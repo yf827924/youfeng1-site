@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第四十章 · 往深处长 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第四十章 · 往深处长</h1>
+  <p>墨记后院的灯，今夜比往常早灭了一盏。</p>
+  <p>萧铁衣在账房里坐着，没点大灯，只留案头那盏油灯，火苗压得小小的。他左手按着总账，右手搁在膝上，掌心朝上，看那几道黑纹。纹从指根起，沿着手背爬过腕子，绕过前臂，一路压到了锁骨底下——比上回又深了些，颜色也沉，像墨渗进了肉里，洗不掉，也刮不净。</p>
+  <p>阿萝在里屋哄丫丫睡。丫丫近来睡得浅，总在半夜惊醒，说梦见西山的碑在走。萧铁衣听着里屋细碎的动静，没出声。</p>
+  <p>他不是在等丫丫睡。他是在等一个人。</p>
+  <p>这几日，他夜里总睡不踏实。墨记重开，明面上的生意是来了，暗里的眼睛也来了。郭大人那张官符订货单压在案头，是招牌，也是靶子——郡城多少双眼睛盯着，想看这少年东家几时栽。他右臂那几道黑纹，白日里被他压着不动，一到夜深就隐隐发烫，像有活物在里头试着往上拱，又被他一遍遍按回深处。深纹这条路，纹不往上长，偏往深处走，可走深了，就收不回来。他心里清楚，只是没得选。</p>
+  <p>阿萝不晓得他掌心里纹在烧。她只当东家是在对账。丫丫在里屋翻了个身，含糊嘟囔了一句"碑在走"，又睡沉了。</p>
+  <p>灯花"噼"地爆了一下。他睁眼，墙外头，落下一点极轻的瓦响。</p>
+  <p>——</p>
+  <p>头更刚过，后院墙头落下一点影子。</p>
+  <p>那人落地极轻，脚尖点地，连瓦都没响一声。萧铁衣在灯下，眼皮都没抬，掌心那几道黑纹却微微一跳——不是疼，是"阅尽"在动。他这双眼睛，看人看的不是脸，是纹。墙头那道影子一落，他眼里的纹路就铺开了：来人身上缠着一层护体纹，细密如织，从脚底缠到脖颈，在胸口收成一个结。那是"那位"清账网下先遣探子的路数——和前几日那封密信上倒着长的纹，同源。</p>
+  <p>探子翻下墙，贴着墙根往账房摸。他走得不快，每一步都探着虚实，像是来探墨记深浅的。萧铁衣把总账轻轻合上，没出声。</p>
+  <p>这是第一拍：看纹。</p>
+  <p>萧铁衣的眼里，纹一层层铺开：第一重缠踝，第二重缠膝，第三重缠腰，第四重缠胸，第五重缠肩，第六重缠臂，第七重缠颈。七重纹路，层层相扣，像七层茧，把人裹在里面，刀枪不入。寻常的护体灵纹，走的是通脉的路子，纹浮在皮外，借脉气撑着——可眼前这七重，长法不对。它们不是浮着的，是"缠"着的，一圈压一圈，圈与圈之间有极细的锁口，锁口上打的结，和密信上倒着长的纹，是同一只手的手法。</p>
+  <p>萧铁衣把这些一层层看过去，像剥一件湿透的棉衣。看到第五重的时候，他心里动了动：这七重纹的根基不在脉里，在骨头缝里。纹是从骨里往外渗的，渗到皮上，再缠成茧。这样的纹，砍是砍不穿的——皮破了，骨里还能渗。可正因为从骨里渗，它得喘气。纹再密，骨缝里那一口气，总要出来走一遭。</p>
+  <p>可他看得到，那茧有一处松。</p>
+  <p>那松处不在胸口，不在背心，而在左肋下三寸，一道极细的缝。寻常人看不出，可"阅尽"顺着纹路走，一眼就见着了那道缝里透出的气门。气门是护体纹呼吸的地方，纹再密，气门一闭一开，总有那么一瞬的空当。他不动声色，把那道缝的位置、开合的节拍，一遍一遍在心里过。半息一开，开的时候，缝里透出的气是凉的——凉得很，和西山的碑林一个味道。</p>
+  <p>萧铁衣没动。他等。</p>
+  <p>探子摸到账房门边，指尖刚沾上门框，门里忽然亮起一点刀光。</p>
+  <p>守拙刀出鞘半寸，灯下冷得发青。萧铁衣就坐在门后阴影里，声音平得很："来了就进，门没闩。"</p>
+  <p>探子顿了一下，推门进屋。他生得普通，眉眼寡淡，像个走街串巷的贩子，可身上那层护体纹一进灯下就显了形，密密麻麻裹着，连指节都缠着。他打量萧铁衣，目光落在萧铁衣搁在膝上的右手上——那几道黑纹在灯里泛着冷意。</p>
+  <p>"萧东家。"探子开口，声线也平，"久闻墨记重开，郭大人的官符都落到你手里了。我家主子让我来瞧瞧，你这东家，有几斤几两。"</p>
+  <p>萧铁衣没接话。他眼里那道气门的位置，已经刻进了脑子。这是第二拍：读气门。</p>
+  <p>他不急着动手，先把对方的底摸透。探子身上护体纹共分七重，一重裹一重，像裹了七层绢。可那道气门，藏在第七重最里头，左肋下三寸。寻常刀剑砍在七重纹上，第一重就卸了力，到不了第七重。可萧铁衣要的不是砍穿，他要的是——让纹自己松。</p>
+  <p>"瞧我这双眼睛。"萧铁衣抬起右手，掌心朝探子，"你身上那七重纹，第一重缠脚，第二重缠膝，第三重缠腰……第七重，收在左肋下三寸，气门开合，半息一空。我说得可对？"</p>
+  <p>探子脸色一变。他没想到，自己这身护体纹，被人一眼看穿了底。</p>
+  <p>"你——"</p>
+  <p>"你不是来杀我的。"萧铁衣淡淡说，"你是来试我的。试我能不能看见你，试我看见之后，接不接得住。"</p>
+  <p>探子不说话了。他手慢慢按上了腰间，护体纹第七重悄悄绷紧，气门闭了一瞬。那一瞬，他的呼吸停住了，整个人像一张拉满的弓——他知道，藏不住了。</p>
+  <p>萧铁衣动了。</p>
+  <p>——</p>
+  <p>这是第三拍：交手，不退不跳。</p>
+  <p>他没起身，只从门后阴影里滑出半步，守拙刀贴着地面横扫。刀不高，离地三寸，正是探子下盘护体纹最薄的那一道。探子侧身避开，护体纹第一重在小腿上亮了一下，卸了刀势。萧铁衣不追，刀势一转，由横变挑，挑向探子右肘——那处纹也薄。</p>
+  <p>一回合。</p>
+  <p>探子反手一掌拍下，掌风里裹着护体纹的劲，萧铁衣刀背格挡，腕子一沉，借力退了半步，又进半步，刀尖点向探子左肋。探子护体纹第六重迎上，"铮"一声，刀尖被弹开。萧铁衣不退，顺势旋身，刀光绕向探子背后第三重纹的接缝。那一刀没用力，只贴着缝蹭过去，像笔在纸上走线——他不破，他找线头。</p>
+  <p>探子终于急了。</p>
+  <p>两回合。</p>
+  <p>他没想到这年轻人刀路这么"黏"，不硬碰，专挑接缝走，每一刀都落在护体纹最薄的那一线，像拿针在绢上找缝。他护体纹连变三次，把接缝越收越紧，可越收，那道气门就越显。他咬了咬牙，护体纹全数绷到第六重，打算硬接下一刀——可萧铁衣的刀，已经绕到第三重去了。</p>
+  <p>三回合。</p>
+  <p>萧铁衣看准了。第四回合，他不砍了——他把手里的刀，往深处送。</p>
+  <p>这是他要试的新招：深纹。</p>
+  <p>寻常的纹，是往上长的，像草冒尖，护在皮外。可他右臂那几道黑纹，却是往下扎的，扎进肉里，扎进骨里。他这些日子摸着门道：纹不往上长，往深处走，就能顺着对方的纹，探到纹根底下。往深处长，不是长厚，是长穿——穿透护体纹，扎到对方的气穴上。</p>
+  <p>他右臂黑纹一烫，像是有人往他腕子里灌了冰水。那烫意顺着守拙刀的刀脊，一路爬上他指节，最后落在刀尖上。</p>
+  <p>守拙刀这一送，刀尖没撞护体纹，而是贴着探子左肋下三寸那道气门，往里一"沉"。这一"沉"，不是靠力气，是靠纹——萧铁衣右臂那几道黑纹，此刻像七根钉子，顺着刀脊扎进守拙刀的刀身上，再扎进刀尖，最后扎进探子的气门上。</p>
+  <p>深纹初成。</p>
+  <p>探子猛地一僵。他觉着左肋下像被一只手从里头攥住了——那不是刀伤，是纹被从根上揪了一下。护体纹第七重"哗"地松了半寸，气门大开。萧铁衣刀尖趁势一点，点在那处气门上，不破皮，只把劲送进去半分。</p>
+  <p>探子闷哼一声，退了三步，护体纹七重齐颤，一时收不回去。</p>
+  <p>"你这招……"他盯着萧铁衣右臂那几道往深处扎的黑纹，脸色发白，"纹是倒着长的。"</p>
+  <p>"倒着长，才扎得进你根里。"萧铁衣收刀，刀身裂痕在灯下闪了一下，两寸半，又深了些。</p>
+  <p>探子看了他片刻，忽然笑了："主子说得对，你这双眼睛，比想的麻烦。那封信你收到了吧？西郊废庙，主子等你。"</p>
+  <p>"你家主子是谁？"萧铁衣问。</p>
+  <p>探子摇头："不知道。我们只见信，不见人。传话的、递印的、下帖子，一条线上隔着三层，谁也不知道线那头坐的是谁。"他顿了顿，声音低了些，"我只知道一件事——主子收网之前，要把'灯'先摘了。你这盏灯，排头一个。"</p>
+  <p>"那你还敢一个人来？"</p>
+  <p>"来瞧瞧摘灯的人，长什么样。"探子笑得很淡，"看过了。值。"</p>
+  <p>他不再恋战，转身撞开后窗，护体纹一卷，人影没入夜色。</p>
+  <p>萧铁衣没追。他站着，把刀慢慢归鞘，掌心那几道黑纹，从指根到锁骨，猛地涨了一寸。</p>
+  <p>——</p>
+  <p>这是第四拍：付代价。</p>
+  <p>黑纹涨的那一寸，带着刺疼。不是皮肉疼，是纹基在裂——每往深处扎一回，右臂的纹基就多一道裂损，裂损攒多了，反噬会找上来（V6）。萧铁衣早知道自己走的是一条不归路：深纹越用越利，可代价是裂痕越长越快。他想起严婆婆临死前说的话："纹往深处长，就不是护身，是自缚。"当时他不懂，现在懂了——纹缠进肉里，拔不出来，就像这刀，越往里送，越收不回来。</p>
+  <p>他在心里算过一笔账。自打凝纹五重那夜起，右臂的黑纹一共涨了三回：观礼夜一回，锁房认刀一回，今夜一回。三回加起来，涨了小两寸，可纹基的裂损不止小两寸——裂损不是匀着来的，是越到后头越快。头一回涨一寸，裂一痕；第二回涨半寸，裂两痕；今夜涨一寸，他不用看，也知至少裂了三痕。照这个走法，撑到纹爬过锁骨，最多还有十来回可用的余地。十来回，够不够走到西郊，够不够走完这一局，他不知道。</p>
+  <p>所以每一回深纹出手，都得值。今夜这一回，换来了三样东西：气门的位置、护体纹的根脚、"那位"先遣已至的实信。值了。可他心里明白，这样的账，越往后越难算平——对手会越来越强，代价却只会越来越重。</p>
+  <p>他低头看守拙刀。刀身那道裂痕，两寸半，今夜又借了气，封了一道锚，可锚封得越紧，裂痕蔓延得越急（S1）。他伸手按在裂痕上，指腹能觉出那道缝里透出的凉——和锁房里那一回，是同一个来路。</p>
+  <p>"阅尽"看见的，从来不只是敌人的纹。他自己的纹，自己的刀，自己的裂痕，都在这双眼睛底下，清清楚楚。</p>
+  <p>里屋的动静停了。阿萝轻手轻脚走出来，见他坐着不动，掌心里黑纹又涨了，眉头便蹙起来。</p>
+  <p>"又长了？"</p>
+  <p>"一寸。"萧铁衣把手收进袖里，"那人不是来拼命的，是来递话的。'那位'已经派先遣探子了，正面接触，不远了。"</p>
+  <p>阿萝没多问。她知道萧铁衣这身纹，是拿命在换消息。她只把灯拨亮了些，去后院看了看后窗——窗框被撞开一道裂，夜风灌进来，凉得硌人。她站在窗口站了一会儿，听那风穿堂而过的声音，像是在听什么人走远的脚步。</p>
+  <p>里屋忽然传来丫丫的声音，细细的，带着睡意的哭腔："娘——"</p>
+  <p>阿萝赶紧进去。丫丫在炕上蜷着，额头上全是汗，小手抓着被角，抓得指节发白。阿萝把她搂起来拍着，轻声问梦着什么了。丫丫不说话，眼睛睁着，直勾勾地看阿萝身后的门框，看了半晌，才说："刚才有个叔叔，站在院子里。他身上有好多圈，一圈一圈的，跟蛇缠树似的。"</p>
+  <p>阿萝的后背一下子就凉了。她拍着丫丫的手顿在半空，半天才落下去："不怕，那是风把瓦吹响了。"</p>
+  <p>"不是瓦。"丫丫摇头，声音很轻，"他走了。往西边走了。娘，他走的时候，回头看了咱们家一眼。"</p>
+  <p>阿萝把丫丫搂得更紧了些，眼睛却越过女儿的发顶，看向门外坐着的萧铁衣。萧铁衣不知何时已站在账房门口，隔着一道门槛，冲她极轻地点了一下头——那意思是：我知道了，没事。</p>
+  <p>"明早我让铁塔留意司里动静。"阿萝说，"探子既然从司里那条线来，司里多半有人递了话。"</p>
+  <p>萧铁衣点头。他靠在椅背上，闭了闭眼。右臂那几道黑纹，从袖口底下隐隐透出轮廓，像几条蛰伏的蛇。他知道这一寸涨上去，明天早起，锁骨下的那道纹，又会比今日更深。纹不往上长，往深处走，走到连肉都包不住的时候，就是反噬找上门的日子。可他不在乎——"那位"已经落子，他若不下这盘棋，连棋盘都摸不着。</p>
+  <p>阿萝走到他跟前，没说话，只是把他案头那本总账往他手边推了推，又把灯芯挑亮了一分。</p>
+  <p>黑石崖上，赵珩忽然睁开眼。</p>
+  <p>他胸口那窝"虫"，今夜跳得比往常急。方才郡城方向，有一道极细的纹震传过来——是墨记那头，萧铁衣动了深纹。赵珩是第一个把"白"喂进萧铁衣身子的人，那半缕活纹，让他和萧铁衣之间，牵着一根旁人看不见的线。萧铁衣一动深纹，他就觉出来。</p>
+  <p>他摸了摸自己半张脸上爬满的青黑甲纹。化人，又深了一分。再过些时日，这副残躯，怕是连人样都保不住了。</p>
+  <p>"你倒是肯下本钱。"赵珩对着西边的夜，低声笑，"深纹都敢用。可你每用一回，离'那位'的局，就近一分。"</p>
+  <p>他想起三十年前，赵家老太爷把他送去云荒"见贵人"那回。那贵人没露面，只在胸口点了一下，他这辈子就成了替"那位"养东西的容器。如今那东西醒了，要从他身上爬出来，化人，化到脸上去。</p>
+  <p>可他咽下的那半缕"白"，是替萧铁衣挡的。白认刀不认人，当年锁房开箱，那东西若认了萧铁衣这把刀后头的人家，萧铁衣早被拖进局里了。赵珩替他咽了下去，把认刀的凭依，引到了自己身上。</p>
+  <p>"你慢慢长。"赵珩对着夜色说，"等你深纹扎到根底，才是'那位'真正要收的人。我这颗钉子，得钉在你前头。"</p>
+  <p>崖风起，吹得他半张脸上的甲纹，微微发亮。风里夹着苦咸的气息，是海，是崖，是云荒的方向。他伸手，摸了摸胸口那窝"虫"——它在跳，跳得比刚才更急，像有什么东西，从很深的地方，往上爬。他忽然想起萧铁衣那双眼睛。那小子现在大概在灯下，对着他截来的信，一点点拆穿"那位"的局。赵珩既欣赏，又忌惮——欣赏那双眼睛的亮，忌惮这亮，终有一日，会比"那位"更刺眼。可他拦不住。他自己，就是被那双眼睛，从"那位"手里，撬开了一道缝的人。</p>
+  <p>——</p>
+  <p>墨记的灯，又灭了一盏。</p>
+  <p>萧铁衣在总账末页，添了一行：</p>
+  <p>司里探子夜探墨记，护体纹七重，气门在左肋下三寸。深纹初成，实战可破护体。代价：黑纹又长一寸，裂痕借气封锚，蔓延加速（S1/V6）。"那位"先遣已至，正面接触不远（V33/V42）。西郊废庙那封信，是钓饵——探子亲口确认。</p>
+  <p>写完，他吹灭案头那盏灯。油灯灭了，账房只剩从窗缝里漏进来的月光，落在守拙刀上，刀身那道裂痕泛着冷白的光。</p>
+  <p>窗外，后院墙头那道被撞开的裂口，在夜风里轻轻响了一声。那声音很轻，轻得像一声叹息，也像某种倒计时，刚刚开始。</p>
+  <p>墨记的灯灭了，可巷子对面的屋脊上，不知几时起，多了一双眼睛。那双眼睛盯了半宿，一动不动，直到天边泛出蟹壳青，才悄无声息地退下屋脊，退得干干净净，不留一点痕。摘灯的人已经到了，先看的，就是这盏灯几时灭。</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，听书键跳转纯语音页 ===== */
+  var TOTAL=75;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<a class="rbtn gold" href="listen.html?ch='+n+'">🎧 听书</a>'+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  var dragging=false;
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a")){show();return;}
+    var w=document.documentElement.clientWidth||document.body.clientWidth;
+    var x=e.clientX||0;
+    /* 左右两侧 1/3 为翻页手势，中间区域用于呼出工具栏 */
+    if(x<w*0.30&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    if(x>w*0.70&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+    if(document.body.classList.contains("ui-show"))hide();else show();
+  });
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  var CH=40, TITLE="往深处长";
+  var RKEY="hugo_reader_v1";
+  function loadR(){try{return JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){return{}}}
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function applyPct(p){if(maxH()>0)window.scrollTo(0,maxH()*p/100);}
+  var chapters=(loadR().chapters||{});
+  var st=chapters[CH]||{pct:0};
+  var bm=loadR().bookmark;
+  if(location.hash==="#bookmark"&&bm&&bm.ch===CH&&bm.pct>0){
+    setTimeout(function(){applyPct(bm.pct)},80);
+  }else if(location.hash==="#resume"&&st.pct>0){
+    setTimeout(function(){applyPct(st.pct)},80);
+  }else if(st.pct>=3&&st.pct<95){
+    var tip=document.createElement("div");tip.className="resume-tip";
+    tip.innerHTML="📌 上次读至 "+st.pct+"% · <a href='javascript:void(0)' id='resumeGo'>继续上次位置</a>";
+    document.querySelector(".wrap").prepend(tip);
+    document.getElementById("resumeGo").onclick=function(){applyPct(st.pct);tip.remove();};
+  }
+  if(bm&&bm.ch===CH&&bm.pct>0&&location.hash!=="#bookmark"){
+    var btip=document.createElement("div");btip.className="resume-tip";
+    btip.innerHTML="🔖 本章已安放书签（钉在 "+bm.pct+"%） · <a href='javascript:void(0)' id='bmGo'>回到书签位置</a>";
+    document.querySelector(".wrap").prepend(btip);
+    document.getElementById("bmGo").onclick=function(){applyPct(bm.pct);btip.remove();};
+  }
+  var timer=null;
+  function record(){
+    var m=maxH();if(m<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/m*100));
+    var d=loadR();d.chapters=d.chapters||{};
+    d.chapters[CH]={pct:p,t:Date.now()};
+    d.resume={book:"gudo",ch:CH,name:"第"+CH+"章 · "+TITLE,file:"gudo-"+CH+".html",pct:p,t:Date.now()};
+    saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record()},1000)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(function(){record()},500);
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  if(bm&&bm.ch===CH&&bm.pct>0){btn.textContent="🔖 书签 "+bm.pct+"%";}else{btn.textContent="🔖 书签";}
+  document.getElementById("__bmSlot").appendChild(btn);
+  btn.onclick=function(){
+    var m=maxH();var p=m>0?Math.min(100,Math.round(document.documentElement.scrollTop/m*100)):0;
+    var d=loadR();d.bookmark={book:"gudo",ch:CH,pct:p,t:Date.now()};saveR(d);
+    btn.textContent="✓ 已安放书签 "+p+"%";
+    setTimeout(function(){btn.textContent="🔖 书签"},1800);
+  };
+})();
+
+</script>
+</body>
+</html>

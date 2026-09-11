@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第五十二章 · 换命之约 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第五十二章 · 换命之约</h1>
+  <p>红光在渠里绷了三息。</p>
+  <p>第四息上，记账人抬起了手。</p>
+  <p>它那半透的手掌，朝着渠面轻轻一按。渠里的光，像被一只无形的手捋过，从红慢慢褪回金，一根一根，捋得平平整整。青灰衫人指着丫丫的那根手指，跟着光一起，僵在了半空。</p>
+  <p>"这层渠里，我是账。"记账人说，"账不让，谁也取不走。"</p>
+  <p>青灰衫人的手指，一寸一寸收了回去。他退进碑影，铜面最后转过来，对着萧铁衣。</p>
+  <p>"今日取不成，"他说，"明日还有。你手里的图，你怀里的碑片，还有这个丫头——主子点过名的东西，没有一样跑得掉。"</p>
+  <p>他走了。走的时候没有声音，像被渠里的光吞了。</p>
+  <p>萧铁衣这才发现，自己后背的衣裳已经湿透。丫丫攥着他的手，小手冰凉。</p>
+  <p>"他不会走远。"记账人说，"他上不去渊口，就在这几层里绕。你们现在上去，正撞在他怀里。"</p>
+  <p>"那怎么办？"</p>
+  <p>"到我那儿去。"记账人转身，朝石台后头一道更窄的缝点了点头，"我住的地方，他进不来。账在我手里，我说了算。"</p>
+  <p>——</p>
+  <p>那道缝后头，是一间石室。</p>
+  <p>石室不大，四壁凿得极粗糙，看得出是拿钝器一点点抠出来的。穹顶上垂下来一根石笋，笋尖上嵌着一盏小灯，灯焰只有豆大，却把整间石室照得清清楚楚。墙上凿着一排一排的浅槽，槽里塞满了竹简、木牍、发黄的纸卷，密密麻麻，从地面一直排到顶。</p>
+  <p>四千年，一个人在这间屋子里，替满渊的灯记账。</p>
+  <p>萧铁衣在门口站了一会儿，才迈进去。丫丫已经跑到墙边，仰着头看那些槽。</p>
+  <p>"爷爷，"她说，"这些全是账？"</p>
+  <p>"全是。"记账人在石笋底下坐下，姿势和它在石台上时一模一样，脊背直着，双手搭膝。"四千年，灯灭一盏我记一笔，人死一个我记一笔。记到后来，我自己也成了账上的一笔。"</p>
+  <p>萧铁衣在对面坐下。刀横在膝上。</p>
+  <p>"你说过，出了渊再同我说。"他说，"渊口堵着，出不去。说吧。"</p>
+  <p>记账人沉默了一会儿。石室里只有那盏豆大的灯，在轻轻地晃。</p>
+  <p>"三十年前，"它开口，"守渊的不是一家，是三家。"</p>
+  <p>它抬起半透的手，在面前的地上划了三道。</p>
+  <p>"萧家，青石镇的，掌刀。严家，郡城的，掌符。赵家，外来的，掌账。刀、符、账，三足。缺一足，渊就封不死。"</p>
+  <p>"赵家是外来的。"萧铁衣说。</p>
+  <p>"赵家是外来的。"记账人重复了一遍，"三百年前从外头迁进来的，落脚郡城，做账房生意。谁也没想到，掌账的会是这一家。可账这种东西，认的不是门第，是耐性。赵家的人，能在灯底下坐一宿，一笔一笔对到天亮。"</p>
+  <p>它顿了顿。</p>
+  <p>"为什么是三样？"萧铁衣问，"刀不够吗？"</p>
+  <p>"刀够杀人，不够封门。"记账人说，"刀是硬东西，砍得开，堵不住。符是软东西，能把裂缝糊上，可日子久了会脱。账是最后一样——它不堵也不糊，它记着。记着这门是什么时候封的，谁封的，凭什么封的。活的东西认这个。"</p>
+  <p>"它认账？"</p>
+  <p>"它怕账。"记账人说，"那位什么都敢改，唯独不敢改'谁封的门'这一笔。改了这一笔，门就不认他，他自己也出不来。"</p>
+  <p>"三十年前，那位头一回伸手。不是大动作，就是渊壁上多了一道缝，缝里渗出一口气。就这一口气，山下死了三十七个人，牲口死了一百多头。三家坐到一起，算了一夜。"</p>
+  <p>"算出什么？"</p>
+  <p>"算出要封渊，得有人去填。"记账人的声音很平，"门不是石头做的，是活的。活的东西要合上，得拿活的东西去顶。三家抽签——不，没抽签。是各报各的价。"</p>
+  <p>萧铁衣握刀的手紧了紧。</p>
+  <p>"严家报的是人。"记账人说，"严守拙说，我顶。"</p>
+  <p>"顶什么？"</p>
+  <p>"顶执刀的名。"记账人说，"那年墨记走水，烧了半条街。官面上要抓执刀的，抓不着，就要拿墨记抵罪。严守拙站出来，说刀是他执的。他跳了井——井底下通暗渠，人没死成，可名已经死了。三十年了，郡城的人提起严守拙，都说他烧死在墨记里头。这就是严家的价：一个人，一个名，一世清白。"</p>
+  <p>萧铁衣想起严婆婆。想起她临终攥着他的手，指甲掐进腕子里的疼。她守了一辈子的那个"名"，原来是这么来的。</p>
+  <p>萧铁衣闭上眼。他想起严婆婆。那年她已经老得走不动路，可每天天不亮还要拄着拐，去墨记后头那口废井边上站一会儿。他问过她站什么，她说听水。现在他懂了——井底下通着暗渠，她在听一个跳了井的人，还有没有气。</p>
+  <p>"他没死。"萧铁衣睁开眼，"严守拙没死。"</p>
+  <p>"账上没记他死。"记账人说，"账上只记：名已死。"</p>
+  <p>"那他现在在哪儿？"</p>
+  <p>"不知道。"记账人说，"暗渠四通八达，走通了能出山，走岔了就困死在里头。三十年了，渊里没有他的气，山上也没有。"</p>
+  <p>萧铁衣把这几个字咽下去。名已死，人不知。一个人把自己的名字留在火里，人却不知去了哪里。</p>
+  <p>"萧家报的是门。"记账人说，"萧远山说，我这一门，填进去。"</p>
+  <p>"填进去？"</p>
+  <p>"那一年，青石镇萧家，满门二十三口，一夜之间没了。"记账人说，"火，刀，或者别的什么，账上只记了结果，没记过程。萧家从此绝户。这是萧家的价：一族人。"</p>
+  <p>石室里静下来。灯焰在石笋尖上晃了一下。</p>
+  <p>"满门二十三口，"萧铁衣重复了一遍，"一个没剩？"</p>
+  <p>"账上是这么记的。"记账人说，"二十三个名字，二十三个日子，全记在同一页上。记完之后，那一页被翻了过去。"</p>
+  <p>"可有一样东西，账上记着，却没写明。"</p>
+  <p>"什么？"</p>
+  <p>"那一年，萧家有个孩子，六岁。"记账人说，"账上只写了'存一孤'，没写名字，没写去处。四千年里，守碑人的册子上出现'存一孤'三个字的，只有三处。这是第三处。"</p>
+  <p>萧铁衣的手指在刀鞘上停住了。"那个孩子——"</p>
+  <p>"我没有查过。"记账人说，"四千年，我学会一件事：账上没写的，别替它写。"</p>
+  <p>"赵家报的是我。"记账人说，"赵怀远说，我背着名册下去，顶在门上，不出来。"</p>
+  <p>萧铁衣抬起头。"他自己说的？"</p>
+  <p>"他自己说的。"记账人说，"那天夜里，三家在这间屋子里立的约。约写在一张纸上，三个名字，三枚手印。赵怀远按完手印，卷了半册名册，从渊口下去了。走的时候，他回头说了一句话。"</p>
+  <p>"什么话？"</p>
+  <p>记账人半透的脸，朝着石壁上的竹简。</p>
+  <p>"他说：'我这一去，账就交给你了。往后再有人来问，你把今天的价，一字不漏地告诉他。'"</p>
+  <p>"他要知道，自己不是白填的。"</p>
+  <p>——</p>
+  <p>萧铁衣坐着没动。过了很久，他开口，声音有点哑。</p>
+  <p>"那我呢？"</p>
+  <p>记账人转过脸来。那张空白的纸，对着他。</p>
+  <p>"你姓萧，不姓萧。"它说。</p>
+  <p>萧铁衣的呼吸停了。</p>
+  <p>"萧家那一门，三十年前断在火里。"记账人说，"萧远山有女无子。女大当嫁，招的是入赘的。"</p>
+  <p>"入赘的人，是守刀的。"</p>
+  <p>"是。"记账人说，"守刀人这一脉，不在三家之内，也不在任何一家之内。他们不姓萧，不姓严，不姓赵。他们只跟着刀走。刀在谁手里，他们替谁守。萧远山的女儿嫁了他，按规矩，生的孩子随母姓，姓萧。"</p>
+  <p>萧铁衣的手，在刀鞘上一点一点地收紧。</p>
+  <p>"所以你姓萧，血里却没有萧家的血。"记账人说，"你身上流的，是你爹那一脉的——守刀人的血。"</p>
+  <p>"刀之血。"萧铁衣说。这三个字，他昨天在渊腹底下听过一遍，当时没敢细想。</p>
+  <p>"刀之血。"记账人点头，"四代。第一代把符刻进骨头的那个人，是守刀人的祖。传到你是第四代。守拙刀认你，不是认萧家的姓，是认你骨头里那四道刻痕。"</p>
+  <p>"那位要的是这个？"</p>
+  <p>"那位要的是这个。"记账人说，"他要的不是萧铁衣这个人，是四代的符。符到了手，刀就能开门。门一开——"</p>
+  <p>它朝脚底下点了点。</p>
+  <p>"底下的东西就上来了。"</p>
+  <p>萧铁衣低下头，看着自己的手。手背上那几道黑纹，从凝纹五重那天起就比别人的往深里长，长进肉里，长进骨缝。他一直当那是练狠了练出来的。</p>
+  <p>原来那不是练出来的。是爹给的。</p>
+  <p>他忽然想起很多事。想起小时候，爹教他磨刀，从不让他碰刀刃；想起娘临走前，盯着他的手背看了很久，什么也没说；想起赵珩在城墙上说的那句"他不姓萧"，当时他以为骂的是赵怀远。</p>
+  <p>原来骂的是他。</p>
+  <p>他坐在那儿，很久没说话。石室里那盏豆大的灯，把他的影子投在墙上，投得很长，长得盖住了半面竹简墙。</p>
+  <p>丫丫挨过来，把头靠在他胳膊上。她没问怎么了，就是靠着。</p>
+  <p>萧铁衣慢慢抬起手，看着手背上那几道黑纹。三十年来，他一直以为自己是萧铁衣，是墨记的东家，是接过一把刀的普通人。现在有人告诉他，他姓的姓是借来的，他流的血是另一条脉上的，他这辈子所有的来处，都写在一张烧掉了第四个名字的纸上。</p>
+  <p>"我爹是个什么样的人？"他问。</p>
+  <p>记账人沉默了一会儿。"我没有见过他。"它说，"守刀人这一脉，不入册，不立碑。他死的时候，渊里没有他的气，碑上也没有他的名。我只知道一件事。"</p>
+  <p>"什么？"</p>
+  <p>"他把刀交给你的时候，你多大？"</p>
+  <p>萧铁衣想了想。"十二。"</p>
+  <p>"守刀人交刀，规矩是十六。"记账人说，"他提前了四年。"</p>
+  <p>石室里静下来。</p>
+  <p>"提前四年交刀，"记账人说，"只有一种可能——他知道那一年，自己要死。"</p>
+  <p>"我爹，"他开口，嗓子发涩，"我爹是谁？"</p>
+  <p>记账人沉默了很久。</p>
+  <p>"云荒那座坟里埋着的，就是。"它说，"他姓什么，账上没有。守刀人这一脉，不入册，不立碑，死了也不留名。四千年，只有赵怀远破过一次例——他把那半块碑片给了你，又在自己坟上留了个记号。"</p>
+  <p>"什么记号？"</p>
+  <p>"灯图。"记账人说，"他把图的另一半带进了坟里。那不是给你娘的。"</p>
+  <p>丫丫忽然转过身来。</p>
+  <p>"是给爹的。"她说。</p>
+  <p>——</p>
+  <p>丫丫走到萧铁衣身边，挨着他坐下。她把小手覆在爹的手背上，覆在那几道黑纹上。</p>
+  <p>"爹，"她说，"我懂了。"</p>
+  <p>"你懂什么？"</p>
+  <p>"我有灯。"丫丫说，"爷爷说的，我身上有灯，所以没纹。"她仰起脸，"爹的刀里，也有灯。"</p>
+  <p>石室里静得能听见灯焰的响。</p>
+  <p>记账人半透的身子，微微前倾了。</p>
+  <p>"再说一遍。"它说。</p>
+  <p>丫丫不明白为什么要再说，还是说了。"我有灯，爹的刀里也有灯。"</p>
+  <p>记账人沉默了很久。它那张空白的纸，第一次，在灯底下显出了一点极淡的起伏，像水面被风吹皱。</p>
+  <p>"灯，"它慢慢地说，"从碑上分出来，落在人身上，叫纹。落在刀上，叫符。落在没有纹的身子上——"</p>
+  <p>它看着丫丫。</p>
+  <p>"叫什么？"</p>
+  <p>丫丫想了想。"叫灯。"</p>
+  <p>"对。"记账人说，"叫灯。"</p>
+  <p>萧铁衣看着女儿。六岁的小丫头，瘦得只剩一把骨头，眼睛却亮得吓人。她身上没有纹，从来没有被任何一道纹认过，可她在渊里能数清碑，能听见赵怀远说话，能一步一步找到这间屋子。</p>
+  <p>她不是没有纹。她是纹还没分出来。</p>
+  <p>"门钥有三，"记账人说，"刀，纸，人。刀是你手里那把，纸是那半张灯图，人——"</p>
+  <p>它看着丫丫。</p>
+  <p>"人是她。"</p>
+  <p>萧铁衣把丫丫往身后拉了拉。丫丫不肯，挣了一下，还是站在了爹前面，仰着头看记账人。</p>
+  <p>"我不怕。"她说。</p>
+  <p>"你该怕。"记账人说，"那位要的就是你。他不是现在要，是等着你长。等你长到灯自己出来的时候，他再来取。在那之前，他不动你，也不让别人动你——所以那个人今天伸了手，又收了回去。"</p>
+  <p>萧铁衣的牙关咬紧了。原来那句"留着比拿了有用"，是这个意思。</p>
+  <p>"这些东西，"他强迫自己冷静下来，"三十年前那张约，还在吗？"</p>
+  <p>"在。"记账人说。</p>
+  <p>它站起身，走到石壁前，从最高的一排槽里，抽出一卷发黑的纸。</p>
+  <p>——</p>
+  <p>纸展开的时候，萧铁衣闻到了一股焦味。</p>
+  <p>那是一张极普通的棉纸，三十年了，边角脆得碰一下就要掉渣。纸上写着三行字，字迹各异：第一行端正瘦硬，第二行圆厚稳当，第三行潦草飞动，像是急着写完就要走。</p>
+  <p>三个名字。</p>
+  <p>每个名字底下，按着一枚手印。手印是朱砂的，三十年了，红得发暗，像干了的血。</p>
+  <p>萧铁衣一个一个看过去。</p>
+  <p>第一行：萧远山。第二行：严守拙。第三行：赵怀远。</p>
+  <p>他的手指，从第一个名字摸到第三个。摸到赵怀远那一行的时候，停住了。那一枚手印按得极重，朱砂都洇开了，把"远"字糊住了半边。</p>
+  <p>萧铁衣凑近了看那三枚手印。</p>
+  <p>第一枚，指腹的螺纹又深又密，是常年握刀的手，茧子在虎口，压出来的印，虎口那一处特别重。第二枚，掌纹平，指纹浅，是握笔的手，按得四平八稳，连纸边都没歪。第三枚，指头细长，螺纹完整，可印子按偏了，有一小半压在了纸外面——按的人是站着的，急着走。</p>
+  <p>"赵怀远是按完手印就走的。"萧铁衣说。</p>
+  <p>"按完就走。"记账人说，"他连纸都没等干。"</p>
+  <p>萧铁衣看着那枚按偏了的手印。三十年前，一个人在这儿按下一枚急着走的手印，卷了半册名册，下渊，顶门，三十年没上来。</p>
+  <p>"他为什么这么急？"萧铁衣问。</p>
+  <p>"因为那张约上，本来有四个名字。"</p>
+  <p>萧铁衣猛地抬头。</p>
+  <p>"他急着走，"记账人说，"是不想让第四个人，也把手印按上去。"</p>
+  <p>"三个名字。"记账人说，"三个手印。三家各填一份价，约成了。"</p>
+  <p>萧铁衣点点头。他把纸往下看——</p>
+  <p>落款的地方，还有第四个名字。</p>
+  <p>可那地方是黑的。不是墨涂的，是烧过的。纸被烧穿了一小片，边缘焦黄卷曲，把底下的字烧得只剩几个笔画的残根，认不出来了。</p>
+  <p>萧铁衣的呼吸慢了下来。</p>
+  <p>"这烧的，"他说，"是当年烧的，还是新烧的？"</p>
+  <p>记账人没有立刻答。</p>
+  <p>它伸出半透的手指，在那片焦痕上极轻地碰了一下。指尖抬起来的时候，沾了一点极细的灰。</p>
+  <p>"纸是三十年的纸。"它说，"灰是新的。"</p>
+  <p>石室里的灯，晃了一下。</p>
+  <p>"三个月内，"记账人说，"有人动过这张约。"</p>
+  <p>萧铁衣盯着那片焦痕。三个月。三个月前，郡城发生的事一件一件从他眼前过——墨记重开，暗桩网合龙，先遣探子夜闯，青灰衫人递帖。</p>
+  <p>"烧名字的人，"他慢慢地说，"是来毁约的，还是来改约的？"</p>
+  <p>记账人把纸卷起来，重新塞回槽里。</p>
+  <p>"毁约的人不会只烧名字，"它说，"改约的人才烧。他把第四个名字从约上抹掉，这约就少了一方。少了一方的约——"</p>
+  <p>它停在这里。</p>
+  <p>"是什么？"</p>
+  <p>萧铁衣站起来。刀在膝上压出的那道印子，还没消。</p>
+  <p>"三份价，"他说，"一份是一个人，一份是一族人，一份是一个人顶三十年。"他看着记账人，"要是有人把这三份价重新收一遍，他收的是什么？"</p>
+  <p>记账人没有答。</p>
+  <p>"收的是三十年的封。"萧铁衣自己答了，"他把价还了，约就作废。约一作废——"</p>
+  <p>门就开了。</p>
+  <p>石室外头，很远的地方，传来一声闷响。不是雷，是石头。整间石室轻轻晃了一下，墙槽里的竹简哗啦啦响成一片，有几卷掉了下来，砸在地上散开。</p>
+  <p>记账人半透的脸，转向洞口。</p>
+  <p>"他开始封渊了。"它说。</p>
+  <p>"谁？"</p>
+  <p>萧铁衣把刀抓在手里，往洞口走了两步。</p>
+  <p>"你上去送死？"记账人在他背后说，"他提着灯，灯照见的地方，你的纹全得亮出来。你凝纹五重，他底下压着七重，还有一重是活的。"</p>
+  <p>萧铁衣站住了。</p>
+  <p>"那怎么办？"</p>
+  <p>"等。"记账人说，"等他把渊口封死，我们再走另一条路。"</p>
+  <p>丫丫从墙边捡起一卷掉下来的竹简，抱在怀里，仰起脸问："爷爷，另一条路通哪儿？"</p>
+  <p>记账人沉默了一息。</p>
+  <p>"通云荒。"它说。</p>
+  <p>"那个戴铜面的主子。"记账人说，"他手里提着灯。四千年了，渊口头一回被人从外头，往里头封。"</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，听书键跳转纯语音页 ===== */
+  var TOTAL=75;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<a class="rbtn gold" href="listen.html?ch='+n+'">🎧 听书</a>'+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  var dragging=false;
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a")){show();return;}
+    var w=document.documentElement.clientWidth||document.body.clientWidth;
+    var x=e.clientX||0;
+    /* 左右两侧 1/3 为翻页手势，中间区域用于呼出工具栏 */
+    if(x<w*0.30&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    if(x>w*0.70&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+    if(document.body.classList.contains("ui-show"))hide();else show();
+  });
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  var CH=52, TITLE="换命之约";
+  var RKEY="hugo_reader_v1";
+  function loadR(){try{return JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){return{}}}
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function applyPct(p){if(maxH()>0)window.scrollTo(0,maxH()*p/100);}
+  var chapters=(loadR().chapters||{});
+  var st=chapters[CH]||{pct:0};
+  var bm=loadR().bookmark;
+  if(location.hash==="#bookmark"&&bm&&bm.ch===CH&&bm.pct>0){
+    setTimeout(function(){applyPct(bm.pct)},80);
+  }else if(location.hash==="#resume"&&st.pct>0){
+    setTimeout(function(){applyPct(st.pct)},80);
+  }else if(st.pct>=3&&st.pct<95){
+    var tip=document.createElement("div");tip.className="resume-tip";
+    tip.innerHTML="📌 上次读至 "+st.pct+"% · <a href='javascript:void(0)' id='resumeGo'>继续上次位置</a>";
+    document.querySelector(".wrap").prepend(tip);
+    document.getElementById("resumeGo").onclick=function(){applyPct(st.pct);tip.remove();};
+  }
+  if(bm&&bm.ch===CH&&bm.pct>0&&location.hash!=="#bookmark"){
+    var btip=document.createElement("div");btip.className="resume-tip";
+    btip.innerHTML="🔖 本章已安放书签（钉在 "+bm.pct+"%） · <a href='javascript:void(0)' id='bmGo'>回到书签位置</a>";
+    document.querySelector(".wrap").prepend(btip);
+    document.getElementById("bmGo").onclick=function(){applyPct(bm.pct);btip.remove();};
+  }
+  var timer=null;
+  function record(){
+    var m=maxH();if(m<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/m*100));
+    var d=loadR();d.chapters=d.chapters||{};
+    d.chapters[CH]={pct:p,t:Date.now()};
+    d.resume={book:"gudo",ch:CH,name:"第"+CH+"章 · "+TITLE,file:"gudo-"+CH+".html",pct:p,t:Date.now()};
+    saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record()},1000)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(function(){record()},500);
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  if(bm&&bm.ch===CH&&bm.pct>0){btn.textContent="🔖 书签 "+bm.pct+"%";}else{btn.textContent="🔖 书签";}
+  document.getElementById("__bmSlot").appendChild(btn);
+  btn.onclick=function(){
+    var m=maxH();var p=m>0?Math.min(100,Math.round(document.documentElement.scrollTop/m*100)):0;
+    var d=loadR();d.bookmark={book:"gudo",ch:CH,pct:p,t:Date.now()};saveR(d);
+    btn.textContent="✓ 已安放书签 "+p+"%";
+    setTimeout(function(){btn.textContent="🔖 书签"},1800);
+  };
+})();
+
+</script>
+</body>
+</html>

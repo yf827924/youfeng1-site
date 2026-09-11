@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第二十六章 · 摊牌 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第二十六章 · 摊牌</h1>
+  <p>四月十五，天没亮，萧铁衣就出了苏家渡。</p>
+  <p>他走的是陆路。水路快，可昨夜起郡城方向的水道加了卡——铁塔托渔家捎来的话：观礼日，进出郡城的水陆两路，一概验帖。他有帖，帖子在怀里揣着，可他不打算把"墨记伙计重返郡城"这件事走在明路上。至少，不走在上午。</p>
+  <p>轻伤员走夜路，重伤员走得更慢。他右手已经提不得东西——黑纹从食指漫过腕骨，又往上爬了三寸，到肘弯底下停住了，像一条探到河边喝水的蛇，喝足了，盘着。左臂还能用，左腿膝弯里那道被瘦竹刀风扫出的淤伤，走快了会热。</p>
+  <p>从苏家渡到郡城，官道六十里，他走了三个半时辰。晌午刚过，他站在了城南槐花巷口。</p>
+  <p>路上他没歇过脚，可走得不算急。道旁的柳絮落尽了，新麦灌浆，风里一股子青气。过最后一道哨卡的时候，验帖的差役懒洋洋抬了下眼皮，帖子是真的，路引是真的，人看着是个跑货的账房先生——谁也不会多看一眼那只不能提东西的右手。他垂着右臂，袖口比平时放低半寸，走路的时候借着肩头晃出一点自然的摆幅。这些小动作，是他在苏家渡对着水面练了两天的。</p>
+  <p>哨卡边上贴着新出的告示，浆糊还没干透：观礼日全城弹压，夜禁提前，聚众者以匪论。告示末尾落的是郡守衙门的印，可他"阅尽"扫过一眼，那印的边缘，有一道极细的、不该出现的回纹——盖印的手，先在别的东西上试过印。官面上的章法乱了。乱，说明上头有人急。</p>
+  <p>他想起严婆婆的话：变了必有乱，乱了必找人顶罪。现在连告示都急了，说明赵珩的"变"，比他算的还要近。</p>
+  <p>墨记的门板上着封条。</p>
+  <p>三条封条，交叉着贴，骑缝盖的是府衙的印。封条边缘被人碰得起了毛——街坊们来过，不止一次，可谁也没敢撕。门槛上有人放了一碗水，水面上浮着一片新鲜的车前草叶，是本地压惊驱秽的老法子。碗沿儿都干了，说明搁下有些时辰了，也没人来换。</p>
+  <p>萧铁衣在封条外站了一会儿。</p>
+  <p>他没有去撕。他把这条巷子从头到尾看了一遍——谁家的窗子开了一条缝，谁家孩子的鞋底印还新，斜对面茶棚的条凳上坐没坐人。看完了，他绕到后巷，从墨记后院的矮墙翻进去。</p>
+  <p>——</p>
+  <p>账房的灯亮着。</p>
+  <p>他没出声，先把柴房看了一遍——柴房里间的铺是空的，丫丫和阿萝都还在苏家渡，这是他昨夜就核过的。然后他才推开账房的门。</p>
+  <p>严婆婆坐在灯下。</p>
+  <p>老妇人穿着一件他没见过的衣裳——藏青底子，领口和袖口滚着一道靛蓝的边，浆洗得发硬，叠痕笔直，一看就是压箱底的衣裳，几十年没上身，今天取出来的。</p>
+  <p>"回来了。"严婆婆头也没抬。她面前摊着一本册子，账房的老规矩，一支笔搁在册边上，"坐。"</p>
+  <p>萧铁衣坐下。他从贴身布袋里取出那半页名册残页，放在桌上，推过去。</p>
+  <p>"今天早上就该给你看的。"他说，"灯笼巷那晚，怕你睡不着觉，没敢。"</p>
+  <p>严婆婆放下笔，把残页拿到灯下。</p>
+  <p>她看得很慢。先是纸——焦边、裁线、页脚的墨渍，一样一样看过去，像在验一张符的纸底。然后才看字。一列一列的名字，朱笔的划痕，一道一道。她的目光在那一列名字上走，走到中段，停住了。</p>
+  <p>那个烧剩半边的字。</p>
+  <p>"严。"</p>
+  <p>她把这两个音念出来的时候，声音是平的。平得像她在账房里核一笔对过的旧账。</p>
+  <p>"划掉了。"她说，"划了三十年了。"</p>
+  <p>萧铁衣的手在膝上收紧了一下："婆婆，你早就知道这一页。"</p>
+  <p>"我知道有一本册子。"严婆婆把残页轻轻放回桌上，用指腹把那道焦边抚平，像抚平一个旧疤，"我当家的走的那年，有个老主顾上门买符，多喝了两杯，说漏了嘴——他说郡里有本册子，上头的人一个一个'划'，划一个，走一个。那年我当家的走了，前一年，东街教书的老周也走了，再前一年，河湾跑船的陈家兄弟也走了。都是'病故'。都是上过册的人。"</p>
+  <p>"我当家的姓严。"她说，"册子上划掉的，就是这个字。"</p>
+  <p>账房里静了下来。豆油灯的火苗立得很直。</p>
+  <p>"他怎么走的。"萧铁衣问。</p>
+  <p>"跟你家一样。"严婆婆说，"一场大火。"</p>
+  <p>萧铁衣的呼吸顿了一顿。</p>
+  <p>三十年前，墨记的老铺面在城南的河街上。那年冬天一场大火，半条街烧过去，墨记烧得最干净——铺面、存货、账册，连后院的柴房都烧穿了。严守拙死于那场火，官面上的文书写的是"灶下失火，殃及比邻"。火灾之后，墨记迁到了槐花巷，重开的招牌，是严婆婆一个人撑起来的。</p>
+  <p>那一年，她三十出头。</p>
+  <p>"火起在四更天。"严婆婆的目光落在灯上，可看的不是灯，是三十年前的那个冬天，"墨记的火，起得没有道理。灶膛里白天就封了火，夜里没人动。可火就是从灶下起来的，起得又快又整，火头贴着地走，专挑存纸的地方烧。救火的人来得也巧，来得早，可水龙偏偏这时候坏了。等到天亮，半条街没了，墨记烧得最干净。"</p>
+  <p>"后来我就明白了，那不是火，那是照着账烧的。哪里存纸，哪里存账，哪里有人睡，火路早画好了。画火路的手，比墨记自己人还清楚这个铺子。"</p>
+  <p>她抬起头，看着萧铁衣。</p>
+  <p>"烧墨记，不是烧铺子，是烧灯。守碑人和看灯人，是两支人，两支守的是同一件事。守碑人守碑，看灯人守着守碑人——守碑人的名字在册上，看灯人的名字也在，只是看灯人的名字不急着划。为什么？因为灯没了，才好划。那把火，是想让看灯人这一支绝了根。火里跑出来两个人——我，和一个八岁的女娃。"</p>
+  <p>"我在火里找到阿萝，是在地窖最里头。"她的声音缓下来，"四代的老纸码到房梁，她爹把她塞在纸垛最深处的夹缝里，外面又压了两层湿毡。火烤了一夜，纸垛外面一层全炭化了，里头一张没损。你说怪不怪——那些老纸，是守碑人的方子造的纸，山石粉压出来的芯，烧不透。她爹拿命把她藏进了唯一烧不死的地方。守碑人的纸，救了看灯人的根。"</p>
+  <p>"她从地窖里出来的时候，不哭，也不说话，两只手抱着半张没烧掉的纸。那半张纸上，是她爹没写完的字。"严婆婆顿了顿，"从那天起，这孩子见字就记，见账就收。我知道她记的不是字。她是在把她爹没写完的那半张纸，一个字一个字，续下去。"</p>
+  <p>萧铁衣的喉咙有点紧："那女娃……"</p>
+  <p>"就是阿萝。"</p>
+  <p>账房里静了很久。</p>
+  <p>"阿萝记性那么好，"萧铁衣慢慢地说，"是因为她从地窖里出来的时候，什么都不肯忘。她爹娘的脸，她家的铺子，她记住的东西一样都不肯放。过目不忘，不是本事，是她不肯忘。"</p>
+  <p>"所以她记账。"严婆婆说，"她的账记得比谁都细。她记的哪里是账，她记的是'都还在'。"</p>
+  <p>——</p>
+  <p>灯芯烧短了一截。严婆婆起身，把灯剔亮，顺手从柜底取出三样东西，一样一样摆在桌上。</p>
+  <p>一本册子。寄存册。蓝布面，四角包铜，边角磨得温润。</p>
+  <p>一把钥匙。黄铜的，齿口磨圆了，是账房地窖暗格的钥匙。</p>
+  <p>一张符。不是朱砂符——是白纸墨笔，画的是一盏灯，灯芯上一笔挑出三道火苗，笔意瘦硬，一笔是一笔。</p>
+  <p>"寄存册，四代没断过账。往后谁接着守，谁管这本册子。"严婆婆把册子推过来，"地窖的钥匙，老纸的方子在我脑子里，方子我教给你，册子你自己看。还有这张符——"</p>
+  <p>她把符捏在指间，就着灯光转了半圈。</p>
+  <p>"这叫看灯符。画符的人不是画符的，是画'灯'的。看灯人这一支，每代传一张，谁画的不清楚，画到我这代，我画不了——我这双手是拨算盘的。这张是我当家的画的，也是他自己画的最后一张。"</p>
+  <p>萧铁衣看着那盏墨笔画成的灯。</p>
+  <p>灯芯上三道火苗，三笔都是悬针，笔笔立得住。他看着看着，忽然觉得这三笔眼熟——不是眼熟，是"认得"。这起笔的顿、行笔的瘦、收笔时那一记极轻的回锋，和后罩楼东南角那道断口的笔路，和刀谱被撕的那一页，和符底样——是同一只手。</p>
+  <p>"守拙刀。"严婆婆看着他，忽然说，"你家那把刀，为什么叫守拙。"</p>
+  <p>"家传的。爷爷说，刀名是曾祖起的，取大巧若拙的意思。"</p>
+  <p>"不是。"严婆婆说，"守拙两个字，是我当家的太爷爷起的名讳。守碑人一支，代代单传，名字里都带一个守字——守拙、守愚、守朴。你家的刀叫守拙，因为你家先人，给守碑人一支的人做过刀。刀名随人名。萧严两家，四代前是一家锅里吃饭的兄弟。"</p>
+  <p>萧铁衣坐在那里，很久没有说话。</p>
+  <p>他想起第1章那把刀在火场里发烫，想起满月夜的鸣动，想起锁房门后那片"白"隔着石门认出这把刀——原来那不是什么妖物的怪癖。那把刀认的，是它造出来时认下的人家。萧严两家的血脉在刀里，刀认人，认的是两家的血。</p>
+  <p>"所以它烫。"他说，"所以它认我。"</p>
+  <p>"所以它等你。"严婆婆纠正他，"等你等到你进墨记的门。四代了，刀没换过，铺子没换过，等的规矩没换过。"</p>
+  <p>——</p>
+  <p>交代完，严婆婆把三样东西合在一起，推到萧铁衣面前，然后做了一件让他猝不及防的事。</p>
+  <p>她对着他，端端正正地福了一福。</p>
+  <p>"婆婆——"</p>
+  <p>"这三样东西，不是给你的。"老妇人直起身，脸上的褶子在灯下很深，"是交给'看灯人'的。从今天起，看灯人这一支，就是你了。阿萝算半支——她的根在我们这支上。丫丫不算，丫丫是咱们捞上来的孩子，可她看得见灯，算个帮手。"</p>
+  <p>"婆婆，我没答应过要接什么——"</p>
+  <p>"你答应过。"严婆婆打断他，"第十六天晚上，账房里，我问你'婆婆觉得我值多少'，你没接话。后头讲完账，我说'名单上要是有我的名字，你别救我'，你问我'要是不救呢'，我告诉你，把灯看完，把天亮看了。"老妇人看着他，"你那晚上说'好'了吗？没有。可你也没说'不'。萧铁衣，你这个人，嘴上不认的账，手上早就画了押。"</p>
+  <p>萧铁衣说不出话。</p>
+  <p>严婆婆从抽屉里取出一份契纸——墨记的铺契。四代的铺子，房契地契，一应文书，她昨夜就翻出来理好了，理得整整齐齐。</p>
+  <p>"观礼的事，你知道多少说多少，我不问。"她说，"我只交代三件事。第一，赵珩今天要开箱，开箱必有变，变了必有乱，乱了必找人顶罪——顶罪的人选，他挑好了，一个是我，一个是你。谁先露头，谁顶罪。"</p>
+  <p>"第二，鱼玉的副本，你给郡守衙门递没有？"</p>
+  <p>"昨夜托渔船带进去了，今晨应该到郡守的私匣。"萧铁衣说，"抄了三份。一份给郡守，一份给兵备道过境的专员，还有一份，收在铁塔那儿。"</p>
+  <p>"好。第三件。"严婆婆把铺契和册子、钥匙、符，一并按在他的手背上，"今天你从后门走，从哪儿来的回哪儿去，苏家渡的船傍晚有一班，你上船，去接阿萝和丫丫。"</p>
+  <p>"婆婆，那你——"</p>
+  <p>"我？"严婆婆笑了。这张老脸上笑起来，褶子全都挤到一起，像晒干的橘子皮忽然又有了水分，"我穿好了衣裳，梳好了头，我今天也去观礼。"</p>
+  <p>"婆婆！"</p>
+  <p>"名单上划掉的是我当家的，不是你。"老妇人站起身，把袖口抚平，"赵珩要找的是守碑人余孽。余孽在这儿坐着呢——一个带了四代灯的孤老婆子，抓她顶罪，名正言顺，天衣无缝。他抓我，就没空抓你。他抓我，你就能带阿萝和丫丫走。"</p>
+  <p>"我可以不让你去——"</p>
+  <p>"你拦不住。"严婆婆走到门边，手搭在门闩上，回头看了一眼这间守了三十年的账房——柜子、算盘、豆油灯、房梁上那只燕子今年又回来做的窝。她看得很慢，一样一样看过去，像出远门的人最后一次清点行李。</p>
+  <p>然后她拉开闩。</p>
+  <p>"铁衣。"她背对着他，"我这辈子，账算得很平。四代人欠的，还了四代；四代人等的，等到了你。就剩一笔账没结——"</p>
+  <p>她跨出门槛，声音从外头传进来，清清楚楚：</p>
+  <p>"我当家的名字，在册上划了三十年，没人给他念一句'冤枉'。今天我去，替他把这一笔，当面记到赵珩的账上。"</p>
+  <p>门外，日头正好。</p>
+  <p>萧铁衣坐在灯下，手背上压着三样东西，压着四代的灯。他坐了很久，久到灯油熬干了一线。</p>
+  <p>然后他站起来，把东西收进贴身布袋，吹了灯。</p>
+  <p>他没有走向后门。</p>
+  <p>他追着那一道藏青色的背影，出了墨记的后巷。</p>
+  <p>——</p>
+  <p>他在县学前的那条街上追上了她。</p>
+  <p>老妇人走得慢，可走得稳。藏青的衣裳在人流里不显眼，可萧铁衣一眼就能认出那道背——三十年，那道背在墨记的柜台后头，什么时候弯过？</p>
+  <p>他放缓脚步，跟在十步之外。跟了两条街，严婆婆忽然停了，没回头，就站在街边一个卖麦芽糖的担子前，看着糖担子出神。</p>
+  <p>"跟上来了？"她说。</p>
+  <p>"嗯。"</p>
+  <p>"我不回头，你走你的。"老妇人说，"我去府门那头，你自己绕到观礼的场子。帖子上写的是随符入观——你的名分在符上，我管不着，也护不着。各走各的。"</p>
+  <p>"婆婆。"</p>
+  <p>"还有，"严婆婆从袖袋里摸出几文钱，买了一块麦芽糖，"到了场子上，不管看见什么，你的眼睛只准干一件事——找'纹'。名册、玉、官面上的账，那些后手你都已经布置了，用不着你再添。你欠的只有一件事：活下来，把今天看见的东西，一样不落地记在眼睛里，带出郡城去。"</p>
+  <p>"记下来做什么。"</p>
+  <p>"做什么？"老妇人把糖递给旁边一个流鼻涕的娃娃，娃娃欢天喜地跑了，"总有一天，要有人说给'能管这件事的人'听。赵珩上面有人，那位'上头'才是守碑人这门账上，最后的那一笔。你看见的东西，就是证。"</p>
+  <p>"证，比刀快。"她说，"刀只能杀一个赵珩。证，能把赵珩底下的那些，一串全提溜出来。"</p>
+  <p>萧铁衣看着她。日头照在老妇人的藏青衣裳上，照出浆洗过头发硬的褶子。他忽然想问一句——值不值。四代人，一个铺子，一场大火，守到今天，守出个什么？话到嘴边，他咽回去了。问了，就是把她这些年的账，算成了亏。她不是不晓得亏不亏，她是不算这个账。</p>
+  <p>"婆婆。"他改了话头，"麦芽糖，甜吗？"</p>
+  <p>"没吃过。"严婆婆说，"我当家的时候买不起，当家了，忘了买。"</p>
+  <p>她说完这句话，自己先笑了，摆摆手示意他别跟着了。卖糖的老汉在旁边听见了，称了一小块硬塞给她，说不要钱，老主顾了。她拗不过，接了，掰了一半给旁边的小娃娃，另一半放进嘴里，眯着眼睛含了一会儿。</p>
+  <p>"甜的。"她说，"比我想的甜。"</p>
+  <p>她拍拍手上的糖渍，继续往前走。藏青的背影穿过县学前的人流，穿过卖花的、修伞的、放纸鸢的孩子们，一直往北城的方向去，越走越小，像一笔账走进了最深处的那一页。</p>
+  <p>萧铁衣在街口站了一息，把贴身布袋按了按——册子、钥匙、看灯符，隔着衣裳硌在心口上。硌得有点疼。他喜欢这点疼，疼是实的，实的东西不会说谎。</p>
+  <p>他转身，从另一条巷子绕向赵府。</p>
+  <p>日头偏西之前，观礼的宾客，就该到齐了。</p>
+  <p>而有些账，今日之内，必须当面记清。他把右臂拢进袖中，藏好那道不能见人的黑纹，汇进了观礼日川流不息的人海里。</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，听书键跳转纯语音页 ===== */
+  var TOTAL=75;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<a class="rbtn gold" href="listen.html?ch='+n+'">🎧 听书</a>'+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  var dragging=false;
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a")){show();return;}
+    var w=document.documentElement.clientWidth||document.body.clientWidth;
+    var x=e.clientX||0;
+    /* 左右两侧 1/3 为翻页手势，中间区域用于呼出工具栏 */
+    if(x<w*0.30&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    if(x>w*0.70&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+    if(document.body.classList.contains("ui-show"))hide();else show();
+  });
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  var CH=26, TITLE="摊牌";
+  var RKEY="hugo_reader_v1";
+  function loadR(){try{return JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){return{}}}
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function applyPct(p){if(maxH()>0)window.scrollTo(0,maxH()*p/100);}
+  var chapters=(loadR().chapters||{});
+  var st=chapters[CH]||{pct:0};
+  var bm=loadR().bookmark;
+  if(location.hash==="#bookmark"&&bm&&bm.ch===CH&&bm.pct>0){
+    setTimeout(function(){applyPct(bm.pct)},80);
+  }else if(location.hash==="#resume"&&st.pct>0){
+    setTimeout(function(){applyPct(st.pct)},80);
+  }else if(st.pct>=3&&st.pct<95){
+    var tip=document.createElement("div");tip.className="resume-tip";
+    tip.innerHTML="📌 上次读至 "+st.pct+"% · <a href='javascript:void(0)' id='resumeGo'>继续上次位置</a>";
+    document.querySelector(".wrap").prepend(tip);
+    document.getElementById("resumeGo").onclick=function(){applyPct(st.pct);tip.remove();};
+  }
+  if(bm&&bm.ch===CH&&bm.pct>0&&location.hash!=="#bookmark"){
+    var btip=document.createElement("div");btip.className="resume-tip";
+    btip.innerHTML="🔖 本章已安放书签（钉在 "+bm.pct+"%） · <a href='javascript:void(0)' id='bmGo'>回到书签位置</a>";
+    document.querySelector(".wrap").prepend(btip);
+    document.getElementById("bmGo").onclick=function(){applyPct(bm.pct);btip.remove();};
+  }
+  var timer=null;
+  function record(){
+    var m=maxH();if(m<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/m*100));
+    var d=loadR();d.chapters=d.chapters||{};
+    d.chapters[CH]={pct:p,t:Date.now()};
+    d.resume={book:"gudo",ch:CH,name:"第"+CH+"章 · "+TITLE,file:"gudo-"+CH+".html",pct:p,t:Date.now()};
+    saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record()},1000)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(function(){record()},500);
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  if(bm&&bm.ch===CH&&bm.pct>0){btn.textContent="🔖 书签 "+bm.pct+"%";}else{btn.textContent="🔖 书签";}
+  document.getElementById("__bmSlot").appendChild(btn);
+  btn.onclick=function(){
+    var m=maxH();var p=m>0?Math.min(100,Math.round(document.documentElement.scrollTop/m*100)):0;
+    var d=loadR();d.bookmark={book:"gudo",ch:CH,pct:p,t:Date.now()};saveR(d);
+    btn.textContent="✓ 已安放书签 "+p+"%";
+    setTimeout(function(){btn.textContent="🔖 书签"},1800);
+  };
+})();
+
+</script>
+</body>
+</html>

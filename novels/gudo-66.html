@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第六十六章 · 出云荒途 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第六十六章 · 出云荒途</h1>
+  <p>乱葬岗上，天光被雨雾罩着，亮得发灰。</p>
+  <p>萧铁衣把铁塔的衣冠理了一遍，又从怀中摸出一半肉包子、一截旧芯、一枚印，摆在那块无字碑前。</p>
+  <p>碑上无字，可碑体是凉的。铁塔靠在这碑上，碑压得住他的身量，他的身量压得住碑。</p>
+  <p>"铁塔。"</p>
+  <p>他开口，声音比之前沉。</p>
+  <p>"你在这儿立了三尺，这碑替你立了。"</p>
+  <p>风从坡上吹下来，吹得草叶动，也吹得碑身的石屑落下来，落在他手背上，凉。</p>
+  <p>碑里没有铁塔。</p>
+  <p>塔倒那天，第六层的火从檐口一路烧到柱顶，等火灭了，人从灰里扒了半天，扒出半截刀鞘、一只烧变形的铜锁扣。人是找不回来了。萧铁衣把那半截刀鞘埋了进去，连同铁塔生前那件补了三次肩的外褂。</p>
+  <p>衣冠冢竖起来那天，木匠问刻什么字。萧铁衣想了很久，说：不刻。</p>
+  <p>木匠不明白。一个扛活扛了半辈子的人，死了连个名都没有，算怎么回事。</p>
+  <p>萧铁衣没解释。他只说，名字这东西，落在石头上，就归石头了；落在纸上，还归人。他不打算把铁塔交出去。</p>
+  <p>后来那块碑就空着。空了三天，没人往上面写一个字。</p>
+  <p>丫丫蹲在碑前，把从路边折的一小把野花摆上去。花是白的，蔫了半边。她摆得很正，摆完了，把手在膝盖上蹭了蹭，站起来。</p>
+  <p>"爹，"她说，"铁塔叔叔会冷么？"</p>
+  <p>"不会。"萧铁衣说。</p>
+  <p>"为啥？"</p>
+  <p>"因为他这会儿不在这儿。"</p>
+  <p>丫丫想了想，点点头。她没再问。</p>
+  <p>——</p>
+  <p>老周挑着胡饼担子站在旁边，没有说话。他的眼圈红着，可手里还在给旁边的伙计指胡饼的位置，指得很稳。</p>
+  <p>"东家。"老周忽然说。</p>
+  <p>"嗯。"</p>
+  <p>"我那盏灯，"老周说，"这两日又有点记不清了。"</p>
+  <p>萧铁衣看着他。老周抬起手，指了指自己的太阳穴。</p>
+  <p>"这儿，像隔了层东西。"他说，"我记着你了，记着你欠我一顿酒。可我记不清我娘长什么样了。"</p>
+  <p>"我不怕。"老周说，"我就是想跟你说一声——趁我还记着，我把能记的都记下。你要记灯，来问我，我一条街一条街给你背。"</p>
+  <p>他把烟锅在鞋底上磕了磕。</p>
+  <p>"东家，我跟你说个事。"老周把烟锅别回腰上，"前儿夜里我做了一梦，梦见我娘在灶前烙饼。饼烙得焦，我嫌她糊，还说了她一句。醒了我就想，我娘走了快二十年了，我咋连她烙糊的饼都记着？可我今早起来，站自家门口，愣是想不起屋里那张床是朝哪头摆的。"</p>
+  <p>"床朝哪头，是事。人还是人。"萧铁衣说。</p>
+  <p>"可我连她是啥时候没的都记不准了。"老周说，"一会儿觉着是开春，一会儿觉着是入冬。这不对。人没了那天的天，不该记不准。"</p>
+  <p>萧铁衣沉默了片刻。</p>
+  <p>"灯换了，先吃记。"他说，"记事吃完了，就吃人。"</p>
+  <p>"那我还有多少时候？"</p>
+  <p>"我不骗你。"萧铁衣说，"我不知道。可你一天背一条街，我就一天记一条街。你背完，我记完——那时候你就是忘了，这城里也还有一本账，替你记着你娘烙糊的饼。"</p>
+  <p>老周咧嘴笑了，笑得眼圈更红。</p>
+  <p>"那敢情好。"他说，"我娘那饼，糊得能刮下三层。"</p>
+  <p>"背完了再忘，也值。"</p>
+  <p>萧铁衣没接话。他看着老周，心里清楚——老周记起的是灯，灯记起的是人。人记起灯，灯才不散。</p>
+  <p>他站起来，从碑前走开。</p>
+  <p>乱葬岗上的人不多。墨记的伙计十来个，暗桩上来的七八个，苏家渡的婆子拄着拐也来了。她站在最后头，没往前挤，手里捏着一迭纸钱——不是烧给铁塔的，是看灯人那门旧规矩：纸钱剪成灯样，压在碑脚，意思是"这盏灯有人看着"。</p>
+  <p>她一张一张摆，摆了七张，围了碑一圈。</p>
+  <p>婆子摆完，抬起头，看见萧铁衣在看她。</p>
+  <p>"东家，"她说，"老规矩，我只会这个。"大家站在碑两边，没人哭出声。萧铁衣走过去，把双账收进怀里——一本青纸，一本白纸，并排在他身后。</p>
+  <p>他把两本账放在碑前的青石上，翻开青纸那一本。</p>
+  <p>明账摊着，记的是"现在的灯"。他翻到最后一页，那页上记的是西市口那一盏，旧主三口，井头铺，灯是壬辰年挂的。</p>
+  <p>"记到这里，记满了。"他说。</p>
+  <p>"东家，不记满了呢？"小钱问。</p>
+  <p>"记满就是记完。记不完，就记到死。"萧铁衣说。</p>
+  <p>他顿了顿，又补了一句。</p>
+  <p>"暗账不写'死'字。"</p>
+  <p>小钱一愣。</p>
+  <p>"一户人家全没了，册上写'绝户'，不写'死'。"萧铁衣说，"'死'是归渊里的——人一死，名就上渊册，这是天条，谁也拦不住。可'绝户'是归咱们这本的：绝户是这一户没了后人，不是这一号空了。"</p>
+  <p>"这……这不一样么？"</p>
+  <p>"不一样。"萧铁衣说，"'死'是把名字交出去，'绝户'是把名字扣下来。名字扣在咱们纸上，渊里那本就收不着。收不着，那号在渊册上就还是活的。"</p>
+  <p>小钱把笔接过去，手抖得厉害。</p>
+  <p>"东家，这活儿我干得了么？"</p>
+  <p>"干得了。"萧铁衣说，"你记的时候，别想着你在救人。你就想着你在记账。账这东西，你越想救命，越记歪；你就当它是账，一笔是一笔，反倒救得下来。"</p>
+  <p>小钱点点头，把笔在指头上转了半圈，攥稳了。</p>
+  <p>"东家啥时候回？"</p>
+  <p>"快则一月，慢则三月。"</p>
+  <p>"要是不回呢？"</p>
+  <p>萧铁衣看了他一眼。</p>
+  <p>"不回，这本账就是你的。"他说，"你接着记。记到城里的灯全黄了，记到没人再问你要账本，你就把它烧了。"</p>
+  <p>"烧了？"</p>
+  <p>"烧了。"萧铁衣说，"灯都黄了，还要账做什么。"</p>
+  <p>"不是抢人。"萧铁衣说，"是抢号。"</p>
+  <p>他把笔掭了掭，落笔在白纸那本上。</p>
+  <p>"名字是死的，号是活的。人死了，名字还在号上；号空了，人就真的没了。我扣不住名字，我扣得住号。"</p>
+  <p>——</p>
+  <p>他翻完两本账，把石台上摊的收起来，放进怀里。</p>
+  <p>"铁塔，该走了。"</p>
+  <p>老周走上前，把担子放到一旁，低声道："东家，我娘那盏灯，你记着。"</p>
+  <p>"记着。"萧铁衣说。</p>
+  <p>老周点头，没再说话。他转身，挑起担子走了。走了几步，回头喊了一句：</p>
+  <p>"东家！今夜别出门啊！外头冷。灯照着呢，不冷。可风大。"</p>
+  <p>萧铁衣站在乱葬岗上，看着老周挑担子的背影。</p>
+  <p>那背影很瘦，走得稳，每一步都不晃。</p>
+  <p>他点点头。</p>
+  <p>"走。"</p>
+  <p>——</p>
+  <p>走之前，他回了一趟墨记后院。</p>
+  <p>阿萝躺在里屋，半边脸从颧骨到耳根浮着一层极淡的青。那青不亮，像退了火的铜。大夫说，纹走到眼睛，人就成灯了。眼下纹停在她颧骨下头，没再往上。</p>
+  <p>萧铁衣在床边站了一会儿。</p>
+  <p>他伸手，把阿萝额前那绺头发拨开。她的额头是凉的，凉得不像活人。</p>
+  <p>"阿萝。"他说。</p>
+  <p>没应。</p>
+  <p>"我得出一趟门。"他说，"去云荒。那边有一盏灯，空着，标着'待填'。"</p>
+  <p>床上的人还是没动。</p>
+  <p>"你那半盏，我给你找回来。"</p>
+  <p>他说完这句，自己也觉出这话有多虚。半盏灯进了别人的册子，跟人死了一样，是不可逆的。渊里的规矩只有一条：上去的名字，拿不下来；空出来的号，可以塞。</p>
+  <p>所以他要做的不是把阿萝那半盏"拿回来"。</p>
+  <p>是把那个号，从渊册上，扣在自己手里。</p>
+  <p>扣住了，那半盏就还有个归处。</p>
+  <p>他站起身，把被角掖好，转身出门。</p>
+  <p>——</p>
+  <p>出城第一站，是那道渠口。</p>
+  <p>渠口在城西，地势低，水浅，枯了，石缝里长着苔，踩上去滑。</p>
+  <p>萧铁衣出城门，穿过县衙，过市口，一直走到渠口。</p>
+  <p>渠口外的草上，零零落落地散着几盏灯。</p>
+  <p>不是暗桩网的灯。是野的。一盏一盏，没串链，没编号，就散在渠口两边的草上，青着，亮着，孤零零的。</p>
+  <p>那是"野灯之戒"。</p>
+  <p>出城前那一夜，铁塔坐在门槛上啃着半块饼，跟他说过这句话。铁塔说：去云荒那条路上，有野灯。野灯不是人家挂的，不是司里上的册，是地里自己长出来的。老辈人管这叫"地漏"——地下有东西漏出来，漏一点，就在草上亮一盏。</p>
+  <p>铁塔那晚啃完饼，把饼渣拢在手心里，站起来，拍了拍屁股。</p>
+  <p>"东家，记着：渠走三日，见灯就低头。别看它的火，别问它的话。看了，它就记住你；记住了，它就照你。照一路，一路都是它。"</p>
+  <p>萧铁衣当时问：照着又怎样？</p>
+  <p>铁塔想了半天，说：不知道。老辈人只说"照着的人，回不来"。至于为啥回不来，没人说过。</p>
+  <p>如今说了野灯，此刻见了。</p>
+  <p>——</p>
+  <p>萧铁衣站在渠口，看着那些野灯。</p>
+  <p>渠很窄，看不到头，只看见它一路向下，往西南的方向去。渠底有石，石上渗水，水一到草上，草就绿。</p>
+  <p>他听见渠水声，一下一下，很慢，像在数数。</p>
+  <p>过了小半柱，一盏野灯跳了一下。</p>
+  <p>"咚。"</p>
+  <p>声音极轻，可他听得清。</p>
+  <p>另一盏也跳了一下。</p>
+  <p>萧铁衣的呼吸停了一息。</p>
+  <p>他想起铁塔说过的话：渠走三日，见灯就低头。看了，会记住你，照到你。</p>
+  <p>他低头。</p>
+  <p>野灯看着他，青火跳了一下，往他方向偏了半寸。</p>
+  <p>不是照他。是等着他看。</p>
+  <p>萧铁衣停了一息，再抬头。野灯还在，青火稳稳地亮着，没动。</p>
+  <p>"野灯，"他轻声说，"你是记了我？"</p>
+  <p>野灯不答。</p>
+  <p>可那光一跳一跳，像在点头。</p>
+  <p>"爹。"丫丫扯了扯他的袖子。</p>
+  <p>"嗯。"</p>
+  <p>"它们在数。"</p>
+  <p>萧铁衣低头看她。丫丫仰着脸，眼睛睁得圆，看着那一片散在草上的青火。</p>
+  <p>"数啥？"</p>
+  <p>"数人。"丫丫说，"一个，两个，三个……数到咱们这儿，停了一下，又往下数了。"</p>
+  <p>萧铁衣的背脊一凉。</p>
+  <p>"数完了呢？"</p>
+  <p>"数完了，就该填号了。"丫丫说，"我在渊里听过。数完了，空着的号，就得有人填。"</p>
+  <p>她把手指头蜷起来，一根一根数给他看：</p>
+  <p>"一，二，三……"</p>
+  <p>——</p>
+  <p>——</p>
+  <p>他顺着渠口往西走。</p>
+  <p>走了约莫小半个时辰，出了城，入了云荒的边界。</p>
+  <p>云荒不比郡城。郡城有墨记，有阿萝，有铁塔，有那张铺了半座城的暗桩网。云荒窄，空，远，远得能听见风从山那边来。</p>
+  <p>萧铁衣走了没几步，就看见了灯屋的轮廓。</p>
+  <p>灯屋在远山影里，轮廓不大，却稳。一座灯屋，九进院子，依着山势排开，院与院之间，隐约能看见一盏灯，亮着，稳稳地，没在风里晃。</p>
+  <p>他走近了，看那灯屋。</p>
+  <p>灯屋的外壁是青石，石上刻着纹，纹一圈一圈，绕着往下走，跟渊门上那些刻痕，一个路数。</p>
+  <p>他认得这种纹。</p>
+  <p>渊里，门上那些刻痕，一个路数。</p>
+  <p>他停住了，抬头看。</p>
+  <p>灯屋外，立着一个身影。</p>
+  <p>那身影不等人，不说话，立在那儿，一动不动，像早就等在灯屋这边。</p>
+  <p>萧铁衣没有走近。他站在灯屋外三步远的地方，看着那身影。</p>
+  <p>身影身上没有灯味。</p>
+  <p>不是干净，是没有。活人的味道是有的——汗味、烟火味、灯油味。这人身上没有。</p>
+  <p>像空了很久的屋子。</p>
+  <p>"东家。"身影开口，声音很平，像从很深的地方传上来，一层一层，穿过山。</p>
+  <p>"来了。"</p>
+  <p>萧铁衣的脸色沉了。</p>
+  <p>"我知道。"他说，"你等了我许久。"</p>
+  <p>"不晚。"身影说，"你该来。"</p>
+  <p>"来做什么？"</p>
+  <p>身影把手里一样东西递过来。</p>
+  <p>是一卷皮纸。</p>
+  <p>纸很旧，熟皮纸，边角起毛。萧铁衣接过来，展开。</p>
+  <p>纸上画的是灯屋的格局。九进院子，每进几间，每间几盏灯，灯摆在什么位置，号怎么标。</p>
+  <p>画得很细，每盏灯的位都标了号，从"一"到"三百二十四"。</p>
+  <p>萧铁衣一页一页看。</p>
+  <p>看到第七进院子的时候，他停住了。</p>
+  <p>第七进院子的第三间屋，第三盏灯底下，标着一个号。</p>
+  <p>号旁边写着两个字。</p>
+  <p>不是名字。</p>
+  <p>是"待填"。</p>
+  <p>萧铁衣的目光，在那两个字上停了一息。</p>
+  <p>——</p>
+  <p>"东家，"身影说，"这是待填之灯的位置。"</p>
+  <p>"待填？"</p>
+  <p>"灯屋三百二十四盏，三百二十三盏压着号。最后一盏，空着，标'待填'。"身影说，"这一盏，是给活人留的。谁把名字填进去，谁就当家。"</p>
+  <p>"填进去，人呢？"</p>
+  <p>"人就成了灯。"</p>
+  <p>"那不就是死了么？"</p>
+  <p>"不是死。"身影说，"是守。"</p>
+  <p>他抬起头。</p>
+  <p>"我家老爷子说，三百年前这一支出云荒的时候，有人自愿填了这一盏。填进去的人，替这一支守了三百年的门。"</p>
+  <p>"守住了没有？"</p>
+  <p>"守住了。"身影说，"三百年，这一支没散过一门一户。"</p>
+  <p>"那填进去的那个人呢？"</p>
+  <p>身影沉默了一下。</p>
+  <p>"老爷子说，那人的名字，从填进去那天起，就不许人再提了。"他说，"提一次，灯就暗一分。"</p>
+  <p>萧铁衣看着他。</p>
+  <p>"那你提了。"</p>
+  <p>"我提的不是名字。"身影说，"我提的是'那人'。名字和人是两码事——名字填进灯里，人还在灯外头守着。"</p>
+  <p>萧铁衣没接话。这话他懂。</p>
+  <p>城里那本白账上，写的也不是名字。</p>
+  <p>"这一盏空了多久？"他问。</p>
+  <p>"空了三百年。"身影说，"三百年前填过一次，填满了就不空了。可前些年，那盏灯忽然暗了。老爷子说，是那人不肯守了。"</p>
+  <p>"不肯守了会怎样？"</p>
+  <p>"灯就空回来。"身影说，"空了，就得再填一个。"</p>
+  <p>"填谁？"</p>
+  <p>"填肯的人。"</p>
+  <p>萧铁衣沉默了很久。</p>
+  <p>"要是我填的不是肯的人呢？"</p>
+  <p>身影第一次笑了。那笑很浅，像脸上裂了一道缝。</p>
+  <p>"东家，"他说，"这灯屋三百年，填过一次。上一次填的是肯的。这一回——您要是填个不肯的，灯会灭。灯灭了，这一支三百年守的门，一个晚上就散。"</p>
+  <p>"那你还给我这张图。"</p>
+  <p>"因为我不敢填。"身影说，"我不敢，就得等一个敢的。"</p>
+  <p>——</p>
+  <p>萧铁衣没有答。</p>
+  <p>他把那张纸收进怀里，心里忽然全亮起来。</p>
+  <p>待填之灯。</p>
+  <p>阿萝被抽去半盏的那盏。</p>
+  <p>她那半盏去了哪儿？不在司里的塔上，不在那口铁管里，也不在裴主簿送出去的那只木桶里。萧铁衣翻过三库，点过九桶，第九桶是空的。</p>
+  <p>空的那半盏，不是没了。是有人拿走了。</p>
+  <p>拿去做什么？</p>
+  <p>填号。</p>
+  <p>他抬起头，看着那座依山排开的灯屋。</p>
+  <p>三百二十四盏，三百二十三盏压着号。压着的号是死人的号，是压住它们不让它们乱跑的。剩下一盏空着——空的那一盏不是用来压的，是用来收的。收一个活人的号，把它按进灯里，这个号就归云荒这一支使。</p>
+  <p>渊册上那个号就空了。</p>
+  <p>空出来的号，能往里头塞东西。</p>
+  <p>萧铁衣的手在袖子里攥成了拳。</p>
+  <p>灯照司抽芯，是为了腾号。腾出来的号给谁？——给渊里的东西落脚。</p>
+  <p>那云荒这一支呢？他们守了三百年，守的不是门。他们守的是那一盏"待填之灯"，守着它别被人拿去填错人。</p>
+  <p>——</p>
+  <p>"这一盏，我要看。"萧铁衣说。</p>
+  <p>"东家要填？"</p>
+  <p>"我要看。"</p>
+  <p>身影摇头。</p>
+  <p>"看不得。"他说，"灯在第七进第三间，那间屋子上了锁。钥匙在老当家手里。老当家三年前出门，没回来。"</p>
+  <p>"那你是谁？"</p>
+  <p>"我是看门的。"</p>
+  <p>"看门的就该有钥匙。"</p>
+  <p>"看门的不拿钥匙。"身影说，"拿钥匙的人，得肯填；看门的人，只肯等。"</p>
+  <p>——</p>
+  <p>身影说完，转身往灯屋走去。</p>
+  <p>背影消失在灯屋外头，青光跟着退了，最后只剩灯屋轮廓里一点，晃了两晃，没了。</p>
+  <p>萧铁衣站在原地，看着灯屋。</p>
+  <p>灯屋外壁那些刻着纹的青石，纹一圈一圈，跟渊门上的，一个路数。</p>
+  <p>渊里那些"顶在门上"的东西，是守门的。</p>
+  <p>灯屋里那盏待填之灯，也是守门的。</p>
+  <p>他握紧手里的皮纸，往后退了一步。</p>
+  <p>丫丫从他身后探出半个脑袋，看着那座灯屋。</p>
+  <p>"爹，"她小声说，"那屋子里头，有人在哭。"</p>
+  <p>萧铁衣蹲下来。</p>
+  <p>"你听见了？"</p>
+  <p>"不是听见。"丫丫说，"是看见的。屋子里有人，很多很多人，都站在灯底下。他们不动，也不说话。就站着。"</p>
+  <p>"有多少？"</p>
+  <p>丫丫把手指头一根一根伸出来，伸到第十根，又从头数。</p>
+  <p>"三百二十三个。"她说，"还有一个空位。"</p>
+  <p>萧铁衣的手一紧。</p>
+  <p>三百二十三。图上标的，正是三百二十三盏压着号。</p>
+  <p>这孩子数的不是人，是号。</p>
+  <p>"走。"他站起来，把丫丫的手牵住。</p>
+  <p>——</p>
+  <p>城里的青灯，照着他走。</p>
+  <p>云荒的远山，挡着夜。</p>
+  <p>可他手里的双账，在怀里，稳着。</p>
+  <p>还有一件事他没跟那看门的说：图上的第七进第三间，标号的墨是新的。</p>
+  <p>三百年的老图上，独独那两笔"待填"，是后填上去的。</p>
+  <p>填的时间，不超过一个月。</p>
+  <p>——</p>
+  <p>——</p>
+  <p>第六十六章 完</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，听书键跳转纯语音页 ===== */
+  var TOTAL=75;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<a class="rbtn gold" href="listen.html?ch='+n+'">🎧 听书</a>'+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  var dragging=false;
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a")){show();return;}
+    var w=document.documentElement.clientWidth||document.body.clientWidth;
+    var x=e.clientX||0;
+    /* 左右两侧 1/3 为翻页手势，中间区域用于呼出工具栏 */
+    if(x<w*0.30&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    if(x>w*0.70&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+    if(document.body.classList.contains("ui-show"))hide();else show();
+  });
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  var CH=66, TITLE="出云荒途";
+  var RKEY="hugo_reader_v1";
+  function loadR(){try{return JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){return{}}}
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function applyPct(p){if(maxH()>0)window.scrollTo(0,maxH()*p/100);}
+  var chapters=(loadR().chapters||{});
+  var st=chapters[CH]||{pct:0};
+  var bm=loadR().bookmark;
+  if(location.hash==="#bookmark"&&bm&&bm.ch===CH&&bm.pct>0){
+    setTimeout(function(){applyPct(bm.pct)},80);
+  }else if(location.hash==="#resume"&&st.pct>0){
+    setTimeout(function(){applyPct(st.pct)},80);
+  }else if(st.pct>=3&&st.pct<95){
+    var tip=document.createElement("div");tip.className="resume-tip";
+    tip.innerHTML="📌 上次读至 "+st.pct+"% · <a href='javascript:void(0)' id='resumeGo'>继续上次位置</a>";
+    document.querySelector(".wrap").prepend(tip);
+    document.getElementById("resumeGo").onclick=function(){applyPct(st.pct);tip.remove();};
+  }
+  if(bm&&bm.ch===CH&&bm.pct>0&&location.hash!=="#bookmark"){
+    var btip=document.createElement("div");btip.className="resume-tip";
+    btip.innerHTML="🔖 本章已安放书签（钉在 "+bm.pct+"%） · <a href='javascript:void(0)' id='bmGo'>回到书签位置</a>";
+    document.querySelector(".wrap").prepend(btip);
+    document.getElementById("bmGo").onclick=function(){applyPct(bm.pct);btip.remove();};
+  }
+  var timer=null;
+  function record(){
+    var m=maxH();if(m<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/m*100));
+    var d=loadR();d.chapters=d.chapters||{};
+    d.chapters[CH]={pct:p,t:Date.now()};
+    d.resume={book:"gudo",ch:CH,name:"第"+CH+"章 · "+TITLE,file:"gudo-"+CH+".html",pct:p,t:Date.now()};
+    saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record()},1000)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(function(){record()},500);
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  if(bm&&bm.ch===CH&&bm.pct>0){btn.textContent="🔖 书签 "+bm.pct+"%";}else{btn.textContent="🔖 书签";}
+  document.getElementById("__bmSlot").appendChild(btn);
+  btn.onclick=function(){
+    var m=maxH();var p=m>0?Math.min(100,Math.round(document.documentElement.scrollTop/m*100)):0;
+    var d=loadR();d.bookmark={book:"gudo",ch:CH,pct:p,t:Date.now()};saveR(d);
+    btn.textContent="✓ 已安放书签 "+p+"%";
+    setTimeout(function(){btn.textContent="🔖 书签"},1800);
+  };
+})();
+
+</script>
+</body>
+</html>

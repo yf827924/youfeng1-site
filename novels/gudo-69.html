@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第六十九章 · 云荒收束 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第六十九章 · 云荒收束</h1>
+  <p>天亮以后，灯屋安静了。</p>
+  <p>不是没声音，是那个"数数"的声音停了。</p>
+  <p>三百二十三盏灯还亮着，青的，齐的，可它们不数了。萧铁衣在第七进的院子里站了半个时辰，一盏一盏地听过去，一盏都不数。</p>
+  <p>"它们吃饱了。"三婆说。</p>
+  <p>她坐在石墩上，木杖横在膝上，一夜之间像是又老了十岁。</p>
+  <p>"吃饱了就不数了？"</p>
+  <p>"数是为了要。"三婆说，"饿了才数。吃饱的东西，不数。"</p>
+  <p>萧铁衣看着那间青石屋。</p>
+  <p>屋里那盏灯，一丈高的黄火，稳稳地立着。</p>
+  <p>三百年来第一次，这盏灯不叫"待填"。</p>
+  <p>——</p>
+  <p>他在灯屋待了三天。</p>
+  <p>头一天，他什么也没做，只是睡。</p>
+  <p>睡在第七进院子的廊下，身底下垫着三婆给的一领旧席。丫丫蜷在他旁边，睡得死沉，鼻孔底下结着一圈干了的血痂。</p>
+  <p>第二天，他去看了那三百二十三盏灯。</p>
+  <p>一盏一盏地看，从头看到尾。每一盏底下都有一块牌，牌上刻着号。他看号，看得很慢。</p>
+  <p>看到第二百一十七盏的时候，他停住了。</p>
+  <p>那块牌上刻的是"丙字七百一十八"。</p>
+  <p>他蹲下来，看了很久。</p>
+  <p>"三婆。"</p>
+  <p>"嗯。"</p>
+  <p>"七百一十八在这儿。"</p>
+  <p>"在。"</p>
+  <p>"那七百一十九呢？"</p>
+  <p>三婆走过来，拄着杖，站在他旁边。</p>
+  <p>"七百一十九没在这儿。"她说，"七百一十九是空的。空了三百年，就搁在第七进第三间。"</p>
+  <p>"现在呢？"</p>
+  <p>"现在在你身上。"</p>
+  <p>萧铁衣没说话。</p>
+  <p>他伸出手，把那块牌翻过来。</p>
+  <p>牌的背面，刻着一行更小的字。字很浅，得对着光才看得清。</p>
+  <p>刻的是：</p>
+  <p>"赵，第三支，第二十一世。"</p>
+  <p>——</p>
+  <p>第三天，他问了那句话。</p>
+  <p>"三婆，赵家分两支，一支守灯，一支守刀。"</p>
+  <p>"是。"</p>
+  <p>"守灯的守的是什么？"</p>
+  <p>三婆没有立刻答。</p>
+  <p>她走到廊下，把手放在一盏灯的罩子上。罩子是冷的，青火在罩子里一跳一跳。</p>
+  <p>"守的是'别开'。"她说。</p>
+  <p>"别开什么？"</p>
+  <p>"门。"</p>
+  <p>萧铁衣的呼吸，慢了下来。</p>
+  <p>"哪一扇门？"</p>
+  <p>"我不知道是哪一扇。"三婆说，"我只知道，赵家老辈人传下来的话，一共两句。第一句：门不能开。第二句：开了就合不上。"</p>
+  <p>"那守刀那一支呢？"</p>
+  <p>三婆把手从灯罩上收回来。</p>
+  <p>"守刀的守的是'开'。"</p>
+  <p>萧铁衣愣住了。</p>
+  <p>"一支守着别开，一支守着开？"</p>
+  <p>"是。"</p>
+  <p>"那不是对头么？"</p>
+  <p>"是对头。"三婆说，"赵家三百年前分家，就为这一件事分崩的。"</p>
+  <p>"为什么？"</p>
+  <p>三婆摇头。</p>
+  <p>"老辈人的事，说不清了。"她说，"我只知道，分家那天，印掰成了两半。掰印的时候，两个当家的一句话都没说。掰完了，各拿一半，各走各的。"</p>
+  <p>"掰印的人是谁？"</p>
+  <p>"不知道。"三婆说，"那一年我还没生。"</p>
+  <p>——</p>
+  <p>萧铁衣站在廊下，看着那一盏"丙字七百一十八"。</p>
+  <p>"三婆。"</p>
+  <p>"嗯。"</p>
+  <p>"守灯这一支，守了三百年'别开'。那三十年前来合印的那个人，是守刀那一支的。"</p>
+  <p>"是。"</p>
+  <p>"他要开门。"</p>
+  <p>"是。"</p>
+  <p>"老当家把他赶出去了。"</p>
+  <p>"是。"</p>
+  <p>"那老当家是守'别开'的。"</p>
+  <p>三婆看了他一眼。</p>
+  <p>"你想说，老当家是对的？"</p>
+  <p>"我不知道。"萧铁衣说，"我只知道，老当家赶走他三年之后，去了郡城。三年前，赵怀远死了。"</p>
+  <p>"你是说老当家杀了赵怀远？"</p>
+  <p>"我没说。"</p>
+  <p>"可你想了。"</p>
+  <p>萧铁衣沉默了片刻。</p>
+  <p>"我想了。"他说。</p>
+  <p>三婆点点头。</p>
+  <p>"想就想了。"她说，"我住在第七进六十年，我什么人都想过一遍。想不是罪。"</p>
+  <p>——</p>
+  <p>第四天夜里，第二声来了。</p>
+  <p>——</p>
+  <p>那声音还是从胸口那根骨头的后头来的。</p>
+  <p>很慢，很轻，一个字一个字地往外吐：</p>
+  <p>"丙——字——七——百——一——十——九。"</p>
+  <p>萧铁衣从席上坐起来。</p>
+  <p>他没有出声。</p>
+  <p>昨夜三婆说过：叫第一声，你应了，你身上就多一道纹；叫第二声，你再应，那道纹就往里长一分；叫第三声——</p>
+  <p>第三声应了，你就不是你了。</p>
+  <p>他坐在席上，等着那声音过去。</p>
+  <p>可那声音没有过去。</p>
+  <p>它又叫了一遍。</p>
+  <p>"丙——字——七——百——一——十——九。"</p>
+  <p>比第一遍响。</p>
+  <p>萧铁衣的手，在膝盖上攥成了拳。</p>
+  <p>丫丫在他旁边翻了个身，没醒。</p>
+  <p>第三遍。</p>
+  <p>"丙——字——七——百——一——十——九！"</p>
+  <p>这一声，已经不是在骨头后头了。它从院子里出来，从三百二十三盏灯里出来，从地底下来。</p>
+  <p>整个灯屋都在叫。</p>
+  <p>——</p>
+  <p>萧铁衣站了起来。</p>
+  <p>他走到院子当中，抬起头。</p>
+  <p>三百二十三盏灯的火苗，一齐立得笔直，朝着他。</p>
+  <p>他张开嘴。</p>
+  <p>"在"字还没出口——</p>
+  <p>"别应！"</p>
+  <p>三婆的木杖，从廊下横飞过来，"当"地砸在他脚边。</p>
+  <p>老人从廊下冲出来。她冲得极快，快得不像一个驼背的老妇。她一把抓住萧铁衣的胳膊，指甲掐进他的肉里。</p>
+  <p>"东家！"她的声音在抖，"别应！第二声不能应！"</p>
+  <p>"为什么？"</p>
+  <p>"第一声是'问'。"三婆说，"第二声是'叫'。问，是它还不确定；叫，是它认准了。你应了第二声，从今往后，它就不用问了——它张嘴你就得应。"</p>
+  <p>"那我该怎么办？"</p>
+  <p>"不理。"</p>
+  <p>"不理，它会一直叫。"</p>
+  <p>"它会叫到天亮。"三婆说，"叫到天亮，它就停了。"</p>
+  <p>"那明天夜里呢？"</p>
+  <p>三婆没答。</p>
+  <p>——</p>
+  <p>第四遍来了。</p>
+  <p>"丙字七百一十九！"</p>
+  <p>这一声，已经不是"叫"了。</p>
+  <p>是喊。</p>
+  <p>萧铁衣的身子晃了一下。他觉得胸口那根骨头的后头，有什么东西在往外钻。黑纹从领口爬出来，爬上脖子。</p>
+  <p>他咬着牙，把那个"在"字咽回去。</p>
+  <p>第五遍。</p>
+  <p>第六遍。</p>
+  <p>到第七遍的时候，萧铁衣跪下了。</p>
+  <p>他两只手撑在地上，喉咙里发出一种不像是人的声音。他想应。他控制不住地想应。那不是怕，也不是疼——是"认"。</p>
+  <p>那个号在他身上，那个号叫他的名字，他就该答应。</p>
+  <p>这是天条。</p>
+  <p>人死了，名上渊册；渊册叫号，号主答应。四千年，没有一个号敢不答应。</p>
+  <p>可他不能应。</p>
+  <p>应了第二声，阿萝那半盏就白救了。号会重新回到册上，回到灯屋，回到那盏刚吃饱的灯里。</p>
+  <p>"东家。"</p>
+  <p>三婆在他面前蹲下来。</p>
+  <p>老人的脸在青火底下，瘦得像一张纸。</p>
+  <p>"你撑不住的。"她说。</p>
+  <p>"我撑得住。"</p>
+  <p>"你撑不住。"三婆说，"我守了六十年灯，我见过撑不住的人。三百年前那后生，撑了三天，第四天他自己走进去了。"</p>
+  <p>她抬起手，摸了摸萧铁衣的头。</p>
+  <p>那一下，很轻。</p>
+  <p>"东家，"她说，"你救了一个人，卖了四十一个号，还搭进去一截自己的记。够了。"</p>
+  <p>"三婆——"</p>
+  <p>"你听着。"三婆说，"这号不是你的。"</p>
+  <p>萧铁衣抬起头。</p>
+  <p>"这是丙字七百一十九。"三婆说，"赵家的号。这一支三百年，赵家的号都挂在我身上。"</p>
+  <p>她站起来。</p>
+  <p>"我替你应。"</p>
+  <p>——</p>
+  <p>"不行！"</p>
+  <p>萧铁衣伸手去抓她，抓空了。</p>
+  <p>三婆已经走到了院子当中。</p>
+  <p>老人站在三百二十三盏灯底下，把腰一点一点地直起来。驼了六十年的背，那一刻居然直了。</p>
+  <p>她抬起头，对着满院的青灯，张开了嘴。</p>
+  <p>第八遍来了。</p>
+  <p>"丙——字——七——百——一——十——九——"</p>
+  <p>"在。"</p>
+  <p>——</p>
+  <p>那一个字，三婆喊得极响。</p>
+  <p>响得不像一个老人的嗓子，像一口钟。</p>
+  <p>整个灯屋，静了一瞬。</p>
+  <p>然后，三百二十三盏灯，一齐灭了。</p>
+  <p>——</p>
+  <p>萧铁衣爬过去的时候，三婆已经倒下了。</p>
+  <p>他抱起她。老人的身子轻得吓人，像一抱干柴。</p>
+  <p>"三婆。"</p>
+  <p>"嗯。"</p>
+  <p>"你傻。"</p>
+  <p>"我六十年了。"三婆说，"我十九岁进这个院子，进来的那天，老当家跟我说，你守着这些灯，守到你守不动的那天。"</p>
+  <p>她喘了一下。</p>
+  <p>"我守了六十年。"</p>
+  <p>"你守得好。"</p>
+  <p>"不好。"三婆说，"我一个号都没记住。"</p>
+  <p>她抬起手，指了指自己的脑袋。</p>
+  <p>"我这六十年，天天听它们报数。我听进去了，可我记不住。我记不住一个号。"</p>
+  <p>萧铁衣的眼眶热了。</p>
+  <p>"你记住了。"他说。</p>
+  <p>"我记住什么了？"</p>
+  <p>"你记住了三百二十三盏灯，一盏都不许灭。"</p>
+  <p>三婆笑了。</p>
+  <p>那笑很淡，像青火上最后一点亮。</p>
+  <p>"东家，"她说，"你这个话，说得比昨儿那个好。"</p>
+  <p>——</p>
+  <p>她从怀里摸出那半枚铜印，塞进萧铁衣手里。</p>
+  <p>印是温的。</p>
+  <p>"给你。"</p>
+  <p>"三婆——"</p>
+  <p>"别合。"她说。</p>
+  <p>"什么？"</p>
+  <p>"别合印。"三婆的手，攥住了他的袖子，攥得很紧，"合了印，门就开了。老当家赶人，赶得对。"</p>
+  <p>"可守刀那一支要开。"</p>
+  <p>"他们要开，是因为他们要进去。"三婆说，"我们不开，是因为我们知道：门里头的东西，出来一个，这世上就少一个号。"</p>
+  <p>"门里头有什么？"</p>
+  <p>三婆没答。</p>
+  <p>她的手，从萧铁衣的袖子上滑下来。</p>
+  <p>落在地上。</p>
+  <p>——</p>
+  <p>第七进的院子里，三百二十三盏灯，一盏一盏，慢慢地，重新亮起来。</p>
+  <p>青的。</p>
+  <p>它们又开始数数了。</p>
+  <p>"一、二、三……"</p>
+  <p>——</p>
+  <p>三婆下葬在灯屋后山。</p>
+  <p>没有碑。萧铁衣按她的意思，把她埋在那三百二十三盏灯看得见的地方，坟头压了七张灯样纸钱。</p>
+  <p>丫丫问：为啥没有碑？</p>
+  <p>萧铁衣说：名字落在石头上，就归石头了。</p>
+  <p>丫丫说：那就归石头吧，石头也挺好的，石头不会忘。</p>
+  <p>萧铁衣摸了摸她的头。</p>
+  <p>这孩子流了一夜的鼻血，第二天就活蹦乱跳了，好像什么都没发生过。可他知道，她念那三十多条的时候，念出去的是真东西。</p>
+  <p>她替他记的那一部分，没了。</p>
+  <p>——</p>
+  <p>——</p>
+  <p>离开灯屋之前，萧铁衣做了一件事。</p>
+  <p>他把三婆那根木杖，插在了她坟头。</p>
+  <p>杖是枣木的，磨了六十年，杖头上有一层包浆，亮得能照见人。三婆拄着它，从第一进扫到第七进，扫了多少遍，没人知道。</p>
+  <p>插好以后，他退开两步看了看。</p>
+  <p>"杖在这儿，"他说，"往后谁来扫院子，谁自己拿。"</p>
+  <p>丫丫拉了拉他的袖子。</p>
+  <p>"爹，婆婆一个人在这儿，冷不冷？"</p>
+  <p>"不冷。"</p>
+  <p>"为啥？"</p>
+  <p>"因为这儿有三百二十三盏灯。"萧铁衣说，"灯都亮着，她就冻不着。"</p>
+  <p>丫丫似懂非懂地点点头。</p>
+  <p>她从怀里摸出一样东西，摆在坟前。</p>
+  <p>是半块胡饼。</p>
+  <p>"婆婆路上吃。"她小声说。</p>
+  <p>那是三婆给她的。进灯屋头一天，老人从灶台上摸出半块又干又硬的胡饼，塞给她，说：路上饿了啃两口。</p>
+  <p>丫丫舍不得啃，一直揣着。</p>
+  <p>——</p>
+  <p>回程走了六天。</p>
+  <p>出云荒，过渠口，那一片野灯还在草上亮着。这一回，萧铁衣没有低头。</p>
+  <p>他从那片野灯中间走过去。</p>
+  <p>一盏一盏的青火，跟着他的脚步，一齐偏过头。</p>
+  <p>走到最后那一盏的时候，他停了一下。</p>
+  <p>"看清楚了？"他说。</p>
+  <p>野灯不答。</p>
+  <p>"看清楚了就记住。"他说，"记住了，回头有人来收号，你就知道该照谁。"</p>
+  <p>他走了。</p>
+  <p>身后的野灯，一盏一盏，灭了。</p>
+  <p>——</p>
+  <p>第七天傍晚，萧铁衣回到郡城。</p>
+  <p>城还是那座城。</p>
+  <p>进了北门，一路走到墨记门口，天已经黑了。</p>
+  <p>一城的灯，全是青的。</p>
+  <p>他站在墨记门口，抬头看了一眼。</p>
+  <p>然后他推门进去。</p>
+  <p>——</p>
+  <p>——</p>
+  <p>小钱把这三日的城里的账，报了一遍。</p>
+  <p>赵珩回城的第三天，灯照司换了一次册。新册子不叫"灯册"，叫"户册"。户册上不记灯，只记人——哪一户几口，谁住哪儿，哪一年生的。</p>
+  <p>"这不对。"阿萝后来听了，只说了一句，"记灯是为了压号。记人——记人是要做什么？"</p>
+  <p>萧铁衣听着小钱报，没插话。</p>
+  <p>报完了，他问了一句：</p>
+  <p>"赵珩住在哪儿？"</p>
+  <p>"没住赵家老宅。"小钱说，"他住在灯照司后头那个院子里。就是从前验灵司那排屋子。"</p>
+  <p>"他带了多少人？"</p>
+  <p>"不多。"小钱说，"十来个。可这十来个，没一个是本地口音。"</p>
+  <p>"哪里的口音？"</p>
+  <p>小钱想了想。</p>
+  <p>"听不出来。"他说，"不像南边，也不像北边。像……像你说的那种，没根儿的。"</p>
+  <p>萧铁衣点点头。</p>
+  <p>"还有一样。"小钱从怀里摸出一张纸，递过来，"这是三日前，司里贴在西市口的告示。我抄了一份。"</p>
+  <p>萧铁衣接过来。</p>
+  <p>告示上写着：自即日起，凡本城户籍，一律重造。各家各户，须于五日内赴灯照司报号。逾期不报者，以"绝户"论。</p>
+  <p>——绝户。</p>
+  <p>萧铁衣的手，停在那两个字上。</p>
+  <p>这两个字，是他自己写在白账上的。</p>
+  <p>如今被贴在了墙上。</p>
+  <p>"东家，"小钱小声说，"他们怎么知道'绝户'这两个字？"</p>
+  <p>萧铁衣把那张纸折起来，收进怀里。</p>
+  <p>"因为我们弄错了一件事。"他说。</p>
+  <p>"什么？"</p>
+  <p>"我们一直以为，渊里那本册子，是死的。"萧铁衣说，"册子上的名字，划掉就是划掉了；号空着就是空着。可它不是死的。"</p>
+  <p>"那是什么？"</p>
+  <p>"是活的。"萧铁衣说，"我们记一笔，它记一笔。我们写'绝户'，它就学会了'绝户'。"</p>
+  <p>——</p>
+  <p>后院里屋，阿萝醒了。</p>
+  <p>她坐在床上，半边脸的青，退到了耳根底下，只剩一道极淡的线。</p>
+  <p>看见萧铁衣进来，她先摸了一下自己的脸。</p>
+  <p>"退了。"她说。</p>
+  <p>"退了。"</p>
+  <p>"你怎么弄的？"</p>
+  <p>萧铁衣把那截灯芯拿出来，放在她手心里。</p>
+  <p>淡黄的，三寸，一头已经不焦了。</p>
+  <p>阿萝捏着那截芯，捏了很久。</p>
+  <p>"这是我的。"</p>
+  <p>"是你的。"</p>
+  <p>"你从云荒拿回来的？"</p>
+  <p>"我拿回来了。"萧铁衣说，"你还记不记得墨记三十年的灯油账？"</p>
+  <p>阿萝愣了一下。</p>
+  <p>"记得。"</p>
+  <p>"哪一年，西市口那一片换了油坊？"</p>
+  <p>"癸巳年。"她想都没想，"换了以后，老陈家的灯油贵了两文，我记在第三本第七页。"</p>
+  <p>萧铁衣笑了。</p>
+  <p>那是他这些天，头一回笑。</p>
+  <p>"记着就好。"他说。</p>
+  <p>——</p>
+  <p>他把两本账，放在阿萝床边的小几上。</p>
+  <p>青纸一本，白纸一本。</p>
+  <p>"白账上，我划了二十七行。"他说，"那二十七个号，喂了灯。"</p>
+  <p>阿萝翻开白账，看了很久。</p>
+  <p>"那你攒了半座城的筹码，一晚上全押了。"</p>
+  <p>"押了。"</p>
+  <p>"值么？"</p>
+  <p>萧铁衣看着她。</p>
+  <p>"你算算。"</p>
+  <p>阿萝低下头，用手指头在桌底下点了点。</p>
+  <p>"不值。"她说。</p>
+  <p>"不值？"</p>
+  <p>"二十七个号，"她说，"换我一个人。账面上，亏。"</p>
+  <p>"那你还问。"</p>
+  <p>"我问的不是账。"阿萝抬起头，眼睛有点红，"我问的是你。"</p>
+  <p>萧铁衣没答。</p>
+  <p>他把刀解下来，放在小几上，刀鞘朝外。</p>
+  <p>"阿萝。"</p>
+  <p>"嗯。"</p>
+  <p>"这盏灯，我交给你。"</p>
+  <p>阿萝的手，停在账本上。</p>
+  <p>"什么灯？"</p>
+  <p>"墨记的灯。"萧铁衣说，"城里这几百盏青的，得有人记着。记着哪一盏原来是谁家的，哪一盏是哪年挂的。记着，它们就还有一天能黄回来。"</p>
+  <p>"我去记？"</p>
+  <p>"你去记。"萧铁衣说，"我教过你怎么记。念旧记，把青盖过去。盖得回来一盏是一盏。"</p>
+  <p>"你要走？"</p>
+  <p>"我要走。"</p>
+  <p>"去哪儿？"</p>
+  <p>萧铁衣看着窗外那一城的青灯。</p>
+  <p>"去取一样东西。"他说。</p>
+  <p>他伸手，从怀里摸出那半枚铜印，放在两本账中间。</p>
+  <p>铜的，锈的，断口不齐。</p>
+  <p>阿萝看了一眼，没有去碰。</p>
+  <p>"这是什么？"</p>
+  <p>"半枚印。"</p>
+  <p>"另一半呢？"</p>
+  <p>"在守刀那一支手里。"萧铁衣说，"我爹那一支。"</p>
+  <p>——</p>
+  <p>屋子里静了一会儿。</p>
+  <p>阿萝把被角往上拉了拉。</p>
+  <p>"东家。"</p>
+  <p>"嗯。"</p>
+  <p>"你要去的时候，"她说，"把这刀带走。"</p>
+  <p>"这刀放着，替你守账。"</p>
+  <p>"我不要刀守账。"阿萝说，"我要刀跟着你。刀在你手上，你才回得来。"</p>
+  <p>萧铁衣看着她。</p>
+  <p>"你不怕我回不来？"</p>
+  <p>"怕。"</p>
+  <p>"那你还让我走。"</p>
+  <p>阿萝低下头，把那本白账合上。</p>
+  <p>"因为你不走，"她说，"这一城的人，就一盏也黄不回来。"</p>
+  <p>——</p>
+  <p>萧铁衣把刀重新挂回腰上。</p>
+  <p>走到门口，他停了一下。</p>
+  <p>"阿萝。"</p>
+  <p>"嗯。"</p>
+  <p>"丫丫这两天，睡得不安稳。"</p>
+  <p>"怎么了？"</p>
+  <p>"她说有人在看她。"</p>
+  <p>阿萝抬起头。</p>
+  <p>"谁？"</p>
+  <p>"她说，'门外的人'。"</p>
+  <p>——</p>
+  <p>萧铁衣走出里屋的时候，丫丫正坐在院里的石阶上，两只手托着下巴，看着天。</p>
+  <p>萧铁衣在她旁边坐下。</p>
+  <p>"丫丫。"</p>
+  <p>"嗯。"</p>
+  <p>"那个人，还在看？"</p>
+  <p>丫丫点头。</p>
+  <p>"天天看。"</p>
+  <p>"从哪儿看？"</p>
+  <p>丫丫抬起手，指了指墨记的院墙。</p>
+  <p>"从墙外头。"</p>
+  <p>"他进来过么？"</p>
+  <p>"没有。"丫丫说，"他不进来。"</p>
+  <p>"为什么？"</p>
+  <p>丫丫想了想。</p>
+  <p>"他进不来。"她说。</p>
+  <p>"为什么不进来？"</p>
+  <p>丫丫转过头，看着他。</p>
+  <p>那双眼睛，在这一城的青光底下，黑得发亮。</p>
+  <p>"因为门没开。"</p>
+  <p>——</p>
+  <p>"那门怎么开？"萧铁衣问。</p>
+  <p>丫丫摇头。</p>
+  <p>"不知道。"</p>
+  <p>"你不是什么都知道么？"</p>
+  <p>"这个不知道。"丫丫说，"我只知道，现在没开。"</p>
+  <p>她顿了顿，又补了一句：</p>
+  <p>"可它在动。"</p>
+  <p>"什么在动？"</p>
+  <p>"门。"丫丫说，"它在慢慢地往外推。推了很久了。"</p>
+  <p>萧铁衣的手，攥紧了刀柄。</p>
+  <p>"推了多少年了？"</p>
+  <p>丫丫伸出手指头，数了数。</p>
+  <p>数到第三根，她不数了。</p>
+  <p>"数不清。"她说，"太多了。"</p>
+  <p>——</p>
+  <p>萧铁衣的心，猛地沉了一下。</p>
+  <p>"什么门？"</p>
+  <p>"就是那个门。"丫丫说，"渊底下那个门。"</p>
+  <p>"你怎么知道是那个门？"</p>
+  <p>"我不知道。"丫丫说，"我就是知道。"</p>
+  <p>她把头靠在他胳膊上。</p>
+  <p>"爹。"</p>
+  <p>"嗯。"</p>
+  <p>"他不是在看我。"</p>
+  <p>"那他在看谁？"</p>
+  <p>丫丫闭上眼睛。</p>
+  <p>"他在看你手里的东西。"</p>
+  <p>——</p>
+  <p>第六十九章 完</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，听书键跳转纯语音页 ===== */
+  var TOTAL=75;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<a class="rbtn gold" href="listen.html?ch='+n+'">🎧 听书</a>'+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  var dragging=false;
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a")){show();return;}
+    var w=document.documentElement.clientWidth||document.body.clientWidth;
+    var x=e.clientX||0;
+    /* 左右两侧 1/3 为翻页手势，中间区域用于呼出工具栏 */
+    if(x<w*0.30&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    if(x>w*0.70&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+    if(document.body.classList.contains("ui-show"))hide();else show();
+  });
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  var CH=69, TITLE="云荒收束";
+  var RKEY="hugo_reader_v1";
+  function loadR(){try{return JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){return{}}}
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function applyPct(p){if(maxH()>0)window.scrollTo(0,maxH()*p/100);}
+  var chapters=(loadR().chapters||{});
+  var st=chapters[CH]||{pct:0};
+  var bm=loadR().bookmark;
+  if(location.hash==="#bookmark"&&bm&&bm.ch===CH&&bm.pct>0){
+    setTimeout(function(){applyPct(bm.pct)},80);
+  }else if(location.hash==="#resume"&&st.pct>0){
+    setTimeout(function(){applyPct(st.pct)},80);
+  }else if(st.pct>=3&&st.pct<95){
+    var tip=document.createElement("div");tip.className="resume-tip";
+    tip.innerHTML="📌 上次读至 "+st.pct+"% · <a href='javascript:void(0)' id='resumeGo'>继续上次位置</a>";
+    document.querySelector(".wrap").prepend(tip);
+    document.getElementById("resumeGo").onclick=function(){applyPct(st.pct);tip.remove();};
+  }
+  if(bm&&bm.ch===CH&&bm.pct>0&&location.hash!=="#bookmark"){
+    var btip=document.createElement("div");btip.className="resume-tip";
+    btip.innerHTML="🔖 本章已安放书签（钉在 "+bm.pct+"%） · <a href='javascript:void(0)' id='bmGo'>回到书签位置</a>";
+    document.querySelector(".wrap").prepend(btip);
+    document.getElementById("bmGo").onclick=function(){applyPct(bm.pct);btip.remove();};
+  }
+  var timer=null;
+  function record(){
+    var m=maxH();if(m<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/m*100));
+    var d=loadR();d.chapters=d.chapters||{};
+    d.chapters[CH]={pct:p,t:Date.now()};
+    d.resume={book:"gudo",ch:CH,name:"第"+CH+"章 · "+TITLE,file:"gudo-"+CH+".html",pct:p,t:Date.now()};
+    saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record()},1000)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(function(){record()},500);
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  if(bm&&bm.ch===CH&&bm.pct>0){btn.textContent="🔖 书签 "+bm.pct+"%";}else{btn.textContent="🔖 书签";}
+  document.getElementById("__bmSlot").appendChild(btn);
+  btn.onclick=function(){
+    var m=maxH();var p=m>0?Math.min(100,Math.round(document.documentElement.scrollTop/m*100)):0;
+    var d=loadR();d.bookmark={book:"gudo",ch:CH,pct:p,t:Date.now()};saveR(d);
+    btn.textContent="✓ 已安放书签 "+p+"%";
+    setTimeout(function(){btn.textContent="🔖 书签"},1800);
+  };
+})();
+
+</script>
+</body>
+</html>

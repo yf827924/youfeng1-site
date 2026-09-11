@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第十章 · 守碑人 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第十章 · 守碑人</h1>
+  <p>春祭前两天，风声紧了。</p>
+  <p>三月十八，阿萝一早去验灵司送符，晌午跑回来，脸色发白。她把门一关："差役出动了。今晚连查三家客栈，查'外地来的少年'。我数了，出动两班人，十六个。"</p>
+  <p>"查到墨记了？"</p>
+  <p>"还没。班次表上排的是客栈，明晚排到当铺。"阿萝喘匀了气，"再往后就该排到街面了。你那条'后门'窄道，我瞧着也悬。"</p>
+  <p>萧铁衣在桌边坐着，没说话。</p>
+  <p>"跑？"阿萝问。</p>
+  <p>"不跑。"他说，"跑了，就永远在暗处了。"</p>
+  <p>"那你打算——"</p>
+  <p>他从怀里取出那枚骨哨。</p>
+  <p>白骨磨的，哨口乌黑。哑巴身上搜出来的。他这几天把灰哨的规矩理了一遍：灰哨是验灵司养的刀，刀要听调，调兵有信物。哑巴敢一个人进镇做局，靠的不是艺高，是身后有桩——城南一定有灰哨的暗桩，桩上有他的同伙。</p>
+  <p>"骨哨是他们的调兵令。"萧铁衣说，"怎么吹、吹什么调，我不知道。可我见过规矩，杀手的规矩，补刀的人动手前要'点香'，香断，活才算收干净。香断，就是事情了结。"</p>
+  <p>他把骨哨竖起来："哨响三短一长，我赌它是'目标现身'。"</p>
+  <p>"赌？"阿萝眼睛睁圆了。</p>
+  <p>"赌错了，不过是全城搜我。"萧铁衣把守拙刀背上，"赌对了，今晚全郡城盯我的人，都得往城西跑。"</p>
+  <p>——</p>
+  <p>三更，城南偏巷。</p>
+  <p>巷子窄，两人宽，青石板缝里长草。萧铁衣立在巷子最深处，骨哨抵在唇边，先运了一口气。</p>
+  <p>哨声响起时，他 自己都愣了一下。</p>
+  <p>声音很怪，不响，却钻。三短一长，短促的三声像三根针，长的那声拖出去，贴着墙根一路往远处爬。</p>
+  <p>吹完，他闪身进两条街外的门洞。</p>
+  <p>数到三十，城南方向先是几声犬吠，接着人声起来。再过一炷香，城西炸了锅——火把一串接一串，出了巷，过了桥，往城西奔。有人喊着灰哨的切口，声音又急又低："目标现身——西市——都上——"</p>
+  <p>萧铁衣在门洞里，看着那串火把跑远。</p>
+  <p>成了。满城的眼睛，今晚都往西看。</p>
+  <p>同一个晚上，阿萝也没闲着。</p>
+  <p>她借着墨记接单的名义，在赵府外巷的茶棚里，见着了赵府的采买下人。单子是赵府三月份续订的镇宅符，四十张，阿萝上门量尺寸、看贴处，名正言顺。</p>
+  <p>下人是个中年汉子，好酒，两盅下去话就多了。</p>
+  <p>"你们这符，怎么比我娘生前贴的那种费？""费？"阿萝笑，"是贵。我这符纸双层的，墨里掺金粉，老爷们图个亮堂。"</p>
+  <p>"亮堂有屁用。"下人灌了口酒，压低声音，"我们家那间房，贴多少符都白搭。得勤换。"</p>
+  <p>"哪间房？"</p>
+  <p>"就后罩楼底下那间，我们都叫它锁房。"下人的舌头有点大了，"一年三百六十天，天天贴。上个月老爷说旧符退性了，一口气加了十倍的单。十倍！你们符铺发财了都。"</p>
+  <p>"锁房里锁着什么呀？"</p>
+  <p>"谁知道。"下人打了个酒嗝，摇头，"反正伺候那间房的差事，没人愿意去。进去的人，出来都蔫蔫的，睡三天。"</p>
+  <p>阿萝把单子按规矩画了押，笑吟吟走了。出了巷子她才发觉，后背一层冷汗。</p>
+  <p>签押房里，灯还亮着。</p>
+  <p>赵珩听完回报。城南哨响，三短一长，暗桩倾巢，扑空。西市翻了个底朝天，只翻出半串烧过的纸钱。</p>
+  <p>他坐在案后，听完，脸上什么都没有。</p>
+  <p>"哨是哪来的。"</p>
+  <p>"回大人，查不出。哑巴随身的东西，如今不知落在谁手里。"</p>
+  <p>"落在一个十六岁的孩子手里。"赵珩说，"他知道哨响之后该往哪儿躲，知道我们听到哨声会往哪儿跑。他用我们的规矩，调我们的兵。"</p>
+  <p>屋里静了一会儿。回报的差役把头越垂越低。</p>
+  <p>赵珩摆摆手，让人退了。他坐了很久，久到灯花爆了两回，才从案头最底下的抽屉里，取出一样东西。</p>
+  <p>半页纸。烧焦了边，脆得像枯叶。上头是一列名字，大部分被火舌吞了，剩下的字迹却工整。页脚角落，有三个字没烧到：</p>
+  <p>守碑人。</p>
+  <p>赵珩看着这三个字，又从头把那列名字看了一遍。然后取笔，蘸墨，在其中一个名字上，轻轻划了一道。</p>
+  <p>划掉的名字不是萧。</p>
+  <p>"青石镇的漏了。"他把笔搁下，声音很轻，像自言自语，又像在跟这半页纸交代，"其余的，照单。"</p>
+  <p>灯花又爆了一下。</p>
+  <p>窗外的郡城，春祭的灯笼已经挂起来了，一夜通明。</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，听书键跳转纯语音页 ===== */
+  var TOTAL=75;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<a class="rbtn gold" href="listen.html?ch='+n+'">🎧 听书</a>'+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  var dragging=false;
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a")){show();return;}
+    var w=document.documentElement.clientWidth||document.body.clientWidth;
+    var x=e.clientX||0;
+    /* 左右两侧 1/3 为翻页手势，中间区域用于呼出工具栏 */
+    if(x<w*0.30&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    if(x>w*0.70&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+    if(document.body.classList.contains("ui-show"))hide();else show();
+  });
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  var CH=10, TITLE="守碑人";
+  var RKEY="hugo_reader_v1";
+  function loadR(){try{return JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){return{}}}
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function applyPct(p){if(maxH()>0)window.scrollTo(0,maxH()*p/100);}
+  var chapters=(loadR().chapters||{});
+  var st=chapters[CH]||{pct:0};
+  var bm=loadR().bookmark;
+  if(location.hash==="#bookmark"&&bm&&bm.ch===CH&&bm.pct>0){
+    setTimeout(function(){applyPct(bm.pct)},80);
+  }else if(location.hash==="#resume"&&st.pct>0){
+    setTimeout(function(){applyPct(st.pct)},80);
+  }else if(st.pct>=3&&st.pct<95){
+    var tip=document.createElement("div");tip.className="resume-tip";
+    tip.innerHTML="📌 上次读至 "+st.pct+"% · <a href='javascript:void(0)' id='resumeGo'>继续上次位置</a>";
+    document.querySelector(".wrap").prepend(tip);
+    document.getElementById("resumeGo").onclick=function(){applyPct(st.pct);tip.remove();};
+  }
+  if(bm&&bm.ch===CH&&bm.pct>0&&location.hash!=="#bookmark"){
+    var btip=document.createElement("div");btip.className="resume-tip";
+    btip.innerHTML="🔖 本章已安放书签（钉在 "+bm.pct+"%） · <a href='javascript:void(0)' id='bmGo'>回到书签位置</a>";
+    document.querySelector(".wrap").prepend(btip);
+    document.getElementById("bmGo").onclick=function(){applyPct(bm.pct);btip.remove();};
+  }
+  var timer=null;
+  function record(){
+    var m=maxH();if(m<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/m*100));
+    var d=loadR();d.chapters=d.chapters||{};
+    d.chapters[CH]={pct:p,t:Date.now()};
+    d.resume={book:"gudo",ch:CH,name:"第"+CH+"章 · "+TITLE,file:"gudo-"+CH+".html",pct:p,t:Date.now()};
+    saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record()},1000)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(function(){record()},500);
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  if(bm&&bm.ch===CH&&bm.pct>0){btn.textContent="🔖 书签 "+bm.pct+"%";}else{btn.textContent="🔖 书签";}
+  document.getElementById("__bmSlot").appendChild(btn);
+  btn.onclick=function(){
+    var m=maxH();var p=m>0?Math.min(100,Math.round(document.documentElement.scrollTop/m*100)):0;
+    var d=loadR();d.bookmark={book:"gudo",ch:CH,pct:p,t:Date.now()};saveR(d);
+    btn.textContent="✓ 已安放书签 "+p+"%";
+    setTimeout(function(){btn.textContent="🔖 书签"},1800);
+  };
+})();
+
+</script>
+</body>
+</html>

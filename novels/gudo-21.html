@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第二十一章 · 箱子开了 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第二十一章 · 箱子开了</h1>
+  <p>巡检营的报案箱，三日一开。</p>
+  <p>四月初八，是开箱的日子。开箱的是个姓魏的九品录事，二十出头，眼毒，手稳，上头交代过这箱子里的东西不许他自己过目，开了封，原样送呈。可原样送呈之前，他总要拆看一二——规矩是死的，好奇心是活的。</p>
+  <p>那日箱子里躺着一封没落款的信，三行字，一张做旧的货单抄本。</p>
+  <p>魏录事看完，手心出了汗。</p>
+  <p>他没有压下这封信——压下这种信，一旦事发，自己是死罪；他也没有声张——声张出去，万一信是假的，他得罪的是验灵司。他做了一件最聪明也最胆小的事：把信和抄本誊了副 本，原样封回箱子记档，副本走公文，一级一级往上递。</p>
+  <p>公文走了两天。四月十二，郡守衙门的签押房里，这张纸落在了郡守郭大人案上。</p>
+  <p>郭大人看完，把纸按在案上，按了很久。</p>
+  <p>他不是没听说过黑符。黑符的告示贴在全城，告示是验灵司贴的——自己的衙门下属贴告示查东西，东西却查到了自己的库里。货单上那个"赵"字，底下压着的是三月十五、验灵司的火漆日期。</p>
+  <p>这一夜，郡守衙门的灯亮到了四更。</p>
+  <p>第二天，两条线同时动了。一条明线，兵备道发文：黑符一案，涉及伪符扰民、勾结匪类，着巡检营会同府衙刑房，彻查西街荣记及通宝行。一条暗线，谁也没发文——府衙的书吏忽然勤快起来，把通宝行这五年的流水底档，一批一批往衙门里调。</p>
+  <p>通宝行知道的时候，查账的人已经坐在柜上了。</p>
+  <p>——</p>
+  <p>通宝行的掌柜姓常，人称常三分——三分利也做，三分险也冒。这人行里滚了三十年，眼皮一抬就知道风向。查账的人进门那天，常三分笑呵呵地陪茶陪笑，把账本一册一册捧出来，捧得比谁都配合。</p>
+  <p>当天夜里，常三分从后门走了。</p>
+  <p>走得干净。他没带大箱，只带了一个不大的包袱，包袱里是几件换洗衣裳、一本没入账的底册、和一小袋金叶子。他从后院狗洞钻出去，雇了一辆不挂幌的骡车，走的不是南门——南门查得严，走的是西水门，西水门是水门，守门的差役吃过他的茶。</p>
+  <p>一个时辰后，骡车出了西水门，上了西官道。</p>
+  <p>常三分坐在车里，掀着帘子回头看了一眼。郡城的灯火在雨雾里缩成一片模糊的黄。他放下帘子，心算着路：十里铺换船，船到下家，改姓埋名，三十年行里滚出来的人，不至于栽在这一回。</p>
+  <p>车过苇塘的时候，车夫咳了一声。</p>
+  <p>常三分没在意。官道上跑夜车的，谁不咳两声。</p>
+  <p>车停了。车夫说车轴响，要下来看看。常三分骂了一句，掀帘下车——雨丝扑在脸上，官道上黑黢黢的，只有车头的灯笼晃。</p>
+  <p>他看见车夫蹲在车轴边上，蹲得很稳。</p>
+  <p>然后他看见车夫站起来，转过身。那人没戴斗笠，雨水顺着一张精瘦的脸往下淌，淌过一双没什么表情的眼睛。</p>
+  <p>"常掌柜。"那人说，"对不住。"</p>
+  <p>常三分这辈子做了三千笔买卖，头一回遇上没谈价的。他张嘴想喊，喉咙里气门一滞，喊声没出来，人先软了。他倒下去的时候还想抓住点什么，抓住的是自己那个包袱——包袱没撒手，他的手指抠在包袱底上，抠得死紧。</p>
+  <p>苇塘里的芦苇沙沙地响，响了一阵，又静了。</p>
+  <p>骡车继续往西走了。车夫换了个坐法，慢悠悠的，像一趟不着急的夜路。</p>
+  <p>——</p>
+  <p>四月十三，巳时。</p>
+  <p>常三分的尸首是苇塘边一个下卡子的渔户发现的。渔户报案，地保验看，晌午的工夫，西官道苇塘边上围了一圈看热闹的。</p>
+  <p>消息传到城里，传法不一。有说遭了劫的，有说赌债寻仇的，茶棚酒肆说了半天，没有一个人说对。</p>
+  <p>萧铁衣是晌午前后到的。</p>
+  <p>他没有从墨记直接来——他从香烛铺送完符，绕的西官道，一身伙计的短打，符匣背在身后，混在看热闹的人堆里，挤在第二排。</p>
+  <p>地保带着两个差役在验尸。尸首停在苇塘边的一块苇席上，席子短，盖不全，露着一双青布鞋。鞋是新换的，泥却溅了半截——这人在道上走了不近的路。</p>
+  <p>人群嗡嗡地议论。萧铁衣不看尸首的脸，看别的。</p>
+  <p>看的还是纹。</p>
+  <p>死人身上的残纹，散得比活人快。可这具尸首散得尤其快——不是自然散开，是被拔的。和赵大龙坟里那道断口一样：气门一记，纹路齐根而断，断口茬子还亮着。下手的人是行里前几号的好手，一记断气门，快、准、不留活口。</p>
+  <p>这一记，跟哑巴死在乱葬岗的那一记，是一个路数，但不是一个人——哑巴那晚的下手，收口重；这一记，收口轻。重和轻之间，是两个人。</p>
+  <p>灰哨桩上，不止一个补刀的。</p>
+  <p>差役验完，吆喝着让人群退开，等仵作从城里赶来。人群往后涌，挤挤挨挨。就在这一挤里，萧铁衣矮身，蹲下了。</p>
+  <p>他的手落在尸首的手边。</p>
+  <p>常三分的右手，到死还攥着那个包袱。包袱皮被人群踩开了半边，露出底册的一角和几片碎金叶——差役看见了，正叫人看好，别让人哄抢。</p>
+  <p>可包袱底下，那只死人的左手，攥着一样东西，露着一个头。</p>
+  <p>半片玉。</p>
+  <p>鱼形的半片，青玉，断口很旧，磨得圆润——不是新断的，是本来就断成两半的。断口的内侧刻着极小的记号，不细看当是玉纹。</p>
+  <p>差役的注意力在包袱上。人群的注意力在金叶子上。萧铁衣的蹲姿收得极低，两根手指探进那只已经僵了的手指缝里——尸僵初起，指节硬，他借着人群往前挤的一股劲儿，压着指根一错。</p>
+  <p>半片鱼玉，无声地滑进了他的袖口。</p>
+  <p>他站起来，随着人群退开，退到道边，看了一眼自己的袖口，又看了一眼那具尸首。</p>
+  <p>常三分死前攥着这两样东西：包袱，是钱和底册，留给任何人看都行；这半片鱼玉，他攥在左手——攥在_left_手里的东西，是人临死前最不想撒手的。</p>
+  <p>这不是他自己的东西。这是他拿命换回来的保命的东西。他一路带着它，是想着到了地头，拿它跟接应的人换一条活路。</p>
+  <p>可他没能换来。</p>
+  <p>那半片玉上刻的记号，萧铁衣眯着眼又看了一眼——已经在袖子里，他用指腹摸清了：一条盘曲的鱼纹，鱼眼的位置点着一个小小的"文"字私记。</p>
+  <p>文书房。</p>
+  <p>郡守衙门的文书房，管着全郡公文往来、印信用度的地方。宋案的文书从那儿出，出货单的"赵"字底下垫着那儿的日子，如今补刀的手，也从那儿领活。</p>
+  <p>链条上又一颗珠子，串上了。</p>
+  <p>——</p>
+  <p>他是在回城的官道上，发现有人跟着的。</p>
+  <p>不是瘦竹那种跟法——那种跟法不会让他发现。这跟法粗，故意粗，像有人拄着一根看不见的竹竿，笃、笃、笃地点在他身后三百步的地方。</p>
+  <p>萧铁衣没有加速，没有回头。他把步子放得跟寻常赶路一样，走到官道边一座歇脚的破亭，进亭，坐下，解下符匣，取出水囊喝水——一路上的行脚人，都这么做。</p>
+  <p>雨下起来了。先是一层薄薄的雨毛，后来密了。</p>
+  <p>亭外的官道上，一个人影从雨里走出来，走到亭外三步，站住。</p>
+  <p>青衫。伞都没打，任雨落在肩上。</p>
+  <p>赵珩。</p>
+  <p>他今日没穿官服，也没带从人。雨里站着，袖口洇了一片深色。他看着亭子里的人，看了有一会儿，忽然抬手，指了指西边——苇塘的方向。</p>
+  <p>"常三分，"他说，"昨天夜里，走在你前头了。"</p>
+  <p>萧铁衣放下水囊，站起身，隔着雨帘看着验灵使。</p>
+  <p>"小人送符回来。"他说，"道上死人，是官爷的事。"</p>
+  <p>"是官爷的事。"赵珩点头，"所以我来了。"他往亭檐下走了半步，避着檐水，"信是墨记投的。字仿账房笔，仿得不错——仿七遍的手，稳。"</p>
+  <p>萧铁衣没接话。雨打在亭檐上，噼啪地响。</p>
+  <p>"你投信，是想借官刀。"赵珩说，"我查常三分，也想借官刀。你借官刀杀的是通宝行的账，我借官刀杀的是常三分的腿——账查到了他头上，他就必须跑；他一跑，桩上就得补刀。这一刀不是我派的，是他自己招来的。"他顿了顿，"萧伙计，你投信之前，算到这一步没有。"</p>
+  <p>"没有。"萧铁衣说。</p>
+  <p>"没有才好。"赵珩笑了一下，那笑淡得像雨水，"算了，就是同行。没算，你还是个替死者鸣不平的伙计——这种伙计，我这儿缺。"</p>
+  <p>他从袖中取出一样东西，隔空一抛。</p>
+  <p>一样东西划着雨线落过来，落在萧铁衣脚前的亭板上——是那半枚鱼玉的另一半。</p>
+  <p>鱼身的另半片。断口同源，正好合榫。</p>
+  <p>"死人手里那半片，你拿了。"赵珩说。这不是问句。"拿着吧，两片凑一块儿，鱼才囫囵。文书房的私记，你认得，我也认得。咱们俩如今看的，是同一本账。"</p>
+  <p>萧铁衣站在亭子里，没有去捡那半片玉。</p>
+  <p>"大人不怕小民拿它去做什么。"</p>
+  <p>"不怕。"赵珩转过身，往雨里走，走了两步，停下，没有回头，"因为这本账上的每一页，你翻的时候都得用我的秤。四月十五之前，你翻到哪一页，我就知道你走到哪一步——墨记的符，初五进香的车，北墙的香灰记号。萧伙计，你的每一步，都在这本账上。"</p>
+  <p>他走进雨里，青衫很快成了一团模糊的影。</p>
+  <p>萧铁衣在亭子里站了很久。亭板上的半片鱼玉被雨水打湿了，青玉在水里泛着光，鱼眼那个小小的"文"字，像一只睁着的眼睛。</p>
+  <p>他蹲下去，把两半玉合在一起。</p>
+  <p>合榫的那一声，很轻，咔。</p>
+  <p>一条完整的鱼，躺在他掌心里。这条鱼一半是死人给的，一半是活人扔的——死人想用它换命，活人用它告诉别人：你的命，如今在我账上。</p>
+  <p>雨下大了。萧铁衣把玉收进贴身布袋，跟铜钱、红纸放在一起，背起符匣，走进雨里。</p>
+  <p>回城的路上他只有一个念头，翻来覆去，越走越沉：</p>
+  <p>赵珩什么都知道。北墙的香灰、初五的车、投的信——全知道。他不动，任由他把这局棋一步步下完，像一个有耐心的庄家，看着骰子往自己要的点数上滚。</p>
+  <p>庄家稳赢，除非——</p>
+  <p>除非桌上还有一个人，也以为自己在做庄。</p>
+  <p>——</p>
+  <p>回到墨记，天擦黑了。</p>
+  <p>柴房里，鱼玉摆在桌上，两片合榫，严婆婆就着灯看了很久。</p>
+  <p>"文书房的私记，我认得。"她说，"这是文'字缸'的记号。文书房底下管印信的吏，分三班，各班的头儿有各班的私记，走私账用的。这条鱼是哪一班，看鱼尾——鱼尾翘三个弯的，是第二班。第二班的头儿，姓文，文有德，人称文二缸子。"</p>
+  <p>"婆婆连这个都知道。"</p>
+  <p>"墨记在这条街上三十年，"严婆婆把玉推回来，"街上有几口缸，缸里存着什么，我数得清。"</p>
+  <p>她把玉还给萧铁衣，忽然问："赵珩把他那一半扔给你的时候，说什么了。"</p>
+  <p>"说两片凑一块儿，鱼才囫囵。说这本账上每一页，翻的时候都得用他的秤。"</p>
+  <p>严婆婆点点头，慢慢坐下，拿过算盘，却没有拨，只是手搭在框上。</p>
+  <p>"他给你玉，不是大方。"老妇人说，"玉是个钩子。文书房的私账，你敢查吗？查了，你就从'伙计'变成了'告官的人'，官面上的任何一股风，都能拿这个名目吹死你。不查，这半片玉攥在你手里，就是个念想——天天提醒你，你和他看的是一本账。他不是在给你东西，他是在给你上套。"</p>
+  <p>"我知道。"萧铁衣把玉收好，"可是婆婆，套这个东西，从来都是两头使劲的。他把玉给我，我也收了。从今往后，他看我的每一步——我也能借着这一步，让他看见我想让他看见的。"</p>
+  <p>"你的意思是。"</p>
+  <p>"他不是说他都知道么。"萧铁衣把灯芯拨了拨，"北墙的香灰，初五的车。好，那从明天起，香灰该出现在哪儿、车该往哪儿走，就由我说了算。他的秤准，我让他称——称出来的斤两，我提前定好。"</p>
+  <p>严婆婆看了他半晌，忽然笑了一声。这一声笑很短，几乎听不见，可柴房里几十天，头一回听见她笑。</p>
+  <p>"行。"老妇人起身，拿起算盘走了，走到门口撂下一句，"我去让茶棚那位换回原来的坐向——从明天起，让赵珩的哨，看见一家放心大胆、什么都没改的符铺。"</p>
+  <p>门带上了。萧铁衣把鱼玉贴身收好，掌心里还留着青玉那一点凉。</p>
+  <p>四月十五，还有六天。</p>
+  <p>柴房的灯灭了。雨还在下，敲着檐口，一声一声，像谁在很远的地方，慢慢数着数。</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，听书键跳转纯语音页 ===== */
+  var TOTAL=75;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<a class="rbtn gold" href="listen.html?ch='+n+'">🎧 听书</a>'+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  var dragging=false;
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a")){show();return;}
+    var w=document.documentElement.clientWidth||document.body.clientWidth;
+    var x=e.clientX||0;
+    /* 左右两侧 1/3 为翻页手势，中间区域用于呼出工具栏 */
+    if(x<w*0.30&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    if(x>w*0.70&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+    if(document.body.classList.contains("ui-show"))hide();else show();
+  });
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  var CH=21, TITLE="箱子开了";
+  var RKEY="hugo_reader_v1";
+  function loadR(){try{return JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){return{}}}
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function applyPct(p){if(maxH()>0)window.scrollTo(0,maxH()*p/100);}
+  var chapters=(loadR().chapters||{});
+  var st=chapters[CH]||{pct:0};
+  var bm=loadR().bookmark;
+  if(location.hash==="#bookmark"&&bm&&bm.ch===CH&&bm.pct>0){
+    setTimeout(function(){applyPct(bm.pct)},80);
+  }else if(location.hash==="#resume"&&st.pct>0){
+    setTimeout(function(){applyPct(st.pct)},80);
+  }else if(st.pct>=3&&st.pct<95){
+    var tip=document.createElement("div");tip.className="resume-tip";
+    tip.innerHTML="📌 上次读至 "+st.pct+"% · <a href='javascript:void(0)' id='resumeGo'>继续上次位置</a>";
+    document.querySelector(".wrap").prepend(tip);
+    document.getElementById("resumeGo").onclick=function(){applyPct(st.pct);tip.remove();};
+  }
+  if(bm&&bm.ch===CH&&bm.pct>0&&location.hash!=="#bookmark"){
+    var btip=document.createElement("div");btip.className="resume-tip";
+    btip.innerHTML="🔖 本章已安放书签（钉在 "+bm.pct+"%） · <a href='javascript:void(0)' id='bmGo'>回到书签位置</a>";
+    document.querySelector(".wrap").prepend(btip);
+    document.getElementById("bmGo").onclick=function(){applyPct(bm.pct);btip.remove();};
+  }
+  var timer=null;
+  function record(){
+    var m=maxH();if(m<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/m*100));
+    var d=loadR();d.chapters=d.chapters||{};
+    d.chapters[CH]={pct:p,t:Date.now()};
+    d.resume={book:"gudo",ch:CH,name:"第"+CH+"章 · "+TITLE,file:"gudo-"+CH+".html",pct:p,t:Date.now()};
+    saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record()},1000)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(function(){record()},500);
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  if(bm&&bm.ch===CH&&bm.pct>0){btn.textContent="🔖 书签 "+bm.pct+"%";}else{btn.textContent="🔖 书签";}
+  document.getElementById("__bmSlot").appendChild(btn);
+  btn.onclick=function(){
+    var m=maxH();var p=m>0?Math.min(100,Math.round(document.documentElement.scrollTop/m*100)):0;
+    var d=loadR();d.bookmark={book:"gudo",ch:CH,pct:p,t:Date.now()};saveR(d);
+    btn.textContent="✓ 已安放书签 "+p+"%";
+    setTimeout(function(){btn.textContent="🔖 书签"},1800);
+  };
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第六十一章 · 司主现身 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第六十一章 · 司主现身</h1>
+  <p>午时，灯照司门口聚了人。</p>
+  <p>不是司里召的，是自己聚的。头一夜改回十七盏黄灯的事，一传十，十传百，到晌午，半个郡城都知道了。人们站在司门外的街口，不敢进，也不肯散。</p>
+  <p>有人小声说，墨记把灯改回来了。有人接，改回来了，那是不是还能改回去。第三个人说，嘘，别说了，司里的人出来了。</p>
+  <p>出来的不是裴主簿。</p>
+  <p>是司主。</p>
+  <p>他是一个人走出来的。没带随从，没喝道，连司里那两个巡灯的都落后他三步。他走到门槛外站定，先把街上扫了一眼——那一眼扫得极慢，从左首的棺材铺门口，一路扫到右首的石碑，扫到人脸上时不停，像在数数。</p>
+  <p>数完了，他才往前迈了半步。</p>
+  <p>街上的人不自觉地往后退了半步。</p>
+  <p>萧铁衣站在人群后头，第一次看清这个人。</p>
+  <p>四十来岁，青衫，身材不高，脸上没什么肉，可骨架宽。他走出来的时候，街上没人吭声——不是怕，是他身上那股子味道不对。</p>
+  <p>不是官威。官威是撑出来的，这人的气息是沉下去的，像一口井，看不出深浅。</p>
+  <p>他手里托着一只铜匣。匣子不大，四四方方，锁扣是黑的，看不出什么材质。</p>
+  <p>"本座姓谢。"他开口，声音不大，可街上每个人都听清了，"灯照司谢司主。"</p>
+  <p>没人应。</p>
+  <p>人群里有人往后缩。那铜匣一出来，站在最前头的几个忽然觉得后颈发凉，像有人在他们背后吹气。</p>
+  <p>丫丫攥着萧铁衣的衣角，小声说："爹，那匣子里有灯。"</p>
+  <p>"什么灯？"</p>
+  <p>"灭着的。"丫丫说，"灭了很久了。可它没坏，它在等。"</p>
+  <p>"等什么？"</p>
+  <p>"等有人把它点上。"</p>
+  <p>萧铁衣又看了那匣子一眼。匣身是紫铜的，包浆很厚，边角磨得发亮——这东西被人天天摩挲，摩挲了几十年。锁扣那一处却是新的，黑，不反光，像是后来换上去的。</p>
+  <p>匣子旧，锁是新的。</p>
+  <p>他记下这一条。</p>
+  <p>谢司主把匣子在掌心掂了掂，像在掂一件熟人。</p>
+  <p>"昨夜，"他说，"城里十七盏灯，被人改回去了。"</p>
+  <p>他顿了顿，目光在人群里巡了一圈。</p>
+  <p>"改得好。"</p>
+  <p>"本座不查。"</p>
+  <p>人群里有了响动。</p>
+  <p>"改回去的，本座不追究。"谢司主说，"改回去就改回去，一盏灯而已。"</p>
+  <p>他抬起手里的铜匣。</p>
+  <p>"可今夜子时，这匣子里的东西要点上。点上了，两本账并作一本——明的暗的，青的黄的，都是一本。到那时候，谁家灯是什么色，由这一本说了算。"</p>
+  <p>他把匣子举高了些。</p>
+  <p>"这本账，在本座手里。"</p>
+  <p>人群"哗"地散开一片。有人开始往后退。</p>
+  <p>萧铁衣没动。</p>
+  <p>他看着那只铜匣。匣子上刻着极细的纹路，绕着匣身走了一圈，走到锁扣的地方，断开了。</p>
+  <p>那纹路他认得。</p>
+  <p>和渊里门上那些刻痕，一个路数。</p>
+  <p>"萧东家。"谢司主忽然点了名，"你在后头站着，出来吧。"</p>
+  <p>人群分开一条道。</p>
+  <p>萧铁衣走出去，站在街心。</p>
+  <p>"司主认得我。"</p>
+  <p>"本座认得你这把刀。"谢司主说，"三十年前，这把刀在渊里叫过一回。叫的时候，本座在门外站着。"</p>
+  <p>萧铁衣的手，慢慢按上刀柄。</p>
+  <p>"三十年前你在门外？"</p>
+  <p>"在。"</p>
+  <p>"那你知道门里有什么。"</p>
+  <p>"知道。"谢司主说，"也知道你爹是谁。"</p>
+  <p>街上一片死寂。</p>
+  <p>萧铁衣的手指收紧了。</p>
+  <p>"我爹是谁？"</p>
+  <p>谢司主笑了笑，没答。</p>
+  <p>"今夜子时，你上塔。"他说，"本座把名字告诉你。你要肯在那本账上记一笔，这满城的灯，本座一盏都不换。你要不肯——"</p>
+  <p>他抬手，指了指司里那座石塔。</p>
+  <p>塔顶上，站着一个人影。</p>
+  <p>阿萝。</p>
+  <p>她被两个司里的人架着，站在塔顶边缘，脚下就是三丈高的空。她没挣扎，也没喊，只是站着，风把她的衣角吹得乱飞。</p>
+  <p>塔顶中央，那盏长明灯就在她旁边，青火一跳一跳。</p>
+  <p>阿萝也看见了他。</p>
+  <p>隔着一条街、三丈高，她没喊，也没挣扎。她只是抬起手，冲他摆了摆。</p>
+  <p>那手势萧铁衣认得。墨记的老规矩：账房对账时若发现数目有诈，就抬手这么摆一下，意思是"别声张，我来"。</p>
+  <p>她在告诉他：别冲动，我在这儿，账还在我手里。</p>
+  <p>萧铁衣的手，慢慢松开了刀柄。</p>
+  <p>这是她第二次冲他摆这只手。上一回是三年前，通宝行的人来墨记砸场子，阿萝就是这么抬了一下手，然后自己抱着账册坐到人家门口，坐了两天两夜。</p>
+  <p>她抬手的意思从来都是同一句：东家你别动，账还在我手里，我能拖。</p>
+  <p>可这回不一样。上回她坐的是人家门口，这回她站的是三丈高的塔顶。</p>
+  <p>萧铁衣的血一下子凉了。</p>
+  <p>"阿萝！"</p>
+  <p>她听见了，却没回头，只是把手放下去，背在身后，手指极快地屈了两下。</p>
+  <p>三下。</p>
+  <p>墨记的老规矩：三下是"账有三本，别急着翻"。</p>
+  <p>她在告诉他，她手里还压着东西。</p>
+  <p>"别急。"谢司主说，"她不是人质，她是'人灯'。"</p>
+  <p>"什么意思？"</p>
+  <p>"这丫头认得旧灯。"谢司主说，"城里哪盏灯挂哪年、谁点的火，她一清二楚。她脑子里那本账，比墨记那本全。"</p>
+  <p>他把铜匣收进袖里。</p>
+  <p>"本座要点的这盏总灯，点着了，得有个'认灯的'在旁边引。她认得旧灯，总灯一亮，她认得的那些旧灯，就一盏一盏跟着归新册。"</p>
+  <p>"她要是不肯呢？"</p>
+  <p>"由不得她肯不肯。"谢司主说，"认灯的人，眼睛是灯的一部分。把她放在总灯边上，灯一亮，她的眼睛就归灯了。"</p>
+  <p>他顿了顿，语气平淡得像在说一件家务事。</p>
+  <p>"灯不灭，人不可下。"</p>
+  <p>萧铁衣往前迈了一步。</p>
+  <p>两个巡灯的横过来拦他，手里的青灯举得老高。</p>
+  <p>"萧东家，"谢司主说，"你要现在动手，塔上那丫头就先下去。你信不信？"</p>
+  <p>萧铁衣站住了。</p>
+  <p>他的牙关咬得死紧，太阳穴一跳一跳。</p>
+  <p>谢司主看着他，看得很仔细，像在看一件东西成色如何。</p>
+  <p>"本座给你一天。"他说，"今夜子时之前，你想清楚。想清楚了上塔，记一笔，这城就还是这个城。"</p>
+  <p>"记一笔？"</p>
+  <p>"你的刀记上本座的账。"谢司主说，"记上了，你走到哪儿，本座照到哪儿。这满城的灯，就不用一盏一盏地点了——你自会替本座点。"</p>
+  <p>"我要是不——"</p>
+  <p>"你不会不。"谢司主打断他，"因为你那把刀，认得本座这盏灯。"</p>
+  <p>他转身，往司里走。走到门口，停了一下。</p>
+  <p>"对了，萧东家。"</p>
+  <p>"什么？"</p>
+  <p>"你昨夜改回去那十七盏，"谢司主头也不回，"本座让它们亮了一天，是让你看看——改回来容易，留住难。"</p>
+  <p>——</p>
+  <p>人群散了。</p>
+  <p>萧铁衣站在街心，很久没动。</p>
+  <p>"东家。"铁塔从后头过来，声音发抖，"咋办？"</p>
+  <p>萧铁衣没答。</p>
+  <p>他在想谢司主那句话：三十年前，这把刀在渊里叫过一回，叫的时候，本座在门外站着。</p>
+  <p>门外。</p>
+  <p>赵怀远也在门外。渊里记账人说过：你要找的人，在门外头。</p>
+  <p>谢司主也在门外站过。</p>
+  <p>"铁塔，"他忽然说，"去请郭大人。"</p>
+  <p>"郭大人？"</p>
+  <p>"验灵司的郭大人。"萧铁衣说，"当年通宝行那桩案子，他欠我一个人情。"</p>
+  <p>——</p>
+  <p>郭大人是申时来的。</p>
+  <p>他老了不少，头发白了大半，官服洗得发白。进了墨记的堂屋，他没坐，先看了看外头的天色。</p>
+  <p>"萧老弟，"他说，"你这事，我帮不上。"</p>
+  <p>"大人还没听我说完。"</p>
+  <p>"不用听。"郭大人摆手，"灯照司不是郡里的衙门。"</p>
+  <p>"那是什么？"</p>
+  <p>"是上头下来的。"郭大人压低声音，"上个月初，京里来了一道谕，说是'灯政归司，郡县不得问'。我验灵司管了三十年的纹档，一夜之间，全归了灯照司。"</p>
+  <p>他苦笑。</p>
+  <p>"我那三十年，白干了。"</p>
+  <p>萧铁衣沉默了片刻。</p>
+  <p>"大人，"他忽然问，"灯照司是从哪儿冒出来的？"</p>
+  <p>郭大人想了想。</p>
+  <p>"说来也怪。"他说，"这衙门不是新设的。三十年前，郡里有个'灯油行'，管着全城商号的灯油供送。"</p>
+  <p>郭大人伸手指了指窗外那条街。</p>
+  <p>"那时候这条街上的灯，点的是桐油还是菜油、一晚添几回、谁家欠了几个月的油钱，都记在一本油册上。那册子我早年还见过，厚得像砖头，一页一页密密麻麻，全是灯。"</p>
+  <p>"后来呢？"</p>
+  <p>"后来那行散了。"郭大人说，"官面上的说法是东家卷了钱跑路，账对不上，行就倒了。可我当年管纹档，听过另一说——说是那本油册丢了。"</p>
+  <p>"丢了？"</p>
+  <p>"不是整本丢。"郭大人压低声音，"是少了后半截。前半截是灯，后半截是人——哪一盏灯底下住着谁、那户人家几口人、叫什么、有没有纹。前半截留在行里，后半截不见了。"</p>
+  <p>萧铁衣的手指在桌面上停住。</p>
+  <p>"行散了以后，那前半截油册，落进了验灵司。"郭大人说，"我收在库里三十年，一直当废纸。上个月京里来谕，头一件就是调档。"</p>
+  <p>"调走了？"</p>
+  <p>"一盏不剩。"</p>
+  <p>郭大人说完，端起茶碗，手有点抖，茶水泼出来一半。</p>
+  <p>"那时候我不懂。"他说，"现在懂了——人家三十年前要的就是那后半截。"</p>
+  <p>"东家姓什么？"</p>
+  <p>"姓赵。"郭大人说，"赵怀远。"</p>
+  <p>萧铁衣的手一顿。</p>
+  <p>"赵怀远？"</p>
+  <p>"你认得？"</p>
+  <p>"听过。"萧铁衣说，"三十年前，他背着一册名册下了渊。"</p>
+  <p>郭大人愣住："下渊？"</p>
+  <p>"大人别问了。"萧铁衣说，"你接着说灯油行。"</p>
+  <p>"灯油行散了以后，"郭大人说，"隔了十来年，忽然有人拿着旧契来认灯——说当年灯油行供过的灯，都要重新上册。那时候没人当回事，一晃又是十几年。直到上个月京里来了谕，灯照司就挂牌了。"</p>
+  <p>他压低声音。</p>
+  <p>"我后来翻旧档才想明白——灯照司这帮人，就是当年灯油行那批人的后人。他们拿着三十年前的旧契，来收三十年前的旧灯。"</p>
+  <p>萧铁衣的背脊发凉。</p>
+  <p>灯油行。赵家。三十年前。</p>
+  <p>渊里记账人说过：赵家三百年前迁进来，一支专管"往渊里送东西"，后来散了，走的那一部分去了云荒。</p>
+  <p>留下的这一部分，成了灯照司。</p>
+  <p>"大人，我不要你跟灯照司作对。"他说，"我只要你一句话。"</p>
+  <p>"什么话？"</p>
+  <p>"灯照司办差，走不走官面的手续？"</p>
+  <p>郭大人愣了一下。</p>
+  <p>"……走。"</p>
+  <p>"换灯要不要报？"</p>
+  <p>"要报。"郭大人说，"新令里写得明白，换灯须造册、须报验灵司备案。"</p>
+  <p>"他们报了么？"</p>
+  <p>郭大人翻了翻袖里的一个小本子，翻了半天，脸色变了。</p>
+  <p>"没报。"</p>
+  <p>"一盏都没报？"</p>
+  <p>"一盏都没报。"郭大人的手抖起来，"按新令，造册不报，视为私换。私换的灯，不入官册，不生效力。"</p>
+  <p>萧铁衣的眼睛亮了一下。</p>
+  <p>"大人，这就是我要你做的事。"他说，"灯照司换了满城几百盏灯，一盏没报。你按新令，给他们下一道文书，要他们补报。"</p>
+  <p>"补报？"</p>
+  <p>"对。"萧铁衣说，"他们要补报，就得把每一盏灯的旧主名、换灯日期、新册归属，一条一条填清楚。填清楚了，就是白纸黑字——这本册子，就落在你验灵司手里了。"</p>
+  <p>郭大人的眼睛也亮了。</p>
+  <p>"你是要……"</p>
+  <p>"我要他们自己把账抄一遍，抄在官册上。"萧铁衣说，"抄在官册上的东西，改不了。"</p>
+  <p>郭大人一拍大腿。</p>
+  <p>"这法子好！"他说，"我这就回去办文书！"</p>
+  <p>他走到门口，又停住。</p>
+  <p>"萧老弟，"他回头，脸色凝重，"我话说在前头——这文书一下，灯照司的人立刻就知道是我。我这顶乌纱，怕是保不住了。"</p>
+  <p>萧铁衣看着他。</p>
+  <p>"大人，你今年多大？"</p>
+  <p>"五十七。"</p>
+  <p>"致仕还有三年。"萧铁衣说，"你这时候退，是被人赶下去的；三年后退，是自己走下来的。"</p>
+  <p>郭大人愣了很久，忽然笑了。</p>
+  <p>"你这小子，"他说，"嘴还是这么毒。"</p>
+  <p>他推门出去，走了两步，又回头。</p>
+  <p>"萧老弟。"</p>
+  <p>"在。"</p>
+  <p>"你那把刀，"郭大人说，"我当年见过一次。它叫的时候，我在这屋里，汗毛都竖起来了。"</p>
+  <p>"它今夜还要叫。"</p>
+  <p>"那就让它叫响点。"郭大人说，"叫给该听的人听。"</p>
+  <p>——</p>
+  <p>郭大人走后，萧铁衣在堂屋里坐了很久。</p>
+  <p>他把这两日的事，从头到尾在心里过了一遍。</p>
+  <p>换灯。抽旧芯，塞青芯。灯下的人不认旧主。</p>
+  <p>提灯人。八盏灯，八个收过的城；第九盏是长明灯，点在塔顶。</p>
+  <p>谢司主。持总灯钥匙，三十年前在渊门外站着。</p>
+  <p>他忽然坐直了。</p>
+  <p>这些事，看着是三桩，其实是一桩。</p>
+  <p>他起身，走到案前，把阿萝那本暗账摊开，又取过一张纸，提笔在上头画。</p>
+  <p>先画一盏灯。</p>
+  <p>灯底下画一个人。</p>
+  <p>"灯是记账的。"他低声说，"灯记谁，谁就归这盏灯。"</p>
+  <p>他在灯和人之间，连了一条线。</p>
+  <p>"换灯，就是改这条线——把灯和旧主之间那条线剪断，接到新册上。"</p>
+  <p>他又画了一座渊。</p>
+  <p>渊里有一本册子，册子上记着名字。</p>
+  <p>"渊里那本册子，记的是死人的名。城里这些灯，记的是活人的名。"</p>
+  <p>他停住笔。</p>
+  <p>"要是……这两本是同一本呢？"</p>
+  <p>他手一抖，笔尖在纸上戳出一个墨点。</p>
+  <p>"城里每换一盏灯，渊里那本册子，就少记一个名字。"他说，"不对——不是少记，是改名。"</p>
+  <p>他把"改名"两个字写在纸上，圈起来，又在旁边写了三个字：第几号。</p>
+  <p>渊里那本册子是有号的。记账人翻册子的时候，一页一号，号与号之间不跳。</p>
+  <p>他自己在渊里被记上的，是第四千零九十五位。</p>
+  <p>四千零九十四之后，是他。中间没有空位。</p>
+  <p>那就意味着前面四千零九十四个名字，一个不少，全在册上。</p>
+  <p>他把笔尖压在纸上，压出一个洞。</p>
+  <p>这一城的人，要是全被上了册，是从第几号开始排？排到哪一号，才轮到城门口那个卖胡饼的、才轮到老陈、才轮到铁塔？</p>
+  <p>"那位要的不是灯。"</p>
+  <p>他站起来，看着窗外那片青光。</p>
+  <p>"是要把郡城这一城的人，重新上一次户口——上到他那本册子里去。"</p>
+  <p>渊里，他刚被记上第4095位。</p>
+  <p>那本册子，在渊里，在门外那位手里。</p>
+  <p>谢司主要他"记一笔"，记的就是这个——把墨记、把守碑人、把满城的灯，一齐记进那一本里去。</p>
+  <p>他握着笔，手心全是汗。</p>
+  <p>"不行。"他说，"这账不能让他记。"</p>
+  <p>窗外，天色暗下来了。</p>
+  <p>远处那座石塔的塔顶，亮着一盏灯。青的。</p>
+  <p>灯旁边，站着阿萝。</p>
+  <p>萧铁衣把笔搁下，转身摘刀。</p>
+  <p>刀挂在墙上挂了一夜，摘下来的时候，刀鞘上落了一层薄灰。他用袖子抹了抹，抹到一半停住——那层灰抹不掉，是灯油熏的。</p>
+  <p>这些日子他天天在青灯下头走，刀鞘上早熏出了一层洗不掉的黄。</p>
+  <p>"东家。"铁塔站在门口，脸绷得死紧，"我跟你上塔。"</p>
+  <p>"不。"</p>
+  <p>"东家——"</p>
+  <p>"铁塔。"萧铁衣把刀系在腰上，"我要是子时下不来，你带着丫丫和阿萝那三本暗账出城。往南，走苏家渡，找一个姓苏的婆子。她认得路。"</p>
+  <p>铁塔的眼一下子红了。</p>
+  <p>"我不走。"</p>
+  <p>"不是叫你逃。"萧铁衣说，"是叫你把账带走。灯照司要并账，并的是全城的账。账没了，他们就得一盏一盏重新数——数一城的人，得数到什么时候。"</p>
+  <p>他说完这句，自己先愣了一下。</p>
+  <p>这句话，是阿萝教的。</p>
+  <p>这些年他学会的所有跟"账"有关的道理，全是阿萝教的。他只会杀人，她会记账。杀人是把人从册上划掉，记账是把人留在册上。</p>
+  <p>他划了一辈子，她留了一辈子。</p>
+  <p>"爹。"丫丫从后头过来，抱着他的腿，"我跟你去。"</p>
+  <p>"你不去。"</p>
+  <p>"我能看灯。"丫丫仰着脸，"我能看见哪盏灯里头还有旧的。"</p>
+  <p>萧铁衣蹲下来，看着她的眼睛。</p>
+  <p>"丫丫，塔上那个姨，你认得么？"</p>
+  <p>"认得。"丫丫说，"她给我买过糖。"</p>
+  <p>"那你要是能看灯，"萧铁衣说，"就在底下看。看塔顶那盏，看它什么时候要灭。它要灭的时候，你就喊。"</p>
+  <p>"喊什么？"</p>
+  <p>"喊她的名字。"</p>
+  <p>丫丫点头，很用力地点头。</p>
+  <p>萧铁衣站起身，把刀在手里掂了掂。</p>
+  <p>铁塔没再说话，只是把堂屋那盏灯挑亮了些，又往灯盏里添了一勺油。油添得太满，溢出来一点，顺着灯座淌到桌面上。他用手指抹了，抹完在裤子上擦了擦，还是黄的一道。</p>
+  <p>没人提"回不来"这三个字。</p>
+  <p>萧铁衣推门出去。门外天已经黑透了，街上那些青灯一排一排亮着，把青石路面照得像泡在水里。他抬头往司里那座塔看了一眼，塔顶那一星青火，在夜风里稳稳地烧着，一动不动。</p>
+  <p>他转身往灯照司走。</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，听书键跳转纯语音页 ===== */
+  var TOTAL=75;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<a class="rbtn gold" href="listen.html?ch='+n+'">🎧 听书</a>'+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  var dragging=false;
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a")){show();return;}
+    var w=document.documentElement.clientWidth||document.body.clientWidth;
+    var x=e.clientX||0;
+    /* 左右两侧 1/3 为翻页手势，中间区域用于呼出工具栏 */
+    if(x<w*0.30&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    if(x>w*0.70&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+    if(document.body.classList.contains("ui-show"))hide();else show();
+  });
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  var CH=61, TITLE="司主现身";
+  var RKEY="hugo_reader_v1";
+  function loadR(){try{return JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){return{}}}
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function applyPct(p){if(maxH()>0)window.scrollTo(0,maxH()*p/100);}
+  var chapters=(loadR().chapters||{});
+  var st=chapters[CH]||{pct:0};
+  var bm=loadR().bookmark;
+  if(location.hash==="#bookmark"&&bm&&bm.ch===CH&&bm.pct>0){
+    setTimeout(function(){applyPct(bm.pct)},80);
+  }else if(location.hash==="#resume"&&st.pct>0){
+    setTimeout(function(){applyPct(st.pct)},80);
+  }else if(st.pct>=3&&st.pct<95){
+    var tip=document.createElement("div");tip.className="resume-tip";
+    tip.innerHTML="📌 上次读至 "+st.pct+"% · <a href='javascript:void(0)' id='resumeGo'>继续上次位置</a>";
+    document.querySelector(".wrap").prepend(tip);
+    document.getElementById("resumeGo").onclick=function(){applyPct(st.pct);tip.remove();};
+  }
+  if(bm&&bm.ch===CH&&bm.pct>0&&location.hash!=="#bookmark"){
+    var btip=document.createElement("div");btip.className="resume-tip";
+    btip.innerHTML="🔖 本章已安放书签（钉在 "+bm.pct+"%） · <a href='javascript:void(0)' id='bmGo'>回到书签位置</a>";
+    document.querySelector(".wrap").prepend(btip);
+    document.getElementById("bmGo").onclick=function(){applyPct(bm.pct);btip.remove();};
+  }
+  var timer=null;
+  function record(){
+    var m=maxH();if(m<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/m*100));
+    var d=loadR();d.chapters=d.chapters||{};
+    d.chapters[CH]={pct:p,t:Date.now()};
+    d.resume={book:"gudo",ch:CH,name:"第"+CH+"章 · "+TITLE,file:"gudo-"+CH+".html",pct:p,t:Date.now()};
+    saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record()},1000)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(function(){record()},500);
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  if(bm&&bm.ch===CH&&bm.pct>0){btn.textContent="🔖 书签 "+bm.pct+"%";}else{btn.textContent="🔖 书签";}
+  document.getElementById("__bmSlot").appendChild(btn);
+  btn.onclick=function(){
+    var m=maxH();var p=m>0?Math.min(100,Math.round(document.documentElement.scrollTop/m*100)):0;
+    var d=loadR();d.bookmark={book:"gudo",ch:CH,pct:p,t:Date.now()};saveR(d);
+    btn.textContent="✓ 已安放书签 "+p+"%";
+    setTimeout(function(){btn.textContent="🔖 书签"},1800);
+  };
+})();
+
+</script>
+</body>
+</html>

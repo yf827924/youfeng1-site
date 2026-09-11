@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第六十四章 · 闯塔 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第六十四章 · 闯塔</h1>
+  <p>子时前一刻，萧铁衣到了灯照司门口。</p>
+  <p>司门大开着。</p>
+  <p>不是给他留的，是根本没人守。门口那两个巡灯的不见了，门房里的灯还亮着，人没了。整座司里静得反常，只有塔上那一星青火，稳稳地烧着。</p>
+  <p>萧铁衣在门口站了三息。</p>
+  <p>他没走正门。翻墙，走的是西边那堵矮墙——七年前他替墨记送灯油，从这道墙翻过不下二十回。</p>
+  <p>墙里是司里的后院。后院堆着柴，柴堆后头就是塔基。</p>
+  <p>塔是石塔，七层，每层四面开窗，窗里都点着灯。七层二十八盏，加塔顶那盏长明灯，二十九盏。</p>
+  <p>萧铁衣仰头看了一眼。</p>
+  <p>二十九盏灯，今夜全亮着。</p>
+  <p>——</p>
+  <p>一层。</p>
+  <p>门虚掩着。他推门进去，里头是间空屋，只有一座楼梯盘着往上。楼梯口坐着一个人，背对着他，佝偻着背。</p>
+  <p>那人听见响动，慢慢回过头。</p>
+  <p>是裴主簿。</p>
+  <p>裴主簿的脸在灯下白得发青，看见他，先愣了一下，然后笑了。</p>
+  <p>"萧东家。"</p>
+  <p>"司主呢？"</p>
+  <p>"在塔顶。"</p>
+  <p>"让开。"</p>
+  <p>"我不让。"裴主簿说。</p>
+  <p>萧铁衣看着他。裴主簿的手在袖子里抖，抖得袖口都在颤。</p>
+  <p>"你打不过我。"萧铁衣说。</p>
+  <p>"我知道。"裴主簿说，"我知道。"</p>
+  <p>他站起来了。</p>
+  <p>他站起来的时候，萧铁衣才看见——他的腰上缠着一圈东西，一圈黄纸，纸上画着朱砂的纹，密密麻麻，画得歪歪扭扭，像是照着什么拓下来的。</p>
+  <p>"萧东家，"裴主簿说，"我不拦你。"</p>
+  <p>"那你拦什么？"</p>
+  <p>"我拦的是这个。"</p>
+  <p>裴主簿把手从袖子里抽出来。</p>
+  <p>他手里捏着一根灯芯。</p>
+  <p>青的。</p>
+  <p>"司主给我三样东西。"裴主簿说，"一样是这根芯，一样是这一圈符，还有一样——"</p>
+  <p>他笑了笑。</p>
+  <p>"是给我娘换的那盏灯。"</p>
+  <p>萧铁衣的手停在刀柄上。</p>
+  <p>"我娘七十三了。"裴主簿说，"住在南门，一个人。上个月司里换灯，换到她那一条街，我跑去找司主，跪着求，求他留一盏。司主说行，留。留了，可留的是我亲手给她换的。"</p>
+  <p>"你亲手换的？"</p>
+  <p>"我亲手抽的芯。"裴主簿说，"我娘那盏灯，芯是我抽的。抽的时候她坐在炕上看着我，问我，儿啊你做啥呢。我说娘我给你换个亮堂的。"</p>
+  <p>他的声音抖起来。</p>
+  <p>"换完第二天，她不认得我了。"</p>
+  <p>裴主簿把手里那根青芯举起来。</p>
+  <p>"司主说，我这一根芯点上，我娘那盏灯就能换回去。点上，我就有娘；不点，我就有个不认得我的娘。"</p>
+  <p>"你信他？"</p>
+  <p>"我不信。"裴主簿说，"可我得信。"</p>
+  <p>他往前迈了一步。</p>
+  <p>"萧东家，我这一根芯点着了，你今夜就上不了塔。"</p>
+  <p>——</p>
+  <p>萧铁衣看着他。</p>
+  <p>看了三息。</p>
+  <p>然后他做了一件事——他把刀，从腰上解了下来，放在地上。</p>
+  <p>裴主簿愣住。</p>
+  <p>"你做什么？"</p>
+  <p>"我不杀你。"萧铁衣说。</p>
+  <p>"你不杀我，我就点。"</p>
+  <p>"你点。"萧铁衣说，"你点完，我让你上塔。"</p>
+  <p>"什么？"</p>
+  <p>"你点完这根芯，"萧铁衣说，"你就跟我上塔。到了塔顶，你亲眼看着司主把你娘那盏灯的旧芯，从哪一格匣子里取出来。"</p>
+  <p>裴主簿的手僵在半空。</p>
+  <p>"司主……司主说旧芯都毁了。"</p>
+  <p>"毁了？"萧铁衣说，"今日辰时，我封了三处库。西市旧仓，二十三桶；南门油坊，上万根；塔下地窖，一匣一盏，编号记着街巷门牌。"</p>
+  <p>他把刀捡起来，挂回腰上。</p>
+  <p>"你娘那盏灯的旧芯，在南门油坊第三间屋，左边第三个麻袋。袋口扎着红绳——南门那一片，旧主三口以下的，扎红绳。"</p>
+  <p>裴主簿的嘴张着，半天合不上。</p>
+  <p>"你……你哄我。"</p>
+  <p>"我哄你做什么。"萧铁衣说，"你要不信，点上这根芯，咱们一块儿下去看。看完了，你要还替他挡道，我不拦你。"</p>
+  <p>裴主簿的手，一寸一寸垂下去。</p>
+  <p>那根青芯从他指缝里滑出来，落在地上，滚了半圈。</p>
+  <p>他蹲下去，把那圈黄纸符从腰上解下来，一层一层撕了。撕到最后一层的时候，他哭了。</p>
+  <p>哭得没声，就是肩膀一抖一抖。</p>
+  <p>萧铁衣从他身边过去，上楼梯。</p>
+  <p>走到楼梯拐弯，他停了一下。</p>
+  <p>"裴主簿。"</p>
+  <p>"……在。"</p>
+  <p>"南门那个麻袋，"他说，"我让人给你留着。"</p>
+  <p>——</p>
+  <p>二层，三层，四层。</p>
+  <p>上到第五层，塔里起风了。</p>
+  <p>不是外头的风。这风是从塔顶灌下来的，从上头一层一层往下压，压到脸上，凉，湿，带着一股极淡的油腥味。</p>
+  <p>第六层的楼梯口，横着一道青光。</p>
+  <p>青光是横着的，像一根杆子，拦在楼梯正中。光里头有东西在动——极细，像水里的丝。</p>
+  <p>萧铁衣抽出刀。</p>
+  <p>刀出鞘三寸，黑纹从手背爬到肘；出鞘七寸，黑纹爬上肩；出鞘到底，黑纹过颈，爬上脸颊。</p>
+  <p>他一步踏上第七级。</p>
+  <p>青光"嗡"地一声，那根"杆子"里头的东西全竖起来了——是灯芯。成千上万根灯芯，缠在一起，拧成一股，横在楼梯口。</p>
+  <p>萧铁衣一刀斩下。</p>
+  <p>第一刀。</p>
+  <p>刀落，芯断。断口齐刷刷，断下来的那一截落在地上，没有声。</p>
+  <p>第二刀。</p>
+  <p>刀横扫，那股拧着的芯从中劈开，一半往左倒，一半往右倒。倒在半空的芯，忽然全着了——青火顺着芯烧起来，"呼"地一下，整个楼梯口都是青色的火。</p>
+  <p>火不烫。</p>
+  <p>萧铁衣从火里穿过去。</p>
+  <p>第三刀。</p>
+  <p>这一刀斩的不是芯，是火。</p>
+  <p>刀锋过处，青火从中裂开，裂出一道口子。他从口子里出去，上了七层。</p>
+  <p>——</p>
+  <p>七层，只有一个门。</p>
+  <p>门开着。</p>
+  <p>塔顶。</p>
+  <p>——</p>
+  <p>风大。</p>
+  <p>塔顶是平的，方方正正，四面没有栏杆。当中立着一根石柱，柱顶托着一盏灯——那盏长明灯，比萧铁衣见过的任何一盏都大，灯座是铜的，灯罩是琉璃的，罩子里头的火，是青的。</p>
+  <p>青火周围，悬着八盏灯。</p>
+  <p>八盏灭着的灯，用那根细铁链串着，绕着石柱转，转得极慢。</p>
+  <p>提灯人站在石柱旁边。</p>
+  <p>第九盏灯，提在他手里，已经点着了。</p>
+  <p>阿萝在石柱另一边。</p>
+  <p>她被绑在柱子上，两只手腕上缠着布，布底下透出光来——青的。她的脸白得像纸，眼睛半睁着，看见萧铁衣，眼睛动了一下。</p>
+  <p>萧铁衣的刀，横在身前。</p>
+  <p>"九盏。"他说。</p>
+  <p>"八盏。"提灯人说，"第九盏还没归位。"</p>
+  <p>"那就别归了。"</p>
+  <p>——</p>
+  <p>第九盏灯，是萧铁衣先动的。</p>
+  <p>他没冲提灯人，也没冲石柱。他冲的是那盏长明灯——他一刀劈在灯座上。</p>
+  <p>灯座是铜的。刀砍在铜上，当的一声，溅出一片火星。</p>
+  <p>铜座没破。</p>
+  <p>提灯人没拦他。</p>
+  <p>"你砍不动的。"提灯人说，"这灯座是渊里的石头磨的。"</p>
+  <p>"我知道。"萧铁衣说，"我砍的不是座。"</p>
+  <p>他把刀抽回来，横着一划——这一刀砍的是灯座底下那圈石台。</p>
+  <p>石台是塔顶的石面，一刀下去，石屑飞起，石面上留下一道白痕。</p>
+  <p>白痕里，渗出一丝极细的东西。</p>
+  <p>不是血，是光。</p>
+  <p>"这塔底下有东西。"萧铁衣说。</p>
+  <p>他第二刀、第三刀连着劈下去，围着石台劈了一圈。</p>
+  <p>劈到第七刀，石台裂了。</p>
+  <p>裂口底下，是一根管子。</p>
+  <p>铁管，极细，从塔顶一路往下通，通到塔基，通到地窖——通到更下头去。</p>
+  <p>管子里有东西在流。</p>
+  <p>青色的，稠的，流得极慢，一跳一跳，像血。</p>
+  <p>"青芯熬出来的油。"提灯人说，"从地窖里压上来，压到这盏灯里。灯点着了，油就顺着塔顶这一圈石缝，漫下去，漫到每一层，漫到每一扇窗。"</p>
+  <p>"漫下去做什么？"</p>
+  <p>"漫到城里的每一盏灯上。"</p>
+  <p>萧铁衣的手停住了。</p>
+  <p>他明白了。</p>
+  <p>这盏总灯，不是"一盏灯"。</p>
+  <p>是个泵。</p>
+  <p>点着了，把熬了八座城的油，从塔基压上来，从塔顶漫下去，漫过整座塔，再顺着灯与灯之间那条看不见的线，漫进城里每一户人家的灯里。</p>
+  <p>一盏一盏，全漫成青的。</p>
+  <p>——</p>
+  <p>"那我就先砸了这个泵。"</p>
+  <p>萧铁衣转身，刀锋对准那根铁管。</p>
+  <p>提灯人动了。</p>
+  <p>他把手里的第九盏灯往石柱上一按——"嗒"的一声，灯嵌进了柱顶的凹槽里。</p>
+  <p>九盏灯，齐了。</p>
+  <p>九盏灯一齐亮起来，绕着石柱转，越转越快。转出来的风把塔顶上的灰卷起来，卷成一股，往城里去。</p>
+  <p>萧铁衣听见了。</p>
+  <p>那声音不是从耳朵进来的，是从脚底下上来的——极远，极沉，像有人在很深的地下，翻了一页书。</p>
+  <p>城里的灯，一盏一盏地亮。</p>
+  <p>不是亮，是变。</p>
+  <p>一户，两户，十户，百户。</p>
+  <p>萧铁衣站在塔顶，能"看见"：城东那一片先变，接着是城南，接着是西市——他数过灯的那十九条街，一条一条地，全青了。</p>
+  <p>——</p>
+  <p>斩。</p>
+  <p>萧铁衣不再想了。</p>
+  <p>他把全身的纹都催起来。</p>
+  <p>黑纹从手背爬上去，过腕、过肘、过肩、过颈，爬上脸颊，爬到额角。两只眼睛的底色全变了，白眼球上浮起一层极细的黑丝。</p>
+  <p>刀催纹。</p>
+  <p>这是他最强的样子。三十年前那把刀在渊里叫一回，靠的就是这个。</p>
+  <p>第一刀，斩灯串最末那一盏。</p>
+  <p>提灯人抬手挡。</p>
+  <p>八盏灯一起亮，八道青光织成一面网，兜住刀锋。</p>
+  <p>刀锋陷在网里，陷了半寸。</p>
+  <p>萧铁衣不退，往前压。黑纹顺着刀身往网上爬，爬一寸，网就化一寸。</p>
+  <p>"当"的一声。</p>
+  <p>第八盏灯炸了。</p>
+  <p>灯炸，青光散，网破了一角。</p>
+  <p>提灯人闷哼一声，往后退了半步——这是他头一回退。</p>
+  <p>第二刀，斩第七盏。</p>
+  <p>这一刀萧铁衣没用全力。他用了巧：刀锋不是斩下去的，是"擦"过去的——擦着灯座那一圈铁箍，一挑。</p>
+  <p>铁箍断了。</p>
+  <p>第七盏灯从链子上掉下来，落在石面上，滚了两圈，灭了。</p>
+  <p>提灯人扑上去要捡。</p>
+  <p>萧铁衣第三刀已经到了。</p>
+  <p>这一刀斩的是链子。</p>
+  <p>铁链从中而断，剩下的六盏灯"哗啦"一声散了一地，滚得到处都是。塔顶上一时间全是青光，滚到哪儿亮到哪儿，像一地碎掉的月亮。</p>
+  <p>提灯人站在那一片碎光里，一动不动。</p>
+  <p>地上那六盏滚得满地都是，滚到半途灭了两盏，还剩四盏亮着。</p>
+  <p>九盏去其四。</p>
+  <p>——</p>
+  <p>"你斩不完。"提灯人说。</p>
+  <p>"我不用斩完。"萧铁衣说，"我斩到你点不着它就行。"</p>
+  <p>他一脚踩碎脚边一盏，又一刀劈碎第二盏。</p>
+  <p>九盏去其六。</p>
+  <p>提灯人终于急了。他把地上剩下的两盏拢在怀里，转身往石柱扑——只要把这两盏也嵌进柱顶的槽里，九盏之数就成了，成了一样能点。</p>
+  <p>萧铁衣追上去。</p>
+  <p>差了三步。</p>
+  <p>提灯人先到石柱前，把第一盏往槽里按。</p>
+  <p>——</p>
+  <p>那一刀，是从他背后过去的。</p>
+  <p>萧铁衣追不上人，就掷了刀。</p>
+  <p>这二十年他掷过三回刀。头一回二十岁，掷偏了，赔了一根肋骨；第二回在渊口，掷中了，刀卡在石缝里拔了半天；第三回是今夜。</p>
+  <p>刀在半空里转了三圈半。</p>
+  <p>转第一圈的时候，提灯人的手已经按到槽口。</p>
+  <p>转第二圈的时候，那盏灯的青焰晃了一下。</p>
+  <p>转第三圈的时候，刀到了。</p>
+  <p>"当——"</p>
+  <p>刀锋从提灯人的手背和灯座之间插进去，把那盏灯从他手里生生撬飞出去。</p>
+  <p>灯飞出去，撞在琉璃罩上，碎了。</p>
+  <p>提灯人站在那儿，看着自己的手背。手背上没有伤，可手背是半透的——青光从他手背里透出来，能看见骨头的影子。</p>
+  <p>他不是人。</p>
+  <p>——</p>
+  <p>九盏去其七。</p>
+  <p>剩下的两盏：一盏还嵌在柱顶槽里，一盏从提灯人怀里脱出来，滚在石面边上。</p>
+  <p>萧铁衣走过去，弯腰把地上那一盏捡起来。</p>
+  <p>"还给你。"他说。</p>
+  <p>他把那盏灯往塔外一扔。</p>
+  <p>灯落下去，落到第六层的檐上，摔碎了。</p>
+  <p>九盏去其八。</p>
+  <p>只剩柱顶那一盏。</p>
+  <p>——</p>
+  <p>提灯人没有再抢。</p>
+  <p>他站在石柱旁边，垂着手，看着那最后一盏灯。</p>
+  <p>"你斩吧。"他说。</p>
+  <p>萧铁衣抬起刀。</p>
+  <p>"斩完了，"提灯人说，"第七座城的人，就再也回不来了。"</p>
+  <p>刀停在半空。</p>
+  <p>"你说什么？"</p>
+  <p>"我说的是实话。"</p>
+  <p>提灯人抬起头，那张脸在青光下白得透明，脸上那道从额头到下巴的痕，白得发亮。</p>
+  <p>"这九盏灯，是九座城的记。前八盏是收过的八座城，第九盏是这一座。第七盏是我的城。"</p>
+  <p>"斩了会怎样？"</p>
+  <p>"记就散了。"提灯人说，"散了的记，找不回来。第七座城的人，就永远记不起自己是谁了。"</p>
+  <p>萧铁衣的刀悬着，没落。</p>
+  <p>"你刚才还在点它。"</p>
+  <p>"我刚才在点为的是让他们记起来。"提灯人说，"主子说，九盏齐了，一盏一盏点回去，点一盏，一座城的人记起来一回。"</p>
+  <p>"你信？"</p>
+  <p>"我不信。"</p>
+  <p>提灯人笑了。那张脸上第一次有表情。</p>
+  <p>"我从第一座城就跟在他后头了。"他说，"我见过点回去的。点回去的城，人记起来了，记起来三天，然后全死了。"</p>
+  <p>"为什么？"</p>
+  <p>"因为记是记，人是人。"提灯人说，"记起来了，才想起来自己没了什么。人没了什么，就活不成。"</p>
+  <p>萧铁衣的刀，慢慢垂下来。</p>
+  <p>"那你为什么还跟着他？"</p>
+  <p>"因为我那盏在他手里。"</p>
+  <p>提灯人指了指自己胸口。</p>
+  <p>"我的记，也在那八盏里。第七盏。"</p>
+  <p>"你要回去？"</p>
+  <p>"我要回去。"</p>
+  <p>"回去也是死。"</p>
+  <p>"我知道。"提灯人说，"可我想死在自己家里。"</p>
+  <p>——</p>
+  <p>塔顶上一时静了。</p>
+  <p>风从四面灌上来，把那最后一盏灯的焰，吹得东倒西歪。</p>
+  <p>萧铁衣看着那盏灯。</p>
+  <p>斩了，第七座城的人永远回不来。</p>
+  <p>不斩，这一城的人，今夜全要被上户口。</p>
+  <p>他想起老周那句话：东家，今夜别出门啊。外头冷。</p>
+  <p>老周记得他。老周记起来了。</p>
+  <p>记起来的人，还有救。</p>
+  <p>"我不斩。"萧铁衣说。</p>
+  <p>提灯人抬起眼。</p>
+  <p>"那这一城——"</p>
+  <p>"我斩的是泵。"</p>
+  <p>萧铁衣转身，一刀劈在那根铁管上。</p>
+  <p>——</p>
+  <p>这一刀，他把全身的纹都催到了刀上。</p>
+  <p>黑纹从四肢百骸往刀身里灌，灌得刀身发亮——不是白光，是黑的亮，黑得发沉，像一截被墨浸透的骨头。</p>
+  <p>刀落。</p>
+  <p>铁管断了。</p>
+  <p>管子里那道青色的稠液，喷出来半尺高，然后断了流。</p>
+  <p>断流的那一刹，柱顶那盏长明灯的焰，矮了下去。</p>
+  <p>矮了一寸。</p>
+  <p>塔顶上那一片青光，跟着矮了一寸。</p>
+  <p>萧铁衣没停。他第二刀、第三刀连着劈下去，把那段铁管劈成了四截，又抬起脚，把石台裂缝周围那圈石面，踩塌了半边。</p>
+  <p>塌下去的石面露出底下的东西。</p>
+  <p>不是地窖。</p>
+  <p>是一口井。</p>
+  <p>井口不大，黑，深，从上往下看，看不到底。井壁上刻着纹，一圈一圈，绕着往下走。</p>
+  <p>那纹他认得。</p>
+  <p>渊里，门上那些刻痕，一个路数。</p>
+  <p>——</p>
+  <p>"这塔，"萧铁衣说，"是打在渊上的。"</p>
+  <p>提灯人没答。</p>
+  <p>——</p>
+  <p>长明灯的焰，从矮一寸，变成矮半尺。</p>
+  <p>青光一寸一寸往下退，退到石柱底下，退到琉璃罩里，最后只剩豆大一点，在罩子中央颤。</p>
+  <p>城里的灯，跟着一根一根地暗了一暗。</p>
+  <p>不全暗。只是暗了一暗，像人打了个盹。</p>
+  <p>然后——</p>
+  <p>——</p>
+  <p>"萧东家。"</p>
+  <p>声音是从塔顶边上传来的。</p>
+  <p>谢司主站在塔顶边缘，不知站了多久。他手里还是托着那只铜匣。</p>
+  <p>匣子开了。</p>
+  <p>匣子里是一盏灯，灭着的。</p>
+  <p>"你断得了管子。"谢司主说，"断不了这一盏。"</p>
+  <p>他把匣子往塔顶中央一放。</p>
+  <p>那盏灯从匣子里浮起来，浮到琉璃罩上方。</p>
+  <p>"这一盏，"谢司主说，"是三十年前从渊里带出来的。"</p>
+  <p>灯落在罩顶。</p>
+  <p>灯芯是白的。</p>
+  <p>谢司主没点火。他只是伸出手，在灯芯上捻了一下。</p>
+  <p>灯着了。</p>
+  <p>——</p>
+  <p>那不是青色的火。</p>
+  <p>是白的。</p>
+  <p>白得极淡，淡到几乎看不出颜色。可它一亮，塔顶上所有的青光，全矮了下去——不是被压下去的，是让开的。像一群人给一个人让路。</p>
+  <p>萧铁衣的刀，在手里抖了一下。</p>
+  <p>不是怕。</p>
+  <p>是刀自己抖的。</p>
+  <p>那把刀三十年前在渊里叫过一回。今夜，它第二次叫了。</p>
+  <p>不是出声的叫。是刀身里那层钢，忽然开始响，响得他整条胳膊发麻，麻到握不住。</p>
+  <p>谢司主看着他，笑了。</p>
+  <p>"听见了？"他说，"它在认我。"</p>
+  <p>——</p>
+  <p>萧铁衣没回话。</p>
+  <p>他扑向石柱。</p>
+  <p>阿萝还在柱子上绑着，手腕上那两团布，已经烧起来了——不是明火，是布底下透出的光，光烧穿了布，烧到皮肉上。</p>
+  <p>她的眼睛还是半睁着。</p>
+  <p>萧铁衣一刀斩断绳子，把她抱下来。</p>
+  <p>她轻得吓人。</p>
+  <p>"阿萝。"</p>
+  <p>阿萝的嘴唇动了动。</p>
+  <p>"东家……"她的声音细得像根线，"册子……"</p>
+  <p>"册子在。"</p>
+  <p>"三份……"</p>
+  <p>"三份都在。"</p>
+  <p>阿萝笑了。</p>
+  <p>笑完，她的眼睛合上了。</p>
+  <p>——</p>
+  <p>就在她合眼的那一瞬间，那盏白灯的光，落到了她的脸上。</p>
+  <p>萧铁衣看见了。</p>
+  <p>他看见阿萝的脸上，浮起一层极淡的纹——从心口往上，过颈，过脸颊，一路浮到额头。纹是青的，浮在皮下，像有什么东西在皮底下走。</p>
+  <p>走到一半，停住了。</p>
+  <p>停在她左边的脸颊上，再也不往上走。</p>
+  <p>她半边脸有纹，半边脸没有。</p>
+  <p>——</p>
+  <p>"半盏。"谢司主在背后说，"她的魂被抽走了半盏。"</p>
+  <p>萧铁衣抱起阿萝，转身。</p>
+  <p>"还留了半盏。"谢司主说，"算她命大。"</p>
+  <p>"什么意思？"</p>
+  <p>"意思是她还活着。"谢司主说，"活多久，看你能跑多快。"</p>
+  <p>"去哪儿？"</p>
+  <p>谢司主笑了笑。</p>
+  <p>"你去问云荒。"</p>
+  <p>——</p>
+  <p>萧铁衣没再听。</p>
+  <p>他抱着阿萝，往楼梯口冲。</p>
+  <p>冲到楼梯口的时候，头顶上那盏白灯，忽然亮了一亮。</p>
+  <p>白光落下来，落在楼梯上，把整段楼梯照得雪亮。</p>
+  <p>亮得他看不见路。</p>
+  <p>他闭着眼往下冲。</p>
+  <p>冲到第六层，脚下一空——</p>
+  <p>不是空，是有人从底下冲上来，撞在他身上。</p>
+  <p>"东家！"</p>
+  <p>是铁塔。</p>
+  <p>铁塔满头是血，一只手捂着肩膀，另一只手死死攥着丫丫的胳膊。</p>
+  <p>"东家！塔底下……塔底下全是灯！"</p>
+  <p>"我让你守在墨记！"</p>
+  <p>"丫丫跑出来了！"铁塔吼，"她非要来！她说塔上的灯要灭了，她得喊阿萝姐的名字！"</p>
+  <p>萧铁衣往下看。</p>
+  <p>塔底下，那一片黑地里，密密麻麻全是青光。</p>
+  <p>不是灯。</p>
+  <p>是人。</p>
+  <p>城里的人，被换过灯的那几百户，全都从家里出来了，站在司门外的街上，仰着脸看塔。他们的眼睛在夜里亮着，青的。</p>
+  <p>几百双青眼睛，一起往塔上看。</p>
+  <p>——</p>
+  <p>"走！"萧铁衣吼。</p>
+  <p>他们往下冲。</p>
+  <p>冲到第三层，白光追下来了。</p>
+  <p>白光是从塔顶那盏灯上泼下来的，像水，一层一层往下泼。泼到哪儿，哪儿的石头就发白，白得透明。</p>
+  <p>石头透明了，就能看见石头里头的东西。</p>
+  <p>萧铁衣看见了。</p>
+  <p>这整座塔的石头里，埋着东西。</p>
+  <p>埋的是人。</p>
+  <p>一层一层，一圈一圈，密密麻麻，全是人——不是尸首，是站着的人形，被封在石头里，保持着一个姿势，几千年了没动过。</p>
+  <p>他认得那种姿势。</p>
+  <p>渊底下，那些"顶在门上"的人，就是这个姿势。</p>
+  <p>——</p>
+  <p>第二层，白光追到脚后跟。</p>
+  <p>萧铁衣把阿萝往铁塔怀里一塞，转身，横刀挡在楼梯口。</p>
+  <p>白光撞在刀上。</p>
+  <p>刀没断。</p>
+  <p>刀身里那层黑，把白光顶住了，顶了三息。</p>
+  <p>三息之后，黑纹从刀身上褪回来，褪到他手臂上，褪到他脸上，褪到他眼睛里。</p>
+  <p>他的眼前黑了一瞬。</p>
+  <p>等他再能看见的时候，白光已经过去了——不是走了，是穿透了。白光穿过刀，穿过他的身体，往楼下去了。</p>
+  <p>楼下传来丫丫的喊声。</p>
+  <p>"阿萝姐——！"</p>
+  <p>——</p>
+  <p>一层。</p>
+  <p>门口。</p>
+  <p>萧铁衣冲出去的时候，看见的是这一幕：</p>
+  <p>丫丫站在院子中央，仰着头，冲着塔顶喊。</p>
+  <p>铁塔扑在她身上。</p>
+  <p>白光从塔上泼下来，泼到院子里，泼到那一片青眼睛上。</p>
+  <p>青眼睛一盏一盏地灭。</p>
+  <p>灭了的人，直挺挺地倒下去。</p>
+  <p>倒了一片。</p>
+  <p>——</p>
+  <p>白光泼到丫丫身上之前，铁塔把她压在了身下。</p>
+  <p>他整个后背，全在白光里。</p>
+  <p>萧铁衣冲过去的时候，白光已经过去了。</p>
+  <p>铁塔还趴着。</p>
+  <p>"铁塔。"</p>
+  <p>铁塔没动。</p>
+  <p>萧铁衣把他翻过来。</p>
+  <p>铁塔的眼睛是睁着的，眼珠还是黑的——没被换过灯，眼睛还是自己的。</p>
+  <p>他胸口那一片衣服，全白了。</p>
+  <p>不是染的白，是烧的白。衣服还在，可衣服的纤维全成了灰，一碰就往下掉。掉光了，露出底下的皮肉——皮肉也是白的，白得透明，能看见里头的骨头。</p>
+  <p>"东家。"铁塔说。</p>
+  <p>声音很轻，气从喉咙里漏出来。</p>
+  <p>"我在。"</p>
+  <p>"丫丫……"</p>
+  <p>"丫丫没事。"</p>
+  <p>"那就好。"铁塔说。</p>
+  <p>他笑了一下。</p>
+  <p>"我爹……我爹当年跟我说，让我跟着你。"</p>
+  <p>"我知道。"</p>
+  <p>"他说……跟着你，有饭吃。"</p>
+  <p>"有饭吃。"</p>
+  <p>"东家，"铁塔的喉咙动了一下，"我这辈子……吃过最好吃的一顿，是那年你给我买的那个肉包子。"</p>
+  <p>萧铁衣想起来了。</p>
+  <p>七年前，墨记开张的头一天。他雇了个傻大个儿搬货，搬了一整天，晚上给了一个肉包子。</p>
+  <p>"我记得。"他说。</p>
+  <p>"那包子……"铁塔的眼睛慢慢合上，"我留了半个……给我娘……"</p>
+  <p>他的手垂下来。</p>
+  <p>——</p>
+  <p>院子里静了。</p>
+  <p>青眼睛灭了一地，人倒了一地。</p>
+  <p>司门外那条街上，几百个人躺着，一动不动。</p>
+  <p>塔上那盏白灯还亮着，白光泼了一圈，泼到城墙上，停住了。</p>
+  <p>停住之后，白光开始往回收。</p>
+  <p>一寸一寸地收，收回塔顶，收回那盏灯里。</p>
+  <p>收完了，塔顶上只剩一点白，孤零零的，亮在夜里。</p>
+  <p>——</p>
+  <p>萧铁衣跪在地上，抱着铁塔。</p>
+  <p>抱了很久。</p>
+  <p>丫丫从铁塔身下爬出来，跪在旁边，一声不吭。</p>
+  <p>她伸手，摸了摸铁塔的脸。</p>
+  <p>"爹。"</p>
+  <p>"嗯。"</p>
+  <p>"铁塔叔叔睡着了。"</p>
+  <p>"嗯。"</p>
+  <p>"他冷不冷？"</p>
+  <p>萧铁衣没答。</p>
+  <p>他把外衣脱下来，盖在铁塔身上。</p>
+  <p>盖完了，他站起来，抬头看那座塔。</p>
+  <p>塔顶上，白光底下，站着一个人影。</p>
+  <p>谢司主。</p>
+  <p>他没走。</p>
+  <p>——</p>
+  <p>"萧东家。"谢司主的声音从塔顶传下来，很轻，却每个字都清清楚楚，"今夜你赢了半局。"</p>
+  <p>萧铁衣没说话。</p>
+  <p>"灯，你压住了大半座城；人，你救回了一个半。"</p>
+  <p>"可这座塔，还立着。"</p>
+  <p>谢司主抬起手，指了指塔顶那一点白光。</p>
+  <p>"这盏灯，我不灭。"</p>
+  <p>"为什么？"</p>
+  <p>"因为它不是给你们点的。"</p>
+  <p>谢司主转过身，背对着他，往塔下看——看的不是萧铁衣，是城里那一片倒下的人。</p>
+  <p>"是给它自己点的。"</p>
+  <p>他的身影一晃，不见了。</p>
+  <p>塔顶上，只剩那一星白火，稳稳地烧着。</p>
+  <p>——</p>
+  <p>天快亮的时候，下起了雨。</p>
+  <p>雨不大，淅淅沥沥。</p>
+  <p>萧铁衣背着铁塔，抱着阿萝，牵着丫丫，从灯照司的后门走出去。</p>
+  <p>走到街上，他回头看了一眼。</p>
+  <p>那座塔在雨里立着，塔顶那一点白，被雨雾罩着，模模糊糊，像一只半睁的眼。</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，听书键跳转纯语音页 ===== */
+  var TOTAL=75;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<a class="rbtn gold" href="listen.html?ch='+n+'">🎧 听书</a>'+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  var dragging=false;
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a")){show();return;}
+    var w=document.documentElement.clientWidth||document.body.clientWidth;
+    var x=e.clientX||0;
+    /* 左右两侧 1/3 为翻页手势，中间区域用于呼出工具栏 */
+    if(x<w*0.30&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    if(x>w*0.70&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+    if(document.body.classList.contains("ui-show"))hide();else show();
+  });
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  var CH=64, TITLE="闯塔";
+  var RKEY="hugo_reader_v1";
+  function loadR(){try{return JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){return{}}}
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function applyPct(p){if(maxH()>0)window.scrollTo(0,maxH()*p/100);}
+  var chapters=(loadR().chapters||{});
+  var st=chapters[CH]||{pct:0};
+  var bm=loadR().bookmark;
+  if(location.hash==="#bookmark"&&bm&&bm.ch===CH&&bm.pct>0){
+    setTimeout(function(){applyPct(bm.pct)},80);
+  }else if(location.hash==="#resume"&&st.pct>0){
+    setTimeout(function(){applyPct(st.pct)},80);
+  }else if(st.pct>=3&&st.pct<95){
+    var tip=document.createElement("div");tip.className="resume-tip";
+    tip.innerHTML="📌 上次读至 "+st.pct+"% · <a href='javascript:void(0)' id='resumeGo'>继续上次位置</a>";
+    document.querySelector(".wrap").prepend(tip);
+    document.getElementById("resumeGo").onclick=function(){applyPct(st.pct);tip.remove();};
+  }
+  if(bm&&bm.ch===CH&&bm.pct>0&&location.hash!=="#bookmark"){
+    var btip=document.createElement("div");btip.className="resume-tip";
+    btip.innerHTML="🔖 本章已安放书签（钉在 "+bm.pct+"%） · <a href='javascript:void(0)' id='bmGo'>回到书签位置</a>";
+    document.querySelector(".wrap").prepend(btip);
+    document.getElementById("bmGo").onclick=function(){applyPct(bm.pct);btip.remove();};
+  }
+  var timer=null;
+  function record(){
+    var m=maxH();if(m<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/m*100));
+    var d=loadR();d.chapters=d.chapters||{};
+    d.chapters[CH]={pct:p,t:Date.now()};
+    d.resume={book:"gudo",ch:CH,name:"第"+CH+"章 · "+TITLE,file:"gudo-"+CH+".html",pct:p,t:Date.now()};
+    saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record()},1000)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(function(){record()},500);
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  if(bm&&bm.ch===CH&&bm.pct>0){btn.textContent="🔖 书签 "+bm.pct+"%";}else{btn.textContent="🔖 书签";}
+  document.getElementById("__bmSlot").appendChild(btn);
+  btn.onclick=function(){
+    var m=maxH();var p=m>0?Math.min(100,Math.round(document.documentElement.scrollTop/m*100)):0;
+    var d=loadR();d.bookmark={book:"gudo",ch:CH,pct:p,t:Date.now()};saveR(d);
+    btn.textContent="✓ 已安放书签 "+p+"%";
+    setTimeout(function(){btn.textContent="🔖 书签"},1800);
+  };
+})();
+
+</script>
+</body>
+</html>

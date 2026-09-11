@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第四十八章 · 碑上的灯 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第四十八章 · 碑上的灯</h1>
+  <p>雾比老人说的要厚。</p>
+  <p>三人往深处走，先是脚踝没进雾里，再是膝盖，走到后来，雾漫过了胸口。雾是凉的，贴着皮肤，却不像水汽——萧铁衣伸手在雾里抓了一把，摊开手心，掌纹间落了一层极细的石粉。这雾是粉做的。山里的雾，原来也是这座账房的一部分。</p>
+  <p>"跟紧。"老人在前头说，声音发闷，像隔着一层布，"雾里头，碑也认人。你脚下的路，是碑让出来的。碑要是不让——"</p>
+  <p>老人的话没说完，前方三步，一块碑悄无声息地横了过来。</p>
+  <p>没有响动。方才那里还是通路，这会儿一块残碑斜插在道中，像一根钉进地里的断箭。老人叹了口气，改道。改出去七八步，又一块碑斜插过来。</p>
+  <p>丫丫忽然拉住萧铁衣的手，往前走了两步，站在两块碑中间的空当里，仰着头，轻轻说了一句什么。</p>
+  <p>那句话萧铁衣没听清。可两边的碑，动了。</p>
+  <p>斜插的残碑缓缓退回去，让出一条刚好容一人一宽的道。</p>
+  <p>"它听你的。"老人站在前头，没有回头，声音闷在雾里，"三十年了，碑只让过三种人：守碑的，送灯的，还有——生下来就空的。丫头是第三种。前两种是进去当差的，第三种，碑把他们当自己人。"</p>
+  <p>萧铁衣把这句话记下。无纹之体，无纹，碑也是无纹之物——都是空身，所以相通。</p>
+  <p>老人又边走边交代了几条规矩，说得很慢，像说给丫丫听："进了凹地，不许喊人名，碑上的名字，喊一声应一声，四千个人应你，你受不住。不许碰青色的灯，那是没守完差的，沾了要跟着当差。夜里灯课停了以后，不许走动，那时候碑在换岗，撞上了，就分不清你是谁的兵了。"</p>
+  <p>丫丫一条一条地应，应得极认真，像在学堂里接先生的话。</p>
+  <p>老人回头看萧铁衣，看了两息，又添了一句："你那把刀，进了凹地，让它自己待着。它要认什么，随它认。你要是攥着不放，认出来的东西，就得先过你的手。"</p>
+  <p>萧铁衣点头。守拙刀一路在腰后发温，越往深处越温，像一头嗅到了旧巢的兽，按不住，也不必按。</p>
+  <p>老人回头看丫丫，看了很久，什么也没说，只在迈步前，把腰弯得更低了些。</p>
+  <p>——</p>
+  <p>再往里，雾忽然开了。</p>
+  <p>不是散了——是头顶上有一片天光漏下来。三人站在一片凹地边缘，凹地像一只巨碗，四壁全是碑，一层压着一层，螺旋着往下排，一直排到看不见底。而那满壁的碑，亮了。</p>
+  <p>不是被光照亮的亮。是碑自己在亮。</p>
+  <p>每一个名字的笔画里，都嵌着一线光。光的颜色不齐——有的是暖黄，像家里的油灯；有的发白，像月光淬过的霜；还有几线是青的，青得发冷，像坟头的磷火。一壁的碑，几千个名字，几万道笔画的光，层层叠叠地悬在凹壁上，从他们脚下一直铺到雾顶。</p>
+  <p>灯海。</p>
+  <p>丫丫的呼吸停了一瞬。她挣脱萧铁衣的手，跑到凹地边缘，扒着一块碑，眼睛睁得大大的，脸被满壁的灯映得忽明忽暗。</p>
+  <p>萧铁衣站在她身后，一时没有动。</p>
+  <p>他见过的灯不少。郡城上元节的灯山，叠到三层楼高；验灵司纹档库里的长明灯，一排排点了几十年。可那些灯都是人点的，点灯的人守着灯。眼前这片灯不是。没有人在点，没有人在守，几万道光自己亮着，自己灭着，自己按着自己的班次运转，人只是住在光里。</p>
+  <p>这座灯海的每一盏，都是一个死掉的人。而死掉的人没有散，他们在碑里接着守差。四千年，几万个名字，一座由死人当值的城。</p>
+  <p>他忽然想起严婆婆。想起她走前那一夜，在灵堂里替他把最后一笔账理清。要是人死了名字进碑，婆婆的名字，此刻是不是也在哪一层凹壁上，亮着一盏？</p>
+  <p>他在满壁的灯里找。找不到。他不认得婆婆的名字在碑上是何种笔法，也不知她名在哪一层。可这个念头一起，满壁的灯忽然都不一样了——那不是风景，不是异象，那是他欠着的人，一座一座，立在石头里接着当差。</p>
+  <p>"爹。"丫丫的声音抖了，不是怕，是别的什么，"他们在上课。"</p>
+  <p>"上课？"</p>
+  <p>"嗯。"丫丫指着凹壁，"爷爷说碑里的名字在当差。他们在上课，学的就是当差。灯亮一下，是先生点了一次名。灯要是一直亮着，就是这一课，他们学会了。"</p>
+  <p>萧铁衣顺着她的手看过去。凹壁中段，一片灯正齐齐地亮，亮一拍，暗一拍，节奏整齐得像府学里晨课的诵读。灯光一起一落之间，他"阅尽"里映出的不是碑，是人——密密麻麻的人影，按着某种他看不懂的次序坐着，每一盏灯后头，坐着一个名字。</p>
+  <p>他试着去数灯课的拍子。数了十几拍，数出一点规律：每七拍为一轮，前六拍，灯是齐的；第七拍，总有几盏灯不亮。不亮的那几盏，位置不定，有时在东壁，有时在西壁，可绝不会连续两轮不亮在同一个地方。</p>
+  <p>像点名点到了，人却不在。</p>
+  <p>不在的那几个名字，正在外头当差——郡城里的暗桩，苏家渡的茶棚，还有昨天那个烧纸钱的扫碑人。碑里的名字不在座，因为人还在山下活着。</p>
+  <p>守碑人的规矩，萧铁衣算是摸到了一条：灯在，人在碑里；灯不灭，差就不算交。这片灯海和郡城的暗桩网，原是一张网的两头——山上的灯记名，山下的灯当差，两头共着一本账。</p>
+  <p>守碑人死了，名字进碑。名字在碑里，接着守。</p>
+  <p>四千年。几万个名字。这座山不是碑林，是一座还在运转的城，城里住的全是死了的守碑人，他们用灯说话，用灯点名，用灯当差。</p>
+  <p>萧铁衣忽然明白了严守拙绝笔信里那句话的分量——灯交给你了。</p>
+  <p>交的不是一盏灯。是这一城的人。</p>
+  <p>——</p>
+  <p>凹地入口的第二层碑壁上，老人停住了。</p>
+  <p>"到了。"他说，"拓样的主人，当年就在这儿拓的。"</p>
+  <p>萧铁衣取出怀里的拓样。严守拙绝笔信随附的那卷碑拓，墨色沉旧，边角磨得起了毛。他捧着拓样，站在碑壁前，一时不知道从何对起——这满壁的碑，哪一个才是拓样的母本？</p>
+  <p>丫丫仰着头，忽然伸手，往凹壁上方一指。</p>
+  <p>"那块。"她说，"它的灯，和你怀里那卷纸，一个颜色。"</p>
+  <p>萧铁衣举拓样对着那块碑。碑在凹壁高处，字迹朝下拓的方向——他顺着丫丫指的方向辨认，那碑上的字，笔画的结构、收笔的角度，与拓样上的字迹，如出一辙。</p>
+  <p>他攀不上去。老人从背篓里取出一盘绳子，绳头拴着铁钩，抡了几圈，甩上去，钩住了碑顶的凿孔。</p>
+  <p>"我上去。"萧铁衣说。</p>
+  <p>"你上去。"老人把绳子踩在脚下，"我看着丫头。碑认你，你落下去之前，它自己会接你。"</p>
+  <p>萧铁衣攀绳而上。碑壁的光映着他的脸，越往上，灯越密，光越沉。攀到那块碑前，他一只脚踩进碑侧的凿坑，一手展开拓样，贴上了碑面。</p>
+  <p>起初什么都没发生。</p>
+  <p>拓样的墨底贴着石面，像一张旧纸贴着另一块旧石头。萧铁衣屏着息，把"阅尽"从指下铺过去——</p>
+  <p>拓样上的墨，动了。</p>
+  <p>那些沉了几十年的墨字，像被什么从碑里唤醒，一笔一画，从纸上浮起来，往石面的刻痕里游。墨迹入石，如同灯油入芯。碑身深处那盏灯"腾"地亮了，亮度陡增十倍，光从刻痕的每一条缝里往外涌——</p>
+  <p>而石面上，拓样原本空白的地方，显出了新的纹。</p>
+  <p>那不是字。是一幅图。</p>
+  <p>图的线条是碑上的名字连成的——一个名字接一个名字，笔画勾连笔画，几千个名字在这块碑的壁面上排出一张图：山的轮廓、林的走向、凹地的位置，而在图的中央偏下，一片空白。</p>
+  <p>萧铁衣压住心口的震动，逐寸地看。</p>
+  <p>图的左上，是西山的主峰，峰下一圈圈排开的，是凹地——他把方位转过来对照，不错，他们此刻就站在图上那道螺旋的第三层。图的右侧，一条细线蜿蜒出山，线身上的名字密而小——那是官道，官道沿线的每一个名字，都是一盏在外的灯。再往右，线出了山，经过一个他认得的弯——苏家渡。渡口的江面上，图上竟也有刻痕，一横一竖，是个"渡"字的变体。</p>
+  <p>这张图不是舆图。是一张活的账网图。满山满城每一盏灯的位置，都在这幅图上。严守拙拓的不是碑文，是这张网的底册。</p>
+  <p>而网的中心，图的缺口处，拓样盖着的地方，恰好是一块拓不出来的石面——凿痕在那里断了，像是刻图的人，故意留了这一块没刻。</p>
+  <p>图的缺口，指向凹地的最深处。</p>
+  <p>"缺口在哪儿？"老人在底下喊。</p>
+  <p>萧铁衣定了定神，把图上最深的那个方位记死，又对着凹壁的走向核了两遍，才开口，声音有点发干：</p>
+  <p>"渊口。"</p>
+  <p>图的缺口，正对着碑林的最深处——雾气最重、磨刀声日夜不停的那个方向。拓样缺的最后一角，要往渊里找。</p>
+  <p>他把拓样从碑面上小心揭下来。墨迹入过石，揭下来的拓样与先前不同了——原先空白的中央，留了一层极淡的印子，像图从碑上褪下来的残影。图的残影不全，可缺口那一角的线条，比先前深了。</p>
+  <p>他忽然明白严守拙当年是怎么做的了。拓样贴碑，墨字入石，图显一角；这卷拓样不是看一次丢一次的纸，它是一把钥匙，走到哪块碑，就显哪一角图。整幅图分作几段，存在几块碑里，一程一程，引着执刀的人往渊口走。</p>
+  <p>严守拙连他寻渊的路，都在几十年前就替他铺好了。一程一程，铺进了石头里。</p>
+  <p>——</p>
+  <p>下得绳来，天已经擦黑。</p>
+  <p>凹地里起了风。灯海的光在风里摇，几万道笔画的光一起晃，晃得整面凹壁像一锅沸腾的星子。</p>
+  <p>萧铁衣歇了小半个时辰，吃了些干粮。丫丫靠着他坐着，忽然说："爹，有盏灯在哭。"</p>
+  <p>他低头看她。</p>
+  <p>"外头的刀上有一盏，记得吗？在哭的那盏。"丫丫指着凹壁，"这儿也有一盏。它不点名，不上课。它一个人在角落里，哭。"</p>
+  <p>萧铁衣朝她指的方向看。凹壁最底层的角落，一块巴掌大的碎碑嵌在壁根，碑身上一个名字，名字周围没有灯，只有一点极暗的光，一明，一灭，一明，一灭，节奏和旁边齐整的灯课全然不同。</p>
+  <p>他把"阅尽"铺过去。</p>
+  <p>碑里的名字看不清了——被水浸过，笔画糊成一团。可那点暗光周围，碑石的纹理里，渗着一线一线的湿痕。碑在出汗。四千年不坏、连火都烧不透的碑，在出汗。</p>
+  <p>"它哭多久了？"他问。</p>
+  <p>丫丫摇头："我来的时候就在哭了。"</p>
+  <p>老人蹲在那块碎碑前，看了半晌，忽然说："这名字，我认得。"</p>
+  <p>"谁？"</p>
+  <p>老人没有立刻答。他伸手在碎碑旁的泥里抠了一点，捻开，凑到鼻子底下闻，像在确认什么年头的事。凹壁上的灯课还在一拍一拍地走，只有这一角的暗光，不跟着拍子走，自顾自地明灭。</p>
+  <p>"我小时候，"老人开口，声音变得很慢，"我爹指着这块碑跟我说过一回话。他说，山里的碑，都是人死了才立的，独独这一块，是个人还没死、山自己立的。山为什么替一个活人立碑，我爹没说。他就说了一句——这块碑哭多久，渊的账就欠多久。"</p>
+  <p>"三十年。"萧铁衣说。</p>
+  <p>"三十年。"老人点头，"我接杠子那年，它在哭。我爹咽气那年，它在哭。今儿，还在哭。"</p>
+  <p>萧铁衣盯着那团糊掉的名字看了很久。碑把名字吸进去，名字在里头当差——可这块碑的名字哭而不差，它不当值，它只是在等。等什么，碑不说，山不说。</p>
+  <p>只有下水的人自己知道。</p>
+  <p>"三十年前，这个人上山，"老人接着说，"在我爹的杠子跟前站了一夜。没吃没喝，就那么站着，看满山的灯。天亮的时候，他把半块东西交给我爹，说，替我收着。等一个执刀的来取——能报出灯数的，就交给他。"</p>
+  <p>"什么东西？"</p>
+  <p>"没开过。"老人说，"我爹拿油布裹了三层，埋在杠子底下。他交代我，交东西的那天，要验一样物件——来人要是能说出这山上灯的数目，东西就归他。"</p>
+  <p>"多少盏？"</p>
+  <p>"我没数过。"老人摇头，"我爹守了二十年，到死也没等来能报数的人。这活儿传到我手上，我起初还年年数，后来不数了。灯天天添，天天灭，数不过来。"</p>
+  <p>萧铁衣看向丫丫。</p>
+  <p>丫丫仰着头，想了想，说："外头的碑，今天早上是三百二十六。从我们进山到这会儿，又亮了一盏——就是哭的那块，它一看见爹，就亮了。三百二十七。"</p>
+  <p>老人的手抖了一下。</p>
+  <p>外圈的灯，一个五岁的孩子，从昨夜数到今晨，一盏不差。这满山守了几十年的活计，原来一直在等的，就是这样一双眼睛。</p>
+  <p>他缓缓蹲下身，从杠子随身的背篓最底层，摸出一个用油布裹了三层的物件。油布陈旧发脆，一层一层揭开，里头是半块石片。</p>
+  <p>石片巴掌大，断口参差，通体无字。可它一见到凹壁的灯海，断口的茬面上，就隐隐透出一线微光——和那块哭着的碎碑，同色的光。</p>
+  <p>"验吧。"老人把石片捧到丫丫面前，声音哑得厉害，"报数的人来了。"</p>
+  <p>萧铁衣的呼吸停了一息。</p>
+  <p>半块无字碑。他怀里那块萧家传了三代的遗物，另一半。</p>
+  <p>三十年前，赵怀远下渊前，把这块石片交给守杠人，等一个执刀的来取。等了三十年，等来的是一个五岁的孩子替山报数。</p>
+  <p>萧铁衣没有伸手去接。他先把自己怀里那块碑片取了出来——两块石片，他隔着半尺对了一下断口。茬对茬，锋对锋，一个是新断的，断口利得发亮；一个是断过三十年的，茬面温润，像被手摩挲过千遍万遍。可断口的曲线严丝合缝，一处不多，一处不少。</p>
+  <p>三十年前断开的半块，和萧家传了三代的半块，本是一物。</p>
+  <p>谁断的，何时断的，为什么断——山下没有答案。答案在渊里。</p>
+  <p>老人转向萧铁衣，浑浊的眼睛里有什么东西在动。</p>
+  <p>"打那天起，这块碑就开始哭。"他说，"我爹说，那是山里唯一一块，人还没死、碑先立了的碑。"</p>
+  <p>萧铁衣的心口一紧。</p>
+  <p>人还没死，碑先立。三十年前下渊的赵怀远，名字已经在碑上——碑不记活人，可这一块记了。不是因为他死了，是因为他从下渊那一刻起，就把自己整个人，押给了这座山。</p>
+  <p>就在这时，守拙刀烫了。</p>
+  <p>不是那种温温的发烫。是真烫，烫得刀鞘里的皮革发出焦味。萧铁衣按住刀柄，裂痕里的热一下一下地搏动，搏动的节奏——</p>
+  <p>磨刀声。</p>
+  <p>凹地深处的磨刀声，一声，一声，与刀身裂痕的搏动，一拍不差。</p>
+  <p>他的刀和那把磨了三十年的刀，隔着半座山，同频。</p>
+  <p>老人看着他按刀的手，缓缓站起来，往后退了半步，退出了刀锋可能扫到的范围。</p>
+  <p>"他知道你到了。"老人说，"刀在互相报信。走吧，小祖宗——山底下那位，请你们过去。"</p>
+  <p>萧铁衣把两块石片一起收进怀里。两块断口贴在一起的地方，微微地热，像两截接上又没接死的骨头，在隔着皮肉彼此试探。</p>
+  <p>他牵起丫丫的手。丫丫另一只手还攥着那块哭碑的方向，回头望了一眼——那点暗光在他们离开时，明了一下，像挥了挥手。</p>
+  <p>磨刀声在前头引路，一声，一声，不急，不停。守拙刀在他腰后，一拍一拍地应。两把刀隔着半座山对了一夜的账，如今账对上了，路也在脚底下了。</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，听书键跳转纯语音页 ===== */
+  var TOTAL=75;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<a class="rbtn gold" href="listen.html?ch='+n+'">🎧 听书</a>'+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  var dragging=false;
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a")){show();return;}
+    var w=document.documentElement.clientWidth||document.body.clientWidth;
+    var x=e.clientX||0;
+    /* 左右两侧 1/3 为翻页手势，中间区域用于呼出工具栏 */
+    if(x<w*0.30&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    if(x>w*0.70&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+    if(document.body.classList.contains("ui-show"))hide();else show();
+  });
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  var CH=48, TITLE="碑上的灯";
+  var RKEY="hugo_reader_v1";
+  function loadR(){try{return JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){return{}}}
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function applyPct(p){if(maxH()>0)window.scrollTo(0,maxH()*p/100);}
+  var chapters=(loadR().chapters||{});
+  var st=chapters[CH]||{pct:0};
+  var bm=loadR().bookmark;
+  if(location.hash==="#bookmark"&&bm&&bm.ch===CH&&bm.pct>0){
+    setTimeout(function(){applyPct(bm.pct)},80);
+  }else if(location.hash==="#resume"&&st.pct>0){
+    setTimeout(function(){applyPct(st.pct)},80);
+  }else if(st.pct>=3&&st.pct<95){
+    var tip=document.createElement("div");tip.className="resume-tip";
+    tip.innerHTML="📌 上次读至 "+st.pct+"% · <a href='javascript:void(0)' id='resumeGo'>继续上次位置</a>";
+    document.querySelector(".wrap").prepend(tip);
+    document.getElementById("resumeGo").onclick=function(){applyPct(st.pct);tip.remove();};
+  }
+  if(bm&&bm.ch===CH&&bm.pct>0&&location.hash!=="#bookmark"){
+    var btip=document.createElement("div");btip.className="resume-tip";
+    btip.innerHTML="🔖 本章已安放书签（钉在 "+bm.pct+"%） · <a href='javascript:void(0)' id='bmGo'>回到书签位置</a>";
+    document.querySelector(".wrap").prepend(btip);
+    document.getElementById("bmGo").onclick=function(){applyPct(bm.pct);btip.remove();};
+  }
+  var timer=null;
+  function record(){
+    var m=maxH();if(m<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/m*100));
+    var d=loadR();d.chapters=d.chapters||{};
+    d.chapters[CH]={pct:p,t:Date.now()};
+    d.resume={book:"gudo",ch:CH,name:"第"+CH+"章 · "+TITLE,file:"gudo-"+CH+".html",pct:p,t:Date.now()};
+    saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record()},1000)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(function(){record()},500);
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  if(bm&&bm.ch===CH&&bm.pct>0){btn.textContent="🔖 书签 "+bm.pct+"%";}else{btn.textContent="🔖 书签";}
+  document.getElementById("__bmSlot").appendChild(btn);
+  btn.onclick=function(){
+    var m=maxH();var p=m>0?Math.min(100,Math.round(document.documentElement.scrollTop/m*100)):0;
+    var d=loadR();d.bookmark={book:"gudo",ch:CH,pct:p,t:Date.now()};saveR(d);
+    btn.textContent="✓ 已安放书签 "+p+"%";
+    setTimeout(function(){btn.textContent="🔖 书签"},1800);
+  };
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第三十章 · 破纹 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第三十章 · 破纹</h1>
+  <p>赵珩出手了。</p>
+  <p>没有架子，没有言辞，甚至没有半分预告。通脉七重的身法全开，一道青金色的残影，从月台正中直接撕到萧铁衣面前——快到满场宾客只看见一阵风，风过处，幡布齐齐炸成碎条。</p>
+  <p>"要活的"——是他的原话。可那一掌拍下来的角度，拍的是萧铁衣的天灵盖偏左半寸。</p>
+  <p>偏的那半寸，是留人命的。留半条命的命。</p>
+  <p>萧铁衣没有躲。</p>
+  <p>不是躲不开。是躲了，那团贴着刀的白就散了——它刚认下他，他一动，它就乱了；它一乱，赵珩的玉圭、赵珩的手，今天就不会再给它第二次认人的机会。</p>
+  <p>所以他不退，反迎。</p>
+  <p>左手刀起，走的是守拙十三式里最慢的一式——"抱朴"。慢式迎快掌，是拿刀的人找死。可"抱朴"的慢不是迟，是"密"：刀随身走，身随刀转，一刀之内，把周身三尺封成一个没有缝的壳。赵珩的掌拍在刀壳上，一声闷响，萧铁衣整个人被拍得倒飞出去，撞塌了半副幡架——</p>
+  <p>幡杆断了两根，白幡罩头盖脸地把他埋了进去。</p>
+  <p>满场倒抽冷气。凝纹五重接通脉七重一掌，在任何一个懂行的人听来，都是一个死字。米行会首别过了脸不敢看；绸缎庄老东家的手死死攥着椅子扶手；墙根下，那个揣手的汉子，第一次把揣在袖子里的手拿了出来。</p>
+  <p>白幡底下，传来一声咳。</p>
+  <p>咳完了，幡布动了一下。又动了一下。萧铁衣从幡布底下爬出来，左手撑着断杆，站起来了。</p>
+  <p>他站起来的姿势很难看——左腿在抖，嘴角挂血，握刀的手虎口全裂了。可他站住了。他把嘴里那口血啐在地上，重新把刀提了起来。</p>
+  <p>凝纹五重，接了通脉七重一掌——他还站着。</p>
+  <p>懂行的和不懂行的，都被这一站钉在了原地。不懂行的是看不懂：一个卖符的伙计，挨了验灵使一掌还能爬起来，这是人和人的差距吗？懂行的更看不懂：接是接了，可通脉七重的一掌，从来不是拿来"接"的——那掌里有灵力的"势"，势压进凝纹境的身子，经脉当场就要震伤。他站起来的样子难看，可他的气是匀的，气匀，说明那一掌的"势"，被他拆掉了。</p>
+  <p>不是挡掉的，是拆掉的。抱朴那一式封出来的刀壳，不是硬顶，是顺着掌势把力"引"进了地面——月台青石上，那道被他撞塌的幡架底下，裂纹顺着一个奇怪的弧度拐进了石缝里。力没吃进他的骨头，被他的刀，写进了地皮。</p>
+  <p>市井里走刀的人，谁没在雨天的青石上摔过跤？摔多了，就知道石头怎么吃力。</p>
+  <p>满场哗然。</p>
+  <p>哗然里，没有人注意到，倒下的白幡底下，一顶不起眼的毡帽，已经被踩扁了。</p>
+  <p>赵珩也顿住了。他低头看了一眼自己的掌缘——掌缘上，一道极细的白痕，是刀气留下的。凝纹的刀气，破不开通脉的护体，可这一痕切的位置太刁了，切的是他灵纹护体里，某一条纹路的"换气"处。</p>
+  <p>护体之内，第一次被凝纹境的刀气"摸"了进去。</p>
+  <p>他抬眼，隔着二十步，重新看这个人。这一眼不再是从上往下看的，是平视。</p>
+  <p>"好。"他说，"好眼力。"</p>
+  <p>这一次，他没有再抢攻。他的本命灵纹全数展开——丈许高的青金纹图浮在背后，纹路层层叠叠，像一座悬空的官印。灵纹一开，他周身三尺的水，都往里流。</p>
+  <p>灵纹护体，凝纹境一辈子破不开的东西。</p>
+  <p>因为灵纹不是死的。它像一件活物，你要破它，它自己会"变"——你攻上，它合下；你取中，它锁边；一刀落进去，落的是它三息前让出来的空位，等刀到了，纹已经合拢，你的力道全喂给它。</p>
+  <p>这就是境界的墙。纹比人快。</p>
+  <p>可是萧铁衣闭上了眼。</p>
+  <p>从七岁起，他就看着这个世界的纹长大。别人练刀，练的是快；他这一双眼睛，练的是"看得见快"。灵纹护体的"变"，在他眼里不是变化，是一段一段摊开的路——哪里让，哪里合，哪里换气，每一段，都写在纹上。</p>
+  <p>赵珩的灵纹，三重结构。</p>
+  <p>外层"锁边"，随攻守开合，换气在两肋，每三息一换；中层"官印"，主御刀气，每逢灵力周天走满一个整环，印心处会松开一线——半息；内层……</p>
+  <p>内层的纹，他看不清。</p>
+  <p>不是太密，是那层纹上，叠着一层不属于灵纹的东西——锁纹。灵纹的理上，压着锁纹的形，两层纹互相咬着，咬得赵珩自己的灵力都走得磕磕绊绊。萧铁衣认得那种咬法：后罩楼满墙的符，就是这种咬法。</p>
+  <p>赵珩拿锁纹炼灵纹。三十年的锁房、满城的锚，连他自己的本命灵纹，都焊在了这套"锁"的理上——他把自己，也铸进了这把锁里。</p>
+  <p>这层咬合的纹，稳的时候，固若金汤。</p>
+  <p>可它咬得越紧，越怕一样东西——怕"错"。</p>
+  <p>看清这三层，萧铁衣付的不是眼力，是血。</p>
+  <p>赵珩没有站着让他看。灵纹展开的同一瞬，他的剑已经到了——三剑连环，第一剑挑喉，萧铁衣偏头，剑锋贴着耳根削过去，带走了一绺头发；第二剑取中，他左手刀横挡，剑刀相撞，震得他整条手臂发麻；第三剑没有影子——</p>
+  <p>剑从背后来的。</p>
+  <p>灵纹护体的人在打没有护体的人，打的是"位移"。萧铁衣的后心挨了半剑，剑气入体三分，他闷哼一声，就地滚开，血从背上洇出来，在青石上拖出一条线。</p>
+  <p>那半剑救了他。若是一整剑，他此刻已经是个死人。</p>
+  <p>赵珩不追。他负手立着，让灵纹的"位移"带着他绕着萧铁衣转，像猫玩一只断了腿的雀："你看得见我的纹。可你的脚，跟不上你的眼。凝纹就是凝纹——"</p>
+  <p>"嗯。"萧铁衣撑着刀，慢慢站起来，血顺着下巴滴，"所以我不看你的脚。"</p>
+  <p>他闭上眼。</p>
+  <p>赵珩眼里，那个摇摇欲坠的年轻人闭眼的一瞬，忽然变了一个人——不是变强，是变"静"。静得像后罩楼里那面石门，像一块碑。</p>
+  <p>赵珩再也不觉得这只雀断了腿。</p>
+  <p>萧铁衣睁开眼。</p>
+  <p>"赵大人。"他说，"你的灵纹上，压着锁纹。锁纹三环咬灵纹，可你的灵力走满周天的时候，三环里有一环，要松半息——"</p>
+  <p>赵珩的瞳孔，缩了。</p>
+  <p>"你怎么知道——"</p>
+  <p>"我还知道，"萧铁衣往前走，一步，一步，"松的那半息，不在印心。在第三环收口，先压后提的那一记里。因为画锁纹的人，收口的手法错了——他学的是官印的收口，可锁纹的收口，该先提后压。他画了三十年的锁，一笔都没画对过。"</p>
+  <p>月台上死一样的静。</p>
+  <p>赵珩僵在原地——他背后那幅灵纹，不受控制地，颤了一颤。</p>
+  <p>这一颤，就是那"半息"。</p>
+  <p>萧铁衣动了。</p>
+  <p>七步，三息。</p>
+  <p>他这三年，在市井里走刀，走的都是"借"字诀：借市声掩脚步，借灯影藏刀路，借一条巷子的雨水断敌纹。可今天这三刀，他不借了。他自己的刀，自己的眼，自己的路。</p>
+  <p>第一刀，"问路"。左手刀斜挑，攻的是灵纹外层的锁边——虚招，纹合拢的空位里，他的人已经切了进去。</p>
+  <p>赵珩的瞳孔第一次真正缩紧——这一刀的落点，是他灵纹三息后才会露出的空位。先知而后动。这不是快，这比快更可怕。</p>
+  <p>第二刀，"借势"。他借着赵珩灵纹合拢的反震，把自己整个人拧成一根弦——这一刀的力，一半是他自己的，一半是对方灵纹给他的。</p>
+  <p>这一借，借得赵珩心头生寒。市井的"借"字诀他见过，可借灵纹的劲当刀力，这是拿自己的骨头当抵押——劲借得动，人受不受得住，全看那一拧的火候。拧过了，弦断人亡；拧住了，他就是借着通脉七重的力，凝纹五重的手。</p>
+  <p>赵珩这才明白方才那一掌拍出去，拍回来的是什么。这年轻人接掌的时候就在借——壳是壳，引是引，从头到尾，他都在把"凝纹"两个字的债，一笔一笔转到对方账上。</p>
+  <p>第三刀——</p>
+  <p>"守拙"。</p>
+  <p>十三式的最后一式。没有花巧，直直的一刀，快得像这句话本该如此。刀锋穿过灵纹外层，穿过中层，在第三环收口那一记"先压后提"的换气里——</p>
+  <p>切了进去。</p>
+  <p>嗡——</p>
+  <p>一声脆响，像绷了三十年的弦，断了。</p>
+  <p>赵珩背后那幅丈许高的青金纹图，从第三环的收口处开始，寸寸皲裂。裂纹蔓延过印心，蔓延过锁边，蔓延过满幅纹路——整座"官印"，在满场几百人的注视里，无声地碎了。</p>
+  <p>护体灵纹，碎了。</p>
+  <p>通脉七重的护体灵纹，被凝纹五重的一刀，破了。</p>
+  <p>满场没有声音。风穿过月台，卷着幡布的灰烬打旋。几百人，包括上首的郭大人、包括反水的差役、包括墙根下刚刚走过的揣手人——没有一个人出声，没有一个人敢出声。</p>
+  <p>兵备道的瘦专员，握笔的手抖了三抖，在公文上落下的那一行字，笔画歪得不成样子。他写的是：四月十五，验灵使赵珩，当众以本命灵纹行锁纹邪术，凝纹五重少年萧铁衣，三刀破之。落笔的时候他想，这份公文递上去，兵备道要惊动的，是京里。</p>
+  <p>米行会首喃喃地说了一句所有人都想说的话：</p>
+  <p>"锁纹邪术……怪不得锁房……怪不得满城……"</p>
+  <p>人群里有妇人的哭声起来了。今天清晨，城里多少人家有人倒地不起，郎中束手，此刻全对上了——渠、锚、锁纹、验灵司。三十年，这座城里死掉的每一个"病故"的年轻人，每一个上过名册的姓氏，都在这一声声哭里翻上来。</p>
+  <p>哭声一开就收不住。观礼棚里，一个外县行东想起自家去年"暴病"的二掌柜，扶着桌子放声嚎了出去；差役班列里，不知是谁的刀先落了地，哐当一声，接着是第二把，第三把——刀落地的声音混着哭声，把这座三十年不透风的月台，砸出了第一道透气的缝。</p>
+  <p>有老差役跪下了。跪的方向不是赵珩，也不是郭大人，是那截断了的两根幡杆——他也不知道自己跪的是什么，可能跪的就是这三个字：对上了。</p>
+  <p>赵珩的"官"，当众碎完了。</p>
+  <p>赵珩低头，看着自己胸口。</p>
+  <p>灵纹碎了的地方，衣袍上有一道焦痕，焦痕正中，一点殷红正在洇开。没有贯穿——刀在入体前一寸，偏了。</p>
+  <p>不是偏的。是萧铁衣收的力。</p>
+  <p>收力，比出力难。他要把这把三十年记账的刀，当众停在一寸之外——停住的意思是：我不杀你。我不杀你，是因为你该活着看，看你锁了三十年的东西怎么一件一件翻上来，看你拿人命画的那本账，怎么一笔一笔，还回你头上。</p>
+  <p>"你的锁，"萧铁衣的刀尖垂着，声音哑得厉害，"锁了三十年人。我今天，只锁你一寸。"</p>
+  <p>这一寸，他自己知道有多难。三刀连击，最后一刀的劲是借着对方的灵纹拧出来的，力道收不住就会直贯而过——可他收住了。收住的那一瞬，他满口的腥甜压成了咽下的一口血：收的不是刀劲，是他自己骨头缝里要炸的东西。婆婆倒在柱子底下，青石镇灭门，满城哭声——哪一样不喊着一刀杀过去？可他偏偏收住了。</p>
+  <p>因为严婆婆教过他：账可以缓，不可以错。错刀比慢刀更误事。赵珩死了，鱼玉的线、名册的线、"那位"的线，全断在一具尸首上；赵珩活着，线还攥在手里。</p>
+  <p>刀比人心急，可执刀的人，得比账本稳。</p>
+  <p>赵珩抬起头。</p>
+  <p>他看着萧铁衣，忽然笑了。这次的笑，笑得咳出血来，血沫顺着嘴角往下淌，淌过下巴，他也不擦。</p>
+  <p>"好刀。"他说，"好……眼。"</p>
+  <p>他张开口，对着那团静静悬浮在萧铁衣刀边的白，说了一个字。</p>
+  <p>一个谁也听不懂的字。</p>
+  <p>那团白，猛地一颤。</p>
+  <p>它挣扎起来——不是挣扎萧铁衣，是挣扎自己身体里的什么东西。赵珩倒地咳血的嘴张着，一缕一缕的白，从它自己的"身"上剥离下来，逆着风向赵珩涌去，涌进他张开的嘴、涌进他胸口那道焦痕——</p>
+  <p>它在被吞。</p>
+  <p>吞它的是一具濒死重伤的躯壳，可它挣不脱——那个字是它的"根"上带的，三十年的喂、三十年的养，它身上一大半的纹，本来就是照着赵珩的手笔长的。它认刀，可它的一半出身，认的仍是赵珩。</p>
+  <p>萧铁衣的刀横过去要拦，晚了。那团白挣扎着，几缕死死扒着刀身不肯走，几缕已经被赵珩咽了下去——白的东西在以肉眼可见的速度缩小，赵珩胸口那道焦痕，却在以肉眼可见的速度，泛起一层青黑。</p>
+  <p>它最后的几缕，在刀身上停了一息。</p>
+  <p>那一息里，萧铁衣清清楚楚地"听"见了一阵颤动，从刀身传进虎口——不是鸣，是哭。无声的、三十年攒下来的哭。</p>
+  <p>然后它松开了刀，最后一缕，也被吞了进去。</p>
+  <p>刀身上还留着它贴过的一线温。那线温正在退，一寸一寸地退，像退潮的滩。萧铁衣握着刀柄，握紧了——他知道这一握什么也留不住，可他还是要握。三十年前喂进锁房的东西，三十年后在他刀上认了亲，又被人当着他的面咽了下去。这笔账，从今天起，也记在了他的账本上。</p>
+  <p>月台上，那些被它"看"过的人，一个个瘫坐在原地——它不在了，可它"看"过的目光还留在他们身上，像退潮之后留在沙滩上的水线。</p>
+  <p>赵珩站起来了。护体灵纹碎了，他的气势却比先前更沉——沉得反常，胸口那片青黑，像一块烧红的炭，隔着衣袍透出光来。他抹了一把嘴角的血，看着萧铁衣，笑容温和得依旧，"记着今天。不是记着你的刀，是记着你的眼。"</p>
+  <p>"你的眼睛，"他说，"和'那位'一样。"</p>
+  <p>"那位是谁。"萧铁衣的刀抬起来了。</p>
+  <p>"到了你该知道的时候——"赵珩的身影忽然变得模糊，胸口那团青黑成了他最后的力量，灵纹碎裂的余纹竟被他强行拢起来，缠在脚下——"自然会有人来杀你。"</p>
+  <p>话音落下，他的身形化作一道残影——残影快得不合常理，快得像不是人在跑，是那团青黑拖着人在跑。残影掠过月台，掠过差役的刀，掠过郭大人变了的脸，直奔府墙。</p>
+  <p>可在掠过那根柱子的时候，他顿了一顿。</p>
+  <p>败走的人，顿这一顿，只为一件事——账没清完。他杀不了萧铁衣了，可他咽不下的，是让一个凝纹境的年轻人，当着满城人，三刀碎了他的本命灵纹。这份账，他要折算成别的东西带走。</p>
+  <p>一道袖底杀，直取捆在柱上的严婆婆。</p>
+  <p>袖底杀是灰哨的手笔——哑巴那一晚用过，瘦竹那一晚也用过。赵珩连杀人的手法，用的都是他买凶的那一套：他从不亲自动刀，他只"支使"。今日他亲手出这一记，是他在这个月台上，唯一一件亲力亲为的事。</p>
+  <p>严婆婆没有躲。</p>
+  <p>她被捆在柱子上，本来躲不开。可两个看押的差役在灵纹碎裂的那一刻就吓瘫了，绳子松了半边——老妇人挣得出半个身位，她可以倒地，可以滚开，可以赌那道袖光偏一寸。</p>
+  <p>她朝着那道袖光，挺着这把四十年拨算盘的骨头，迎了上去。</p>
+  <p>袖劲入体的声音，很闷。</p>
+  <p>像一块石头，落进了很深的井里。</p>
+  <p>老妇人往后倒。倒下去的时候，她的手往身后柱子的方向够了一下——不是求救，她够的是被差役踢落在地的那张出货单。她的手指够到了纸角，攥住，攥进掌心，攥得指节发白，像攥着四代账本的最后一页。</p>
+  <p>然后她倒在了柱子底下，像一笔终于对上了的账，合上了。</p>
+  <p>满月台的风，忽然停了一息。漫天幡灰悬在半空，落不下来，像满场几百人的呼吸，一齐断了。</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，听书键跳转纯语音页 ===== */
+  var TOTAL=75;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<a class="rbtn gold" href="listen.html?ch='+n+'">🎧 听书</a>'+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  var dragging=false;
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a")){show();return;}
+    var w=document.documentElement.clientWidth||document.body.clientWidth;
+    var x=e.clientX||0;
+    /* 左右两侧 1/3 为翻页手势，中间区域用于呼出工具栏 */
+    if(x<w*0.30&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    if(x>w*0.70&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+    if(document.body.classList.contains("ui-show"))hide();else show();
+  });
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  var CH=30, TITLE="破纹";
+  var RKEY="hugo_reader_v1";
+  function loadR(){try{return JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){return{}}}
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function applyPct(p){if(maxH()>0)window.scrollTo(0,maxH()*p/100);}
+  var chapters=(loadR().chapters||{});
+  var st=chapters[CH]||{pct:0};
+  var bm=loadR().bookmark;
+  if(location.hash==="#bookmark"&&bm&&bm.ch===CH&&bm.pct>0){
+    setTimeout(function(){applyPct(bm.pct)},80);
+  }else if(location.hash==="#resume"&&st.pct>0){
+    setTimeout(function(){applyPct(st.pct)},80);
+  }else if(st.pct>=3&&st.pct<95){
+    var tip=document.createElement("div");tip.className="resume-tip";
+    tip.innerHTML="📌 上次读至 "+st.pct+"% · <a href='javascript:void(0)' id='resumeGo'>继续上次位置</a>";
+    document.querySelector(".wrap").prepend(tip);
+    document.getElementById("resumeGo").onclick=function(){applyPct(st.pct);tip.remove();};
+  }
+  if(bm&&bm.ch===CH&&bm.pct>0&&location.hash!=="#bookmark"){
+    var btip=document.createElement("div");btip.className="resume-tip";
+    btip.innerHTML="🔖 本章已安放书签（钉在 "+bm.pct+"%） · <a href='javascript:void(0)' id='bmGo'>回到书签位置</a>";
+    document.querySelector(".wrap").prepend(btip);
+    document.getElementById("bmGo").onclick=function(){applyPct(bm.pct);btip.remove();};
+  }
+  var timer=null;
+  function record(){
+    var m=maxH();if(m<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/m*100));
+    var d=loadR();d.chapters=d.chapters||{};
+    d.chapters[CH]={pct:p,t:Date.now()};
+    d.resume={book:"gudo",ch:CH,name:"第"+CH+"章 · "+TITLE,file:"gudo-"+CH+".html",pct:p,t:Date.now()};
+    saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record()},1000)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(function(){record()},500);
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  if(bm&&bm.ch===CH&&bm.pct>0){btn.textContent="🔖 书签 "+bm.pct+"%";}else{btn.textContent="🔖 书签";}
+  document.getElementById("__bmSlot").appendChild(btn);
+  btn.onclick=function(){
+    var m=maxH();var p=m>0?Math.min(100,Math.round(document.documentElement.scrollTop/m*100)):0;
+    var d=loadR();d.bookmark={book:"gudo",ch:CH,pct:p,t:Date.now()};saveR(d);
+    btn.textContent="✓ 已安放书签 "+p+"%";
+    setTimeout(function(){btn.textContent="🔖 书签"},1800);
+  };
+})();
+
+</script>
+</body>
+</html>

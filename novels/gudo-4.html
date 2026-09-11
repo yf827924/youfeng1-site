@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第四章 · 补刀的人 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第四章 · 补刀的人</h1>
+  <p>灰哨的堂口在落霞郡城南，门脸是一间香烛铺。</p>
+  <p>复命的人跪在里间。执事捏着回报的纸条，捏了很久，茶盏从他手里滑出去，在地上摔得粉碎。</p>
+  <p>"一个不留。"他说，"验灵使交代的时候，就是这么四个字。你们听不懂？"</p>
+  <p>跪着的人把头压得更低："当夜的火是放了，人马也撤了。谁知道那小子命硬——"</p>
+  <p>"命硬？"执事笑了一声，笑得很短，"灰哨办了十九年的差，没听过什么命硬。"</p>
+  <p>他从案头的木匣里取出一枚名帖，帖上不写字，只烙着一点香头大的焦痕。他把它递给角落里一直没出声的那个人。</p>
+  <p>那人接了帖，起身就走，自始至终没有一个字。</p>
+  <p>满堂的人都松了口气，又都把气咽了回去。</p>
+  <p>灰哨上下都知道，这人接了帖，就是没了——不是他没了，是帖上那个人没了。十九年，七次，没落过空。</p>
+  <p>镇上人叫他哑巴。他不是真哑，是不屑于说话。灰哨的名册上，他的名字旁边画着一根针。</p>
+  <p>——</p>
+  <p>三日后，青石镇来了个走方郎中。</p>
+  <p>四十来岁，灰布袍子洗得发白，药箱上的铜锁锃亮。他在镇口给人看了两个病人，分文不取，只说自己是云游到此，听说镇上遭了火，特来施诊。</p>
+  <p>不出三天，"活菩萨"的名声就在镇上传开了。</p>
+  <p>萧铁衣肩上的刀伤一直没好利索，天一阴就抽着疼。阿萝提了一嘴，他本来不想去，可第五天早上起来，右手的五根指头麻了小半截，攥拳都攥不实。练刀的人，手不能废。他去了。</p>
+  <p>郎中看伤很仔细。拆布、清洗、上药、复缠，每个动作都稳，稳得不像在大病，倒像在修一件东西。上药的时候指腹按在伤口边缘，力道分毫不差，按哪儿、按多久、隔多少息换一下，跟数着拍子似的。</p>
+  <p>"伤了七日才治，拖晚了。"郎中说话慢，嗓音磨得平，"要连上七天药。老夫住的店在后街，你每日巳时来，老夫上门也使得。"</p>
+  <p>"上门吧。"萧铁衣说。</p>
+  <p>第二天，郎中果真上门。药是自带的，深褐色，闻着有股土腥。上完药又留下一个小瓷瓶："一日三次，冲水服。败火毒用的。"</p>
+  <p>萧铁衣道了谢，送他出门。</p>
+  <p>回来路上，他经过井台。打水的时候，他把那瓶药举起来对着日头照了照，瓶底沉着一点极细的暗色粉末，转着圈，散得很匀。</p>
+  <p>败火毒的药，不需要这么匀的散法。</p>
+  <p>他没有扔，照常冲水服了一次——水喝了，药末他用舌根抵着，进了院子以后吐在袖口的棉絮里。这是他后半夜想出来的笨办法：袖子里缝了团旧棉絮，一口一口接住。土办法，费袖子，管用。</p>
+  <p>第七天傍晚，阿萝从符铺回来，路过后街的饭铺，跟萧铁衣碰了头。</p>
+  <p>"那个郎中，"她盛饭的手没停，声音压得只有两个人能听见，"他前日煎药的渣，倒在后墙根，喂了条野狗。"</p>
+  <p>"然后？"</p>
+  <p>"那条狗，第二天早上没爬起来。"阿萝把碗放到他面前，抬起眼，"我记着的。野狗、药渣、时辰，我全记着。"</p>
+  <p>萧铁衣端着碗，一时没动。</p>
+  <p>"我也记着一样东西。"他说，"他每天给我上药，收工之前，会用右手拇指在药箱的铜扣上按一下。"</p>
+  <p>"按一下怎么了？"</p>
+  <p>"第一天我没在意。第四天我发现，他按的不是扣。"萧铁衣放下筷子，"他掌心有茧，茧的位置，不在练拳练刀该有的地方——在虎口偏下，那是常年扣短刃的位置。"</p>
+  <p>两个人都不说话了。饭铺里人声嘈杂，吆喝声、碗筷声，把这一桌的安静衬得像口井。</p>
+  <p>"报官？"阿萝问。</p>
+  <p>"报官做什么。验灵司的差役前脚出镇，他后脚就到。"萧铁衣慢慢地说，"阿萝，灭门那晚，那伙人叫我'小的'，说验灵使交代一个不留。他们撤得太干脆。做屠戮的活，人手七个人，头目连我杀没杀干净都不验——"</p>
+  <p>他顿了顿。</p>
+  <p>"不是没验。是压根不用验。因为还会有人来补。"</p>
+  <p>阿萝的筷子尖在碗沿上磕了一下。</p>
+  <p>当天夜里，萧铁衣照例坐在槐树底下。巳时三刻，后街的更鼓敲过，他闭上了眼。</p>
+  <p>这一次，他"看"的不是刀，是白日里那双手。</p>
+  <p>上药的指法、按铜扣的拇指、切药时腕子悬的高度，一双手在他脑子里重新"走"了一遍。纹路渗出来的时候，他后颈的汗毛全立起来了。</p>
+  <p>那双手的纹，走的是"贴、短、藏"三个字。跟灭门当夜那七把窄刀，跟那个领头的偏头、收刀、翻墙的每一下——</p>
+  <p>一个师门。</p>
+  <p>萧铁衣睁开眼。夜风穿堂过，槐叶哗啦啦响。他坐着没动，把右手的指头挨个攥了一遍，攥得很用力。</p>
+  <p>指头是麻的，药是真的，人的杀心也是真的。</p>
+  <p>可他反而在笑。笑意很淡，压在嘴角。</p>
+  <p>你们看得见我练刀三年没练出名堂，看得见我伤重、钱薄、人在明处。</p>
+  <p>你们看不见，我闭着眼的时候，你的刀、你的手、你的药，在我这儿，是亮着的。</p>
+  <p>他起身回屋，把明天要穿的外衣搭在椅背上，袖口的棉絮换了个新的。</p>
+  <p>然后吹了灯。</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，听书键跳转纯语音页 ===== */
+  var TOTAL=75;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<a class="rbtn gold" href="listen.html?ch='+n+'">🎧 听书</a>'+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  var dragging=false;
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a")){show();return;}
+    var w=document.documentElement.clientWidth||document.body.clientWidth;
+    var x=e.clientX||0;
+    /* 左右两侧 1/3 为翻页手势，中间区域用于呼出工具栏 */
+    if(x<w*0.30&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    if(x>w*0.70&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+    if(document.body.classList.contains("ui-show"))hide();else show();
+  });
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  var CH=4, TITLE="补刀的人";
+  var RKEY="hugo_reader_v1";
+  function loadR(){try{return JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){return{}}}
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function applyPct(p){if(maxH()>0)window.scrollTo(0,maxH()*p/100);}
+  var chapters=(loadR().chapters||{});
+  var st=chapters[CH]||{pct:0};
+  var bm=loadR().bookmark;
+  if(location.hash==="#bookmark"&&bm&&bm.ch===CH&&bm.pct>0){
+    setTimeout(function(){applyPct(bm.pct)},80);
+  }else if(location.hash==="#resume"&&st.pct>0){
+    setTimeout(function(){applyPct(st.pct)},80);
+  }else if(st.pct>=3&&st.pct<95){
+    var tip=document.createElement("div");tip.className="resume-tip";
+    tip.innerHTML="📌 上次读至 "+st.pct+"% · <a href='javascript:void(0)' id='resumeGo'>继续上次位置</a>";
+    document.querySelector(".wrap").prepend(tip);
+    document.getElementById("resumeGo").onclick=function(){applyPct(st.pct);tip.remove();};
+  }
+  if(bm&&bm.ch===CH&&bm.pct>0&&location.hash!=="#bookmark"){
+    var btip=document.createElement("div");btip.className="resume-tip";
+    btip.innerHTML="🔖 本章已安放书签（钉在 "+bm.pct+"%） · <a href='javascript:void(0)' id='bmGo'>回到书签位置</a>";
+    document.querySelector(".wrap").prepend(btip);
+    document.getElementById("bmGo").onclick=function(){applyPct(bm.pct);btip.remove();};
+  }
+  var timer=null;
+  function record(){
+    var m=maxH();if(m<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/m*100));
+    var d=loadR();d.chapters=d.chapters||{};
+    d.chapters[CH]={pct:p,t:Date.now()};
+    d.resume={book:"gudo",ch:CH,name:"第"+CH+"章 · "+TITLE,file:"gudo-"+CH+".html",pct:p,t:Date.now()};
+    saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record()},1000)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(function(){record()},500);
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  if(bm&&bm.ch===CH&&bm.pct>0){btn.textContent="🔖 书签 "+bm.pct+"%";}else{btn.textContent="🔖 书签";}
+  document.getElementById("__bmSlot").appendChild(btn);
+  btn.onclick=function(){
+    var m=maxH();var p=m>0?Math.min(100,Math.round(document.documentElement.scrollTop/m*100)):0;
+    var d=loadR();d.bookmark={book:"gudo",ch:CH,pct:p,t:Date.now()};saveR(d);
+    btn.textContent="✓ 已安放书签 "+p+"%";
+    setTimeout(function(){btn.textContent="🔖 书签"},1800);
+  };
+})();
+
+</script>
+</body>
+</html>
