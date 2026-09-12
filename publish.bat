@@ -1,61 +1,71 @@
 @echo off
-chcp 65001 >nul 2>nul
+chcp 936 >nul 2>nul
 setlocal
-REM ============================================================
-REM  ä¸€é”®å‘å¸ƒ  â€”â€”  æ”¹å®Œç½‘é¡µ/å†…å®¹åï¼ŒåŒå‡»æœ¬æ–‡ä»¶å³å¯ä¸Šçº¿
-REM  ç”¨æ³•ï¼š  publish.bat "æœ¬æ¬¡æ›´æ–°çš„è¯´æ˜"   ï¼ˆè¯´æ˜å¯çœç•¥ï¼‰
-REM  å‘å¸ƒç›®æ ‡ï¼š https://youfeng1.com
-REM  åŸç†ï¼šæŠŠæœ¬ç›®å½•å†…å®¹æäº¤å¹¶æ¨é€åˆ° GitHubï¼ŒGitHub Pages ä¼šè‡ªåŠ¨é‡æ–°éƒ¨ç½²
-REM ============================================================
 cd /d "%~dp0"
+title Ò»¼ü·¢²¼ youfeng1.com
 
-REM ---------- 1) æ‰¾ä¸€ä¸ªå¯ç”¨çš„ git ----------
+set "KEY=D:\workbuddy\2026-09-11-10-33-06\.deploy\id_ed25519"
+set "KH=D:\workbuddy\2026-09-11-10-33-06\.deploy\known_hosts"
+
+echo ============================================================
+echo   Ò»¼ü·¢²¼  --  youfeng1.com
+echo ============================================================
+echo.
+
+REM ---------- 1) ÕÒÒ»¸ö¿ÉÓÃµÄ git£¨ÏµÍ³Ã»×°¾ÍÓÃ WorkBuddy ×Ô´øµÄ£© ----------
 set "GITEXE="
 for /f "delims=" %%i in ('where git 2^>nul') do if not defined GITEXE set "GITEXE=%%i"
-
 if not defined GITEXE (
-  for /f "delims=" %%i in ('dir /b /s "%USERPROFILE%\.workbuddy\binaries\PortableGit\versions\*\cmd\git.exe" 2^>nul') do if not defined GITEXE set "GITEXE=%%i"
+  for /d %%d in ("%USERPROFILE%\.workbuddy\binaries\PortableGit\versions\*") do (
+    if not defined GITEXE if exist "%%d\cmd\git.exe" set "GITEXE=%%d\cmd\git.exe"
+  )
 )
-
 if not defined GITEXE (
-  echo.
-  echo [é”™è¯¯] æ²¡æœ‰æ‰¾åˆ° gitã€‚
-  echo        è¯·å®‰è£… Git for Windows: https://git-scm.com/download/win
+  echo [´íÎó] Ã»ÓĞÕÒµ½ git¡£
+  echo        Çë°²×° Git for Windows: https://git-scm.com/download/win
   echo.
   pause
   exit /b 1
 )
-echo ä½¿ç”¨ git: %GITEXE%
+for %%i in ("%GITEXE%") do set "GITDIR=%%~dpi"
+set "PATH=%GITDIR%;%GITDIR%..\mingw64\bin;%GITDIR%..\usr\bin;%PATH%"
+set "GIT_SSH_COMMAND=%GITDIR%..\usr\bin\ssh.exe -i %KEY% -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=%KH% -o BatchMode=yes"
+echo [»·¾³] git = %GITEXE%
+echo [»·¾³] Õ¾µã = %CD%
+echo.
 
-REM ---------- 2) è®© git ä½¿ç”¨è‡ªå¸¦çš„ sshï¼ˆç³»ç»Ÿ ssh ä¼šæ‹’ç»æœ¬ä»“åº“çš„ç§é’¥ï¼‰ ----------
-for %%i in ("%GITEXE%") do set "GITBIN=%%~dpi"
-set "PATH=%GITBIN%;%GITBIN%..\mingw64\bin;%GITBIN%..\usr\bin;%PATH%"
+REM ---------- 2) ±¾´ÎÌá½»ËµÃ÷ ----------
+if "%~1"=="" (set "MSG=update %date% %time%") else (set "MSG=%~1")
 
-REM ---------- 3) æäº¤è¯´æ˜ ----------
-if "%~1"=="" (set "MSG=æ›´æ–° %date% %time%") else (set "MSG=%~1")
-
-REM ---------- 4) æäº¤ ----------
+REM ---------- 3) Ìá½» ----------
 "%GITEXE%" add -A
 "%GITEXE%" diff --cached --quiet
 if errorlevel 1 (
   "%GITEXE%" commit -m "%MSG%"
-  echo [1/2] å·²æäº¤æœ¬æ¬¡æ”¹åŠ¨
+  if errorlevel 1 (
+    echo.
+    echo [Ê§°Ü] Ìá½»³ö´í£¬°ÑÉÏÃæµÄ±¨´í·¢¸øÖúÊÖ¡£
+    echo.
+    pause
+    exit /b 1
+  )
+  echo [1/2] ÒÑÌá½»±¾´Î¸Ä¶¯
 ) else (
-  echo [1/2] æ²¡æœ‰æ–°æ”¹åŠ¨ï¼Œè·³è¿‡æäº¤
+  echo [1/2] Ã»ÓĞĞÂ¸Ä¶¯£¬Ìø¹ıÌá½»
 )
+echo.
 
-REM ---------- 5) æ¨é€ ----------
-echo [2/2] æ­£åœ¨æ¨é€åˆ° GitHub ...
+REM ---------- 4) ÍÆËÍµ½ GitHub ----------
+echo [2/2] ÕıÔÚÍÆËÍµ½ GitHub ...
 "%GITEXE%" push
 if errorlevel 1 (
   echo.
-  echo [å¤±è´¥] æ¨é€æ²¡æœ‰æˆåŠŸã€‚æŠŠä¸Šé¢çš„æŠ¥é”™ä¿¡æ¯å‘ç»™åŠ©æ‰‹ã€‚
+  echo [Ê§°Ü] ÍÆËÍÃ»³É¹¦£¬°ÑÉÏÃæµÄ±¨´í·¢¸øÖúÊÖ¡£
 ) else (
   echo.
   echo ============================================================
-  echo  å‘å¸ƒå®Œæˆï¼ç­‰ 1-2 åˆ†é’Ÿï¼Œæ‰“å¼€ https://youfeng1.com æŸ¥çœ‹ã€‚
+  echo   ·¢²¼Íê³É£¡ µÈ 1-2 ·ÖÖÓ£¬´ò¿ª https://youfeng1.com ²é¿´
   echo ============================================================
 )
-
 echo.
 pause
