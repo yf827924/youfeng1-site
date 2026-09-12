@@ -20,12 +20,15 @@
 
 小说章节在源站更新后，用 **`同步小说并发布.bat`**：
 
-双击它，会自动完成三步：
-1. 找到小说源站（`D:\workbuddy\2026-09-02-08-41-25\portfolio_live`，自动挑章节最多的那个）
-2. 只把**有差异**的文件同步进本目录（新增章节 + 更新的页面，含配套音频），只保留必要文件不动
-3. 调用 `publish.bat` 推送到 GitHub
+双击它，会自动完成四步：
+1. **环境自检**：确认 `CNAME`、发布私钥、`publish.bat` 都在（缺了立刻报警，不会默默失败）
+2. **找源站**：在 `D:\workbuddy\2026-09-02-08-41-25\` 下的几个作品小屋目录里，自动挑**章节最多、最新**的那个（当前是 `portfolio`）
+3. **只同步有差异的文件**：新增章节 + 更新过的页面 + 配套音频，保留文件不动
+4. **调用 `publish.bat` 推送到 GitHub**
 
-- 源站没有更新时，它会明确告诉你「与源站内容完全一致，无需同步」，然后照样走一次发布（无害）
+- 屏幕第一行会打印 `[环境] python = ...`，并明确列出「源站 / 当前站」各多少章 —— **看一眼章数就知道同步有没有生效**
+- 源站没有更新时，会明确说「本地与源站内容完全一致」，然后**照样推送一次**（无害，保证线上是最新）
+- 全程日志写在 `D:\workbuddy\2026-09-11-10-33-06\.deploy\last_run.log`，出问题直接把窗口内容或这个文件发给助手
 - **不会被覆盖删除**：`.git`、`.gitignore`、`CNAME`、`publish.bat`、`同步小说并发布.bat`、`README_发布指南.md`
 
 > 如果小说源站换到了别的目录，告诉助手改一下 `D:\workbuddy\2026-09-11-10-33-06\.deploy\sync_publish.py` 里的路径。
@@ -46,7 +49,7 @@
 |---|---|
 | 域名 | `youfeng1.com` 注册在 **Cloudflare**，你本人名下，随时可转出 |
 | 托管 | **GitHub Pages**（免费），仓库 `yf827924/youfeng1-site`（公开，分支 `main`） |
-| 内容 | 全站 273MB / 332 文件，含 **90 章小说**（每章配 1 集音频，共 90 集）、小游戏、文章、旅行影像、镖局 APK |
+| 内容 | 全站 273MB / 333 文件，含 **95 章小说**（每章配 1 集音频，共 95 集）、小游戏、文章、旅行影像、镖局 APK |
 | HTTPS | Let's Encrypt 证书已签发，`http://` 自动 301 跳到 `https://` |
 | DNS | 根域 `youfeng1.com` → GitHub 的 4 条 A + 4 条 AAAA；`www` → CNAME `yf827924.github.io`（两条都必须是**灰云 / 仅 DNS**，不能开橙色云代理） |
 
@@ -80,6 +83,15 @@ DNS 原理：域名解析直接指向 GitHub 的服务器，Cloudflare 只做 DN
 
 **症状：双击 publish.bat 满屏「不是内部或外部命令，也不是可运行的程序或批处理文件」**
 - 这是**批处理文件编码**问题，已修复（原因见文末「踩坑记录」）。若又出现，说明 `publish.bat` 被某个编辑器改存成了 UTF-8，告诉助手重新生成即可。
+
+**症状：双击 `同步小说并发布.bat` 后，章节数没变 / 好像什么都没干**
+1. 看窗口第一行有没有 `[环境] python = ...`
+   - **没有** → 说明 python 没找到，窗口里会有 `[错误] 没有找到可用的 python`
+   - 有，但指向 `...\WindowsApps\python.exe` → 这是**假 python**（微软商店的占位程序），见下方「踩坑记录」第 4 条
+2. 看窗口里打印的「源站 X 章 / 当前站 Y 章」
+   - 两者**相同** → 源站确实没更新，属于正常（脚本仍会推一次）
+   - 源站**大于**当前站 → 应该会同步，若报错就把窗口内容发给助手
+3. 都正常但网站上没变 → 等 2 分钟 + `Ctrl + F5` 强制刷新
 
 **症状：双击 publish.bat 一闪而过或报错**
 1. 先确认不是上面那条编码问题
@@ -130,3 +142,36 @@ hugo-site/
 - **脚本里 push 写成 `git push origin main`**（而不是裸 `git push`），并每次运行自动重设 `branch.main.merge`——这样即使远程跟踪引用丢失（`git status` 显示 `[gone]`），也永远不会推不上去
 
 重新生成这个文件的脚本在 `D:\workbuddy\2026-09-11-10-33-06\.deploy\gen_bat.py`，改完跑一下就会输出正确编码的 `publish.bat`。
+
+### 4. `where python` 找到的可能是"假 python"（2026-09-12 踩）
+
+Windows 自带一个**应用商店占位程序**：
+
+```
+C:\Users\16668\AppData\Local\Microsoft\WindowsApps\python.exe
+   → 实际指向 AppInstallerPythonRedirector.exe（不是真 python）
+```
+
+它在系统 PATH 里，所以双击 `.bat` 时（那时 PATH 是系统 PATH，不含 WorkBuddy 的目录）`where python` **会先找到它**。
+老版本的 `同步小说并发布.bat` 就这样踩坑：拿到假 python → 脚本压根没执行 → 双击后"什么都没发生"。
+
+正确写法（已用在现行 `同步小说并发布.bat` 里）：
+
+```bat
+REM 1) 优先 WorkBuddy 自带 python
+for /d %%d in ("%USERPROFILE%\.workbuddy\binaries\python\versions\*") do (
+  if not defined PYEXE if exist "%%d\python.exe" set "PYEXE=%%d\python.exe"
+)
+REM 2) 再退回系统 python，且必须排除 WindowsApps 占位程序
+if not defined PYEXE (
+  for /f "delims=" %%i in ('where python 2^>nul') do (
+    if not defined PYEXE (
+      echo %%i | find /i "WindowsApps" >nul || set "PYEXE=%%i"
+    )
+  )
+)
+```
+
+> 顺带解释：`publish.bat` 一直没事，是因为它找的是 `git` —— 你电脑没装 Git，`where git` 找不到，于是正常退回到 WorkBuddy 自带的 PortableGit。而 python 这边"找得到假货"，所以没走退回分支。
+
+生成 `同步小说并发布.bat` 的脚本是 `.deploy\gen_sync_bat.py`，改完跑一下即可。
