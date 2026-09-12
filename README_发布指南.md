@@ -10,7 +10,8 @@
 
 脚本会自动：`git add` → `commit` → `push` → GitHub Pages 自动重新部署 → 1~2 分钟后 `https://youfeng1.com` 就是新的。
 
-- 想写提交说明：`publish.bat "新增第76章"`（不加则自动用日期时间）
+- 想写提交说明：直接把说明拖到 `publish.bat` 上（如 `publish.bat "add chapter 76"`）；不写则自动用 `site update`
+  - 说明可以是中文，GitHub 上显示正常；但**黑色命令行窗口里那行提交信息可能显示成乱码**，属正常现象，不影响发布
 - **不需要你电脑装 Git**：脚本会自动找 WorkBuddy 自带的 Git，找不到才提示你去装
 
 ---
@@ -53,9 +54,13 @@ DNS 原理：域名解析直接指向 GitHub 的服务器，Cloudflare 只做 DN
 2. 浏览器强制刷新 `Ctrl + F5`
 3. 打开 https://github.com/yf827924/youfeng1-site/commits/main 看是否有你刚才的提交
 
+**症状：双击 publish.bat 满屏「不是内部或外部命令，也不是可运行的程序或批处理文件」**
+- 这是**批处理文件编码**问题，已修复（原因见文末「踩坑记录」）。若又出现，说明 `publish.bat` 被某个编辑器改存成了 UTF-8，告诉助手重新生成即可。
+
 **症状：双击 publish.bat 一闪而过或报错**
-1. 对着 `publish.bat` 右键 → 以管理员身份运行，再试
-2. 截图报错信息给助手
+1. 先确认不是上面那条编码问题
+2. 对着 `publish.bat` 右键 → 以管理员身份运行，再试
+3. 截图报错信息给助手
 
 **症状：GitHub 网页打不开**
 不影响发布，双击 `publish.bat` 照样能推。也可以换网络（手机热点）或换 DNS（改成 `223.5.5.5`）后再试。
@@ -83,3 +88,21 @@ hugo-site/
 - 单个文件 ≤ **100MB**（GitHub Pages 限制），当前最大 93M，安全
 - 仓库总量 254MB，远低于 GitHub 1GB 软上限，无需 Git LFS
 - 换电脑：把 `hugo-site` **和** `.deploy` 两个文件夹一起拷过去，双击 `publish.bat` 照样能发
+
+---
+
+## 七、踩坑记录（写给以后的自己）
+
+`publish.bat` 这种**含中文的 Windows 批处理文件**，有三个必须同时满足的硬条件，缺一个就满屏报错：
+
+| 要求 | 不对会怎样 |
+|---|---|
+| **GBK 编码**（不是 UTF-8） | cmd 默认按 GBK 读文件，UTF-8 的中文变乱码字节 → 每行都被当成命令，报「不是内部或外部命令」 |
+| **CRLF 换行**（不是 Unix 的 LF） | cmd 逐行读取时偏移错乱，把文件内容错位当成命令执行 |
+| **ssh 路径用正斜杠** | git 解析 `GIT_SSH_COMMAND` 时会吃掉反斜杠，路径变成 `C:Users16668...` → 找不到 ssh |
+
+另外两条经验：
+- **不要用 `chcp 65001` 配 GBK 中文**：这是最经典的翻车组合，改用 `chcp 936`
+- **脚本里 push 写成 `git push origin main`**（而不是裸 `git push`），并每次运行自动重设 `branch.main.merge`——这样即使远程跟踪引用丢失（`git status` 显示 `[gone]`），也永远不会推不上去
+
+重新生成这个文件的脚本在 `D:\workbuddy\2026-09-11-10-33-06\.deploy\gen_bat.py`，改完跑一下就会输出正确编码的 `publish.bat`。
