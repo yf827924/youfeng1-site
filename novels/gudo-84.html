@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第八十四章 · 合印 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第八十四章 · 合印</h1>
+  <p>第七天上午，赵珩到了。</p>
+  <p>——</p>
+  <p>先是听见车轱辘响。</p>
+  <p>响在城外那条道上，很远，可城里听得清清楚楚——这城太空了，一点声音都藏不住。</p>
+  <p>萧铁衣把那口刀靠在墙根，自己站在口子上。风从西南来，带着土腥气，吹过空荡荡的街。第七天了。前头六天他每天都在这儿站一阵，今天站得最久。城里能搬的早搬空了，剩的人也都缩在自己屋里，连狗都不叫。他忽然觉得，这城像是被抽掉了什么，只剩个壳。</p>
+  <p>萧铁衣站在城口那道口子上等。</p>
+  <p>他等了大约一炷香。</p>
+  <p>车从坡上下来，一辆，两匹马。马拉得很吃力，车辙在土里压出两道深沟。</p>
+  <p>车后头跟着人。</p>
+  <p>萧铁衣数了数。</p>
+  <p>九个。</p>
+  <p>——</p>
+  <p>车在城口停住。</p>
+  <p>赵珩从车上跳下来。</p>
+  <p>他比在郡城的时候瘦了一圈，颧骨支出来，眼窝发青。额角那一绺白头发还在，白得更显眼了。</p>
+  <p>他站在那儿，看着萧铁衣。</p>
+  <p>看了很久。</p>
+  <p>"你比我早。"</p>
+  <p>"我抄了近路。"</p>
+  <p>"没有近路。"</p>
+  <p>"有。"萧铁衣说，"我走的是暗渠。"</p>
+  <p>——</p>
+  <p>赵珩笑了一下。</p>
+  <p>笑得很短。</p>
+  <p>他从车上招了招手，两个人抬下来一口箱子。</p>
+  <p>箱子是樟木的，不大，三尺长，二尺宽，四个角包着铜。抬的人很吃力，放下的时候"咚"的一声，箱底砸进土里半寸。</p>
+  <p>箱子旧得很，樟木的纹路被手摩得发亮，四个铜角却生了绿锈。萧铁衣盯着那口箱子，心里忽然翻起一个念头——赵珩这一路，是把什么当宝贝似的从郡城搬来的。可那宝贝，分明又像是压得他直不起腰的石头。</p>
+  <p>"这是什么？"萧铁衣问。</p>
+  <p>赵珩没答。</p>
+  <p>他走到箱子跟前，蹲下去，把箱盖上的铜扣解开。</p>
+  <p>扣是锁着的。他从怀里摸出一把钥匙——很旧的一把，铜的，钥匙齿都磨圆了。</p>
+  <p>锁开了。</p>
+  <p>——</p>
+  <p>箱盖掀开。</p>
+  <p>里头铺着黄缎子。缎子上搁着一样东西。</p>
+  <p>一块印。</p>
+  <p>半块。</p>
+  <p>——</p>
+  <p>萧铁衣的呼吸停了一下。</p>
+  <p>那半块印，他从云荒带回来过。三婆临死前交给他的，嘱咐过两个字：别合印。</p>
+  <p>后来他见过这半块印的另一半——在郡城灯照司塔下的地窖里，那半个赵家的族印。</p>
+  <p>现在赵珩手里这个，不是地窖里那个。</p>
+  <p>这个是从云荒来的。</p>
+  <p>"你从哪儿弄来的？"</p>
+  <p>"我家老宅。"赵珩说，"灶台底下，埋了三十年的一个瓦罐里。"</p>
+  <p>"你什么时候挖的？"</p>
+  <p>"你从云荒回来那天夜里。"赵珩说，"我爹留下话，说灶底下有东西，不到时候别动。我等了三十年，那天夜里我算着到时候了。"</p>
+  <p>"怎么算的？"</p>
+  <p>"你回来了。"赵珩说，"你带着另外半块回来的。"</p>
+  <p>——</p>
+  <p>萧铁衣站在箱子跟前，低头看那半块印。</p>
+  <p>印是铜的，边角磨圆了，断口很齐——是被人一劈两半的，不是碎的。断面上有纹，一半的纹凸，一半的纹凹。</p>
+  <p>萧铁衣认得这种断法。当年三婆把那半块交给他时，断口也是这样齐。一劈两半，不是摔的，是有人拿刀，干脆利落地劈开，像是早就算好要分开带。他忽然懂了三婆那句"别合印"——不是舍不得合，是这印从根上就是被人故意分开的。</p>
+  <p>他伸手，把印拿起来。</p>
+  <p>翻过来。</p>
+  <p>印背上刻着东西。</p>
+  <p>一扇门。</p>
+  <p>——</p>
+  <p>萧铁衣的手指，在印背上摸了一遍。</p>
+  <p>"你把你的那半块拿出来。"赵珩说。</p>
+  <p>萧铁衣没动。</p>
+  <p>"拿出来。"赵珩说，"你不拿出来，我们没法说话。"</p>
+  <p>——</p>
+  <p>萧铁衣回屋，把那半块印取出来。</p>
+  <p>他走到井台边，把两半并排摆在井台上。</p>
+  <p>摆好的那一刻，井台边安静了。</p>
+  <p>老周站在灶门口。老太太坐在井台另一头。提灯人蹲在墙根底下。丫丫站在萧铁衣腿边，两只手扒着井沿，垫着脚往里看。</p>
+  <p>两半印搁在一块儿。</p>
+  <p>茬对茬，纹连纹。</p>
+  <p>——</p>
+  <p>那不是两块印拼成一块。</p>
+  <p>那是两块拼成一扇门。</p>
+  <p>门是关着的。门上有门环，有门钉，门缝在正中间，笔直一道。门楣上还有两个小字，太小了，看不清是什么。</p>
+  <p>萧铁衣伸出两只手，把两半往一块儿推。</p>
+  <p>推到还剩半寸的时候，他停住了。</p>
+  <p>"别合。"赵珩说。</p>
+  <p>——</p>
+  <p>萧铁衣抬起头。</p>
+  <p>"你说什么？"</p>
+  <p>"别合。"赵珩说。</p>
+  <p>"你带了它来，又让我别合？"</p>
+  <p>"我带了它来，是因为它在灶底下埋了三十年。"赵珩说，"我爹埋它的时候，就没打算让人合。"</p>
+  <p>"那你还带来？"</p>
+  <p>"我带来，"赵珩说，"是因为我想看看，我到底舍不舍得。"</p>
+  <p>——</p>
+  <p>井台上静了。</p>
+  <p>萧铁衣把手从印上收回来。</p>
+  <p>他没说话。不是没话，是想说的话太多，堵在嗓子眼，反而不知从哪句起。那两半印并在那儿，像两扇半开的窗，又像一扇关死的门。推过去半寸，门就成全的；门一成全，里头的东西就出来。他忽然怕了——不是怕门后的爹出不来，是怕门后头，真有赵珩爹说的"不光是他一个"。</p>
+  <p>"赵珩。"</p>
+  <p>"嗯。"</p>
+  <p>"你想见你爹。"</p>
+  <p>"我想。"</p>
+  <p>"想了三十年。"</p>
+  <p>"三十年。"赵珩说，"我十岁那年他走的。走的那天晚上，他蹲在灶前跟我说话，说了半宿。"</p>
+  <p>"说什么？"</p>
+  <p>"说他要出一趟远门。"赵珩说，"我问他去哪儿，他说西南。我问去多久，他说不好说。"</p>
+  <p>"然后呢？"</p>
+  <p>"然后我问了一句。"赵珩说。</p>
+  <p>"问什么？"</p>
+  <p>"我问，'那我呢'。"</p>
+  <p>——</p>
+  <p>赵珩站在箱子跟前，两只手垂在身侧。</p>
+  <p>"他没答。"他说，"他蹲在那儿，拿火钳拨灶膛里的灰，拨了很久。拨完他说，'珩儿，灶上那罐粥你记得喝'。"</p>
+  <p>"他没答你。"</p>
+  <p>"他没答。"</p>
+  <p>"你恨他么？"</p>
+  <p>赵珩抬起头。</p>
+  <p>那双眼睛，红了一圈。</p>
+  <p>"我恨了他二十年。"他说，"后十年不恨了。"</p>
+  <p>"为什么不恨了？"</p>
+  <p>"因为我也当了爹。"赵珩说。</p>
+  <p>——</p>
+  <p>萧铁衣看着他。</p>
+  <p>"你有孩子？"</p>
+  <p>"有过。"赵珩说。</p>
+  <p>"有过？"</p>
+  <p>"生下来七天，没了。"</p>
+  <p>——</p>
+  <p>井台上又静了。</p>
+  <p>老周在灶门口低下头。老太太把手从棍头上放下来。</p>
+  <p>赵珩站了一会儿，走过来，在井台边坐下。</p>
+  <p>"我抱着他的时候，"他说，"他在我怀里，那么小一团。我就想，我要是有一天也得走，我也答不上来那一句。"</p>
+  <p>"答不上来什么？"</p>
+  <p>"'那我呢'。"赵珩说，"我答不上来。"</p>
+  <p>——</p>
+  <p>萧铁衣在他旁边坐下。</p>
+  <p>两个人并排坐在井台边上，看那两半印。</p>
+  <p>"你爹说过别开门。"萧铁衣说。</p>
+  <p>"说过。"</p>
+  <p>"什么时候说的？"</p>
+  <p>"三十年前，他走的前一天。"赵珩说，"那天他喝多了，拉着我说了半宿胡话。"</p>
+  <p>"他说什么？"</p>
+  <p>"他说，'珩儿，往后要是有人跟你提开门的事，你就说别开'。"</p>
+  <p>"你问他为什么了么？"</p>
+  <p>"问了。"</p>
+  <p>"他怎么说？"</p>
+  <p>赵珩想了想。</p>
+  <p>"他说，'门一开，里头的不光是我'。"</p>
+  <p>——</p>
+  <p>萧铁衣猛地转过头。</p>
+  <p>"他也是这么说的？"</p>
+  <p>"他也是这么说的。"</p>
+  <p>"一字不差？"</p>
+  <p>"一字不差。"赵珩说，"我记了三十年。"</p>
+  <p>萧铁衣的手指无意识地抠着井台的石缝。两个人说的不是各人的糊涂话。是两个分别在门里头、门外面的人，隔着三十年，隔着一扇门，说出来的同一句交代。这不是巧合能解释的。是有人，在很久以前，把这话一句一句，分别递到了该听见的人耳朵里。</p>
+  <p>——</p>
+  <p>萧铁衣站起来。</p>
+  <p>他走到井台那头，站住，背对着所有人。</p>
+  <p>他站了很久。</p>
+  <p>然后他开口，声音不高，可井台上每个人都听得见。</p>
+  <p>"我听见了。"</p>
+  <p>"听见什么？"</p>
+  <p>"我爹。"萧铁衣说，"他也说过这一句。"</p>
+  <p>——</p>
+  <p>赵珩慢慢站起来。</p>
+  <p>"在哪儿？"</p>
+  <p>"在门里。"萧铁衣说，"隔着一扇门，隔着三十年。"</p>
+  <p>"他说什么？"</p>
+  <p>"他说'别开门'。"</p>
+  <p>"你问为什么了么？"</p>
+  <p>"问了。"</p>
+  <p>"他怎么说？"</p>
+  <p>萧铁衣转过身。</p>
+  <p>"门一开，里头不光大，也不光有我。"</p>
+  <p>——</p>
+  <p>两个人对着看。</p>
+  <p>看了很久。</p>
+  <p>赵珩先开口。</p>
+  <p>"那他们俩，"他说，"说的是一句。"</p>
+  <p>"是一句。"</p>
+  <p>"那就不是各说各的。"</p>
+  <p>"不是。"</p>
+  <p>"那是什么？"</p>
+  <p>萧铁衣走回井台边，重新坐下。</p>
+  <p>"是他们商量好的。"</p>
+  <p>两个分别关在门里门外的男人，隔着三十年，把同一句"别开"递到各自儿子耳朵里。萧铁衣忽然觉得，这门后头站着的，未必是敌人——可也未必是能随随便便放出来的东西。他们拦的，到底是什么呢。</p>
+  <p>——</p>
+  <p>那天中午，萧铁衣去了那道缝。</p>
+  <p>他一个人去的。</p>
+  <p>那道缝还在老地方，还是那么宽，还是那么深，里头还是黑。</p>
+  <p>他蹲在缝跟前。</p>
+  <p>"爹。"他说。</p>
+  <p>没人应。</p>
+  <p>"爹。"</p>
+  <p>还是没人应。</p>
+  <p>"我问你一句话。"</p>
+  <p>——</p>
+  <p>风从缝里往外渗。</p>
+  <p>渗出来的时候是凉的。</p>
+  <p>"你说门一开，里头的不光是你。"萧铁衣说，"那还有谁？"</p>
+  <p>——</p>
+  <p>缝里安静了很久。</p>
+  <p>久到萧铁衣以为不会有人答了。</p>
+  <p>然后那个声音起来了。</p>
+  <p>不是响在耳朵里。是响在骨头里，响在牙根，响在胸膛正中那块空的地方。</p>
+  <p>"还有四千年的。"</p>
+  <p>——</p>
+  <p>萧铁衣的呼吸停了。</p>
+  <p>"四千年的什么？"</p>
+  <p>"号。"</p>
+  <p>"多少？"</p>
+  <p>"数不清。"</p>
+  <p>"数不清是多少？"</p>
+  <p>"比这儿的桩子多。"那声音说，"这儿的桩子是四千一百六十三。里头那些，是这个数的一万倍。"</p>
+  <p>——</p>
+  <p>萧铁衣跪在地上。</p>
+  <p>他两只手撑着地，撑了很久。</p>
+  <p>"它们想出来？"</p>
+  <p>"想。"</p>
+  <p>"出来干什么？"</p>
+  <p>"找位。"</p>
+  <p>"找不着呢？"</p>
+  <p>"找着什么坐什么。"</p>
+  <p>——</p>
+  <p>萧铁衣抬起头。</p>
+  <p>"坐在人身上？"</p>
+  <p>"坐在人身上。"</p>
+  <p>"那这个人呢？"</p>
+  <p>"这个人就成了位。"那声音说，"位上坐的不是他了。"</p>
+  <p>萧铁衣的胃猛地抽了一下。他想起桩圈之城那些空壳——号钉在门楣上，人就成了壳，里头坐的不是自己。原来那不是孤例。门后头那四千多年攒下的号，每一个都在找位，找不着就坐到人身上。他一直以为"换人"是桩圈之城的法子，如今才懂，那法子，是从这道门里漏出来的。</p>
+  <p>——</p>
+  <p>萧铁衣跪在那儿，一句话都说不出来。</p>
+  <p>过了很久，他开口：</p>
+  <p>"那你呢。"</p>
+  <p>"我？"</p>
+  <p>"你在里头干什么？"</p>
+  <p>那声音停了一下。</p>
+  <p>"我闩着。"</p>
+  <p>"闩了多久？"</p>
+  <p>"三十年。"</p>
+  <p>"累么？"</p>
+  <p>——</p>
+  <p>那声音沉默了很长时间。</p>
+  <p>长到太阳都挪了一拃。</p>
+  <p>"累。"</p>
+  <p>萧铁衣的眼泪一下子出来了。</p>
+  <p>他跪在地上，低着头，眼泪砸在土里，砸出一个一个的小坑。</p>
+  <p>"那你歇会儿。"他说。</p>
+  <p>"歇不了。"</p>
+  <p>"为啥歇不了？"</p>
+  <p>"我一松手，"那声音说，"门就开了。"</p>
+  <p>萧铁衣蹲在那儿，半天没动。三十年的闩门，换来的就是一句"我一松手门就开"。他爹不是不想出来，是出来就得连着后头那些一起放。一个做爹的，把自己钉在门后头三十年，就为着外头这城里的人，能安生过日子。他忽然觉得，自己这三十年的"找爹"，找的从来不是个活人，是个闩门的人。</p>
+  <p>——</p>
+  <p>那天下午，萧铁衣回到井台边。</p>
+  <p>赵珩还坐在那儿。</p>
+  <p>萧铁衣走过去，在他旁边坐下。</p>
+  <p>"不合。"萧铁衣说。</p>
+  <p>赵珩看着他。</p>
+  <p>"你不合？"</p>
+  <p>"不合。"</p>
+  <p>"那你爹呢？"</p>
+  <p>"我另想办法。"</p>
+  <p>"什么办法？"</p>
+  <p>"我还没想出来。"萧铁衣说，"可我想得出来。"</p>
+  <p>——</p>
+  <p>赵珩盯着他看了很久。</p>
+  <p>然后他伸出手。</p>
+  <p>"拿来。"</p>
+  <p>"什么？"</p>
+  <p>"印。"赵珩说，"你那半块给我。"</p>
+  <p>"你干什么？"</p>
+  <p>"我带走。"</p>
+  <p>"带到哪儿去？"</p>
+  <p>"带回去。"赵珩说，"带回郡城，埋回灶底下。"</p>
+  <p>——</p>
+  <p>萧铁衣看着他。</p>
+  <p>"你舍得？"</p>
+  <p>"不舍得。"</p>
+  <p>"那你还要带走？"</p>
+  <p>"因为我爹说了别开。"赵珩说，"他这辈子就求过我这一件事。"</p>
+  <p>——</p>
+  <p>萧铁衣把那半块印拿出来，递给他。</p>
+  <p>赵珩接过去，掂了掂，塞进怀里。</p>
+  <p>然后他站起来，走到箱子跟前，把自己那半块也放回去，扣上铜扣，落了锁。</p>
+  <p>锁上的那一刻，他站在那儿没动。</p>
+  <p>"萧铁衣。"</p>
+  <p>"嗯。"</p>
+  <p>"我要是改主意了，"他说，"我会回来。"</p>
+  <p>"我知道。"</p>
+  <p>"我要是回来了，你拦不拦我？"</p>
+  <p>萧铁衣抬起头。</p>
+  <p>"拦。"</p>
+  <p>"拦得住么？"</p>
+  <p>"拦不住。"</p>
+  <p>"那你拦什么？"</p>
+  <p>"拦一次是一次。"萧铁衣说。</p>
+  <p>赵珩没再说话。他转过身，走回车边。萧铁衣看着他的背影，忽然想起十年前郡城那回——赵珩也是这样，要走的时候从不回头，可走出几步总要停一下，像是还有什么没说完。这一回，他停了三次，三次都没回头。萧铁衣知道，他不是没话说，是说了，也是白说。</p>
+  <p>——</p>
+  <p>赵珩笑了一下。</p>
+  <p>这一回笑得比先前长一点。</p>
+  <p>他转身，招呼那九个人。</p>
+  <p>"走了。"</p>
+  <p>——</p>
+  <p>九个人站起来，拍土，收拾东西。</p>
+  <p>车轱辘又响起来。</p>
+  <p>萧铁衣站在城口，看着那辆车往坡上走。</p>
+  <p>走到一半，他忽然喊了一声：</p>
+  <p>"赵珩！"</p>
+  <p>车停了。</p>
+  <p>赵珩回过头。</p>
+  <p>"你的灯。"萧铁衣说。</p>
+  <p>——</p>
+  <p>赵珩愣了一下。</p>
+  <p>他从怀里把那盏白灯摸出来。</p>
+  <p>灯是白的，罩子完好。</p>
+  <p>他举起来，看了一眼。</p>
+  <p>然后他的脸，慢慢地变了。</p>
+  <p>——</p>
+  <p>那盏灯的火苗，在往一边偏。</p>
+  <p>不是被风吹的。罩子是糊着的，风吹不进去。</p>
+  <p>是它自己在偏。</p>
+  <p>偏得很慢，慢到几乎看不出来。</p>
+  <p>可它一直在偏。</p>
+  <p>偏的方向，是西南。</p>
+  <p>萧铁衣盯着火苗。西南——和生父三十年前走的那个方向，和赵珩爹说的"西南"，和云荒那张灯图第七城对上的方向，是同一个。一盏灯，自己往西南偏，像是有什么东西在西南那头，牵着它。他忽然想起阿萝那半盏——"丙字七百一十九"，待填之灯，也一直朝着一个方向。灯认方向，不认人。</p>
+  <p>"它多久了？"萧铁衣问。</p>
+  <p>"我不知道。"</p>
+  <p>"你出城的时候就这样？"</p>
+  <p>"出城的时候……"赵珩想了想，"出城的时候它是正的。"</p>
+  <p>"什么时候开始偏的？"</p>
+  <p>"过了渡荒口。"</p>
+  <p>"偏了多久？"</p>
+  <p>"三天。"</p>
+  <p>——</p>
+  <p>萧铁衣站在城口，看着那盏灯。</p>
+  <p>"赵珩。"</p>
+  <p>"嗯。"</p>
+  <p>"它灭了多少？"</p>
+  <p>赵珩把灯举高了一点，对着日头看。</p>
+  <p>火苗在罩子里，只有米粒那么大。</p>
+  <p>萧铁衣看着那点火苗。米粒大，却亮得刺眼。赵珩说灭了一半——那一灭，灭的不是灯油，是赵珩自己。白灯认主，灯在人在，灯灭人亡，这是云荒的老理儿。可赵珩还站着，还说话，还笑。那就说明，这灯灭得慢，慢到赵珩自己都没察觉，慢到——慢到像是有人在里头，一点点把他的火抽走。</p>
+  <p>"一半。"赵珩说。</p>
+  <p>——</p>
+  <p>两个人都没说话。</p>
+  <p>过了一会儿，赵珩把灯收进怀里。</p>
+  <p>"我先走。"</p>
+  <p>"你走。"</p>
+  <p>"我要是回不来——"</p>
+  <p>"你回得来。"</p>
+  <p>"我要是回不来，"赵珩说，"那半块印，你替我埋了。"</p>
+  <p>——</p>
+  <p>车轱辘响起来，越走越远。</p>
+  <p>萧铁衣站在城口，站到看不见为止。</p>
+  <p>——</p>
+  <p>回到井台边的时候，天已经快黑了。</p>
+  <p>他刚走到井台跟前，就停住了。</p>
+  <p>那两半印——</p>
+  <p>不对。</p>
+  <p>赵珩把两半都带走了。井台上什么都没有。</p>
+  <p>可他听见了声音。</p>
+  <p>——</p>
+  <p>嗡。</p>
+  <p>很轻的一声，从四面八方同时响起来。</p>
+  <p>不是一处在响。</p>
+  <p>是四千多处同时在响。</p>
+  <p>——</p>
+  <p>萧铁衣猛地转过身。</p>
+  <p>那圈桩子，一根一根，都在抖。</p>
+  <p>抖得极细，幅度小到看不出来，可那些铜牌在抖，牌底下压着的指骨也在抖，抖得土往上冒烟。</p>
+  <p>抖了三息。</p>
+  <p>停了。</p>
+  <p>可那三息里抖出来的土，落在地上，像一层薄薄的灰。老周蹲下去，用手指捻了捻，捻起一根极细的铜丝——是桩顶铜牌上掉下来的。他没说话，把铜丝攥进手心，攥得指节都白了。</p>
+  <p>——</p>
+  <p>井台上四个人，谁都没说话。</p>
+  <p>提灯人从墙根底下站起来。</p>
+  <p>"这是第几回了？"他问。</p>
+  <p>"第一回。"萧铁衣说。</p>
+  <p>"第一回？"</p>
+  <p>"第一回。"</p>
+  <p>"那往后还会有第二回。"</p>
+  <p>"我知道。"</p>
+  <p>"第二回比第一回响。"提灯人说，"第三回比第二回响。响到第四回，这圈桩子就该塌了。"</p>
+  <p>——</p>
+  <p>萧铁衣站在那儿，看着那圈黑桩子。</p>
+  <p>天黑下来了。</p>
+  <p>桩顶上的光，一盏一盏亮起来。</p>
+  <p>四千一百六十三点。</p>
+  <p>可他没看错。昨天他数的时候，还是四千一百七十。今天少了七个。不是灭了七盏——是那七个号，钉着的桩子空了，灯没人接，自己灭的。他忽然想起提灯人说的"灭一城多一盏灯"。可今天，是灭了七盏，一盏都没多。这城，开始丢号了。</p>
+  <p>——</p>
+  <p>萧铁衣在井台边坐下来。七盏灯，没多没少地灭了七盏，这不是桩圈之城的规矩——桩圈之城灭一城，必多一盏，那多出来的，是替死的人接住的火。可这一回，七盏灯就这么空了，没人接，也没人多出来。他想起赵珩那盏往西南偏的白灯，忽然明白了一件事：灯在灭，号在丢，这城和赵珩，像是被同一根线牵着，往同一个方向走。门还没开，可门里头的风，已经从这个口子，钻进来了。他坐到夜里，没动。桩顶的灯，一盏一盏，亮着那四千一百五十六点光，照着一城将散未散的人。</p>
+  <p>——</p>
+  <p>第八十四章 完</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，听书键跳转纯语音页 ===== */
+  var TOTAL=90;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<a class="rbtn gold" href="listen.html?ch='+n+'">🎧 听书</a>'+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  var dragging=false;
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a")){show();return;}
+    var w=document.documentElement.clientWidth||document.body.clientWidth;
+    var x=e.clientX||0;
+    /* 左右两侧 1/3 为翻页手势，中间区域用于呼出工具栏 */
+    if(x<w*0.30&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    if(x>w*0.70&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+    if(document.body.classList.contains("ui-show"))hide();else show();
+  });
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  var CH=84, TITLE="合印";
+  var RKEY="hugo_reader_v1";
+  function loadR(){try{return JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){return{}}}
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function applyPct(p){if(maxH()>0)window.scrollTo(0,maxH()*p/100);}
+  var chapters=(loadR().chapters||{});
+  var st=chapters[CH]||{pct:0};
+  var bm=loadR().bookmark;
+  if(location.hash==="#bookmark"&&bm&&bm.ch===CH&&bm.pct>0){
+    setTimeout(function(){applyPct(bm.pct)},80);
+  }else if(location.hash==="#resume"&&st.pct>0){
+    setTimeout(function(){applyPct(st.pct)},80);
+  }else if(st.pct>=3&&st.pct<95){
+    var tip=document.createElement("div");tip.className="resume-tip";
+    tip.innerHTML="📌 上次读至 "+st.pct+"% · <a href='javascript:void(0)' id='resumeGo'>继续上次位置</a>";
+    document.querySelector(".wrap").prepend(tip);
+    document.getElementById("resumeGo").onclick=function(){applyPct(st.pct);tip.remove();};
+  }
+  if(bm&&bm.ch===CH&&bm.pct>0&&location.hash!=="#bookmark"){
+    var btip=document.createElement("div");btip.className="resume-tip";
+    btip.innerHTML="🔖 本章已安放书签（钉在 "+bm.pct+"%） · <a href='javascript:void(0)' id='bmGo'>回到书签位置</a>";
+    document.querySelector(".wrap").prepend(btip);
+    document.getElementById("bmGo").onclick=function(){applyPct(bm.pct);btip.remove();};
+  }
+  var timer=null;
+  function record(){
+    var m=maxH();if(m<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/m*100));
+    var d=loadR();d.chapters=d.chapters||{};
+    d.chapters[CH]={pct:p,t:Date.now()};
+    d.resume={book:"gudo",ch:CH,name:"第"+CH+"章 · "+TITLE,file:"gudo-"+CH+".html",pct:p,t:Date.now()};
+    saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record()},1000)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(function(){record()},500);
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  if(bm&&bm.ch===CH&&bm.pct>0){btn.textContent="🔖 书签 "+bm.pct+"%";}else{btn.textContent="🔖 书签";}
+  document.getElementById("__bmSlot").appendChild(btn);
+  btn.onclick=function(){
+    var m=maxH();var p=m>0?Math.min(100,Math.round(document.documentElement.scrollTop/m*100)):0;
+    var d=loadR();d.bookmark={book:"gudo",ch:CH,pct:p,t:Date.now()};saveR(d);
+    btn.textContent="✓ 已安放书签 "+p+"%";
+    setTimeout(function(){btn.textContent="🔖 书签"},1800);
+  };
+})();
+
+</script>
+</body>
+</html>
