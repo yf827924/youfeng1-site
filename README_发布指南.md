@@ -1,78 +1,85 @@
-# 发布指南（youfeng1.com 作品小屋 · GitHub Pages 路线）
+# 发布指南 · 雨果的作品小屋（youfeng1.com）
 
-目标：改完网页/内容后，**双击 `publish.bat` 一条命令就上线**，不用每次去后台拖文件夹、不用每次折腾密钥。
-
----
-
-## 一、你只需做 4 步（一次性，之后不用再碰）
-
-### 第 1 步：在 GitHub 建仓库
-1. 登录 https://github.com/ （没有账号先注册，免费）
-2. 右上角 **＋ → New repository**
-3. Repository name 填 `youfeng1-site`
-4. 选 **Public**（私有仓库 GitHub Pages 要付费）
-5. **不要**勾 "Add a README file" / .gitignore / license（保持空仓库）
-6. 点 **Create repository**
-
-### 第 2 步：把本机 SSH 公钥加到 GitHub
-复制下面这整串（已为本机生成）：
-
-```
-ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA7l7TRbDB/VyfMj7nRe5Gm/6N7xFsBnn+FixuYyS9lV youfeng1@163.com
-```
-
-1. GitHub 右上角头像 → **Settings**
-2. 左侧 **SSH and GPG keys** → **New SSH key**
-3. Title 随便填（如 `my-pc`），Key 框粘贴上面那串 → **Add SSH key**
-
-> 这把密钥在本机长期有效，配一次即可，不像 Cloudflare 全局密钥那样会被建议轮换导致失效。
-
-### 第 3 步：首次推送（把仓库地址告诉我，我帮你跑）
-建好仓库后，把你的 **GitHub 用户名**发我，我会执行：
-```
-git remote add origin git@github.com:<你的用户名>/youfeng1-site.git
-git push -u origin main
-```
-之后代码就上去了。
-
-### 第 4 步：开启 Pages + 改 DNS（各点一下）
-1. 进 `youfeng1-site` 仓库 → **Settings → Pages**
-2. Branch 选 **main** → **Save**（等几分钟，GitHub 会给 `https://<用户名>.github.io/youfeng1-site/` 临时地址）
-3. 进 Cloudflare 控制台 → `youfeng1.com` 的 **DNS**
-4. 把现有的 CNAME（指向 `youfeng1-site.pages.dev`）改成指向 **`<用户名>.github.io`**
-   - 根域 `youfeng1.com` → CNAME → `<用户名>.github.io`（代理保持开启）
-   - `www.youfeng1.com` 同理
-5. 等几分钟生效，浏览器开 **https://youfeng1.com** 就是正式站
-
-> 域名始终注册在 Cloudflare 名下，完全独立；换主机只是改一条 CNAME，零锁定。
+> 站点已经上线，这份文档只讲**以后怎么改内容、怎么发布、出问题怎么查**。
 
 ---
 
-## 二、以后怎么发布（重点：一条命令）
+## 一、以后怎么发布（就一件事）
 
-改完 `hugo-site/` 里的任何文件（加章节、改文案、换图都行），**双击 `publish.bat`** 即可：
-- 它会自动 `git add` → `commit` → `push`
-- GitHub 检测到推送 → 自动重新部署到 Pages → 你的站秒级更新
+改完 `hugo-site/` 里任何文件（加章节、改文案、换图都行）→ **双击 `publish.bat`** → 完成。
 
-可选：在双击时加说明，如 `publish.bat "新增第76章"`；不加则自动用时间戳作提交说明。
+脚本会自动：`git add` → `commit` → `push` → GitHub Pages 自动重新部署 → 1~2 分钟后 `https://youfeng1.com` 就是新的。
+
+- 想写提交说明：`publish.bat "新增第76章"`（不加则自动用日期时间）
+- **不需要你电脑装 Git**：脚本会自动找 WorkBuddy 自带的 Git，找不到才提示你去装
 
 ---
 
-## 三、文件结构（当前已就绪）
+## 二、当前的架构（已经配好，不用再动）
+
+| 部分 | 现在的情况 |
+|---|---|
+| 域名 | `youfeng1.com` 注册在 **Cloudflare**，你本人名下，随时可转出 |
+| 托管 | **GitHub Pages**（免费），仓库 `yf827924/youfeng1-site`（公开，分支 `main`） |
+| 内容 | 全站 254MB / 300+ 文件，含 75 章小说、小游戏、文章、旅行影像、镖局 APK |
+| HTTPS | Let's Encrypt 证书已签发，`http://` 自动 301 跳到 `https://` |
+| DNS | 根域 `youfeng1.com` → GitHub 的 4 条 A + 4 条 AAAA；`www` → CNAME `yf827924.github.io`（两条都必须是**灰云 / 仅 DNS**，不能开橙色云代理） |
+
+DNS 原理：域名解析直接指向 GitHub 的服务器，Cloudflare 只做 DNS 解析、不参与流量，这样 GitHub 才能签证书。
+
+---
+
+## 三、⚠️ 两件千万不要做的事
+
+1. **不要在 GitHub 网页的 Pages 设置里点 `Remove`（删除自定义域）**
+   这会连带删掉仓库里的 `CNAME` 文件，导致 `youfeng1.com` 直接变成 404。
+   （已经踩过一次，靠重新推送 `CNAME` 文件救回来了。）
+
+2. **不要删这两个文件夹/文件**
+   - `D:\workbuddy\2026-09-11-10-33-06\.deploy\` —— 发布用的 SSH 私钥，删了就无法推送
+   - `hugo-site\CNAME` —— 内容是 `youfeng1.com`，删了域名会掉
+
+---
+
+## 四、出问题怎么查（按顺序看）
+
+**症状：`youfeng1.com` 打不开 / 显示 404 "Site not found"**
+1. 先看 `hugo-site\CNAME` 文件在不在、内容是不是 `youfeng1.com`
+2. 不在就新建一个，内容填 `youfeng1.com`，然后双击 `publish.bat` 推上去
+3. 若还不行，备用地址一定通：`https://yf827924.github.io/youfeng1-site/`
+
+**症状：改了内容但网站上没变**
+1. 等 2 分钟（GitHub 部署有延迟）
+2. 浏览器强制刷新 `Ctrl + F5`
+3. 打开 https://github.com/yf827924/youfeng1-site/commits/main 看是否有你刚才的提交
+
+**症状：双击 publish.bat 一闪而过或报错**
+1. 对着 `publish.bat` 右键 → 以管理员身份运行，再试
+2. 截图报错信息给助手
+
+**症状：GitHub 网页打不开**
+不影响发布，双击 `publish.bat` 照样能推。也可以换网络（手机热点）或换 DNS（改成 `223.5.5.5`）后再试。
+
+---
+
+## 五、文件结构
+
 ```
 hugo-site/
 ├── index.html            首页（作品小屋四板块入口）
-├── novels/               75 章小说（gudo-*.html）
+├── novels/               小说章节
 ├── games/                小游戏
 ├── articles/             文章
-├── videos/               旅行影像（含 93M「泰达谷的夏」）
-├── downloads/            镖局 APK（29M）
+├── videos/               旅行影像
+├── downloads/            镖局 APK
 ├── assets/               样式/脚本/图片
+├── CNAME                 ★ 绑定域名用，内容必须是 youfeng1.com
 ├── publish.bat           ★ 一键发布脚本
 └── README_发布指南.md    本文件
 ```
 
-## 四、注意事项
-- 单文件 ≤ 100MB（GitHub Pages 限制），当前最大 93M，安全。
-- 仓库总量 254M，远低于 GitHub 1GB 软上限，无需 Git LFS。
-- 若某天换电脑，把 `C:\Users\16668\.ssh\id_ed25519` 一并拷走即可继续用同一把密钥发布。
+## 六、其它
+
+- 单个文件 ≤ **100MB**（GitHub Pages 限制），当前最大 93M，安全
+- 仓库总量 254MB，远低于 GitHub 1GB 软上限，无需 Git LFS
+- 换电脑：把 `hugo-site` **和** `.deploy` 两个文件夹一起拷过去，双击 `publish.bat` 照样能发
