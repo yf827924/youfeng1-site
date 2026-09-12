@@ -93,6 +93,11 @@ DNS 原理：域名解析直接指向 GitHub 的服务器，Cloudflare 只做 DN
    - 源站**大于**当前站 → 应该会同步，若报错就把窗口内容发给助手
 3. 都正常但网站上没变 → 等 2 分钟 + `Ctrl + F5` 强制刷新
 
+**症状：窗口里中文变成一堆乱字符（2026-09-12 已修）**
+- 这是**脚本自己的输出编码写错了**，不是电脑的问题，也不影响发布结果（内容照样推上去了）
+- 原因见文末「踩坑记录」第 5 条：Python 在 Windows 控制台本该用宽字符直接写屏幕，中文天生正确；一旦强行把输出编码改成 GBK，就会在窗口里变成乱字符
+- 顺带把启动器自己的提示改成了 ASCII（`[ENV] python = ...`），这样即使 `chcp` 失效也不会花屏 —— **窗口里的中文说明全部由 Python 输出**
+
 **症状：双击 publish.bat 一闪而过或报错**
 1. 先确认不是上面那条编码问题
 2. 对着 `publish.bat` 右键 → 以管理员身份运行，再试
@@ -175,3 +180,30 @@ if not defined PYEXE (
 > 顺带解释：`publish.bat` 一直没事，是因为它找的是 `git` —— 你电脑没装 Git，`where git` 找不到，于是正常退回到 WorkBuddy 自带的 PortableGit。而 python 这边"找得到假货"，所以没走退回分支。
 
 生成 `同步小说并发布.bat` 的脚本是 `.deploy\gen_sync_bat.py`，改完跑一下即可。
+
+### 5. 别给 Python 的 stdout 乱设编码（2026-09-12 踩）
+
+出错写法（会让窗口刷满乱字符）：
+
+```python
+sys.stdout.reconfigure(encoding='gbk', errors='replace')   # ❌ 无条件这么写是错的
+```
+
+原因：Python 3.6+ 在 Windows 控制台底下用的是 `_WindowsConsoleIO`（PEP 528），
+**它接收的是 UTF-8 字节**，再转成 UTF-16 调 `WriteConsoleW` 显示。
+所以控制台里的中文本来就天生正确，跟 `chcp` 是 936 还是 65001 **无关**。
+
+一旦把编码强行改成 GBK，「中」会被编成 `D6 D0`，但收到字节的那一端仍按 **UTF-8** 去解
+→ 窗口里就是一堆 `ÖÐ` 之类的乱字符。
+
+正确写法：
+
+```python
+import sys
+if not sys.stdout.isatty():          # 只有被别的程序用管道捕获时
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+# 控制台（双击）时什么都不做 —— 让 Python 自己走宽字符 API
+```
+
+配套经验：**启动器 .bat 自己的提示语尽量用 ASCII**（`[ENV]`、`[ERROR]` 而不是中文），
+把中文提示全部交给 Python 输出 —— 这样即使某台机器 `chcp` 没生效，窗口也不会花屏。
