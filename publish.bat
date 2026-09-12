@@ -4,9 +4,6 @@ setlocal
 cd /d "%~dp0"
 title 一键发布 youfeng1.com
 
-set "KEY=D:/workbuddy/2026-09-11-10-33-06/.deploy/id_ed25519"
-set "KH=D:/workbuddy/2026-09-11-10-33-06/.deploy/known_hosts"
-
 echo ============================================================
 echo   一键发布  --  youfeng1.com
 echo ============================================================
@@ -32,15 +29,22 @@ REM 把 git 自带目录放进 PATH，让 git 用 PortableGit 的 ssh
 for %%i in ("%GITEXE%") do set "GITDIR=%%~dpi"
 set "PATH=%GITDIR%;%GITDIR%..\mingw64\bin;%GITDIR%..\usr\bin;%PATH%"
 
-REM 指定发布用密钥。注意：ssh 参数一律用正斜杠，反斜杠会被 git 吃掉
+REM 发布密钥（正斜杠，反斜杠会被 git 吃掉）
 "%GITEXE%" config core.sshCommand "ssh -i D:/workbuddy/2026-09-11-10-33-06/.deploy/id_ed25519 -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=D:/workbuddy/2026-09-11-10-33-06/.deploy/known_hosts -o BatchMode=yes"
+
+REM 自我修复远程跟踪关系（防止 push 时报 upstream gone）
+"%GITEXE%" config remote.origin.url git@github.com:yf827924/youfeng1-site.git
+"%GITEXE%" config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+"%GITEXE%" config branch.main.remote origin
+"%GITEXE%" config branch.main.merge refs/heads/main
+"%GITEXE%" config push.default simple
 
 echo [环境] git = %GITEXE%
 echo [环境] 站点 = %CD%
 echo.
 
-REM ---------- 2) 本次提交说明 ----------
-if "%~1"=="" (set "MSG=update %date% %time%") else (set "MSG=%~1")
+REM ---------- 2) 本次提交说明（默认纯英文，避免中文乱码） ----------
+if "%~1"=="" (set "MSG=site update") else (set "MSG=%~1")
 
 REM ---------- 3) 提交 ----------
 "%GITEXE%" add -A
@@ -62,7 +66,7 @@ echo.
 
 REM ---------- 4) 推送到 GitHub ----------
 echo [2/2] 正在推送到 GitHub ...
-"%GITEXE%" push
+"%GITEXE%" push origin main
 if errorlevel 1 (
   echo.
   echo [失败] 推送没成功，把上面的报错发给助手。
