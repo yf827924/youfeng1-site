@@ -4,8 +4,8 @@ setlocal
 cd /d "%~dp0"
 title 一键发布 youfeng1.com
 
-set "KEY=D:\workbuddy\2026-09-11-10-33-06\.deploy\id_ed25519"
-set "KH=D:\workbuddy\2026-09-11-10-33-06\.deploy\known_hosts"
+set "KEY=D:/workbuddy/2026-09-11-10-33-06/.deploy/id_ed25519"
+set "KH=D:/workbuddy/2026-09-11-10-33-06/.deploy/known_hosts"
 
 echo ============================================================
 echo   一键发布  --  youfeng1.com
@@ -27,9 +27,14 @@ if not defined GITEXE (
   pause
   exit /b 1
 )
+
+REM 把 git 自带目录放进 PATH，让 git 用 PortableGit 的 ssh
 for %%i in ("%GITEXE%") do set "GITDIR=%%~dpi"
 set "PATH=%GITDIR%;%GITDIR%..\mingw64\bin;%GITDIR%..\usr\bin;%PATH%"
-set "GIT_SSH_COMMAND=%GITDIR%..\usr\bin\ssh.exe -i %KEY% -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=%KH% -o BatchMode=yes"
+
+REM 指定发布用密钥。注意：ssh 参数一律用正斜杠，反斜杠会被 git 吃掉
+"%GITEXE%" config core.sshCommand "ssh -i D:/workbuddy/2026-09-11-10-33-06/.deploy/id_ed25519 -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=D:/workbuddy/2026-09-11-10-33-06/.deploy/known_hosts -o BatchMode=yes"
+
 echo [环境] git = %GITEXE%
 echo [环境] 站点 = %CD%
 echo.
