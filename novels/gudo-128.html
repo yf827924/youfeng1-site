@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第一百二十八章 · 谢页落笔 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第一百二十八章 · 谢页落笔</h1>
+  <p>外闩断了，他明白，挡不住了。</p>
+  <p>第十六日。门开一掌，缝成口子，外闩断了一截，推门人的半只手还探在缝里。他试过挡，挡回一瞬，外闩断，门又开。挡一回，纹近一线；挡十回，九天半到颈根。他算过这笔账，可今日这笔账，算到尽头了——外闩不扛了，他挡门，得自己出命，出到纹爬满颈根，第三声来，收的是他自己。挡，是拖；拖到头，还是收。</p>
+  <p>他坐在门里，背贴着门板，手按着那面，掌心下是推门人顶过来的劲。那劲一日实过一日，今日比昨日更沉。他不挡了，也不放。他就这么靠着，想一件事：这门，挡不住了；谢页那笔，落不落？</p>
+  <p>挡不住，就得选。前些日子他卡着，是因为还挡得住——挡得住，就能拖，拖一天算一天。卡，不是没想清，是不用想清：只要门还挡得住，笔就可以悬着，谢页就可以白着，两种收法就可以都按在手里，谁也不放。卡，是他给自己留的余地。今日这余地，被外闩那声&quot;咔&quot;，砍没了。门挡不住，笔就得落；不落笔，门开了，笔也得落，只是落到别人手上。落自己手上，谢家三代的账，他接；落旁人手上，那账，白悬三百年。</p>
+  <p>他想了一夜。这一夜，推门人的手，还探在缝里，没缩。他坐在门里，背贴着门板，掌心下是那股认了死理的劲，一日实过一日。他数自己的纹：一寸九，二十九粒米，二十九笔，九天半。他数谢页的白：三百年，一页，没一个字。他数门外的推：十六天，从试到用劲，手探进来半只。三个数，数到天亮，他心里那笔账，落了底——落。今日挡不住了，拖不下去了。推门人明日再来，后日再来，门一日开一分，到门全开那日，外来的人进来，谢页那页白，要么他落，要么进来的人落。他落，是拿命填；进来的人落，是谢家旁支接了谢司主守的那半截芯。两条都是落，一条落他的命，一条落谢家的名。他不肯白落，也不肯让谢家三代的账，落在一个旁支手上——旁支名不进册，世代守外头，落了也白落，芯不认。</p>
+  <p>那就他落。</p>
+  <p>这个念头，不是今日才有。他悬了这些天，悬的就是这一笔。悬着，是因为还挡得住，还能拖；挡不住了，拖到头，笔就得落。落，是拿命填；不落，是让门开全，让外来的人落。他不肯让外来的人落——推门人守在外头，名不进册，他落了谢页，芯不认，谢家三代的账，还是悬着。要落，就得落在一个认得的人手上。门里认得的，只有他；谢家认得的，也只有他——他手里有谢司主给的半截芯，改了四千多笔账，改账的人，芯认。</p>
+  <p>拿命填，这笔账他算过无数回。填谢页，是把保一处，挪给谢家。六处保，变五处。五处担六处的活，改账的引擎慢一层，日产三笔还得降。他占的那一处，是他自己的名位——挪出去，名位空了，谢家的名，填进那处。填了，谢崇归位、谢砚落名、谢司主守芯，谢家三代的账，接上了。可他的命，少一笔——纹快一线，离颈根近一步。</p>
+  <p>六处保，是这些日子撑着门里的顶。七处折了娘空一处，剩六处；一处最多担一份，性质不同补不上，六处担七处的活，无一处宽裕。他占的那处，是自己的名位，也在六处里。挪出去，六处变五处。五处担六处，每处多担两成。他算过：日产三笔，靠的是六处轮着担；变五处，日产得降到两笔半——半笔不是笔，是有一日只能落两笔。日产降，四千多笔的账，消化时限又拉长。救了谢家的账，慢了门里的账。这笔，他认。</p>
+  <p>他不认也得认。谢家三代的账，悬了三百年，咬了三代人。谢崇被划名留号，飘了三百年；谢砚空名，先还后填，落了名；谢司主守芯，守在门外，脚抬了又放下。三代人，卡在同一道门上。如今他手里有半截芯，有白灯，有改账的手，这账，他接了。接了，就落笔。落笔，就拿命填。拿命填的意思，他懂：不是立刻死，是把自己的日子，匀给谢家三代。他匀出去三天，谢家三百年，有人接。</p>
+  <p>一笔，一线。一线，一粒米。一粒米，一日。他数过：纹头到颈根，两寸，三十粒米，三十笔，十天。填谢页，保一处挪，纹快一线——那一线，不是一粒米，是三粒。三粒米，三天。他填这一笔，九天半变八天半。</p>
+  <p>七天。</p>
+  <p>他伸手，摸那道纹。钝的线，钉在锁骨上缘，离颈根一寸九。填了谢页，纹快三粒米，二十六粒米，二十六笔，约八天半。八天半，第三声来。他看着自己的手，手背上有推门人指尖碰过的土印，还没擦。这手，改了四千多笔账，落过别人无数的名，如今要落自己的命。</p>
+  <p>他没犹豫太久。犹豫了这些天，够了。这些天里，他数过米粒，数过日子，数过门外推门的次数，数过芯上裂的缝。数到今日，数清了：挡不住，笔得落，落自己手上。数清了，就不犹豫了。犹豫是给还有余地的人的；他没余地了。</p>
+  <p>他起身，走到谢页那头。</p>
+  <p>从门板到谢页，不远，走十几步。这十几步，他走过无数回，每回都停在中途，退回门板那头按着。今日没停。走过半途，他抬头看了看册山——石壁一层层，名后缀号，位旁注法，填的或绝的，密密麻麻，望不到头。四千一百六十四位，落了名的不到一半，空栏占了一大半。那些空栏，是历代被收的人：走闩收的，散在门外，册上不记；走纹收的，按进册，名在栏空。他自己的名，占着保一处，还不在空栏里；可今日落了谢页，保一处挪了，他的名位，离那些空栏，又近了一层。</p>
+  <p>他走到谢页前，站定。</p>
+  <p>谢页还是白的。三百年了，白着。谢崇归位，名落在册上的位，不在这页；谢砚落名，先还后填，名在，也不在这页；谢司主守芯，名在门外，更不在这页。三代谢家人，没一个在这页落过名。芯留着这页，等的，是一个肯拿命填的人。</p>
+  <p>白灯照着这页。灯照见它空，照见它白了三百年，照见边上的石粉，白里带灰，新了三百年还是新——落过名的页，边是旧的，摸得发暗；这页的边，没人摸过，还是新的。灯照见这页的空白，不替它填一个字。</p>
+  <p>他蘸墨。</p>
+  <p>墨是门里的墨，账房用了四千年的那种，稠，黑，带着石粉的涩。他蘸了三下，笔尖饱了，墨在尖上凝着，圆的一滴，不滴。这滴墨，他认得——改四千多笔账，每一笔，都是这么一滴。改别人的账，滴下去，是个名；今日这一滴，滴下去，是个姓，是谢家三百年的空，是他三天的命。</p>
+  <p>笔尖挨着那页白，墨在笔尖，圆的一滴，不滴。他悬了这些天的手，今日不悬了。手腕一沉，笔落下去。</p>
+  <p>第一画，横。墨洇开，白纸上开了一道黑。他写的是&quot;谢&quot;字——谢家的谢。三百年，这页第一次落了墨。落笔那瞬，他感到锁骨上缘那道钝线，跳了跳，往颈根爬了三分。三粒米，三天，实打实的。</p>
+  <p>他没停。第二画，第三画，一画一画，把&quot;谢&quot;字写完。每落一画，纹近一寸。</p>
+  <p>落笔的感觉，和改别的账不同。改别的账，笔尖落下去，是替别人添一笔，纹也重，可重得匀，像挑水，一担一担，担到肩上，走得动。今日这笔，落下去，是往自己的命上割一刀——每一画，割一寸，那寸数，他数得清。割第一画，纹从一寸九到一寸八；割第二画，到一寸七；写完，一寸五。十五粒米，十五笔，五天。他一边落，一边数，数到最后一画，笔离开纸，墨还亮着，他的命，从十天，变成五天。</p>
+  <p>五天。他退开那步，腿有点软。不是怕，是空——身上少了一块，那块，是三粒米，三天，匀给谢家了。他摸颈根，那道钝线，比昨日近了三分。三分，是三天的日子。他把它给了谢崇，给了谢砚，给了谢司主。三代人，三百年，他给了三天。三天换三百年，这账，划算；可这三天，是他的命。写完这个字，纹从二十九粒米，到了二十六粒米。二十六笔，约八天半。</p>
+  <p>五天。</p>
+  <p>他退开一步，看那页。这笔，他写得横平竖直，是改账的手写的，不快，也不慢。可那第一画的横，起笔时抖了一下——不是手抖，是纹在跳。抖的那下，留在纸上，墨洇开一点，像一滴旧泪。他看着那点洇开的墨，想起谢崇飘了三百年，想起谢砚空名先还后填，想起谢司主守在门外脚抬了又放下。三代人，没一个在这页落过名。今日他落了，落的不是他们的名，是他们的姓。白纸上，一个&quot;谢&quot;字，墨还没干，黑得发亮。三百年空着的页，今日有了第一个字。他填的不是名，是姓——谢家的姓。名还没落，落了姓，位就空出来了，等人填名。填谁的名？谢崇的，谢砚的，谢司主的，还是推门人的？芯没说，灯没说。他只落了姓，把位留着。</p>
+  <p>他刚落笔，门那头，动了。</p>
+  <p>不是推门人在推。是另一道声——轻，稳，从门外传来，不是推的劲，是站的静。他贴着门板，听见门外有人站定，然后，是脚抬起来的声。</p>
+  <p>谢司主。</p>
+  <p>那脚，抬了三十年，又放下。今日，落了。</p>
+  <p>门没全开，可谢司主进了门。他不是从缝里挤进来的——他是这道门认的人，门开一掌，他从那道口子里，侧身进来。</p>
+  <p>&quot;该进未进&quot;这四个字，芯里留了三十年。芯记旧事，不记人；那桩旧事，芯里只留一笔没写完的划——脚抬了，又放下。放下的理由，芯没写。他猜过：谢司主守在门外，守的不是门，是那道没写完的划；划不写完，他不进门，谢家三代的账，就悬着，等一个肯落笔的人。今日谢页落了墨，那道划，接上了。划一接完，空填了，守就没了理由——他进来了。</p>
+  <p>他进门的那一脚，落得很慢。三十年抬了又放下的脚，落下时，先落跟，再落掌，最后落趾，像怕踩坏了门里的什么东西。落地那声，闷的，实的。他站在门里，站稳了，没立刻走，先低头看了看自己的脚——那脚，在门外站了三十年，今日踩在门里的地上。门里的地，是册山的土，和门外一样，可踩上去，不一样。粗布，宽肩，背微弓，和推门人一个骨架。他站在门里，站稳了，转身，看着那道成口的缝，看了很久。</p>
+  <p>三十年。他守在门外，把半截芯交给肯改账的人，自己卡着，脚抬了又放下。三十年，门外的人世换了几茬，门里的册山塌过又补过，账房数错了就绕，绕不过去就慌。他就在门外站着，脚抬起来，放下，抬起来，又放下——守门的守，不是死守，是等：等一个肯落笔的人，等芯上那道划接上，等这一步，能落进自己的门里。今日谢页落了墨，谢家三代的账，有人接了——他那步&quot;该进未进&quot;的空，填上了。空一填，守就没了理由。他进来了。</p>
+  <p>他走到那半截芯跟前，伸手，把芯接过去。芯还是那半截，两半合拢过的，木头上留着划名者的指印——比常人小半号，指节粗，硌在指腹偏下。他把芯握在手里，握了很久，没说话。</p>
+  <p>那半截芯，他递出去过一次，今日又接了回来。递出去那日，他站在门外，手伸进门里，把芯递给肯改账的人，说&quot;算账别讲理&quot;。那日他没进门。今日他进了门，把芯接回来——接的不是木，是谢家三代没接上的那口气。谢砚的半，还了名，归了位；谢司主的半，交给了改账的人；如今两半，在一个人手里合着。他把芯贴在掌心，指腹摩挲那道合拢的痕，摩挲了很久。</p>
+  <p>芯上那枚指印，还在。三百年前动手划名的人，留的印：比常人小半号，指节粗，硌在指腹偏下，是练过这一手的人。芯只记账不记人，那人的名，芯里没写，只留空。他问过芯，划名的是谁，芯不答——芯记账，不记人，也不替人担。谢司主今日握着这枚指印，也没问。他只是握着，握到指节发白，才把芯，收进怀里。</p>
+  <p>门里，多了个人。</p>
+  <p>他引谢司主，走到谢页那头。谢页上，一个&quot;谢&quot;字，墨还没干透，黑得发亮。谢司主站定，看那字，看了很久。他没伸手摸，也没说话。看了半晌，他开口，声音是从门外带来的，哑，带风尘：&quot;你落了姓，没落名。&quot;</p>
+  <p>&quot;名还没定。&quot;他说，&quot;落谁的？谢崇的，谢砚的，你的，还是门外那位的？&quot;</p>
+  <p>谢司主摇头：&quot;芯留着这页，等的不是名，是肯落的人。你落了，就是你的。&quot;</p>
+  <p>&quot;我落了，是替谢家落。&quot;</p>
+  <p>&quot;替谢家落，也是你落。&quot;谢司主说，&quot;改账的人，落的每一笔，都算自己的。你改了四千多笔，那一笔笔，都是你的。&quot;</p>
+  <p>他没接话。这话，他认，也不认。认，是每一笔纹都重在他身上，改一笔重一分，一分都算他的；不认，是他改的那些，都是别人的名——飘号的名，绝户的名，待填的名，改完了，名归别人，纹归他。他改了四千多笔，四千多个名，没一个姓萧，可那四千多道纹，一道道都在他身上爬。今日这一笔不同：落的是谢家的姓，不是别人的名；可爬的纹，还是他的。落别人的名，纹归他；落谢家的姓，纹也归他。改账这行当，本就是替人担纹的手艺。他干的就是这个。</p>
+  <p>他忽然懂了自己这行当的价：改一笔，重一分，重到扛不住，第三声收人。收的不是他改的那些名，是他自己。他改了四千多笔，救了四千多个号，自己的号，重了四千多分。救得越多，重得越狠。这就是这笔账的算法——救人者自救不了。</p>
+  <p>谢司主转身，看向那道成口的缝。门开一掌，光从口子里漏进来，落在他脚边。门外，推门人还在——那半只手，还探在缝里，指尖碰着门里这面的木。谢司主看着那只手，看了很久，说：&quot;那是谢家旁支的。名不进册，世代守外头。他推了这些天，推的是我当年没迈的那步。&quot;</p>
+  <p>&quot;他知道你进了？&quot;</p>
+  <p>&quot;不知道。&quot;谢司主说，&quot;他推他的，我进我的。他推门，是为了逼里头的人落笔；里头的人落了，我就能进。他不知道我进了，还会在外头推。推到门全开那日，他才知道。&quot;</p>
+  <p>他心里一沉。门全开那日，推门人进来，看见谢司主在门里，看见谢页落了墨——那日，是什么光景，他不敢想。推门人推了十六天，从试到用劲，手探进半只，推的是谢司主当年没迈的那步。他不知道谢司主已经进了门，还在外头，一下一下，推着。等他推开门全开，走进来，看见谢司主站在门里，握着那半截芯，看见谢页上一个&quot;谢&quot;字墨迹未干——那日，推门人是松手，还是接着推？是道谢，还是质问？他不敢想。</p>
+  <p>他也不敢想另一桩：谢司主进了门，可门还开着一掌，卯眼成口子，外闩断了。谢司主进来，没把门带上。门里多了个人，可这门，还是开的。开着的门，等第二个进来的人。</p>
+  <p>五天。</p>
+  <p>谢页填了，谢司主进了，门里的账，慢了；他自己的命，从十天，变五天。五天，纹到颈根，第三声来。谢司主在门里，能接他的账吗？谢司主守了三十年，接的是守，不是改。四千多笔的账，谢司主未必接得动。他看着谢司主的背影，宽肩，微弓，和推门人一个骨架——门里一个，门外一个，中间是他，卡着，笔刚落，命少了三天。</p>
+  <p>门开一掌，光漏着，推门人的手，还探在缝里。谢司主站在门里，握着半截芯。他站在两人中间，手上有墨，颈上有纹。谢页落了第一个字，谢司主落了第一只脚，门还开着一掌，推门人的手，还探在缝里。三件事，两件落了，一件还悬着——他自己的那笔，还没落。</p>
+  <p>第一百二十八章 完</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，听书键跳转纯语音页 ===== */
+  var TOTAL=130;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<a class="rbtn gold" href="listen.html?ch='+n+'">🎧 听书</a>'+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  var dragging=false;
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a")){show();return;}
+    var w=document.documentElement.clientWidth||document.body.clientWidth;
+    var x=e.clientX||0;
+    /* 左右两侧 1/3 为翻页手势，中间区域用于呼出工具栏 */
+    if(x<w*0.30&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    if(x>w*0.70&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+    if(document.body.classList.contains("ui-show"))hide();else show();
+  });
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  var CH=128, TITLE="谢页落笔";
+  var RKEY="hugo_reader_v1";
+  function loadR(){try{return JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){return{}}}
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function applyPct(p){if(maxH()>0)window.scrollTo(0,maxH()*p/100);}
+  var chapters=(loadR().chapters||{});
+  var st=chapters[CH]||{pct:0};
+  var bm=loadR().bookmark;
+  if(location.hash==="#bookmark"&&bm&&bm.ch===CH&&bm.pct>0){
+    setTimeout(function(){applyPct(bm.pct)},80);
+  }else if(location.hash==="#resume"&&st.pct>0){
+    setTimeout(function(){applyPct(st.pct)},80);
+  }else if(st.pct>=3&&st.pct<95){
+    var tip=document.createElement("div");tip.className="resume-tip";
+    tip.innerHTML="📌 上次读至 "+st.pct+"% · <a href='javascript:void(0)' id='resumeGo'>继续上次位置</a>";
+    document.querySelector(".wrap").prepend(tip);
+    document.getElementById("resumeGo").onclick=function(){applyPct(st.pct);tip.remove();};
+  }
+  if(bm&&bm.ch===CH&&bm.pct>0&&location.hash!=="#bookmark"){
+    var btip=document.createElement("div");btip.className="resume-tip";
+    btip.innerHTML="🔖 本章已安放书签（钉在 "+bm.pct+"%） · <a href='javascript:void(0)' id='bmGo'>回到书签位置</a>";
+    document.querySelector(".wrap").prepend(btip);
+    document.getElementById("bmGo").onclick=function(){applyPct(bm.pct);btip.remove();};
+  }
+  var timer=null;
+  function record(){
+    var m=maxH();if(m<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/m*100));
+    var d=loadR();d.chapters=d.chapters||{};
+    d.chapters[CH]={pct:p,t:Date.now()};
+    d.resume={book:"gudo",ch:CH,name:"第"+CH+"章 · "+TITLE,file:"gudo-"+CH+".html",pct:p,t:Date.now()};
+    saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record()},1000)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(function(){record()},500);
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  if(bm&&bm.ch===CH&&bm.pct>0){btn.textContent="🔖 书签 "+bm.pct+"%";}else{btn.textContent="🔖 书签";}
+  document.getElementById("__bmSlot").appendChild(btn);
+  btn.onclick=function(){
+    var m=maxH();var p=m>0?Math.min(100,Math.round(document.documentElement.scrollTop/m*100)):0;
+    var d=loadR();d.bookmark={book:"gudo",ch:CH,pct:p,t:Date.now()};saveR(d);
+    btn.textContent="✓ 已安放书签 "+p+"%";
+    setTimeout(function(){btn.textContent="🔖 书签"},1800);
+  };
+})();
+
+</script>
+</body>
+</html>
