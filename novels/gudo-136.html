@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第一百三十六章 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第一百三十六章</h1>
+  <p>门开着。风从那道全开的口子灌进来，日日灌，从不歇。</p>
+  <p>谢石立在门里门外之间的那道界上。</p>
+  <p>他脚踏进来了。推门那天起，脚就踩在门里的地上，土味人世味跟着他扑到册山。可他的名没进来。守外支的规矩，名不进册——他推了门，进了门，占不了处。脚踏在门里，人还悬在门外的位上，占的不是册上的椅子，是那道风灌进来的口子。那道口子原本是外闩断的地方。推门那天，三只手按在门上，门自弹全开，外闩断，卯眼成了口子——他当时没想占处，只想把门推开，让门里的人看见门外。如今门全开，他反倒站到了这口子边上，守着风。口子外是土，口子里是册山，他立中间，占的不是哪边，是这口子本身。风从口子进来，先过他的身，再扑到册山，他立着，风慢半分，这半分，是他还推门那笔的——门是他推的，风是他放进来的，他立这，是看着自己放进来的东西，别扑得太急。</p>
+  <p>风从他身侧过去，带着门外的土，带着更外头的人世。他站着，不挡，也不退。守外支的人，一辈子守在门外，如今门开了，他站到了门里这一侧，可册上的名没有他，椅子上没有他，他立着的那一处，是六处保之外的一处空守。</p>
+  <p>他在门外守了这些年，风里听得出味。土味涩，人世味淡，更外头那股淡远的，他说不清，可风一过，他能从里头分出三样。如今站到门里这一侧，风从他身侧灌过去，他不动，风就顺着他衣角拐了半分——他守外支练出的本事，是让风偏，不是让风停。门开前，他在门外让风偏，护着门里的账；门开了，他在门里让风偏，护着这刚裂开的缝。他脚下的石壁山根，被风日吹月吹，磨出一道浅槽，他一只脚正踩在那槽里，像踩了多年踩熟的位置，换了门里门外，脚还认得那槽。</p>
+  <p>主角看着他。谢石方下颌绷着，青胡茬底下那口气压着，和前几日站到谢页前时一个样，只是那时手悬着要落名，此刻手垂着，什么也不落。他占不了处，可他不走。</p>
+  <p>&quot;你站这，&quot;主角说，&quot;占的什么。&quot;</p>
+  <p>谢石没立刻答。风又灌一道，把他衣角带得动了动。他抬了抬下巴，指那道口子：&quot;占的不是位。是这股风。门开了，风从这里进来，我守了一辈子外支，知道风往哪偏，味往哪沉。我立在这，风进来慢半分。&quot;</p>
+  <p>门开前，他在门外头，风往门里灌，他站在外闩边上，听风里有没有不对的味——土味重了，是外头土松；人世味重了，是外头有人过；更外头那股淡远的，他听了多年也没听出是什么，只知风一过就偏头让开。有不对的味，他用自己的身形把风偏开，护着里头的账顺。外闩没断时，他偏的是门外头的风；外闩断了，他偏的是门里刚裂开的缝。守外支的活，说到底是让风别往账上扑，他干了一辈子，如今门开了，风更大了，他偏的力也更大了，脚下那道槽踩得更实。</p>
+  <p>主角没说话。他看谢石脚下——那道界，门里是石壁山的根，门外是土。谢石一只脚踩石，一只脚踩土，中间那道缝，是他立着的地方。册山上的名影照过来，照到他身上就止了，照不进他名，因为他没名。</p>
+  <p>&quot;账房数到你，收的什么。&quot;主角问。</p>
+  <p>谢石摇头：&quot;收的空。我名不进册，它数不到我。我立在这，是门里的风口，不是册上的保。&quot;</p>
+  <p>主角想着那六处保。自己一处，谢司主一处，外头三人三处，活空一处——六处，排法调了，数回不了七。谢石是第七个立着的，可他占不了处，不在六处里，也不在七处里，他是一处&quot;空守&quot;。账房数到他名下，收的空，可这空，是活人立着的空，不是绝户的空，不是折了的空。</p>
+  <p>白灯照着这一幕。灯只照不担，照见谢石立在那道口子，照见风从他身侧过去，照见他占不了处的那道界，不替他扛，也不替他落名。灯照见他脚下那道槽，照见风被他衣角带得慢了半分，照见他占不了处的影，立在那道界上——别的影占着保，他的影占着风，灯都照见，都不替他变。灯照见一个占不了处却立得住的人，和册山上那些占着位的影不是一个样，可它不评判，只照，照完，就走了。</p>
+  <p>帐房在那头数着。</p>
+  <p>它立在册山那头，一团影，手按在册上，一个数，一按，收的，是空。门开这些天，它照旧数，照旧按，只在前日数到主角名下时，顿了半息，收了个不空。那半息是第一道缝，缝里透风。</p>
+  <p>今日它数到外头三人轮担的那三处保。</p>
+  <p>第一个，外头老人轮的那处，它数，按，收空。第二个，中年人轮的那处，它数，按，收空。第三个——</p>
+  <p>它的手顿了。</p>
+  <p>不是半息。比在主角名下那一下长。手按在册上，停了一停，像被那处保上&quot;在&quot;的字带了一下。外头三人轮担的保，担的是&quot;在&quot;，不是绝户，不是活空，是有人在外头守着的&quot;在&quot;。账房数到&quot;在&quot;字的保，手顿了一顿。它认了一辈子空，空是顺的，手按下去就收走，不费劲。可&quot;在&quot;字它没碰过几回——暗账上记的&quot;在&quot;，它是绕过去划一道痕，不算数到；今日数到外头三人的&quot;在&quot;保，是头一回正正数到&quot;在&quot;上还按下去。那股&quot;在&quot;的气息从册上泛起来，像拨了它记性坏的那根弦，弦颤了一下，手就停了。它分不清这颤是收不动还是认不得，只觉得手底下的名，明明灭灭，不是一个能收走的空，是一团还在着的、它数了四千年都没数清的东西。手停在那，等那股颤过去。</p>
+  <p>主角看着那团影。前日它顿在主角名下，收了个不空，缝裂了第一道。今日它顿在外头三人的&quot;在&quot;保上——缝，宽了。它认空认了四千年，空是它唯一的收，手按下去，收走，名影灭，顺得很。如今碰到&quot;在&quot;，记性坏的那根弦被拨了一下，它分不清这颤是收不动还是认不得——不空是有人担，在是有人守，两样都让它手顿，可两样不是一回事。它收了一辈子空，碰到有人担有人守的名，手就停，像那根弦被拨了两回，一回在主角，一回在外头三人，弦颤得久了，缝就宽。</p>
+  <p>谢石也看着。他立在那道口子，风因为他立着慢了半分，可账房身上的缝，因为他推门带进来的味，宽了半分。他推门带进来的，是守了一辈子的外支味——土味人世味，原在门外头，如今扑到册山，让账房碰到&quot;在&quot;就顿。他没想到自己护了一辈子的味，进了门会让账房收不动。守外支是护账，门一开，他护的味反倒让账房顿了，这层他懵，立在风口，说不清。两个守外的人，一个让风慢，一个让缝宽，门开后的松动，从主角名下那一处，扩到了外头三人的&quot;在&quot;保。</p>
+  <p>&quot;它又顿了。&quot;谢石说。</p>
+  <p>&quot;顿在&#39;在&#39;字上。&quot;主角说，&quot;外头三人轮的那三处，担的是在，不是空。账房数到在，手顿——它收了一辈子空，头一回碰到不空，是主角；第二回碰到在，是外头三人。缝宽了。&quot;</p>
+  <p>帐房的手，停在第三个&quot;在&quot;保上，很久。久到风灌进来又退出去一道。然后它手落下去，按了，收的，是空——可那一顿，留在册上，像多裂了一道缝。先前那道缝在主角名下，如今这道缝在外头三人的&quot;在&quot;保上，两道缝，都透风。</p>
+  <p>主角走过去，看册山上那三处保。外头三人轮担的格局，担的是&quot;在&quot;，飘号群里落位的那些，担的也是&quot;在&quot;。三处保上的&quot;在&quot;字，墨色和外头三人的名影连着，可三样&quot;在&quot;不一样重：老人轮的那处，名影稳，墨色实；中年人轮的那处，名影晃，墨色浅；第三人那处，名影淡，墨色虚。账房手顿的长短跟着&quot;在&quot;的轻重走——头一处顿半息，第二处顿一息，第三处顿得久，因为淡的&quot;在&quot;它更认不得。账房数到&quot;在&quot;，手顿——它不是收不动&quot;在&quot;，是碰&quot;在&quot;字时，记性坏的那根弦，被拨了一下。四千多年，它只认空，不认在；如今门开了，在进来了，它数到在，手就顿，顿的长短，跟着&quot;在&quot;的轻重走。</p>
+  <p>&quot;下一笔，&quot;主角说，&quot;它数到飘号落位的那些在，会不会也顿。&quot;</p>
+  <p>谢石立在风口，没答。风慢了半分，可他眼里那股压着的气，和账房身上的缝一个理——门开后的松动，扩开了。</p>
+  <p>白灯照着册山，照见那两道缝。灯只照不担，照见缝宽了，不替它合，也不替它补。一道缝在主角名下，一道缝在外头三人的&quot;在&quot;保上，两道都透风，风灌进来，味也进来。灯不替合，也不替补，只照见缝宽了，照见门开后的账，裂了第一道，裂了第二道，接着还会有第三道——飘号的在，等着它数到，弦还要颤。灯照见这些，不担，走了。它照了一辈子门里的账，如今照见账裂了缝，不替谁补，也不替谁慌，只照，照完，光移开，落回册山。</p>
+  <p>主角回看谢石。他立在那道口子，一只脚踩石，一只脚踩土，中间那道缝是他占不了处的界。账房数不到他，收他收的空，可他立着，风慢半分，这门里的风，因他站着，灌得没那么急。</p>
+  <p>主角想起保的排法。他那一处，谢司主接了闩位一处，外头三人轮着三处，活空一道，六样摆着，数回不了七。谢石立着的这一处，不在六样里，也不是第七样保，他是门栓口那道活的守。账房数到他名下，收的是空，可那空和绝户的空不是一回事：绝户的空，收走就没了，名影灭了；谢石这空，立着，风慢半分，味也慢半分进来，门里的账，因他立着，少受些味扑。他是空，可这空是活的，替六处保挡了半分门外的东西。</p>
+  <p>&quot;你立这，&quot;主角说，&quot;账房收你收的空。可风因为你慢了半分，这半分，是六处保之外的第七处——一处空守。&quot;</p>
+  <p>谢石垂着眼。他不想落名，爹临终摁着他手说的那句话，他记着：守外支的，宁可自己没名，也不能让门里的账混了。他推门，是替门里谢家迈那两步；他立在这，是替门里守那道风口。名不进册，他认；占不了处，他认。可他立着，风慢半分，这门，因他立着，少灌了些味。</p>
+  <p>&quot;我占不了处，&quot;谢石说，&quot;可我立得住。门开了，风从这进来，我守了一辈子外支，知道风往哪偏。我立这，风进来慢半分，账房身上的缝，宽半分——两样，都是我立这带出来的。&quot;</p>
+  <p>主角懂了。谢石占不了处，但他立着，是门里的一处活的守。六处保数回不了七，可谢石这一处空守，不在数里，也不在保外，他在那道界上，把风拦了半分，把缝宽了半分。门开后的松动，因他立着，扩了一半，也因他立着，慢了一半。</p>
+  <p>白灯照着谢石立界的身形。灯只照不担，照见他一只脚踏石一只脚踏土，照见风从他身侧慢了半分，照见他占不了处的那道缝，不替他落名，也不替他占处。灯照见这处空守，和六处保的影不是一个样——六处保的影占着位，他的影占着风。灯把这道界照得清清楚楚：一边是册上的名，一边是门外的土，他立中间，哪边都不占，就占那道风。灯不替他选边，也不替他落名，只照见他立着，风慢半分，和门里别的守不一样：别的守占保，他守风，风慢了，门里的账就少受些扑。灯照见这一层，走了。</p>
+  <p>帐房在那头，又数起来。它数完外头三人的&quot;在&quot;保，手顿过两回，收的空，可缝宽了。下一笔，它数到飘号落位的那些在——飘号群排在光里，号影比册上的名淡，担的&quot;在&quot;也淡，可也是&quot;在&quot;。账房手按下去，弦颤第三回，比前两回轻，可还是颤了。它收的空，可缝又宽了一道。主角看那团影，数了四千年没停过，如今一日三颤，缝一日三宽，门开后的账，它还在数，数着的味一日比一日杂，土味人世味更外头的淡远味，全灌进来，它手底下的名，明明灭灭，收不净，也收不动。</p>
+  <p>主角等着。他站在这开了的门里，颈根那道纹沉着，没爬。谢石立在那道口子，风慢半分。账房身上的两道缝，透着风。门开后的松动，从主角名下那一处不空，扩到了外头三人的在，扩到了飘号落位的在，缝一日宽一日。他看那排光里的飘号群——四千多号，门开后聚起来，原不在册上，如今排在光里等落位，担的也是&quot;在&quot;，不是绝户，比外头三人的&quot;在&quot;更淡，可也是&quot;在&quot;。账房下一笔数到飘号，碰到这股淡在，弦会颤第三回。主角算着：头回颤在主角，二回颤在外头三人，三回要颤在飘号，一回比一回淡，可一回比一回多，缝就一日宽一日，挡不住。</p>
+  <p>&quot;它下一笔数到飘号，&quot;主角说，&quot;顿不顿，看在字上头的担。担的是在，它手就顿；担的是空，它手就顺。门开了，在进来了，它收了一辈子空，碰在就顿——这顿，是裂的第二道缝，第三道缝，会接着来。&quot;</p>
+  <p>谢石立在风口，没动。风因为他立着慢了半分，可他眼里那股气，压着，和这门开后的松动一个理：链子一动，一样带一样，从门开那下起，没停过。他看着账房身上的缝，想起推门那天——门开那下，他没想过会带出这么多。他只想替门里谢家迈那两步，推门、填位。推门迈了，填位没迈成，他站到谢页前，手悬着，没落名。如今门开着，风灌，缝裂，他立在这风口，反倒成了门里的一道活的守。他没落名，可他立着，门开后的事，他脱不了干系——推门是他推的，风是他放进来的，缝是他带出来的，他立在这，是还这笔。</p>
+  <p>主角摸颈根。那道纹沉了一线，压着，没爬。他站在这，看谢石立界，看账房顿缝，看六处保之外的第七处空守——门开后的事，一件件摆出来，占不了处的人立着，收不动的账房顿着，两样，都是门带出来的。他算自己的保：他那一处担分了，不空，纹才停在颈根；谢石这一处空守，和他那处不空不是一个理——他的是担分了保不空，谢石的是立着占风不落名。两样都让账房顿过：他顿在&quot;不空&quot;，谢石带进来的味让缝宽在&quot;在&quot;。占不了处的人立着，收不动的账房顿着，六处保的力往哪挪还没定，可这两样先摆出来了，门开后的局，从这两样起，就立住了。</p>
+  <p>门开着。风灌着。谢石立在那道口子，一只脚踩石一只脚踏土，风慢半分。账房身上的缝，宽了半分。主角站在这，颈根沉着，等账房下一笔数到飘号的在，看它顿不顿。</p>
+  <p>风又灌一道，谢石衣角动了动，他脚下的槽踩得更实。账房身上的缝，今日宽了半分，明日还会宽——门开后的松动，挡不住，只能看着它宽。主角站在这，颈根那道纹沉着，没爬。占不了处的人立着，收不动的账房顿着，两本账的界线糊着，纹沉着，四样压着，一件件要答。他等账房下一笔，也等门开后，这处空守的人，立到哪天。门开着，灯照着，风灌着，味进来，这一夜，门里照着一个人立界的影，和账房身上两道透风的缝。风不歇，缝不合，占不了处的人立着，等门开后这处空守走到哪天。主角摸颈根，那道纹沉着，没爬——门开后的局，立住了，从一个人立界的影起，从两道透风的缝起，从这一夜风灌味进来起。</p>
+  <p>第一百三十六章 完</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，听书键跳转纯语音页 ===== */
+  var TOTAL=140;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<a class="rbtn gold" href="listen.html?ch='+n+'">🎧 听书</a>'+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  var dragging=false;
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a")){show();return;}
+    var w=document.documentElement.clientWidth||document.body.clientWidth;
+    var x=e.clientX||0;
+    /* 左右两侧 1/3 为翻页手势，中间区域用于呼出工具栏 */
+    if(x<w*0.30&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    if(x>w*0.70&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+    if(document.body.classList.contains("ui-show"))hide();else show();
+  });
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  var CH=136, TITLE="";
+  var RKEY="hugo_reader_v1";
+  function loadR(){try{return JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){return{}}}
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function applyPct(p){if(maxH()>0)window.scrollTo(0,maxH()*p/100);}
+  var chapters=(loadR().chapters||{});
+  var st=chapters[CH]||{pct:0};
+  var bm=loadR().bookmark;
+  if(location.hash==="#bookmark"&&bm&&bm.ch===CH&&bm.pct>0){
+    setTimeout(function(){applyPct(bm.pct)},80);
+  }else if(location.hash==="#resume"&&st.pct>0){
+    setTimeout(function(){applyPct(st.pct)},80);
+  }else if(st.pct>=3&&st.pct<95){
+    var tip=document.createElement("div");tip.className="resume-tip";
+    tip.innerHTML="📌 上次读至 "+st.pct+"% · <a href='javascript:void(0)' id='resumeGo'>继续上次位置</a>";
+    document.querySelector(".wrap").prepend(tip);
+    document.getElementById("resumeGo").onclick=function(){applyPct(st.pct);tip.remove();};
+  }
+  if(bm&&bm.ch===CH&&bm.pct>0&&location.hash!=="#bookmark"){
+    var btip=document.createElement("div");btip.className="resume-tip";
+    btip.innerHTML="🔖 本章已安放书签（钉在 "+bm.pct+"%） · <a href='javascript:void(0)' id='bmGo'>回到书签位置</a>";
+    document.querySelector(".wrap").prepend(btip);
+    document.getElementById("bmGo").onclick=function(){applyPct(bm.pct);btip.remove();};
+  }
+  var timer=null;
+  function record(){
+    var m=maxH();if(m<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/m*100));
+    var d=loadR();d.chapters=d.chapters||{};
+    d.chapters[CH]={pct:p,t:Date.now()};
+    d.resume={book:"gudo",ch:CH,name:"第"+CH+"章 · "+TITLE,file:"gudo-"+CH+".html",pct:p,t:Date.now()};
+    saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record()},1000)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(function(){record()},500);
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  if(bm&&bm.ch===CH&&bm.pct>0){btn.textContent="🔖 书签 "+bm.pct+"%";}else{btn.textContent="🔖 书签";}
+  document.getElementById("__bmSlot").appendChild(btn);
+  btn.onclick=function(){
+    var m=maxH();var p=m>0?Math.min(100,Math.round(document.documentElement.scrollTop/m*100)):0;
+    var d=loadR();d.bookmark={book:"gudo",ch:CH,pct:p,t:Date.now()};saveR(d);
+    btn.textContent="✓ 已安放书签 "+p+"%";
+    setTimeout(function(){btn.textContent="🔖 书签"},1800);
+  };
+})();
+
+</script>
+</body>
+</html>
