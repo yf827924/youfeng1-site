@@ -18,6 +18,8 @@
      鸿蒙/安卓 WebView 的地址栏与手势条会吃掉一段高度，100vh 算出来的偏大，底部内容被挤出屏幕。 */
   #wrap { position:relative; width:100vw; height:100vh; height:100dvh; height:var(--app-h, 100dvh); }
   canvas { background:#231a10; touch-action:none; width:100%; height:100%; display:block; }
+  /* 3D 层上的 2D 叠层画布必须透底，否则不透明底色会盖住 WebGL 战斗/走镖画面 */
+  #combat, #escort { background:transparent; }
   .hud { position:absolute; top:max(10px, var(--sa)); left:10px; right:10px; display:flex; justify-content:space-between; gap:8px; font-size:14px; pointer-events:none; z-index:5; }
   .pill { background:rgba(20,15,8,.78); border:1px solid #6b4f2a; border-radius:999px; padding:4px 8px; white-space:nowrap; font-size:12px; }
   .pill b { color:#ffd479; }
@@ -262,6 +264,7 @@
   <!-- 登录 / 注册 -->
   <div id="authScreen" class="overlay authScreen" data-page-node-id="yteBLBntTvE3bj3bpTMIxC">
     <h1 data-page-node-id="VMVSVlCym5jn4emmXOjz4G">威远镖局</h1>
+    <div id="auth3d" style="width:min(86%,320px);height:150px;border-radius:12px;overflow:hidden;border:2px solid #6b4f2a;background:radial-gradient(circle at 50% 30%,#3a2c18,#160f07);margin-bottom:10px;" data-page-node-id="auth3dVignette"></div>
     <p data-page-node-id="kbNU4sOsaXmGvQeNKuQIYm">登录或注册账号，进度自动存档于本机浏览器。</p>
     <div style="display:flex;flex-direction:column;gap:10px;width:min(86%,320px);" data-page-node-id="GYXFAiQvFB8YWrm3ig7tyD">
       <input id="authUser" placeholder="用户名" autocomplete="username" data-page-node-id="32DHBDMImA9w3rFAoFn55R">
@@ -292,7 +295,8 @@
 
   <!-- 走镖动画层 -->
   <div id="escortLayer" class="escortCanvas hidden" data-page-node-id="yuGDEOO3kze3ozcm3T01J5">
-    <canvas id="escort" data-page-node-id="KoAF006hJPDj2Y9C7nzmDj"></canvas>
+    <div id="travel3D" style="position:absolute;inset:0;z-index:1;"></div>
+    <canvas id="escort" style="position:relative;z-index:2;pointer-events:none;" data-page-node-id="KoAF006hJPDj2Y9C7nzmDj"></canvas>
   </div>
 
   <!-- 回合制战斗层 -->
@@ -1456,6 +1460,11 @@ function drawPortraitCard(img, corner, name, sub, color){
 }
 function spawnHitFx(who, crit){
   if(!combat) return;
+  // 3D 同步特效：挥砍弧光扫过受击方 + 受击方材质闪白
+  if(typeof B3D !== 'undefined' && B3D.isReady() && B3D.stageName() === 'battle'){
+    B3D.slashFX(who === 'enemy' ? 'R' : 'L', crit ? 0xffffff : 0xffd870);
+    B3D.hitFlash(who === 'enemy' ? 'R' : 'L');
+  }
   const X = who === 'enemy' ? CWW * 0.80 : CWW * 0.20;
   const Y = CWH * 0.32;
   combat.fx.push({ type:'slash', x:X, y:Y, t:0, life:0.35, crit:!!crit });
@@ -1868,7 +1877,7 @@ function resizeEscortCanvas(){
   ecv.height = _appVisibleH();
 }
 resizeEscortCanvas();
-window.addEventListener('resize', resizeEscortCanvas);
+window.addEventListener('resize', function(){ resizeEscortCanvas(); if(B3D.isReady()) B3D.resize(); });
 
 function startEscort(order, e){
   e.busy = true; renderOrders();
@@ -1923,7 +1932,16 @@ function startEscort(order, e){
   enc.sort((a,b)=> a.pos - b.pos);
   window.travel = { order, e, nodes, ww, wh, scale, t0:performance.now(), dur, enc, ended:false };
 
+  // 3D 走镖场景：马车 + 押镖镖师 + 沿途景物（3D 不可用时回退 2D 舆图）
+  if(B3D.isReady()){
+    B3D.mount(document.getElementById('travel3D'));
+    B3D.setStage('travel');
+    B3D.setTravel(escort3DCfg(e), todayWeather());
+    B3D.setPaused(false);
+  }
+
   function showTravelEvent(ev){
+    if(B3D.isReady()) B3D.setPaused(true);   // 途中事件：3D 走镖画面暂停（景物/行走定格）
     const te = order.adventure ? ADVENTURES_BY_ID[order.adventure] : TRAVEL_EVENTS[rnd(0, TRAVEL_EVENTS.length-1)];
     const modal = document.createElement('div'); modal.className='modal';
     let html = '<div class="box"><h3>📍 走镖途中 · '+te.t+'</h3>';
@@ -1944,25 +1962,34 @@ function startEscort(order, e){
         showResultModal('📍 '+te.t, msg);
         renderAll();
         // 走镖动画保持暂停，结果弹窗关闭时经 onResumeModal → _pendingResume 自动续走
-        window._pendingResume = ()=>{ travel.t0 = performance.now() - ev.pos*travel.dur; travel.raf = requestAnimationFrame(frame); };
+        window._pendingResume = ()=>{ if(B3D.isReady()) B3D.setPaused(false); travel.t0 = performance.now() - ev.pos*travel.dur; travel.raf = requestAnimationFrame(frame); };
       } else { resumeTravel(ev); }
     });
     document.getElementById('wrap').appendChild(modal);
   }
   function resumeTravel(ev){
+    if(B3D.isReady()) B3D.setPaused(false);
     travel.t0 = performance.now() - ev.pos*travel.dur;
     travel.raf = requestAnimationFrame(frame);
   }
   function frame(now){
     if(travel.ended) return;
     const p = clamp((now - travel.t0)/travel.dur, 0, 1);
-    drawMap(nodes, p, ww, wh, false); // 不绘制出发地与运镖车之间的连线
-    const pos = posOnPath(nodes, p);
-    ectx.font = '32px serif'; ectx.textAlign='center';
-    ectx.fillText('🐴', pos.x, pos.y);
-    ectx.fillText('📦', pos.x, pos.y-32);
-    ectx.fillStyle='#5a3a1a'; ectx.font='15px "KaiTi","STKaiti",serif';
-    ectx.fillText('走镖 '+Math.round(p*100)+'%  ·  '+destCity, ww/2, wh-28);
+    if(B3D.isReady()){
+      // 3D 走镖画面 + 2D 叠层：右上小舆图 + 底部进度条
+      B3D.render(1/60, {});
+      ectx.clearRect(0,0,ww,wh);
+      drawMiniMap(nodes, p, ww, wh);
+      drawTravelProgress(p, destCity, ww, wh);
+    } else {
+      drawMap(nodes, p, ww, wh, false); // 不绘制出发地与运镖车之间的连线
+      const pos = posOnPath(nodes, p);
+      ectx.font = '32px serif'; ectx.textAlign='center';
+      ectx.fillText('🐴', pos.x, pos.y);
+      ectx.fillText('📦', pos.x, pos.y-32);
+      ectx.fillStyle='#5a3a1a'; ectx.font='15px "KaiTi","STKaiti",serif';
+      ectx.fillText('走镖 '+Math.round(p*100)+'%  ·  '+destCity, ww/2, wh-28);
+    }
     for(const ev of travel.enc){
       if(!ev.done && !ev.fired && p >= ev.pos){
         ev.fired = true;
@@ -2095,7 +2122,7 @@ function showSettlement(order, e, outcome, s){
   m.classList.remove('hidden');
   if(can3D){
     const ec3d = document.getElementById('ec3d');
-    if(ec3d){ B3D.mount(ec3d); B3D.setStage('preview'); B3D.setCharacter(B3D.buildCharacter(client3DCfg(c))); B3D.render(0, {}); }
+    if(ec3d){ B3D.mount(ec3d); B3D.setStage('preview'); B3D.setCharacter(B3D.modelChar('client_female.glb', 0.42, client3DCfg(c))); B3D.render(0, {}); }
   }
   document.getElementById('ecContinue').onclick = ()=>{
     m.classList.add('hidden');
@@ -2117,6 +2144,43 @@ function showSettlement(order, e, outcome, s){
   };
 }
 
+
+// ===== 走镖 3D 模式下的 2D 叠层：右上角小舆图 + 底部进度条 =====
+function drawMiniMap(nodes, p, ww, wh){
+  const k = ww >= 900 ? 0.20 : 0.28;
+  const mw = ww*k, mh = wh*k, mx = ww-mw-10, my = 10;
+  ectx.save();
+  ectx.beginPath(); ectx.rect(mx,my,mw,mh); ectx.clip();
+  ectx.fillStyle='rgba(24,17,9,0.62)'; ectx.fillRect(mx,my,mw,mh);
+  ectx.translate(mx,my); ectx.scale(k,k);
+  // 全程虚线
+  ectx.strokeStyle='rgba(200,168,106,0.85)'; ectx.lineWidth=2/k; ectx.setLineDash([8/k,8/k]);
+  ectx.beginPath(); ectx.moveTo(nodes[0].x,nodes[0].y);
+  for(let i=1;i<nodes.length;i++) ectx.lineTo(nodes[i].x,nodes[i].y);
+  ectx.stroke(); ectx.setLineDash([]);
+  // 已走实线
+  const done = posOnPath(nodes, p);
+  ectx.strokeStyle='#d05a3a'; ectx.lineWidth=3/k;
+  ectx.beginPath(); ectx.moveTo(nodes[0].x,nodes[0].y); ectx.lineTo(done.x,done.y); ectx.stroke();
+  // 驿站节点 + 地名
+  nodes.forEach(function(n,i){
+    ectx.fillStyle = i <= Math.round(p*(nodes.length-1)) ? '#e0b25a' : '#c0392b';
+    ectx.beginPath(); ectx.arc(n.x,n.y,7/k,0,Math.PI*2); ectx.fill();
+    ectx.fillStyle='#f0e2c0'; ectx.font=(13/k)+'px "KaiTi","STKaiti",serif'; ectx.textAlign='center';
+    ectx.fillText(n.name, n.x, n.y + (n.y < wh/2 ? -18/k : 26/k));
+  });
+  ectx.restore();
+  ectx.strokeStyle='#8a6a3a'; ectx.lineWidth=2; ectx.strokeRect(mx,my,mw,mh);
+}
+function drawTravelProgress(p, destCity, ww, wh){
+  const bw = Math.min(300, ww*0.55), bx = (ww-bw)/2, by = wh-34;
+  ectx.fillStyle='rgba(24,17,9,0.6)'; ectx.fillRect(bx-8, by-26, bw+16, 46);
+  ectx.strokeStyle='#8a6a3a'; ectx.lineWidth=1; ectx.strokeRect(bx-8, by-26, bw+16, 46);
+  ectx.fillStyle='#3a2c18'; ectx.fillRect(bx, by, bw, 10);
+  ectx.fillStyle='#d8a84a'; ectx.fillRect(bx, by, bw*clamp(p,0,1), 10);
+  ectx.fillStyle='#f0dfb8'; ectx.font='13px "KaiTi","STKaiti",serif'; ectx.textAlign='center';
+  ectx.fillText('🛣️ 走镖 ' + Math.round(p*100) + '% · 前往' + destCity, ww/2, by-10);
+}
 
 // ===== 古朴走镖舆图绘制 =====
 function drawMountain(cx, baseY, h, scale){
@@ -3795,7 +3859,7 @@ function openRecruit(){
     const prev = modal.querySelector('#recruit3D');
     cs.forEach((e,idx)=>{
       const op = modal.querySelector('.opt[data-i="' + idx + '"]');
-      op.onmouseenter = ()=>{ if(B3D.isReady()){ B3D.mount(prev); B3D.setStage('preview'); B3D.setCharacter(B3D.buildCharacter(escort3DCfg(e))); } };
+      op.onmouseenter = ()=>{ if(B3D.isReady()){ B3D.mount(prev); B3D.setStage('preview'); B3D.setCharacter(escortModelFor(e)); } };
       op.onclick = ()=>{
         if(silver < e.cost){ toast('银两不足，招募需 ' + e.cost + ' 两'); return; }
         silver -= e.cost; const ee = e; escorts.push(ee);
@@ -3804,7 +3868,7 @@ function openRecruit(){
     });
     const re = modal.querySelector('#reReroll');
     if(re) re.onclick = ()=>{ const ncs=[]; for(let i=0;i<4;i++){ const e=makeEscort(); e.wuli=clamp(e.wuli+rnd(0,8),20,95); ncs.push(e); } paint(ncs); };
-    if(B3D.isReady() && cs[0]){ B3D.mount(prev); B3D.setStage('preview'); B3D.setCharacter(B3D.buildCharacter(escort3DCfg(cs[0]))); }
+    if(B3D.isReady() && cs[0]){ B3D.mount(prev); B3D.setStage('preview'); B3D.setCharacter(escortModelFor(cs[0])); }
   }
   const init=[]; for(let i=0;i<4;i++){ const e=makeEscort(); e.wuli=clamp(e.wuli+rnd(0,8),20,95); init.push(e); }
   paint(init);
@@ -3921,6 +3985,14 @@ const B3D = (function(){
   let renderer, scene, camera, clock, ready = false;
   let charL = null, charR = null, single = null, singleMode = 'char';
   let target = null;
+  let ambient = {};   // 舞台氛围件（GLB）：按舞台显隐
+  let stageName = 'gate', paused = false;
+  // 走镖 3D：travelG 场景组（官道+树石卷动）+ 马车 + 押镖镖师
+  let travelG = null, tCart = null, tWalker = null, tProps = [], tGround = null, tRoad = null;
+  const T_SPEED = 7.5;
+  // 战斗 3D 特效：挥砍弧光 + 受击闪白
+  let fx3d = [], fxGeo = null, flashL = 0, flashR = 0;
+  let flames = [];
   function init(){
     if(typeof THREE === 'undefined') return false;
     try {
@@ -3945,6 +4017,51 @@ const B3D = (function(){
           scene.add(l);
         });
       });
+      // 舞台氛围件：battle=牌楼+石狮对（镖局大门），prop=兵器架+银箱+元宝堆（库房）
+      function addAmbient(key, file, pos, scl, ry){
+        loadGLB(file, function(m){
+          if(!m) return;
+          m.scale.setScalar(scl);
+          m.position.set(pos[0], pos[1], pos[2]);
+          if(ry) m.rotation.y = ry;
+          m.visible = false;
+          scene.add(m);
+          ambient[key] = m;
+        });
+      }
+      addAmbient('gate',  'banner_pole.glb',  [0, 1.85, -3.5],  1.7,  0);
+      addAmbient('lionL', 'lion.glb',         [-2.15, 0, -3.0], 0.5,  0.55);
+      addAmbient('lionR', 'lion.glb',         [2.15, 0, -3.0],  0.5, -2.6);
+      addAmbient('rack',  'weapon_rack.glb',  [-2.0, 0, -2.4],  0.75, 0);
+      addAmbient('chest2','silver_chest.glb', [2.0, 0, -2.4],   0.75, 0);
+      addAmbient('pile',  'silver_pile.glb',  [2.3, 0, -1.4],   0.5,  0);
+      // ===== 战斗环境：演武场地面 + 远山剪影 + 火把 =====
+      const bGround = new THREE.Mesh(new THREE.CircleGeometry(9, 36), mat(0x4a3d24, 5));
+      bGround.rotation.x = -Math.PI/2; bGround.position.y = -0.005;
+      bGround.visible = false; scene.add(bGround); ambient['bGround'] = bGround;
+      [[-5,-14,2.6],[5,-16,3.4],[0,-18,3.0],[8.5,-12,2.2],[-8.5,-12,2.2]].forEach(function(a,i){
+        const hill = new THREE.Mesh(new THREE.ConeGeometry(a[2], a[2]*1.15, 7), mat(0x1f180e, 3));
+        hill.position.set(a[0], a[2]*0.5, a[1]);
+        hill.visible = false; scene.add(hill); ambient['bHill'+i] = hill;
+      });
+      [-2.1, 2.1].forEach(function(x, i){
+        const tg = new THREE.Group();
+        const pole = cyl(0.05, 0.065, 1.7, 0x4a3418, 8); pole.position.y = 0.85; tg.add(pole);
+        const flame = new THREE.Mesh(new THREE.ConeGeometry(0.16, 0.5, 8), new THREE.MeshBasicMaterial({ color: 0xffa04a }));
+        flame.position.y = 1.85; tg.add(flame); flames.push(flame);
+        tg.position.set(x, 0, -2.3);
+        tg.visible = false; scene.add(tg); ambient['torch'+i] = tg;
+      });
+      // 演武场背景 GLB（模型到位后自动替换程序化远山剪影，失败保持远山）
+      loadGLB('arena.glb', function(m){
+        if(!m) return;
+        m.scale.setScalar(4.2);
+        m.position.set(0, 0, -7.2);
+        m.visible = false; scene.add(m); ambient['arenaBk'] = m;
+        setStage(stageName);
+      }, true);
+      // ===== 走镖 3D 场景：官道 + 沿途树石（渲染帧内卷动） =====
+      buildTravelScene();
       clock = new THREE.Clock();
       ready = true; return true;
     } catch(e){ console.warn('B3D init fail', e); return false; }
@@ -3954,11 +4071,11 @@ const B3D = (function(){
   let _gltfLoader = null;
   const _glbCache = {};
   const GLB_MAP = { weapon:'sword.glb', gear:'chest.glb', herb:'jar.glb' };
-  function loadGLB(name, cb){
+  function loadGLB(name, cb, silent){
     if(_glbCache[name]){ cb(_glbCache[name].clone(true)); return; }
     if(typeof THREE.GLTFLoader === 'undefined'){ try{ toast('⚠️ GLTFLoader 未加载，3D 道具回退'); }catch(e){} cb(null); return; }
     if(!_gltfLoader) _gltfLoader = new THREE.GLTFLoader();
-    _gltfLoader.load('models/' + name, function(gltf){
+    const onParse = function(gltf){
       const src = gltf.scene;
       // 归一化：缩放到统一尺寸 + 居中到原点（转台动画按轴心处理）
       let box = new THREE.Box3().setFromObject(src);
@@ -3969,10 +4086,33 @@ const B3D = (function(){
       src.position.sub(box.getCenter(new THREE.Vector3()));
       _glbCache[name] = src;
       cb(src.clone(true));
-    }, undefined, function(err){
-      try{ toast('⚠️ 3D 模型加载失败: ' + name + (err && err.message ? ' · ' + err.message : '')); }catch(e){}
+    };
+    const onErr = function(err){
+      if(!silent){ try{ toast('⚠️ 3D 模型加载失败: ' + name + (err && err.message ? ' · ' + err.message : '')); }catch(e){} }
       cb(null);
-    });
+    };
+    // file:// 协议下 fetch/XHR 被浏览器禁止，GLTFLoader 无法直读本地 .glb；
+    // 改用 <script> 标签加载 base64 版（models/xxx.glb.js，<script> 在 file:// 下允许）。
+    if(location.protocol === 'file:' || window.__forceGLBJs){
+      const el = document.createElement('script');
+      const url = 'models/' + name + '.js';
+      el.onload = function(){
+        const b64 = window.__GLB && window.__GLB[name];
+        if(!b64){ onErr(new Error('embedded data missing: ' + name)); return; }
+        try{
+          const bin = atob(b64);
+          const arr = new Uint8Array(bin.length);
+          for(let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+          const buf = arr.buffer.slice(arr.byteOffset, arr.byteOffset + arr.byteLength);
+          _gltfLoader.parse(buf, '', onParse, onErr);
+        }catch(e){ onErr(e); }
+      };
+      el.onerror = function(){ onErr(new Error('script not found: ' + url)); };
+      el.src = url;
+      document.head.appendChild(el);
+      return;
+    }
+    _gltfLoader.load('models/' + name, onParse, undefined, onErr);
   }
   function setPropGLB(cfg){
     const g = buildProp(cfg);
@@ -4122,7 +4262,7 @@ const B3D = (function(){
     if(cfg.traitKey === 'tie'){ const sh = box(0.85, 0.62, 0.10, 0x3a5a8a); sh.position.set(-0.42, 1.12, -0.30); sh.rotation.y = 0.25; g.add(sh); }
     if(cfg.traitKey === 'meng'){ const cl = box(0.90, 1.15, 0.05, 0xc0392b); cl.position.set(-0.06, 0.9, -0.34); cl.rotation.z = 0.08; g.add(cl); }
 
-    g.userData.parts = { torso: torso, head: head, armR: armR, belt: belt };
+    g.userData.parts = { torso: torso, head: head, armR: armR, armL: armL, legL: legL, legR: legR, belt: belt };
     return g;
   }
   function buildProp(cfg){
@@ -4229,42 +4369,234 @@ const B3D = (function(){
     renderer.setSize(w, h, false);
     camera.aspect = w / h; camera.updateProjectionMatrix();
   }
-  function setStage(mode){
-    if(mode === 'battle'){ camera.position.set(0,1.2,5.2); camera.lookAt(0,1.0,0); }
-    else { camera.position.set(0,1.25,3.9); camera.lookAt(0,1.05,0); }
+  // ===== 走镖 3D 场景 =====
+  function buildTree(){
+    const g = new THREE.Group();
+    const trunk = cyl(0.12, 0.17, 1.3, 0x6a4a28, 7); trunk.position.y = 0.65; g.add(trunk);
+    const c1 = new THREE.Mesh(new THREE.ConeGeometry(0.95, 1.9, 8), mat(0x4d6b31, 8)); c1.position.y = 2.0; g.add(c1);
+    const c2 = new THREE.Mesh(new THREE.ConeGeometry(0.66, 1.4, 8), mat(0x5a7a38, 8)); c2.position.y = 2.95; g.add(c2);
+    g.scale.setScalar(0.8 + Math.random()*0.7);
+    return g;
   }
-  function setBattle(L, R){ clearAll(); charL = L; charR = R; if(L){ L.position.x = -1.35; scene.add(L); } if(R){ R.position.x = 1.35; scene.add(R); } }
+  function buildRock(){
+    const g = new THREE.Group();
+    const r = new THREE.Mesh(new THREE.DodecahedronGeometry(0.5, 0), mat(0x8a8578, 10));
+    r.scale.set(1 + Math.random()*0.6, 0.7 + Math.random()*0.5, 1);
+    r.rotation.y = Math.random()*3; r.position.y = 0.3; g.add(r);
+    return g;
+  }
+  function buildTravelScene(){
+    travelG = new THREE.Group(); travelG.visible = false; scene.add(travelG);
+    tGround = new THREE.Mesh(new THREE.PlaneGeometry(90, 120), mat(0x6d7c46, 6));
+    tGround.rotation.x = -Math.PI/2; tGround.position.z = -35; travelG.add(tGround);
+    tRoad = new THREE.Mesh(new THREE.PlaneGeometry(3.8, 120), mat(0xb09a68, 4));
+    tRoad.rotation.x = -Math.PI/2; tRoad.position.set(0, 0.012, -35); travelG.add(tRoad);
+    for(let i=0;i<26;i++){
+      const side = i%2 ? 1 : -1;
+      const g = (i%3 === 0) ? buildRock() : buildTree();
+      g.position.set(side*(4.2 + Math.random()*6), 0, 9 - Math.random()*68);
+      travelG.add(g); tProps.push(g);
+    }
+    // 山路背景 GLB：两侧远山随场景卷动（模型到位后生效，失败保持树石）
+    for(let i=0;i<4;i++){
+      (function(i){
+        loadGLB('mountain.glb', function(m){
+          if(!m || !travelG) return;
+          m.scale.setScalar(3.6);
+          m.position.set((i%2 ? 1 : -1)*(7.5 + (i>1 ? 3 : 0)), 0, 2 - i*17);
+          travelG.add(m); tProps.push(m);
+        }, true);
+      })(i);
+    }
+  }
+  function disposeObj(o){
+    o.traverse(function(n){
+      if(n.geometry) n.geometry.dispose();
+      if(n.material && !n.material._shared) n.material.dispose();
+    });
+  }
+  function setTravel(escortCfg, weather){
+    if(!travelG) buildTravelScene();
+    clearAll();
+    if(tWalker){ travelG.remove(tWalker); if(!tWalker.userData.isModelChar) disposeObj(tWalker); }  // GLB 与缓存共享材质，不可 dispose
+    if(tCart){ travelG.remove(tCart); tCart = null; }  // cart 与 GLB 缓存共享材质，不可 dispose
+    // 天气 → 天空 / 雾 / 地面色调
+    const w = weather || {};
+    const sky = { sun:0x9db8c9, rain:0x6f7a86, fog:0xa9a89e, snow:0xc3c9cf }[w.id] || 0x9db8c9;
+    scene.background = new THREE.Color(sky);
+    scene.fog = new THREE.Fog(sky, w.id==='fog' ? 7 : 16, w.id==='fog' ? 30 : (w.id==='rain' ? 46 : 62));
+    if(tGround) tGround.material.color.setHex(w.id==='snow' ? 0xd9dee3 : (w.id==='rain' ? 0x51603a : 0x6d7c46));
+    if(tRoad) tRoad.material.color.setHex(w.id==='snow' ? 0xb6b0a6 : (w.id==='rain' ? 0x77664a : 0xb09a68));
+    // 押镖马车（GLB，异步加载归位；加载失败仅缺车，不影响镖师行走）
+    loadGLB('cart.glb', function(m){
+      if(!m || !travelG) return;
+      tCart = m; tCart.scale.setScalar(1.05);
+      tCart.rotation.y = Math.PI/2;             // 模型原生朝 +x，转 90° 使马头朝行进方向（-z）
+      tCart.position.set(-0.5, 1.15, -2.2);
+      travelG.add(tCart);
+    });
+    // 押镖镖师：GLB 低模随行（无骨骼不做迈步，仅整体颠步/挑担摇摆/赶路前倾）
+    tWalker = modelChar('escort.glb', 0.52, escortCfg);
+    tWalker.rotation.y = Math.PI;              // 面朝行进方向（-z）
+    tWalker.position.set(1.45, 0, -1.7);
+    travelG.add(tWalker);
+  }
+  // ===== 3D 战斗特效 =====
+  function slashFX(side, col){
+    if(!ready) return;
+    if(!fxGeo) fxGeo = new THREE.TorusGeometry(1.15, 0.07, 8, 30, 2.6);
+    const m = new THREE.Mesh(fxGeo, new THREE.MeshBasicMaterial({ color: col || 0xfff0b8, transparent:true, opacity:0.95, side:THREE.DoubleSide }));
+    m.position.set(side === 'R' ? 1.15 : -1.15, 1.2, 0.5);
+    m.rotation.z = Math.random()*2 - 1;
+    scene.add(m); fx3d.push({ mesh:m, t:0, life:0.45 });
+  }
+  function hitFlash(side){
+    if(side === 'L') flashL = 1; else flashR = 1;
+  }
+  function applyFlash(ch, v){
+    if(!ch) return;
+    const f = v * 0.85;
+    ch.traverse(function(n){
+      if(n.isMesh && n.material && n.material.emissive) n.material.emissive.setRGB(f, f*0.85, f*0.7);
+    });
+  }
+  function updateFx3d(dt){
+    for(let i=fx3d.length-1;i>=0;i--){
+      const f = fx3d[i]; f.t += dt;
+      const k = f.t / f.life;
+      if(k >= 1){ scene.remove(f.mesh); fx3d.splice(i,1); continue; }
+      f.mesh.material.opacity = 0.95 * (1-k);
+      f.mesh.scale.setScalar(0.5 + k*1.4);
+      f.mesh.rotation.z += dt*7;
+    }
+    if(flashL > 0){ flashL = Math.max(0, flashL - dt*3.2); applyFlash(charL, flashL); }
+    if(flashR > 0){ flashR = Math.max(0, flashR - dt*3.2); applyFlash(charR, flashR); }
+  }
+  // 攻击动作曲线：lunge 从 1 缓慢衰减 → 宽钟形曲线（蓄势-大幅挥砍-从容收势）
+  function swingOf(atk){
+    if(!atk || atk <= 0) return 0;
+    const u = 1 - Math.min(1, atk);
+    return Math.sin(Math.min(1, u*1.2) * Math.PI);
+  }
+  function setStage(mode){
+    stageName = mode;
+    // 竖屏视野窄：战斗用宽 FOV + 拉远机位，其余舞台回 45°
+    camera.fov = (mode === 'battle') ? 55 : 45; camera.updateProjectionMatrix();
+    if(mode === 'battle'){ camera.position.set(0,1.35,6.2); camera.lookAt(0,1.02,0); }
+    else if(mode === 'gate'){ camera.position.set(0,0.95,2.9); camera.lookAt(0,0.72,0); }
+    else if(mode === 'travel'){ camera.position.set(3.3,2.4,7.2); camera.lookAt(0,0.95,-2.6); }
+    else { camera.position.set(0,1.25,3.9); camera.lookAt(0,1.05,0); }
+    // 背景戏台色（走镖的天空/雾由 setTravel 按天气设定）
+    if(mode !== 'travel'){
+      scene.background = new THREE.Color(0x140e07);
+      scene.fog = new THREE.Fog(0x140e07, 22, 60);
+    }
+    if(travelG) travelG.visible = (mode === 'travel');
+    // 氛围件按舞台显隐（演武场背景 GLB 到位后用 arenaBk 替代程序化远山）
+    const bBk = ambient['arenaBk'] ? ['arenaBk'] : ['bHill0','bHill1','bHill2','bHill3','bHill4'];
+    const vis = {
+      gate:  ['gate','lionL','lionR'],
+      battle:['gate','lionL','lionR','bGround','torch0','torch1'].concat(bBk),
+      prop:  ['rack','chest2','pile'],
+      preview: [], travel: []
+    }[mode] || [];
+    for(const k in ambient) ambient[k].visible = vis.indexOf(k) >= 0;
+  }
+  function setBattle(L, R){ clearAll(); charL = L; charR = R; if(L){ L.position.x = -1.15; scene.add(L); } if(R){ R.position.x = 1.15; scene.add(R); } }
+  // ===== GLB 角色化：镖师/劫匪用生成的低模，动画走整体位移/拧身（无骨骼） =====
+  function modelChar(name, scl, fbCfg){
+    const g = new THREE.Group(); g.userData.isModelChar = true;
+    const shadow = new THREE.Mesh(new THREE.CircleGeometry(0.55, 24), new THREE.MeshBasicMaterial({ color:0x000000, transparent:true, opacity:0.28 }));
+    shadow.rotation.x = -Math.PI/2; shadow.position.y = 0.01; g.add(shadow);
+    loadGLB(name, function(m){
+      if(!m){ // 加载失败 → 程序化角色兜底
+        const fb = buildCharacter(fbCfg || {});
+        g.remove(shadow); g.add(fb);
+        g.userData.parts = fb.userData.parts; g.userData.weapon = fb.userData.weapon;
+        g.userData.isModelChar = false;
+        return;
+      }
+      const holder = new THREE.Group();
+      if(scl) holder.scale.setScalar(scl);
+      const box = new THREE.Box3().setFromObject(m);
+      m.position.y -= box.min.y;             // 底部落到脚下
+      holder.add(m); g.add(holder);
+    });
+    return g;
+  }
+  function setBattleModels(fbL, fbR){
+    clearAll();
+      charL = modelChar('escort.glb', 0.5, fbL);
+      charR = modelChar('bandit.glb', 0.5, fbR);
+    charL.userData.faceY = Math.PI/2;        // 面朝右侧对手
+    charR.userData.faceY = -Math.PI/2;       // 面朝左侧对手
+    charL.position.x = -1.15; charR.position.x = 1.15;
+    scene.add(charL); scene.add(charR);
+  }
   function setCharacter(g){ clearAll(); single = g; singleMode = 'char'; if(g) scene.add(g); }
   function setProp(g){ clearAll(); single = g; singleMode = 'prop'; if(g) scene.add(g); }
   function render(dt, st){
     if(!ready) return; st = st || {};
     const t = clock.getElapsedTime();
+    // 火把火焰摇曳（战斗/登录门面可见时）
+    for(let i=0;i<flames.length;i++){
+      flames[i].scale.y = 1 + Math.sin(t*9 + i*2.1)*0.22;
+      const fx = 1 + Math.sin(t*7 + i)*0.1;
+      flames[i].scale.x = fx; flames[i].scale.z = fx;
+    }
+    // ===== 走镖 3D：景物卷动 + 马车颠簸 + 镖师行走 =====
+    if(stageName === 'travel' && travelG && travelG.visible){
+      if(!paused){
+        for(const g of tProps){ g.position.z += dt*T_SPEED; if(g.position.z > 10) g.position.z -= 72; }
+        if(tWalker){
+          const w = tWalker.userData.parts || {};
+          const sw = Math.sin(t*6.5);
+          if(w.legL) w.legL.rotation.x = sw*0.55;
+          if(w.legR) w.legR.rotation.x = -sw*0.55;
+          if(w.armL) w.armL.rotation.x = -sw*0.42;
+          if(w.armR){ w.armR.rotation.x = sw*0.42; w.armR.rotation.z = -0.16; }
+          tWalker.position.y = Math.abs(Math.sin(t*6.5))*0.06;   // 行走颠步
+          tWalker.rotation.z = Math.sin(t*3.25)*0.04;            // 挑担摇摆
+          tWalker.rotation.x = 0.05 + Math.sin(t*6.5)*0.015;     // 赶路前倾
+        }
+        if(tCart){
+          tCart.position.y = 1.15 + Math.sin(t*6.2)*0.045;
+          tCart.rotation.z = Math.sin(t*3.1)*0.03;
+          tCart.rotation.x = Math.sin(t*4.7)*0.012;
+        }
+      }
+      renderer.render(scene, camera); return;
+    }
+    updateFx3d(dt);
     if(charL || charR){
       const breathe = Math.sin(t*2)*0.03;
       const look = Math.sin(t*0.7)*0.25;
+      const swL = swingOf(st.lunge||0), swR = swingOf(st.enemyLunge||0);
+      const fL = (charL.userData.faceY != null) ? charL.userData.faceY : -0.35;
+      const fR = (charR.userData.faceY != null) ? charR.userData.faceY : Math.PI + 0.35;
       if(charL){
-        const atk = st.lunge||0, hit = st.enemyLunge||0;
-        charL.position.x = -1.35 + atk*0.8;
+        charL.position.x = -1.15 + swL*1.35 - swR*0.3;
         charL.position.y = Math.sin(t*2)*0.02;
-        charL.rotation.y = -0.35 - atk*0.7 + look*0.3;
-        charL.rotation.x = hit*0.35;
+        charL.rotation.y = fL - swL*0.6 + look*0.2;
+        charL.rotation.x = -swR*0.5 - swL*0.28;          // 受击后仰 + 出招前倾
         const p = charL.userData.parts || {};
-        if(p.torso) p.torso.scale.y = 1 + breathe - atk*0.1;
-        if(p.head) p.head.rotation.y = look;
-        if(p.armR) p.armR.rotation.z = -0.16 - atk*0.8;
-        if(charL.userData.weapon) charL.userData.weapon.rotation.x = -atk*1.6;
+        if(p.torso) p.torso.scale.y = 1 + breathe - swL*0.12;
+        if(p.head) p.head.rotation.y = look - swL*0.45;
+        if(p.armR) p.armR.rotation.z = -0.16 - swL*1.5;
+        if(p.armL) p.armL.rotation.z = 0.16 + swL*0.6;
+        if(charL.userData.weapon) charL.userData.weapon.rotation.x = -swL*2.7;
       }
       if(charR){
-        const atk = st.enemyLunge||0, hit = st.lunge||0;
-        charR.position.x = 1.35 - atk*0.8;
+        charR.position.x = 1.15 - swR*1.35 + swL*0.3;
         charR.position.y = Math.sin(t*2 + 1)*0.02;
-        charR.rotation.y = Math.PI + 0.35 + atk*0.7 - look*0.3;
-        charR.rotation.x = hit*0.35;
+        charR.rotation.y = fR + swR*0.6 - look*0.2;
+        charR.rotation.x = -swL*0.5 - swR*0.28;
         const p = charR.userData.parts || {};
-        if(p.torso) p.torso.scale.y = 1 + breathe - atk*0.1;
-        if(p.head) p.head.rotation.y = -look;
-        if(p.armR) p.armR.rotation.z = -0.16 - atk*0.8;
-        if(charR.userData.weapon) charR.userData.weapon.rotation.x = -atk*1.6;
+        if(p.torso) p.torso.scale.y = 1 + breathe - swR*0.12;
+        if(p.head) p.head.rotation.y = -look + swR*0.45;
+        if(p.armR) p.armR.rotation.z = -0.16 - swR*1.5;
+        if(p.armL) p.armL.rotation.z = 0.16 + swR*0.6;
+        if(charR.userData.weapon) charR.userData.weapon.rotation.x = -swR*2.7;
       }
     } else if(single){
       const breathe = Math.sin(t*2)*0.03;
@@ -4283,7 +4615,10 @@ const B3D = (function(){
     }
     renderer.render(scene, camera);
   }
-  return { ensure, mount, setStage, setBattle, setCharacter, setProp, setPropGLB, buildCharacter, buildProp, render, resize, isReady: ()=> ready, hasTarget: ()=> !!target };
+  return { ensure, mount, setStage, setBattle, setBattleModels, setCharacter, setProp, setPropGLB, buildCharacter, buildProp, modelChar, render, resize, setTravel, slashFX, hitFlash,
+    setPaused: function(v){ paused = !!v; }, stageName: function(){ return stageName; },
+    _dbg: function(){ return { chars:[!!charL,!!charR], single:!!single, kids:scene.children.length, cam:camera.position.toArray(), travelKids: travelG ? travelG.children.length : -1, info: renderer.info.render, scene: scene, target: target ? (target.id || target.className) : null }; },
+    isReady: ()=> ready, hasTarget: ()=> !!target };
 })();
 
 // 3D 预览常驻渲染循环：招募 / 库房 / 结算等预览依赖它出图；
@@ -4292,10 +4627,25 @@ function b3dLoop(){
   requestAnimationFrame(b3dLoop);
   if(!B3D.ensure()) return;
   if(combat) return;
+  const _stg = B3D.stageName();
+  if(_stg === 'battle' || _stg === 'travel') return;  // 分别由 combatFrame / 走镖帧驱动
   if(!B3D.hasTarget()) return;
   B3D.render(1/60, {});
 }
 requestAnimationFrame(b3dLoop);
+// 登录页 3D 门面：牌楼 + 石狮迎宾（Three/GLTFLoader 就绪后挂载，失败静默）
+(function(){
+  let tries = 0;
+  function tryAuth3d(){
+    tries++;
+    const el = document.getElementById('auth3d');
+    if(!el || tries > 60) return;                    // 最多等 30 秒
+    if(!B3D.ensure()){ setTimeout(tryAuth3d, 500); return; }  // THREE 未就绪
+    if(B3D.mount(el)) B3D.setStage('gate');
+  }
+  if(document.readyState === 'complete') setTimeout(tryAuth3d, 100);
+  else window.addEventListener('load', function(){ setTimeout(tryAuth3d, 100); });
+})();
 function hashHue(s){ let h = 0; for(let i=0;i<s.length;i++) h = (h*31 + s.charCodeAt(i)) >>> 0; return h; }
 function hashColor(s){ const hue = hashHue(s) % 360; if(typeof THREE !== 'undefined') return new THREE.Color().setHSL(hue/360, 0.45, 0.46).getHex(); return 0x6b4f2a; }
 function escort3DCfg(e){ return { body: hashColor(e.id || e.name), skin: 0xe0a27a, weapon: (e.weapon && getWeapon(e.weapon)) ? getWeapon(e.weapon).type : 'fist', traitKey: e.trait ? e.trait.key : null, gear: (e.gear && typeof e.gear === 'object') ? e.gear : {} }; }
@@ -4305,6 +4655,11 @@ function enemy3DCfg(enemy, order){
   return { body: 0x4a4a4a, skin: 0xc9a07a, weapon: ['刀','棍','拳'][hashHue(enemy.name) % 3], mask: mask, bandana: mask, traitKey: null };
 }
 function client3DCfg(c){ return { body: hashColor(c.name || 'client'), skin: 0xe8b98a, weapon: 'fist', traitKey: null }; }
+// 镖师统一用 GLB 低模（武力越高体型越魁梧，保留细微个体差异）
+function escortModelFor(e){
+  const w = (e && e.wuli != null) ? e.wuli : 50;
+  return B3D.modelChar('escort.glb', 0.46 + clamp((w-20)/75, 0, 1)*0.09, escort3DCfg(e));
+}
 function prop3DCfg(kind, id){ return { kind: kind, id: id }; }
 
 
@@ -4374,13 +4729,13 @@ function combatFrame(){
   if(!combat) return;
   const dt = 1/60;
   combat.tick = (combat.tick || 0) + dt;
-  if(combat.lunge) combat.lunge *= 0.82;
+  if(combat.lunge) combat.lunge *= 0.90;
   combat.dmg.forEach(d=>{ d.y -= 0.6; d.life -= dt*1.4; });
   combat.dmg = combat.dmg.filter(d=> d.life>0);
   combat.fx.forEach(f=>{ f.t += dt; });
   combat.fx = combat.fx.filter(f=> f.t < f.life);
   if(combat.shake > 0) combat.shake = Math.max(0, combat.shake - dt*40);
-  if(combat.enemyLunge) combat.enemyLunge *= 0.82;
+  if(combat.enemyLunge) combat.enemyLunge *= 0.90;
   if(combat.bossIntro > 0) combat.bossIntro -= dt;
   drawCombat();
   if(B3D.isReady()){ B3D.render(dt, { lunge: combat.lunge||0, enemyLunge: combat.enemyLunge||0 }); }
@@ -4462,7 +4817,7 @@ function startCombat(order, e, bossOv){
   if(B3D.isReady()){
     const cc = document.getElementById('combat3D');
     B3D.mount(cc); B3D.setStage('battle');
-    B3D.setBattle(B3D.buildCharacter(escort3DCfg(e)), B3D.buildCharacter(enemy3DCfg(enemy, order)));
+    B3D.setBattleModels(escort3DCfg(e), enemy3DCfg(enemy, order));  // GLB 低模双方，失败自动回退程序化
   }
   logCombat('💢 半路杀出' + enemy.name + '！（使' + schoolName(enSchool) + '）' + (rel>0 ? ' ' + schoolName(eSchool) + '克' + schoolName(enSchool) + '，占优！' : rel<0 ? ' 小心，' + schoolName(enSchool) + '被克！' : ''));
   const _bb = beastOf(e);
