@@ -30,7 +30,7 @@ for %%i in ("%GITEXE%") do set "GITDIR=%%~dpi"
 set "PATH=%GITDIR%;%GITDIR%..\mingw64\bin;%GITDIR%..\usr\bin;%PATH%"
 
 REM 发布密钥（正斜杠，反斜杠会被 git 吃掉）
-"%GITEXE%" config core.sshCommand "ssh -i D:/workbuddy/2026-09-11-10-33-06/.deploy/id_ed25519 -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=D:/workbuddy/2026-09-11-10-33-06/.deploy/known_hosts -o BatchMode=yes"
+"%GITEXE%" config core.sshCommand "ssh -i C:/Users/user/WorkBuddy/2026-09-18-23-23-45/projects/.deploy/id_ed25519 -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=C:/Users/user/WorkBuddy/2026-09-18-23-23-45/projects/.deploy/known_hosts -o BatchMode=yes"
 
 REM 自我修复远程跟踪关系（防止 push 时报 upstream gone）
 "%GITEXE%" config remote.origin.url git@github.com:yf827924/youfeng1-site.git
