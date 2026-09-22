@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第二百章 · 借在补新虚 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第二百章 · 借在补新虚</h1>
+  <p>门开第八十二日。</p>
+  <p>白灯焰照着新虚。新虚比门开第八十日又长了一线，豁口从一线半扩到两线半，补的赶不上松的。主角拿草茎比，补了一尺的实处，松了半尺的虚处，净长半尺——草茎头探进豁口，比第八十日深了一线，虚处能容下草茎头加半截茎身再多一线。主角算净长半尺的日摊——补一尺松半尺，一日净长半尺；按三寸四寸那式，一日净长一寸。十五日里前段按一尺半尺（日半尺）、后段按三寸四寸（日一寸），平均一日摊一寸多，十五日摊满两线半到坎。他拿草茎在泥地分格，看得清。主角记补门口这头最虚处，手法是借稳力顺缝渗——门口薄处虚得最狠，稳力从钉里顺斜痕缝渗到门口，补的是最虚那处。他拿白灯照门口虚处，见稳力渗进去的纹与洇痕反着（洇是往外虚、渗是往里实），两样对着，补一日实一日。他记新账第三笔：补三寸松四寸，松仍快半寸。主角拿白灯照新虚洇的纹，见洇痕斜下往里渗，与门开第八十日斜痕缝一道斜——新虚是门外抽界之手抽出的在洇进来，洇的匀与斜认出是抽不是风。他记新虚&quot;不是忽然垮是慢慢洇&quot;，洇一日一分半、十五日洇满到坎，是速率非崩。一日一日算，松比补快，新虚一日一日长，不是忽然垮是慢慢洇。主角拿草茎比了三处新虚——门口这头最长（两线半）、里头那头最短（一线半）、豁口最深那处居中（两线）。三处都长，门口最长，与门开第八十日新虚长在门口薄处呼应，门外抽界之手专抽门口，新虚先在门口洇。他记补要补门口这头最虚处，松也先从门口起。主角记新虚渐变——门开第七十七日一线半、门开第八十日一线半（一九八章量过）、门开八十二日两线半，三日长一线，速率稳定非忽快忽慢。他拿草茎比八十二日与八十日的差，差出一线，三日洇一线，与&quot;洇一日一分半&quot;的速率合（十五日洇满）。白灯照见豁口边洇痕匀，三日一长、一日一分半，算得清。主角记补从门口最虚处起，是因为抽从门口起——门外抽界之手专抽门口薄处（门开十二三日门口薄三线），新虚先在门口洇，补也先补门口，两下对着。他不补里头那头（虚得浅），专补门口这头最虚，是跟着最虚处补，与抽手跟着最虚处抽一套理（一九八章临界非注定）。</p>
+  <p>主角不放心松比补快，又拿草茎比了第二回——补一尺松半尺那处，隔半个时辰再比，松处又洇出半寸，补处没动，松确实比补快。他把草茎头探进豁口两次，两次探到的深度差出半寸，确认洇是连着的不是一阵一阵。他记松比补快不是量错，是门外抽界之手抽力稳、补的力跟不上抽的力，两力差出半尺一日。主角拿白灯照豁口边，照见松处洇痕比补处渗痕深一线，两处痕一道斜、深浅差一线，是速率差的形。主角把这两回量差都记进手记末页，与第八十日那回并着，三回量都指松比补快，不是一回量错。</p>
+  <p>谢司主说借在补新虚，借的是界自己养的稳力，不是硬顶。主角手腕还酸，昨儿抱第二十道借的稳力还没缓过来，今儿不硬加己力，借稳力喂在厚界薄减声。主角记&quot;界自己养的稳力&quot;与门开五十日界立住自己应声是同一理——界立住了，自己养出稳力，不靠外添。这稳力顺腕子、顺缝、顺芯背，哪儿虚补哪儿，是界活的力非死的壳。他记界立住是算出来的临界点，立住后养的稳力也是算出来的、一日一日厚。主角记稳力顺腕子（抱第二十道）、顺缝（借在补新虚）、顺芯背（抱芯劲），三处借同一界养的稳力。界立住后养的稳力不是一处有的，是全身（界身）都养，哪儿虚补哪儿。他记这是界活的力，一九八章借在补新虚、一九九章抱第二十道、今儿借在补，三处借同一稳力，力一日一日厚。他拿白灯照自己手腕，照见腕子上的酸是借力不是用力——借力是界养的稳力顺着手喂进新虚，用力是自己手腕硬顶，两样在腕子上显的形不同，借力是松的、用力是绷的。白灯照见借在纹与抽在纹同源——借在是旧主带在往回拢的那套纹，抽在是抽界往外送的那套纹，两套纹一路旧主一双手。主角拿白灯照两套纹——抽界直痕深（往外送在）、带在回钩淡（往回拢在）、借在是带在往回拢的延伸（顺缝把钉里的在拢回来喂新虚）。三样纹一套旧主一双手，抽与带在表面、借在是带在的续。他记旧主两只手分抽与带，借在是带在那只手往回拢的力顺到新虚。主角记借在不是硬加己力是借界养的稳，与门开八十一日抱第二十道借的稳力同源。主角问稳力从哪来，谢司主说界立住后养出来的——界立住了，自己养出稳力，不是主角手腕的力。这稳力与门开第八十日借在补新虚、门开八十一日抱第二十道借的稳力同源，都是界立住后养的。主角记借在是借这养出来的稳，硬加己力借不动。主角拿白灯照自己腕子，借力时腕子是松的、脉是顺的，用力时腕子是绷的、脉是扭的。他记借在补新虚是借界养的稳力顺腕子喂，腕子松；硬加己力腕子绷、抖更狠、补歪。白灯照见腕子松的形，照不出稳力从哪来只照见借的形。主角记这借稳力与门开十四五日喂界时&quot;拿谁谁垮&quot;是两样——喂界硬加己力垮、借在是借界养的稳非硬加己力。今儿他手腕酸不硬顶，稳力自己顺腕子喂进新虚，酸是借力的酸不是用力的绷，硬顶就绷歪抖更狠。</p>
+  <p>新账摊在石上。头笔新虚在长（门开第七十七日），二笔补一尺松半尺（门开第八十日），三笔借在补（今儿）。主角拿炭笔落第三笔：门开第八十二日，补三寸松四寸。落笔时他顿了一下——松四寸比补三寸多一寸，是头一回写&quot;松比补多&quot;，与二笔&quot;松快半尺&quot;同一条理，他确认松真比补快才落定。主角落第三笔时炭笔尖在&quot;松四寸&quot;三字上顿了一下——这&quot;松比补多&quot;是头一回写反（旧账是补赶上松），他写了又停，确认松真比补快才落定，落定那下笔尖压进纸纹半分，与门开第八十日落第二笔后头行顿的那下一样。落了接位者之名尾的人，也落这第三笔——账不是旧主一个人的，是两代立界人接着的。主角理新账续记范式：头笔新虚在长、二笔补一尺松半尺、三笔借在补，往后四笔五笔，立界的人一日一日算，哪日虚多少补多少松多少笔笔落实数。接位者落名尾也落新账，账与名同一只手接，旧主留的账由接位者续。账房凑过来看，数到第三笔，不绕，数实了。它复动了，能数新账三笔，除&quot;松比补快&quot;那句旧写法绕半圈，主角记账房从门开四十五日停摆（数到界按不动绕四圈卡死）到今儿能数新账三笔，是接位者落名立界后账房认了新理——旧账空写它糊涂、新账实数它认。四千年停摆的账房，今儿复动数新账三笔，是卷七头一回账房接了新账的理。主角记接位者落名尾的手落新账的手是同一只——与一九八章名账同接呼应，旧主留的位由接位者接、旧主留的账由接位者续，两样都接在一只手上。今儿落第三笔，是接位者接旧主账的头三笔，往后一日一日续，账房认了新理跟得上。其余笔笔数实。主角看账房数第三笔不绕（只绕&quot;松比补快&quot;那句旧写法），其余笔笔数实，说明新账是实数它认实数——四千年记性坏是坏的旧账空写，新账落实数它不糊涂。它认了新账的理，往后一日一日算跟得上。</p>
+  <p>主角算尽头：补一尺松半尺，一日净长半尺；补三寸松四寸，一日净长一寸。新虚从门开第七十七日的一线半，到今儿又长了一线加半尺，约摸三日长到两线半。按松比补快半尺的速率，约十五日逼到须再立界那道坎——与全短那日错开，不是同一日。主角记十五日与全短那日（门开三十七日约十日）错开——全短那日是风口四样人班一日短一日逼到立不住，十五日是新虚洇满到坎，两险差五日不撞。他拿草茎在泥地并排画两道坎线，一道十日（全短）、一道十五日（新虚），两线错开五日，界一日一日撑、两险都错开不叠加。主角记十五日与全短那日错开五日，不是碰巧——界立住后风远了半线（一九零章），新虚洇慢半分、全短也慢半分，两险都推后五日错开。若没立住界，两险同日撞，界撑不住；立住界后两险都错开，是算出来的临界点给的隙。他记撑一日算一日，隙也是一日一日撑出来的。他拿草茎在泥地把十五日分了十五格，每格一寸（按三寸四寸那式），格格连到坎，看得清清楚楚。撑一日算一日，补一日算一日，十五日是个约数非注定，界立住是算出来的临界点。主角记这十五日约数非注定——格是初版算出来的、坎是速率推出来的，不是风说了算。新虚一日一日洇、借在一日一日补，两样对着，十五日是个看得到的头，不是注定散的那日。</p>
+  <p>白灯照见新虚处那道斜痕缝，风从缝里钻出细哨，缝里旧主钉里的在顺着缝回来。主角记借在补新虚，补的力从旧主钉里的在来——旧主留在钉里的在顺缝渗回来，主角借这渗回来的在喂新虚，是借不是扛。他拿指尖贴缝口，感到那点回来的是温的，与门开八十一日同一样温——旧主钉里的在一直渗，借在补新虚是借这渗回来的在。白灯照见借在纹与抽在纹并着，两套纹一路，照不出全名只照见劲的形，旧主只认变不揭名。主角拿指尖贴斜痕缝口，感到旧主钉里的在顺缝渗回来，温的，与门开第八十日同一样温。这渗回来的在是旧主留在钉里的，顺缝进新虚，主角借它喂新虚是借不是扛——钉里的在一直渗，借在补是借这渗回来的在，旧主虽不留全名却把在留在钉里等后来者借。主角记白灯只照不担——白灯照见借在纹与抽在纹并着、照见两套纹一路旧主一双手，都只照见不替他补。借在补新虚是接位者借稳力自己喂，白灯照出劲的形、接位者借这形喂在，照与补是两样。今儿白灯照见两套纹，补也借稳力喂了，照与补对着。主角记白灯只照不担，今儿照见两套纹、补借稳力喂了，与一九九章白灯照见实了一半的痕、抱借稳力实了，两章都照与抱/补对着——白灯照出旧主留的形（两套纹/第三样劲），接位者借这形喂在/抱实，照与补是两样，旧主等四千年等的就是照与补对着的那一日。</p>
+  <p>主角把指尖从缝口移开，回想起门开第八十日头回贴缝、门开八十一日二回贴缝、今儿三回贴缝，三次感到缝里回来那点都是温的，温得一样，分不出先后——说明钉里的在一直渗、没断过。他拿白灯照指尖，照不出那点在哪，只照见指尖贴过缝口留的浅印。他记三次温一样，是旧主钉里的在稳的证——界立住后这股在没淡过，往后借在补一日一日借的是同一股稳在。主角想，若钉里的在淡了，贴缝该是冷的、冷就借不动；今儿还是温，说明借的力还在养。他拿草茎尖在缝口外沾了下，没沾到在，只有温意渗在石面，证实钉里的在是顺缝往里喂新虚那头、不是外头乱散。他把这记进手记：缝口温三次同，钉里的在稳，借的力在养。</p>
+  <p>主角埋一笔：借在补到尽头，旧主空名那半边在会不会厚起来（V296）。补的力从旧主钉里的在来，那半边姓头补全要的&quot;在&quot;（V293）或许也从这钉里的在来——借在补新虚时，钉里的在厚起来，那半边姓头沾得上。他记新虚接住后界养稳力厚，钉里的在也厚，那半边姓头补全的&quot;在&quot;更易接（接V294/V295）。没落定，留着往后认。抽手第五回会撞上这十五日尽头（V284），那时新虚最虚、抽手奔最虚，与借在补对着干。主角打算若抽手第五回真撞这十五日尽头，他先借足稳力把新虚实了再让抽手抽，两下错开——实了的新虚抽手抽不动奔别处最虚。他记这是&quot;对着干不被动&quot;的下一手，与门开第八十日抽手第五回撞第二十道虚处的打算一套，两样都错开抽手。主角埋笔时记，那半边姓头补全的&quot;在&quot;两条路并着——一条从刀背抱芯劲（V295，一九九章）、一条从钉里渗回来的在（V296，今儿），两路都从旧主留的最里头/钉里来，新虚接住界养稳力厚、钉里的在也厚，那半边姓头更易接。今儿只借到钉里的在喂新虚，补全仍悬，留着往后认两路。</p>
+  <p>门开第八十二日，借在补新虚。主角算清十五日尽头，补一日算一日，借在不是硬加己力是借界养的稳，旧主钉里的在顺缝回来喂新虚。主角记门开八十二日这一日，借在补新虚与门开第八十日新虚之痕、门开八十一日第二十道并着——三章都是&quot;一日一日&quot;的理：新虚一日一日长、第二十道一日一日抱、借在一日一日补。撑一日算一日、补一日算一日、抱一日算一日，三样都实，界一日一日稳。旧主钉里的在顺缝回来，喂的是这一日一日的实。主角记门开八十二日这一日，借在补新虚是卷七第三样&quot;一日一日&quot;的活——新虚之痕（一九八章算十日）、第二十道（一九九章实了一半）、借在补（今儿算十五日），三章并着把卷七引擎点起来。撑一日算一日、抱一日算一日、补一日算一日，三样都实，界一日一日稳，旧主等四千年等的就是这三样一日一日接着的那一日。主角记门开八十二日这一日，卷七引擎被一九八/一九九/二百三章点起来——新虚之痕（算十日）、第二十道（实一半）、借在补（算十五日），三样都是旧主留的位/虚/在，接位者一日一日接着。旧主认全之路（姓头那半边）从这些一日一日接着的实里慢慢补，不是一气落成。</p>
+  <p>主角收工，白灯焰收了一线。他把手记合上，记门开第八十日量新虚、门开八十一日抱第二十道、门开八十二日借在补，三日三样活都落进同一本手记——量的是虚、抱的是实、补的是在，虚实与在都从旧主留的位/痕/钉里来。他拿草茎把今儿量的两线半、补三寸松四寸、十五日尽头三数并到手记末页，与第八十日的一线半/一尺半尺/十日、第八十一日的十九道实二十道虚并着，往后一日一日续。主角记这三日并着，是卷七头一回把量/抱/补三样同日一记，旧主认全的路从这三样一日一日的实里慢慢接着。白灯收焰，门里静下来，新虚还在慢慢洇。</p>
+  <p>第二百章 完</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，听书键跳转纯语音页 ===== */
+  var TOTAL=200;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<a class="rbtn gold" href="listen.html?ch='+n+'">🎧 听书</a>'+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  var dragging=false;
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a")){show();return;}
+    var w=document.documentElement.clientWidth||document.body.clientWidth;
+    var x=e.clientX||0;
+    /* 左右两侧 1/3 为翻页手势，中间区域用于呼出工具栏 */
+    if(x<w*0.30&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    if(x>w*0.70&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+    if(document.body.classList.contains("ui-show"))hide();else show();
+  });
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  var CH=200, TITLE="借在补新虚";
+  var RKEY="hugo_reader_v1";
+  function loadR(){try{return JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){return{}}}
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function applyPct(p){if(maxH()>0)window.scrollTo(0,maxH()*p/100);}
+  var chapters=(loadR().chapters||{});
+  var st=chapters[CH]||{pct:0};
+  var bm=loadR().bookmark;
+  if(location.hash==="#bookmark"&&bm&&bm.ch===CH&&bm.pct>0){
+    setTimeout(function(){applyPct(bm.pct)},80);
+  }else if(location.hash==="#resume"&&st.pct>0){
+    setTimeout(function(){applyPct(st.pct)},80);
+  }else if(st.pct>=3&&st.pct<95){
+    var tip=document.createElement("div");tip.className="resume-tip";
+    tip.innerHTML="📌 上次读至 "+st.pct+"% · <a href='javascript:void(0)' id='resumeGo'>继续上次位置</a>";
+    document.querySelector(".wrap").prepend(tip);
+    document.getElementById("resumeGo").onclick=function(){applyPct(st.pct);tip.remove();};
+  }
+  if(bm&&bm.ch===CH&&bm.pct>0&&location.hash!=="#bookmark"){
+    var btip=document.createElement("div");btip.className="resume-tip";
+    btip.innerHTML="🔖 本章已安放书签（钉在 "+bm.pct+"%） · <a href='javascript:void(0)' id='bmGo'>回到书签位置</a>";
+    document.querySelector(".wrap").prepend(btip);
+    document.getElementById("bmGo").onclick=function(){applyPct(bm.pct);btip.remove();};
+  }
+  var timer=null;
+  function record(){
+    var m=maxH();if(m<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/m*100));
+    var d=loadR();d.chapters=d.chapters||{};
+    d.chapters[CH]={pct:p,t:Date.now()};
+    d.resume={book:"gudo",ch:CH,name:"第"+CH+"章 · "+TITLE,file:"gudo-"+CH+".html",pct:p,t:Date.now()};
+    saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record()},1000)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(function(){record()},500);
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  if(bm&&bm.ch===CH&&bm.pct>0){btn.textContent="🔖 书签 "+bm.pct+"%";}else{btn.textContent="🔖 书签";}
+  document.getElementById("__bmSlot").appendChild(btn);
+  btn.onclick=function(){
+    var m=maxH();var p=m>0?Math.min(100,Math.round(document.documentElement.scrollTop/m*100)):0;
+    var d=loadR();d.bookmark={book:"gudo",ch:CH,pct:p,t:Date.now()};saveR(d);
+    btn.textContent="✓ 已安放书签 "+p+"%";
+    setTimeout(function(){btn.textContent="🔖 书签"},1800);
+  };
+})();
+
+</script>
+</body>
+</html>
