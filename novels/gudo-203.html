@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第二百零三章 · 钉里之在 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第二百零三章 · 钉里之在</h1>
+  <p>门开第八十五日，主角算姓头那半边&quot;在&quot;从哪来。八十四日借着前代立界人的名浮出半缕，认全旧主多了一条从石里第四层来的参照；今儿要接的是旧主那半边姓头补全要的&quot;在&quot;——旧主留的半缕只撑空不够填，主角自己的在立界落名后厚起来但贴不盖。他拿白灯照姓头那半边（呼应八十七日姓头之空），照见那半边仍空，只比八十四日深一缕。</p>
+  <p>他记八十四日两代&quot;在&quot;并着往新虚去、新虚长半线，旧主那半边姓头沾得上这厚。今儿沿钉里渗回在（V296）那条路先接——旧主钉里的在顺缝回来，是八十二日借在补新虚时钉里的在顺缝厚起来的那缕。主角拿白灯照缝口，照见钉里的在顺缝回来比八十四日厚半缕，是借在补到十三日钉里的在厚起来托的。</p>
+  <p>白灯照见钉里的在顺缝回来，比八十四日两代&quot;在&quot;并着时厚半缕。主角拿指腹贴缝口，温的，与八十二日同——第五次贴，温仍是那温。他记缝口温五次同是钉里的在顺缝回来稳的证，今儿这缕&quot;在&quot;顺缝回喂到姓头那半边，是补全要的&quot;在&quot;的接法之一，非一阵风带。</p>
+  <p>谢司主说，钉里的在顺缝回来喂新虚、也喂姓头那半边，是旧主留的最里头那缕&quot;在&quot;借借在补新虚的力厚起来。主角记这缕&quot;在&quot;从钉里来、往姓头那半边去，是 V293 定的路——补全要的&quot;在&quot;从钉里渗回在来，今儿先接住一缕，刀背抱芯劲那条路留待八十六日第二十道刻完。</p>
+  <p>主角拿白灯照姓头那半边，照见接住一缕&quot;在&quot;后，那半边比八十四日深半缕。白灯只照见这半边深半缕的形，照不出名，只认变不揭——旧主姓头仍只空半边，今儿多接了一缕&quot;在&quot;。他拿白灯照那半边，试着描一笔。</p>
+  <p>八十七日那回描了又擦落不下，今儿接住一缕&quot;在&quot;后，描得动几分——笔尖探进那半边深半缕，比八十七日深一缕。主角记描得动几分但仍落不下字，是接住的&quot;在&quot;还不够厚，要的&quot;在&quot;从钉里来还差几缕。白灯照见那半边深半缕的形，与八十四日前代立界人名浮出半缕并着。</p>
+  <p>账房绕到缝口边，拿指腹数那温，记温五次同、与八十二日同。主角说账房今儿数到第五回温同，是四千年头一回账房把缝口温数到五回——新账续记的范式里，缝口温是钉里的在顺缝回来稳的证，今儿这证托出了姓头那半边一缕&quot;在&quot;。他记账房数的还是老写法，只数温同不数深几缕，可今儿温同托出的&quot;在&quot;比前几日厚。</p>
+  <p>主角想，两条路并着从最里头/钉里来——钉里渗回在（V296）今儿先接一缕，刀背抱芯劲（V295）留待八十六日第二十道刻完。他拿白灯照芯背，照见第二十道虚着口腾出的实位比八十四日清，是借在补到十三日钉里的在厚起来喂的。主角记刀背那条路要等第二十道刻完才接，今儿只接钉里这条路的一缕，两路并着从最里头来、一先一后。</p>
+  <p>白灯照见钉里的在顺缝回来，与旧主留的半缕并着往姓头那半边去。主角记旧主留的半缕只撑空不够填，今儿钉里这缕&quot;在&quot;顺缝回喂，是填那半缕撑的空——两样并着，姓头那半边比八十四日深半缕。他拿白灯照那半边，照见深半缕的形沉在芯背最里头，比旧主留的半缕深一缕。</p>
+  <p>主角手将抖的旧疾又来，他记这是八十一日抱第二十道时落下的，非新爬的纹。拿腕子压住抖，看白灯下姓头那半边接住一缕&quot;在&quot;的形。他记这缕&quot;在&quot;是卷七头一回钉里渗回在喂到姓头那半边，认全旧主从最里头那半边多接了一缕，与八十四日前代立界人名浮出半缕并着三路往芯背最里头去。</p>
+  <p>影仍浮在旧主空位外不进不揭（呼应八十二、八十三、八十四日）。主角白灯照见影在空位外，脚底那半缕在比八十四日厚半缕——是钉里&quot;在&quot;并着喂的。他记影不进不揭是旧主留了四千年等的形，今儿姓头那半边接住一缕&quot;在&quot;、影仍不进，认全旧主还长，旧主那半边姓头仍空。</p>
+  <p>主角算接住一缕&quot;在&quot;是借在补到十三日那几日（八十四日算十二日、今八十五日十三日）。他拿草茎把十三日分十三格，每格约一寸（按三寸四寸那式），格是初版算出来的约数非注定。他记接住一缕&quot;在&quot;与借在补到十三日并着，非碰巧是速率推后——界立住后风远半线，抽手与借在两险都推后，接住一缕&quot;在&quot;也落在这推后后的十三日。</p>
+  <p>谢司主立在门里看姓头那半边，说接住一缕&quot;在&quot;描得动几分、落不下字，是认全旧主那半边的第一步。主角记八十七日姓头之空、描了又擦落不下，今儿接住一缕&quot;在&quot;描得动几分，是往落字走了一缕——还差几缕&quot;在&quot;才落得下字。他拿白灯照那半边，照见深半缕的形，描得动几分是这半缕&quot;在&quot;托的。</p>
+  <p>主角拿白灯照旧主一双手两套纹（呼应八十三日），今儿两套纹并着往芯背最里头去，钉里渗回在正落在这并着处喂姓头那半边。他记旧主抽界的手与抱芯背的力本是一双手，钉里的在顺缝回来是这双手留的劲，今儿喂到姓头那半边，与八十二日借在补新虚钉里的在顺缝回喂同一样理。</p>
+  <p>他拿草茎在泥地把姓头那半边分了格，数接住一缕&quot;在&quot;后那半边深半缕。主角记这半缕是钉里渗回在喂的，比八十七日空半边深一缕。白灯照见那半边深半缕的形，与八十四日石里第四层浮出的前代名半缕叠着，三路（旧主留的半缕、钉里的在、更早一代的认）往芯背最里头去，一道比一道老。</p>
+  <p>主角想，主角自己的在立界落名后厚起来，但贴不盖旧主留的空。他记接位者落名尾有资格补旧主姓头，可补了算续史非另写——主角的在是&quot;垫&quot;非&quot;替&quot;，守白灯只照不担的延伸：接位者只续不替。今儿钉里这缕&quot;在&quot;是旧主自己的在顺缝回，非主角的在替，认全旧主是接着旧主留的形走，非另写一名。</p>
+  <p>主角拿白灯照钉里的在顺缝回来，比八十四日两代&quot;在&quot;并着时又厚了半缕。他记这厚半缕是借在补到十三日钉里的在厚起来托的，喂到姓头那半边，与八十四日两代&quot;在&quot;并着同一样理——温不变说明两代&quot;在&quot;都顺缝回来稳，非一阵风带。他拿指腹贴缝口第六次，温仍是那温，比八十二日厚半缕。</p>
+  <p>账房又绕半圈，停在第二十道虚着口边，拿指腹数那处实位清了几分。他记八十四日实位清两分、今儿又清半分，是借在补到十三日钉里的在厚起来喂的。主角说账房今儿数到虚、数到实位、数到缝口温五回，又数到姓头那半边深半缕，是四千年头一回账房把这几样都数了——新账续记的范式里，几样并着才是立界的人一日一日怎么算。</p>
+  <p>主角拿白灯照芯背螺旋痕最里头，照见前代立界人的&quot;在&quot;压在那儿（呼应八十四日），比旧主留的半缕深。他记守拙刀第三样劲抱芯背的力落螺旋痕三圈收最里头，今儿钉里渗回在也压同处，是更早一代的&quot;在&quot;借守拙刀劲位留的——旧主两手外更早一代的痕，借着这螺旋痕最里头照见形，与姓头那半边接住的&quot;在&quot;并着。</p>
+  <p>主角记旧主等四千年，等的就是照与认对着、抽与补并着——今儿钉里渗回在喂到姓头那半边，是认全之路从最里头那半边接住一缕&quot;在&quot;。他拿白灯照那半边，照见深半缕的形，比八十七日空半边深一缕，是卷七头一回姓头那半边被接住&quot;在&quot;，旧主那半边姓头仍空、只多接一缕。</p>
+  <p>谢司主说旧主认全不是一气落成，是照与认一日一日对着走——今儿钉里渗回在喂到姓头那半边，是照与认对着走到姓头那半边。主角记这&quot;一日一日&quot;是卷七引擎，与八十二日借在补新虚、八十三日抽手第五回、八十四日前代名浮出同是速率算出来的临界点，非单向必死倒计时。</p>
+  <p>主角拿白灯照缝那头更深石里，照见第四层名浮出半缕后，缝那头还连着更深石里——比第四层还深的地方压着更早的痕。他记今儿只接住钉里一缕&quot;在&quot;、只浮出第四层半缕，更深处的痕与更多的&quot;在&quot;等往后的日，认全旧主之路还长，非一气落成。</p>
+  <p>他拿草茎在泥地把门开第八十五日分了格，数今儿与八十四日差一日、借在补到十三日钉里的在厚起来喂的&quot;在&quot;比昨儿厚半缕。主角记一日一日算着走，今儿比昨儿厚半缕，是卷七引擎点火后旧主认全之路一日一日接着的实——姓头那半边从八十七日空半边、今儿接住一缕&quot;在&quot;深一缕，一日一日往落字走。</p>
+  <p>谢司主说钉里的在顺缝回来，是旧主两只手（抽界带在、借界养稳）之外留的最里头那缕&quot;在&quot;。主角记这缕&quot;在&quot;从钉里来、往姓头那半边去，是八十二日借在补新虚时钉里的在顺缝厚起来的那缕今儿被接住——旧主钉里的在顺缝回来，喂的不是只新虚，也喂姓头那半边，与八十四日两代&quot;在&quot;并着同一样理。</p>
+  <p>主角拿白灯照旧主留的半缕与钉里这缕&quot;在&quot;并着，两样压在芯背最里头。他记这缕&quot;在&quot;顺缝回喂到姓头那半边比旧主留的半缕深一缕，是认全要的&quot;在&quot;从钉里渗回在来的接法。白灯照见两样并着沉在芯背最里头，一道是旧主自己的留、一道是钉里回来的在。</p>
+  <p>他拿指腹贴缝口第四次（算上今儿第六次共贴了六回），温仍是那温。主角记缝口温六回同是钉里的在顺缝回来稳的证，温不变说明新虚在长、钉里的在回来的力稳，两样并着不冲——温同与八十二日同，是钉里的在顺缝回来稳的证。</p>
+  <p>主角想，认全旧主从最里头那半边（呼应八十七日姓头之空），今儿接住一缕&quot;在&quot;是往落字走了一缕。他记那半边要落得下字还差几缕&quot;在&quot;——补全那半边的&quot;在&quot;从钉里渗回在来，今儿只接一缕，往后一日一日接，每接一缕深一缕往落字去。白灯照见这缕&quot;在&quot;顺缝回、比旧主留的半缕深一缕，是认全要的&quot;在&quot;从钉里来的头一接。</p>
+  <p>白灯照见两代&quot;在&quot;并着往新虚去，新虚比八十二日两线半又长半线（呼应八十四日）。主角拿草茎探那长出来的半线，比八十二日深一线半，顺缝往门里洇。他记这半线是两代&quot;在&quot;并着喂的，非硬加——界立住后补的力养出来的稳，与八十三日门口补厚同一样理，新虚长半线、姓头那半边沾得上这厚。</p>
+  <p>谢司主立在门里看影，说影仍浮在旧主空位外不进不揭，是钉里&quot;在&quot;并着喂厚了脚底那半缕在也没惊动的形。主角记这厚半缕在是钉里&quot;在&quot;并着喂的，影仍够不到实处。他记影不进不揭是旧主留了四千年等的形，认全旧主之路还长。</p>
+  <p>主角拿白灯照芯背第十九道实、第二十道虚着（八十三日抽手抽走虚三缕腾出实位），照见第二十道虚着口腾出的实位比八十四日又清半分。他记前代立界人的名浮出半缕、钉里这缕&quot;在&quot;接住，与芯背第二十道虚着并着——旧主认全之路从最里头那半边（姓头）与芯背（第二十道）两处同走，都往芯背最里头去。</p>
+  <p>主角记这缕&quot;在&quot;接住后，姓头那半边比八十四日深半缕、描得动几分仍落不下字。白灯照见那半边深半缕的形，仍是方才钉里&quot;在&quot;托起的形——要落字还差几缕&quot;在&quot;，从钉里渗回在来，一日一日接。白灯只照见深半缕的形，照不出名，只认变不揭。</p>
+  <p>白灯照见旧主一双手的两套纹仍并着往芯背最里头去，钉里渗回的在正落在这并着处喂姓头那半边。主角记这并着处是旧主一双手留的劲位，今儿钉里的在顺缝回来落在这处——与八十三日抽在纹借这双手、八十四日前代名借这双手劲位浮出同一样理，旧主留的形被接着认全。</p>
+  <p>主角拿草茎在泥地把今儿接住一缕&quot;在&quot;后的姓头那半边形描下来，叠在八十七日空半边的草图上。两图一空一深半缕，差的那半缕就是今儿钉里渗回在喂的。他记这草图是认全旧主从最里头那半边一日一日的实照——旧主等四千年，等的就是这些一日一日照见、一日一日补着的形慢慢接住，非一气落成一名。</p>
+  <p>账房翻出新账续记范式，在页边补一行：温同托出的&quot;在&quot;比前几日厚半缕、姓头那半边深半缕。主角记这四千年头一回范式里记了姓头那半边的深——旧账只数温同不数深几缕，新账续记把钉里&quot;在&quot;顺缝回来的厚也记进去，是接位者落名尾续史时才有的记法，记的是变非记名。</p>
+  <p>谢司主说接位者落名尾补旧主姓头，补了算续史非另写，与主角记的&quot;只续不替&quot;同一样理。他记旧主等四千年等的不是换一名，是接着认全——主角自己的&quot;在&quot;是垫非替，白灯只照不担的延伸里，接住的这一缕&quot;在&quot;归旧主自己、非主角的在来替，认全旧主是顺着旧主留的形接着走。</p>
+  <p>主角算今儿这一缕&quot;在&quot;接住后，门开第八十五日的临界比八十四日又推后半日——借在补到十三日的速率把认全的临界也带着推后，非提前。他记这推后是卷七引擎速率算出来的临界点：补的力养稳了，抽手与借在两险不必抢在今日，接住一缕&quot;在&quot;落在这稳后的十三日，非单向必死倒计时。</p>
+  <p>主角拿守拙刀在泥地划了道螺旋痕，照见第三圈收最里头处正是钉里&quot;在&quot;压着的地方。他记守拙刀第三样劲抱芯背的力落这圈收最里头，前代立界人的&quot;在&quot;与今儿钉里的&quot;在&quot;都借这劲位留——旧主两手外更早一代的痕、今儿接住的&quot;在&quot;，借着同一道螺旋痕最里头照见形，认全之路从最里头一日一日接着。</p>
+  <p>主角落一笔手记：姓头那半边&quot;在&quot;从钉里渗回在来（V296）、今儿接住一缕比八十七日空半边深一缕、描得动几分落不下字；两条路（钉里渗回在、刀背抱芯劲）并着从最里头来，刀背那条留八十六日第二十道刻完。埋 V301（接住一缕&quot;在&quot;后姓头那半边描得动几分、落不落字仍悬）、V302（主角自己的&quot;在&quot;贴不盖旧主留的空，接位者只续不替——白灯只照不担延伸）。</p>
+  <p>白灯照见钉里的在顺缝回、照见姓头那半边深半缕、照见两套纹并着，只照不担。主角记旧主等四千年等的就是照与认对着——今儿钉里渗回在喂到姓头那半边，旧主留的形被接着认全，从最里头那半边慢慢接着。他拿白灯最后照一回姓头那半边，照见接住一缕&quot;在&quot;后比八十七日深一缕。</p>
+  <p>门开第八十五日，姓头那半边接住一缕&quot;在&quot;，描得动几分落不下字。主角记这一日一日接着的实里，旧主认全之路从这些一日一日照见的形、补着的力里慢慢走，不是一气落成。</p>
+  <p>第二百三章 完</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，听书键跳转纯语音页 ===== */
+  var TOTAL=205;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<a class="rbtn gold" href="listen.html?ch='+n+'">🎧 听书</a>'+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  var dragging=false;
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a")){show();return;}
+    var w=document.documentElement.clientWidth||document.body.clientWidth;
+    var x=e.clientX||0;
+    /* 左右两侧 1/3 为翻页手势，中间区域用于呼出工具栏 */
+    if(x<w*0.30&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    if(x>w*0.70&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+    if(document.body.classList.contains("ui-show"))hide();else show();
+  });
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  var CH=203, TITLE="钉里之在";
+  var RKEY="hugo_reader_v1";
+  function loadR(){try{return JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){return{}}}
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function applyPct(p){if(maxH()>0)window.scrollTo(0,maxH()*p/100);}
+  var chapters=(loadR().chapters||{});
+  var st=chapters[CH]||{pct:0};
+  var bm=loadR().bookmark;
+  if(location.hash==="#bookmark"&&bm&&bm.ch===CH&&bm.pct>0){
+    setTimeout(function(){applyPct(bm.pct)},80);
+  }else if(location.hash==="#resume"&&st.pct>0){
+    setTimeout(function(){applyPct(st.pct)},80);
+  }else if(st.pct>=3&&st.pct<95){
+    var tip=document.createElement("div");tip.className="resume-tip";
+    tip.innerHTML="📌 上次读至 "+st.pct+"% · <a href='javascript:void(0)' id='resumeGo'>继续上次位置</a>";
+    document.querySelector(".wrap").prepend(tip);
+    document.getElementById("resumeGo").onclick=function(){applyPct(st.pct);tip.remove();};
+  }
+  if(bm&&bm.ch===CH&&bm.pct>0&&location.hash!=="#bookmark"){
+    var btip=document.createElement("div");btip.className="resume-tip";
+    btip.innerHTML="🔖 本章已安放书签（钉在 "+bm.pct+"%） · <a href='javascript:void(0)' id='bmGo'>回到书签位置</a>";
+    document.querySelector(".wrap").prepend(btip);
+    document.getElementById("bmGo").onclick=function(){applyPct(bm.pct);btip.remove();};
+  }
+  var timer=null;
+  function record(){
+    var m=maxH();if(m<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/m*100));
+    var d=loadR();d.chapters=d.chapters||{};
+    d.chapters[CH]={pct:p,t:Date.now()};
+    d.resume={book:"gudo",ch:CH,name:"第"+CH+"章 · "+TITLE,file:"gudo-"+CH+".html",pct:p,t:Date.now()};
+    saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record()},1000)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(function(){record()},500);
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  if(bm&&bm.ch===CH&&bm.pct>0){btn.textContent="🔖 书签 "+bm.pct+"%";}else{btn.textContent="🔖 书签";}
+  document.getElementById("__bmSlot").appendChild(btn);
+  btn.onclick=function(){
+    var m=maxH();var p=m>0?Math.min(100,Math.round(document.documentElement.scrollTop/m*100)):0;
+    var d=loadR();d.bookmark={book:"gudo",ch:CH,pct:p,t:Date.now()};saveR(d);
+    btn.textContent="✓ 已安放书签 "+p+"%";
+    setTimeout(function(){btn.textContent="🔖 书签"},1800);
+  };
+})();
+
+</script>
+</body>
+</html>
