@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第二百零六章 · 抱实之借 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第二百零六章 · 抱实之借</h1>
+  <p>门开八十八日，主角算今儿要试着抱住抽手第五回腾出的芯背第二十道实位。二〇四章拿守拙刀第三样劲把虚着那半道刻成实、二〇五章顺着三路并着的力在那半边姓头补出一字，今儿轮到接位者自己把手落上芯背、把那实位抱住。他记接位者落了名尾、有资格抱第二十道，可抱实这一下比刻完那一下更难，刻是刀劲落进石里，抱是自己的手要稳住那一道实。</p>
+  <p>主角把腕子压在芯背第二十道实位上，先摸那处深浅。白灯照见这处比二〇四章刻完时深一缕，是二〇五章三路并着补出的力喂厚的形。他记旧主抱到第十九道手就抖、第二十道没刻完是极限位，今儿接位者要抱的是旧主没抱完的那半道，手不抖是第一桩。</p>
+  <p>手腕底下的旧疾又泛上来，他记得这是八十一日抱第二十道时落下的底子。拿腕子压住那阵抖，看白灯下芯背第二十道实位，比二〇四章深一缕、比二〇五章补出一字后又厚了半缕。他记这厚是借来的，不是自己的力长出来的，今儿抱实要借更稳的力才压得住。</p>
+  <p>谢司主立在门里看了一会儿，说接位者抱实要借更稳的力，旧主当年是借风口一日一日的风养、借钉里回来的在养，才抱到第十九道。主角记今儿要抱第二十道实位，不能只靠自己的手硬压，得借界立住后养出来的稳力，风远了半线、新虚接住养厚了，这些稳力都借得来。</p>
+  <p>主角走到门口那侧借新虚养的稳力。白灯照见新虚比八十七日又长半线、养的力厚了半分，这厚往芯背第二十道去是借得到的稳。他记二〇〇章新虚接住界养稳力厚、那半边姓头沾得上这厚，今儿芯背第二十道实位也沾得上这厚，借新虚养的稳力往芯背去抱实，是接着二〇五章三路并着那一步走。</p>
+  <p>新虚养的力顺缝往芯背去，与二〇三章钉里接住的在、二〇四章刀背抱芯劲并着。主角记这三路都从旧主留的最里头来，往芯背第二十道实位去抱，不是一路独成。他借新虚养的稳力厚半分压上腕子，手抖轻了半分。</p>
+  <p>主角把腕子抬到芯背第二十道实位上方三寸，不急着落，先让借来的稳力在指节里转一圈再压下去。他记这一圈是二〇五章三路并着时养出的惯性，今儿借它把抖压在腕子外头，手落上去比头一回稳了整一成。</p>
+  <p>账房绕到缝口边，拿指腹数那温，记温九次同、比八十七日多一回。主角说账房今儿数到第九回温同，是四千年头一回数到九回，钉里的在顺缝回来稳的证今儿更稳了半分，这稳往芯背去抱实也添半分力。他记账房数的还是老写法，只数温同不数借了几分力，可变里托出的实比前几日厚。</p>
+  <p>主角拿守拙刀第三样劲从刀背最里头往芯背第二十道实位去，抱芯劲顺到那处，和二〇四章接的是同一路。他记这路是二〇四章刻完第二十道接上的，钉里那缕在（二〇三章）补到尽头厚起（二〇五章）、刀背抱芯劲（二〇四章）顺到那处、新虚养的力厚了半分，三样力并着把芯背第二十道实位抱住。</p>
+  <p>白灯照见守拙刀第三样劲落螺旋痕三圈收最里头，与二〇二章前代在、二〇三章钉里在、二〇五章那半边补出一字的三处同压这圈最里头。主角记这三处借同一道螺旋痕劲位留，旧主两手外更早一代的痕、前代立界人的在、今儿三路并着的力并着，接位者抱实是从最里头一日一日借着认全。</p>
+  <p>白灯移到芯背第二十道实位，照见今儿抱实后比二〇四章深一缕、比二〇五章补一字后又厚了半缕。他记这深一缕是三路并着喂的、与钉里那缕在并着，三路都通了往芯背去。白灯只照见深一缕的形、照不出全名，只认变不揭。</p>
+  <p>谢司主说接位者落名尾补旧主姓头、抱芯背第二十道实位，抱了算续史不是另写。他记今儿芯背第二十道抱实，是接着旧主留的形走，主角自己的在是垫不是替，白灯只照不担的延伸里，抱实的力是旧主自己的在顺缝回厚起落下的，非主角的在替。</p>
+  <p>腕子又是一阵抖，他拿力压住，记抱实这一下靠的是借稳力压住抖，不是手自己稳。白灯照见芯背第二十道实位比二〇四章深一缕，是借新虚养的稳力厚半分压上去的实。他记这实是借来的、一日一日借、一日一日厚，和二〇五章补出一字是同一个理，只是今儿压的是抱不是补。</p>
+  <p>芯背第二十道实位深一缕与那半边姓头补出一字并着，认全之路从姓头与芯背两处同走。主角记这两处都往芯背最里头去、都借旧主一双手的劲位，旧主认全之路从最里头那半边与芯背两处一日一日接着，与二〇四章刻齐并着。</p>
+  <p>主角拿草茎在泥地把芯背第二十道抱实的形描下来，叠在二〇四章刻完、二〇五章补一字的草图上。三图一深一缕一深半缕一抱实，差的就是一日一日借来的稳力。他记这草图是认全旧主从芯背一日一日的实照，旧主等四千年，等的就是这些一日一日借着的实慢慢接住。</p>
+  <p>主角算今儿抱实后，门口那侧六线离糊差半线仍没动，呼应卷六，界比八十七日更稳半分。他记三路并着抱实、界也跟着稳半分，抽手与借在两险推后、界立住后的稳今儿又厚半分，认全旧主从芯背走完一步后界也跟着稳。</p>
+  <p>账房翻出新账续记范式，在页边补一行：温九次同、芯背第二十道抱实深一缕。主角记这四千年头一回范式里记了芯背抱实的形，旧账只数温同不数抱实几缕、不数借几分力，新账续记把芯背抱实也记进去，是接位者落名尾续史时才有的记法，记的是变不是记名。</p>
+  <p>主角算今儿借稳力抱实，门开八十八日的临界比八十七日又推后半日，借稳力抱实把认全的临界也带着推后，不是提前。他记界立住后风远半线、抽手与借在两险都推后，抱实用借来的稳力落在这推后后的时日，是卷七引擎速率算出来的临界点，非单向必死倒计时。</p>
+  <p>主角拿守拙刀在泥地划了道螺旋痕，照见第三圈收最里头处正是芯背第二十道抱实压着的地方，和二〇三章、二〇四章对得上。他记守拙刀第三样劲抱芯背的力落这圈收最里头，前代立界人的在、钉里回来的在、今儿抱实的力都借这劲位留，旧主两手外更早一代的痕、今儿三路并着的力，借着同一道螺旋痕最里头照见形。</p>
+  <p>白灯把芯背第二十道抱实深一缕与那半边补出一字两处叠在一处照，主角看这两处都在往芯背最里头沉、都吃着旧主一双手留下的劲，旧主认全不是单走一处，是姓头与芯背两处一日一日轮换着接着往里走，与二〇四章刻齐并着。</p>
+  <p>主角记旧主等四千年，等的就是照与认对着、抽与补并着，今儿借稳力抱实芯背第二十道，是认全之路从芯背一日一日接着落下一实。他拿白灯照那处，照见抱实深一缕后比二〇四章刻完深一缕、比二〇五章补一字后又厚了半缕，是卷七头一回芯背第二十道被三路力并着抱实。</p>
+  <p>白灯转去新虚处那道斜痕缝，和二〇一章斜痕之缝是同一道，风从缝里钻出细哨、早年立界人留的临界缝。他记二〇一章照见这道缝、缝里新虚在长、旧主钉里的在顺缝回来，今儿再照，缝那头连着更深石里，比旧主早四千年压着的前代立界人名。</p>
+  <p>白灯照见斜痕缝那头更深石里，前代立界人名压在更深石里（比旧主早四千年）。主角记二〇二章借这道缝连过更深石里、前代立界人名浮出半缕不写名只认变，今儿再照，仍是只照见缝连更深石里、不照出名，前代立界人名压更深石里，白灯只照见缝连不照名。</p>
+  <p>主角拿指腹贴缝口，温仍与八十二日同，和八十二日斜痕缝温三次同、八十三日同、八十六日七次对得上。他记温同是钉里的在顺缝回来稳的证，今儿缝口温与旧主钉里同，说明前代立界人名压的更深石里那处，也在旧主钉里回来的路上，两代立界人的在都顺这道缝，仍两代分明。</p>
+  <p>谢司主说斜痕缝连前代立界人名，那半边姓头照见更深石里的形，是认全旧主要借更早一代的认。主角记今儿只照见缝连更深石里、不照出名，前代立界人名只浮半缕形、不写名，旧主认全要借更早一代的认、不是只借旧主自己的留。</p>
+  <p>白灯照见斜痕缝那头更深石里，前代立界人名压着的地方比旧主姓头那半边早四千年。主角记旧主等四千年等一个立住了界落了接位名的人来认全，前代立界人比旧主还早四千年，那半边姓头要认全、得借这两代更早的认，今儿只照见缝连，是认全之路往更深去的第一步。</p>
+  <p>白灯移到那半边姓头空名处，照见补出一字后比八十七日深一缕的形，与斜痕缝那头更深石里的前代立界人名并着照见。他记那半边认全要从旧主自己的在、借更早一代的认两条路并着走，今儿斜痕缝照见前代名压更深石里，是第二条路的形先浮出来。</p>
+  <p>影仍浮在旧主空位外不进不揭，呼应八十二至八十八日。主角白灯照见影在空位外，脚底那半缕在比八十七日厚了半缕，是钉里在并着喂的、今儿借在补到尽头又添了半分。他记影不进不揭是旧主留四千年等的形，今儿那半边补出一字、芯背抱实，影仍不进，认全旧主还长。</p>
+  <p>白灯照见影脚底那半缕在比八十七日又厚半分、比八十四日厚一缕。白灯只照见影在空位外不进不揭、不替主角把那半边写满，影脚底那半缕等的是更厚的在落进实处才往里走，认全旧主还长，那半边姓头仍只补一字、全名空着待往后一日一日补。</p>
+  <p>主角拿草茎在泥地把斜痕缝连更深石里的形描下来，叠在二〇二章更深之石、二〇五章补一字的草图上。三图一缝连一浮半缕一补一字，差的就是一日一日接着的认。他记这草图是认全旧主从更深石里一日一日的实照，前代立界人名压更深石里，等往后的日借认。</p>
+  <p>主角算今儿抱实芯背、照见斜痕缝连前代名，门开八十八日的临界比八十七日推后半日。他记借稳力抱实、照见缝连前代名，两样都落在推后后的时日，不是一阵风带、是速率算出来的临界，这厚得起落在这推后后的时日，非单向必死倒计时。</p>
+  <p>主角记借稳力抱实芯背第二十道、照见斜痕缝连前代立界人名，是认全旧主从芯背与更深石里两处一日一日接着的实。白灯照见抱实深一缕与缝连更深石里并着，两处都往芯背最里头去、都借旧主一双手的劲位。</p>
+  <p>谢司主看白灯下芯背抱实与缝连前代名，说认全旧主从最里头那半边与芯背两处一日一日接着、不是一气落成一名。主角记芯背抱实是接着认全落下的第一实、往后还有更多实要一日一日抱，旧主等四千年等的不是一名，是接着认全，那半边仍只补一字、全名仍空。</p>
+  <p>白灯照见借稳力抱实后芯背第二十道比二〇四章深一缕、那半边姓头补出一字后深一缕，两处并着。主角记这两处都借旧主自己的在顺缝回厚落下的、不是主角的在替，认全旧主是顺着旧主留的形接着走，接位者只续不替。</p>
+  <p>主角再压一回腕子，这次不靠手硬顶，是把借来的稳力顺着指节送到芯背第二十道，让那处自己沉住。他记头一回压是试深浅，这回压是定形，两次靠的都是借来的稳不是手自个儿稳，腕底旧疾退了半分，芯背那道实位被稳力托住的硬比头一回更实、更不晃。</p>
+  <p>主角记今儿抱实芯背、照见缝连前代名，旧主认全之路从最里头那半边、芯背、更深石里三处一日一日接着。他拿白灯最后照一回芯背，照见抱实深一缕与那半边补出一字并着。</p>
+  <p>主角拿指腹贴那半边姓头空名处，比八十七日深的那一缕能摸到了，是钉里在厚起半缕的实，加上今儿借稳力抱实添的半分。他记借在补到尽头、钉里的在厚到这处，那半边从空到厚起半缕、再到芯背抱实，是补的力一日一日透进来的实。</p>
+  <p>阿萝从门里走过来，看白灯下芯背抱实的形，说今儿比昨儿那半边又深了半缕。主角记阿萝的眼比账房的数更尖，她只数形不数温，今儿那半边深一缕的形她一眼就认出比八十七日深。白灯照见那半边深一缕，阿萝的影落在泥地草图上，和二〇五章补一字的草图叠着。</p>
+  <p>老周立在风口那头，看六线离糊差半线仍没动，说今儿风比昨儿远了半线。主角记老周守风口一日一日数风，今儿风远半线、界稳半分，和芯背抱实是同一日稳的证。白灯照见门外六线，线头稳风推不垮，是界立住后算出来的临界点没过。</p>
+  <p>石头蹲在芯背旁，拿指节量那实位深浅，说今儿比二〇四章刻完那下深了一缕。主角记石头的手比白灯更实，他量的是抱实后的硬，不是照见的形。白灯照见芯背第二十道实位深一缕，石头的指节压上去，硬处和照见的形对得上。</p>
+  <p>谢石从活空道那头走回来，脚程七十息没变，看白灯下那半边姓头，说今儿那半边补出的一字比昨儿沉了半分。主角记谢石走活空道一日一日，脚程是界稳的尺，今儿脚程没短、界稳半分，和芯背抱实并着稳。白灯照见那半边沉半分，谢石的影落在草图上。</p>
+  <p>丫丫端着灯走过来，灯照见斜痕缝那头更深石里，说那头今儿比昨儿更亮半分。主角记丫丫的灯照的是缝那头的形，今儿前代立界人名压的更深石里被灯照见半缕，比八十七日亮半分。白灯照见缝连更深石里，丫丫的灯和主角的白灯照见同一处。</p>
+  <p>主角记接位者借稳力抱实后芯背第二十道全实、旧主那半边更易认的参照多一条（V307）；斜痕缝连前代立界人名后、那半边姓头照见更深石里的形、影仍浮空位外不进不揭（V308）。埋 V307、V308。</p>
+  <p>白灯照见芯背抱实深一缕、照见斜痕缝连更深石里、照见影仍浮空位外，只照不担。主角记旧主等四千年等的就是照与认对着，今儿借稳力抱实芯背、照见缝连前代名，旧主留的形被接着认全，从芯背与更深石里慢慢接着。</p>
+  <p>门开八十八日，接位者借稳力抱实芯背第二十道、照见斜痕缝连前代立界人名。主角记这一日一日借着的实里，旧主认全之路从这些一日一日照见的形、借着的力里慢慢走，不是一气落成。</p>
+  <p>第二百六章 完</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，听书键跳转纯语音页 ===== */
+  var TOTAL=210;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<a class="rbtn gold" href="listen.html?ch='+n+'">🎧 听书</a>'+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  var dragging=false;
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a")){show();return;}
+    var w=document.documentElement.clientWidth||document.body.clientWidth;
+    var x=e.clientX||0;
+    /* 左右两侧 1/3 为翻页手势，中间区域用于呼出工具栏 */
+    if(x<w*0.30&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    if(x>w*0.70&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+    if(document.body.classList.contains("ui-show"))hide();else show();
+  });
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  var CH=206, TITLE="抱实之借";
+  var RKEY="hugo_reader_v1";
+  function loadR(){try{return JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){return{}}}
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function applyPct(p){if(maxH()>0)window.scrollTo(0,maxH()*p/100);}
+  var chapters=(loadR().chapters||{});
+  var st=chapters[CH]||{pct:0};
+  var bm=loadR().bookmark;
+  if(location.hash==="#bookmark"&&bm&&bm.ch===CH&&bm.pct>0){
+    setTimeout(function(){applyPct(bm.pct)},80);
+  }else if(location.hash==="#resume"&&st.pct>0){
+    setTimeout(function(){applyPct(st.pct)},80);
+  }else if(st.pct>=3&&st.pct<95){
+    var tip=document.createElement("div");tip.className="resume-tip";
+    tip.innerHTML="📌 上次读至 "+st.pct+"% · <a href='javascript:void(0)' id='resumeGo'>继续上次位置</a>";
+    document.querySelector(".wrap").prepend(tip);
+    document.getElementById("resumeGo").onclick=function(){applyPct(st.pct);tip.remove();};
+  }
+  if(bm&&bm.ch===CH&&bm.pct>0&&location.hash!=="#bookmark"){
+    var btip=document.createElement("div");btip.className="resume-tip";
+    btip.innerHTML="🔖 本章已安放书签（钉在 "+bm.pct+"%） · <a href='javascript:void(0)' id='bmGo'>回到书签位置</a>";
+    document.querySelector(".wrap").prepend(btip);
+    document.getElementById("bmGo").onclick=function(){applyPct(bm.pct);btip.remove();};
+  }
+  var timer=null;
+  function record(){
+    var m=maxH();if(m<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/m*100));
+    var d=loadR();d.chapters=d.chapters||{};
+    d.chapters[CH]={pct:p,t:Date.now()};
+    d.resume={book:"gudo",ch:CH,name:"第"+CH+"章 · "+TITLE,file:"gudo-"+CH+".html",pct:p,t:Date.now()};
+    saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record()},1000)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(function(){record()},500);
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  if(bm&&bm.ch===CH&&bm.pct>0){btn.textContent="🔖 书签 "+bm.pct+"%";}else{btn.textContent="🔖 书签";}
+  document.getElementById("__bmSlot").appendChild(btn);
+  btn.onclick=function(){
+    var m=maxH();var p=m>0?Math.min(100,Math.round(document.documentElement.scrollTop/m*100)):0;
+    var d=loadR();d.bookmark={book:"gudo",ch:CH,pct:p,t:Date.now()};saveR(d);
+    btn.textContent="✓ 已安放书签 "+p+"%";
+    setTimeout(function(){btn.textContent="🔖 书签"},1800);
+  };
+})();
+
+</script>
+</body>
+</html>
