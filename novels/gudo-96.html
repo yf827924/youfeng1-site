@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第九十六章 · 第二笔 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第九十六章 · 第二笔</h1>
+  <p>萧铁衣在石上站了很久。</p>
+  <p>那一晚的风，是从他脸上吹过去的。黑纹趴在眼角往里的地方，凉而钝，像一道旧疤被人用手指反复按着。他抬手摸过好几回，摸不出深浅，只摸得出它比先前长了——从眼角爬过了一小段，爬上了脸。</p>
+  <p>他记得生父说过的话：改一笔，重一分；重到扛不住，就是第三声收人。</p>
+  <p>第一笔，他改了栓子的号。那一笔下去，第三声的头一下就来了，黑纹过了眼角。他拿&quot;在&quot;字挡回去，账房绕了过去，可那道纹，是按进皮里的。</p>
+  <p>他低下头，看自己的手背。光从门板缝里漏进来，照得石面发灰。他忽然很想再改一笔。不是因为闲，是因为他怕——怕自己一旦停下来，就会开始算那笔总账：四千一百六十二笔，还差着四千一百六十一笔。</p>
+  <p>他往位阵深处走。</p>
+  <p>他走得很慢。脚下的石，一道一道的，被无数人踩出了凹。他低着头，看那些凹痕，想起青石镇码头上的石阶——也是这么被踩出凹的，几十年，几代人，凹里积着雨，雨里泡着脚印。门里这些凹，积的不是雨，是号。每一个凹，都是一个走过的人，留下的一笔。</p>
+  <p>栓子落位的那一幕，他又想了一遍。那个飘了二百多年的孩子的号，乙字二百零六，被他拿丙字七百一十九做了保，落了位。当时外头暗账浮起一道纹，他胸口那块号沉了一沉。那沉，他现在还记得，像有人往他怀里头塞了块石头，不大，可坠。</p>
+  <p>他走过一排又一排的位。有的位上团着一团亮些的影，有的只是一团灰，灰得几乎看不出人形。名后缀的字也不一样：填的，绝的，还有少数几个缀着别的、他看不懂的记号。他忽然明白这面墙是什么了——它不是一个册，是一整座城的人，一个挨一个，摞在他面前。每一个人，都停在了最难的那一步上。</p>
+  <p>位阵还是老样子。一座一座的位，每座一团影，一个名。名后缀着三样：号、位、法。填的注&quot;在册&quot;，绝的注&quot;待落&quot;。他走在这些石面之间，像走在一片望不到头的碑林里。风穿过位与位的缝隙，带着一股陈年的土腥味，不凉，是滞的。</p>
+  <p>他在第三排停住。</p>
+  <p>上次他挑栓子，用的是三个条件：飘着、干净、近。飘了二百多年的孩子的号，乙字二百零六，干净得没有一丝牵扯，近得就在手边。这一回他有意反着来——他要挑一个牵扯更小的，轻的，好测一测：一笔到底爬多少。</p>
+  <p>他在一块石面前蹲下。</p>
+  <p>石上刻着&quot;丙字九百零三&quot;。名后头缀着&quot;绝&quot;，注&quot;待落&quot;，可那&quot;待落&quot;两个字被磨得发白，像是有人天天路过，天天拿指头蹭。他盯着那个号看了半天，听见里头有个极细的回声，像个小孩子在很远的地方喊&quot;幺儿&quot;。</p>
+  <p>幺儿。一个孩子的诨名，家里最小的那个。这号飘了百来年，干干净净，背后没有活人，也没有死人争——它只是空着，等一个落处。比栓子的号还轻。栓子好歹还有段被人记挂的因由，幺儿的号，连记挂它的人都没有了。</p>
+  <p>萧铁衣伸手，按在&quot;丙字九百零三&quot;那几个字上。</p>
+  <p>石是钝的，不冰。他想起自己胸口那块丙字七百一十九——他拿它给每一笔做保。保得越多，号越重；号越重，脸上的纹越深。</p>
+  <p>&quot;我改第二笔，&quot;他出声，声音在石壁间撞出回响，&quot;还是老法子。我用我自己，给号算账。&quot;</p>
+  <p>那细弱的回声，颤了一下，像小孩子听见有人喊自己的名，忽然停住了哭。</p>
+  <p>他在石上，落下了第二个&quot;换&quot;字。</p>
+  <p>笔是从哪儿来的，他不知道。上一回是石自己吐出一道痕，这一回也是——他手指按下去，石面微微一陷，一道极细的纹顺着他的指腹长出来，弯弯曲曲，落成一个&quot;换&quot;字。写完最后一个弯，那&quot;丙字九百零三&quot;后头的&quot;绝&quot;字，淡了。淡到几乎看不清，像被谁用袖子蹭过。</p>
+  <p>幺儿的号，落了位。</p>
+  <p>外头暗账上，又浮起一道纹。他看不见外头，可他能感觉到——胸口那块丙字七百一十九，微微一沉，像有人往天平这头，又摞了一枚铜钱。</p>
+  <p>那道纹落定的时候，石面上的&quot;丙字九百零三&quot;轻轻颤了一下。不是抖，是像一块压了百来年的石板，终于被人从底下抽走了一根撑着的棍，松了一松。幺儿的号，从&quot;待落&quot;里，落到了实处。</p>
+  <p>他睁眼，看那块石。&quot;绝&quot;字已经淡得快要看不见，像是被谁拿湿布擦过。取而代之的，是一线极细的、新刻上去的纹——不像&quot;换&quot;字那样弯，是一道笔直的、往下落的痕。那痕落得很轻，像小孩子终于被人抱进了屋，不再站在雪地里等人来领。</p>
+  <p>他盯着那道痕看了很久。它不发光，不烫手，就是一道安静的、落了地的纹。可他知道，这一道，就是幺儿往后站的地方。百来年飘着，这回，落了。</p>
+  <p>他抬手摸脸。</p>
+  <p>黑纹动了。从眼角往里，爬了——他拿手指比了比，不到半指。比栓子那一笔轻。栓子那笔，爬了小半寸；这一笔，只爬了半指不到。</p>
+  <p>他盯着自己的指尖，忽然懂了生父那句话的另一层意思：改一笔重一分，可这&quot;一分&quot;不是死的。有的号牵连重，一笔爬一寸；有的号牵连轻，一笔爬半指。他方才挑的，是能挑到的最轻的一笔。</p>
+  <p>可就算最轻的半指，从眼角到锁骨，又能爬几笔？</p>
+  <p>他站起身，往墙根走。</p>
+  <p>生父那副塌着的肩，还背对着他，一只手按在墙上。提灯人钉在门板上，那两道长烙痕从石头里透出来。账房坐在圈里，捏着那根细长的东西，在册上点得极慢，一页一页地过。</p>
+  <p>&quot;爹。&quot;萧铁衣说。</p>
+  <p>墙根底下静了一息。</p>
+  <p>&quot;改了？&quot;生父问。</p>
+  <p>&quot;第二笔。&quot;</p>
+  <p>&quot;轻的？&quot;</p>
+  <p>&quot;最轻的。&quot;萧铁衣抬手点了点自己的脸，&quot;爬了半指不到。&quot;</p>
+  <p>生父没回头。那只按墙的手，指节动了动。</p>
+  <p>&quot;三指，&quot;萧铁衣把指节按在脸颊上比了比，&quot;一笔半指，轻的。重的呢？&quot;</p>
+  <p>&quot;重的，一寸。&quot;生父说，&quot;绝户号牵着死人，换号牵着活人。栓子牵的是个飘着的孩子的念想，轻。后头你要改的，多半牵着整户的人、整城的号。一笔一寸，不算稀奇。&quot;</p>
+  <p>萧铁衣算了算。三指，按半指算，六笔；按一寸算，三笔。六笔到三笔之间。</p>
+  <p>&quot;三指之外呢？&quot;他问，&quot;收走，是收什么？&quot;</p>
+  <p>&quot;收&#39;在&#39;。&quot;生父说得很平，像在说一件跟他不相干的事，&quot;明账上你是绝户，暗账上你才有&#39;在&#39;。到锁骨，明账那头就有人来抽你的&#39;在&#39;——抽走，你就成了明账上的绝户，绝一户，人就没了。进门那一晚，你挨过一下，该知道那滋味。&quot;</p>
+  <p>萧铁衣知道。那一晚黑里，他自己的日子被往外抽，青石镇的雪、严婆婆的符、阿萝纸一样的脸，一件件过。抽到最后，抽空了，人就没了。他拿&quot;在&quot;字挡回去，可那一下，他至今想起，心口还发滞。</p>
+  <p>&quot;三到六笔。&quot;他重复了一遍，像要把这个数，刻进骨头里，&quot;到锁骨。&quot;</p>
+  <p>&quot;到锁骨。&quot;生父说，&quot;你这会儿在眼角往里半指。还有两指半。&quot;</p>
+  <p>萧铁衣没再比划。他把指节从脸颊上放下来，攥成了拳。拳心里是空的，可他攥得指节发白。</p>
+  <p>&quot;这中间，&quot;他问，&quot;我改一笔，它爬一笔。我要是停了呢？&quot;</p>
+  <p>&quot;停不了。&quot;生父说，&quot;你改了一笔，账就多一道缝。缝在，账房就多一处数不平。它迟早找上门，一次一声。你不改，它照样来收——你欠着那第一笔的债，不会因你不动就少。&quot;</p>
+  <p>&quot;那就是说，&quot;萧铁衣慢慢道，&quot;我不改，也是收；改，也是收。只是改，还能多拉几个号下水。&quot;</p>
+  <p>墙根底下，那只按墙的手，停了一息。</p>
+  <p>&quot;对。&quot;生父说，&quot;所以这门里进来的人，大多选了坐下。坐下了，就不欠了，也不改了。你没坐，你选了站着改。站着改的人，四千多年，没几个。&quot;</p>
+  <p>萧铁衣把拳松开。掌心有一道月牙形的红印，是他自己掐的。</p>
+  <p>&quot;我没得选。&quot;他说，&quot;我进了门，看了册，就回不去了。&quot;</p>
+  <p>&quot;回得去。&quot;生父说，&quot;你坐下来，就回得去。坐下来，你就是第四千一百六十四位，安安稳稳，门里养你一辈子。&quot;</p>
+  <p>萧铁衣没接这话。他转过身，往位阵走。走两步，他停下来，没回头。</p>
+  <p>&quot;我不坐。&quot;他说。</p>
+  <p>墙根底下，静了很久。</p>
+  <p>&quot;我知道。&quot;生父说，&quot;你像你娘。&quot;</p>
+  <p>三到六笔。</p>
+  <p>门里还有四千一百六十二笔。</p>
+  <p>他忽然觉得，那道黑纹不是爬在脸上，是压在胸口。三到六笔，到锁骨；到锁骨，收走。一个人，一条命，换四千多年的账——这笔账，从一开始就算不平。</p>
+  <p>他往账房那边看了一眼。</p>
+  <p>账房还在数。它数到丙字七百一十九那一页，手停了。那一道划痕，横在&quot;丙字七百一十九&quot;上头，细细的，像没写完的字。它盯着那道痕，嘴唇动了动，无声地数：一，二。数到二，它眼睛愣了一下，像是把要干嘛忘了，手一翻，翻到下一页。翻过去三行，它猛地停住，像被什么刺了一下，又翻回来。翻回来，它盯着那道痕，又数：一，二。数到二，又愣。它这样来回了三趟，第三趟回来时，它终于想起了——捏着那根细长的东西，往石上落，像是要把那道痕补上，把少掉的那个数，填回去。</p>
+  <p>落笔的前一刻，它手抖了一下。不是怕，是那道痕太细，它拿不准从哪儿下笔。抖完，它把那根东西放下了，翻到下一页，慢吞吞地数。数了两行，它忽然停住，回头看了一眼那道痕——可这一眼，它已经不记得那道痕是什么了。它迟疑了一息，转回头，继续数。</p>
+  <p>萧铁衣看着它，没出声。他数了数它来回的趟数：三遍。第三遍，才想起要修；想起的下一刻，又忘了。</p>
+  <p>他忽然明白，这团影不是他的敌人。它只是个守了四千多年账的老账房，记性坏了，账对不上了，就慌。它数三遍才想起修，想起又忘——这不是心机，是老。门里的一切，都是老的：老的账，老的规矩，老的守账人，老的守门人。连他娘走的那条空道，都走了三十年。他一个刚进门的人，要拿一条命，去改这一整座老城的账。他想，这大概就是&quot;门之决&quot;三个字的意思——不是决出谁赢谁输，是决开一道缝，让新的，能挤进去。缝一开，老的就拦不住了。</p>
+  <p>他把这层想透，心里那点滞，松了一松。</p>
+  <p>萧铁衣看着它，没出声。</p>
+  <p>生父在墙根，忽然开了口。</p>
+  <p>&quot;你看清了？&quot;</p>
+  <p>&quot;看清什么？&quot;</p>
+  <p>&quot;它绕过去，不是不修。&quot;生父说，&quot;它记性坏，可它不傻。它每数到那道痕，都要停一停，想一想&#39;该补了&#39;。它停三遍，第三遍才动笔。可它动笔的前一刻，自己又忘了。&quot;</p>
+  <p>萧铁衣盯着账房。那团驼背的影，正慢吞吞地翻页，数着它的数。</p>
+  <p>&quot;一道痕，它数三遍才想起来修。&quot;生父说，&quot;三遍，就是它给这道缝的时限。你改得越多，痕越多。痕多了，它数到这一道，还没想起来修，手已经伸到下一道了。等它回过神，前头的早忘了。到那时候，缝就不是一道一道的，是一片一片的。&quot;</p>
+  <p>萧铁衣慢慢懂了。</p>
+  <p>这就是它&quot;绕过去&quot;的锚。不是它心善放过他，是它记性坏，坏到补不过来。一道划痕，它尚且要数三遍才想得起修；十道、百道、千道，它根本数不过来。它四千年没搁过账，第一笔搁在进门那一晚；往后每一笔，都是它数不过来的一道口子。</p>
+  <p>&quot;所以它迟早忘了修。&quot;萧铁衣说。</p>
+  <p>&quot;迟早。&quot;生父说，&quot;你改得越快，它忘得越快。它一忘，缝就一直在。缝在，你就有空子。&quot;</p>
+  <p>萧铁衣站了一会儿。</p>
+  <p>风从门板缝里漏进来，带着外面那座空城的味道——灰，涩，像烧了很久的香只剩烟。他低头看自己的手，又抬头看满壁的位。一座一座，密得像雨后的蘑，数不清。每一座，都是一个号，一个待落或待换的名。</p>
+  <p>他忽然很想笑，笑得发苦。</p>
+  <p>他想起墨记里那本老账。有一回，镇上两家为了半亩水田的租子，记了三百多年的糊涂账，他跟着谢司主对了三天，对到最后，发现差的那几文，早被几代人的丧葬喜事冲得没了影。谢司主当时说：账平不了，不是因为没人会算，是因为算的人，只有一个。</p>
+  <p>他一个人，一条命，改一笔重一分，满打满算还能改三到六笔，就到锁骨，被收走。而眼前这些号，四千一百六十几座，一座挨着一座，从他脚下铺到看不见的暗处。每一座，都是一笔要改的账；每一笔，都要拿他的命去平。</p>
+  <p>他蹲下来，伸手摸最近一块石。石面凉而钝，刻着一个他念不出的姓。那姓后头缀着&quot;绝&quot;，注&quot;待落&quot;。他摸着那个&quot;待落&quot;，忽然觉得，这四个千年的号，不是压在他身上的，是悬在他头上的——像一整座城的人，都仰着脸，等他一个人，拿一条命，把他们一个一个，从&quot;绝&quot;里捞出来。</p>
+  <p>捞不完的。他早算明白了。</p>
+  <p>一个人的命，改不完四千年的账。</p>
+  <p>这个道理，他从前在墨记打算盘的时候就懂——一笔烂账，一个人对，对到死也平不了。可他没想过，自己有朝一日，会站在一笔比墨记大四千倍的账前面，拿命去平。</p>
+  <p>他摸了摸脸上的黑纹。它安安静静，钝而凉。</p>
+  <p>&quot;爹。&quot;</p>
+  <p>&quot;嗯。&quot;</p>
+  <p>&quot;我改得完吗？&quot;</p>
+  <p>墙根底下，那只按墙的手，停了停。</p>
+  <p>&quot;改不完。&quot;生父说得很平，&quot;一个人，改不完。我闩了三十年，早算明白了。你改得完的，是头几笔。后头那四千多笔，得另想法子。&quot;</p>
+  <p>&quot;什么法子？&quot;</p>
+  <p>&quot;我也不知道。&quot;生父说，&quot;我要知道，三十年前就改了。我等的，就是进来一个肯改的人——可进来的人，也得自己找出路。&quot;</p>
+  <p>萧铁衣没再问。</p>
+  <p>他转身，走回位阵。他在第三排蹲下，看着&quot;丙字九百零三&quot;那块石。幺儿的号，落了位，后头的&quot;绝&quot;字淡得快看不见。他伸手，按了按那个淡下去的字。</p>
+  <p>石是温的。</p>
+  <p>不是他娘那块位牌的温，是一种更浅的、刚落了位的号才有的温。像一个刚被人记住的孩子，终于有了去处。</p>
+  <p>他蹲在那儿，很久没动。</p>
+  <p>位阵里很静。账房的数声，从远处一圈圈荡过来，慢，钝，像老僧敲着一面裂了的钟。风穿过位与位的缝隙，带着陈年的土腥。他忽然觉得，这地方不黑，也不死——它只是停在了最难的那一步上，四千多年，谁都没再往前走一步。</p>
+  <p>他要往前走。</p>
+  <p>可他只有三到六笔的命。</p>
+  <p>他站起来，拍了拍膝上的石屑。石屑是灰的，沾在裤腿上，拍不掉。他往深处走，边走边看那些名。丙字九百零四，丙字九百零五，丙字九百零六……一座一座，密密麻麻。每一个，都是一笔要改的账。</p>
+  <p>他数着数着，手停下来。</p>
+  <p>他摸了摸脸。黑纹还在原地，半指，钝，凉。可他心里，多了一种从前没有的东西——不是怕，是算。他在算：三到六笔，到锁骨；到锁骨，收走。这笔账，他一个人平不了。</p>
+  <p>可平不了，也得平。</p>
+  <p>他是第四千一百六十四位。他进了门，报了号，看了册，改了账。他没在自己的位上坐下，因为他还有四千多笔没改。他要是坐下了，这趟就白来了；这四千多年的账，就再没人动了。</p>
+  <p>他往深处走，背影融进位阵的暗里。</p>
+  <p>账房还在数它的数。数到那道划痕，停一停，又翻过去。三遍之后，它还是没想起来修。</p>
+  <p>缝，还在。</p>
+  <p>他站了一会儿，转身，往位阵深处去。脚步比来时实了些——不是不怕，是算清了。三到六笔，到锁骨；到锁骨，收走。这笔账他一个人平不了，可缝开着，就还有路。他得在缝还开着的时候，把路走出来。路怎么走，他还不知道。可他得走——账房每搁一道划痕，就给他让出一笔的工夫；他多改一笔，账房就多搁一道。搁够了，账房就数不下来了。数不下来，他就活过了第三声。</p>
+  <p>第九十六章 完</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，听书键跳转纯语音页 ===== */
+  var TOTAL=240;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<a class="rbtn gold" href="listen.html?ch='+n+'">🎧 听书</a>'+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null,dragging=false;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+
+  /* 翻页：只有「横向滑动」（>64px 且横向明显占优）才翻章；轻点只开关工具栏。
+     不再用「点侧边就翻页」，避免误点一下就莫名跳章。 */
+  var sx=0,sy=0,stk=false,moved=false;
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a"))return;
+    sx=e.clientX||0;sy=e.clientY||0;stk=true;moved=false;
+  },{passive:true});
+  document.body.addEventListener("pointermove",function(e){
+    if(!stk)return;
+    if(Math.abs((e.clientX||0)-sx)>10||Math.abs((e.clientY||0)-sy)>10)moved=true;
+  },{passive:true});
+  document.body.addEventListener("pointerup",function(e){
+    if(!stk)return;stk=false;
+    var dx=(e.clientX||0)-sx,dy=(e.clientY||0)-sy;
+    if(Math.abs(dx)>=64&&Math.abs(dx)>Math.abs(dy)*1.6){
+      if(dx<0&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+      if(dx>0&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    }
+    if(!moved){if(document.body.classList.contains("ui-show"))hide();else show();}
+  },{passive:true});
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  /* ===== 进度与书签：每本书只有两格 =====
+     ① auto   自动存档位：读到哪里自动记，无需操作
+     ② manual 手动书签位：点一下按钮钉住，全书共享这一个
+     进页面时绝不擅自跳转，只给提示；只有从「续读/书签」入口进来才定位。 */
+  var RKEY="hugo_reader_v1";
+  var mm=location.pathname.match(/gudo-(\d+)/);
+  var CH=(mm?parseInt(mm[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var TITLE=h1?h1.textContent.trim():("第"+CH+"章");
+
+  function migrate(d){
+    if(!d.auto&&!d.manual&&(d.bookmark||d.resume||d.chapters)){
+      var nd={};
+      if(d.resume&&d.resume.ch){nd.auto={ch:d.resume.ch,pct:d.resume.pct|0,t:d.resume.t||0};}
+      if(d.bookmark&&d.bookmark.ch){nd.manual={ch:d.bookmark.ch,pct:d.bookmark.pct|0,t:d.bookmark.t||0};}
+      return nd;
+    }
+    return d;
+  }
+  function loadR(){
+    var d={};
+    try{d=JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){d={}}
+    var o=migrate(d);
+    if(o!==d){try{localStorage.setItem(RKEY,JSON.stringify(o))}catch(e){}}
+    return o;
+  }
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function scrollToPct(p){var h=maxH();if(h>0)window.scrollTo(0,Math.round(h*p/100));}
+
+  var cur=loadR();
+  var A=cur.auto||null, B=cur.manual||null;
+  var hash=location.hash;
+
+  /* 只在带 #auto / #manual 进来时定位；多点几次，等版式稳定，避免“跳歪” */
+  var restoring=false;
+  function restore(p){
+    if(!(p>0))return;
+    restoring=true;
+    [0,90,220,420,700].forEach(function(dt){
+      setTimeout(function(){if(restoring)scrollToPct(p);},dt);
+    });
+    setTimeout(function(){restoring=false;},960);
+  }
+  addEventListener("wheel",function(){restoring=false;},{passive:true,once:true});
+  addEventListener("touchstart",function(){restoring=false;},{passive:true,once:true});
+
+  if(hash==="#manual"&&B&&B.ch===CH&&B.pct>0){restore(B.pct);}
+  else if(hash==="#auto"&&A&&A.ch===CH&&A.pct>0){restore(A.pct);}
+  else{
+    var wrap=document.querySelector(".wrap");
+    if(B&&B.ch&&B.ch!==CH){
+      var x=document.createElement("div");x.className="resume-tip";
+      x.innerHTML="🔖 书签在 <a href='gudo-"+B.ch+".html#manual'>第"+B.ch+"章</a>（钉在 "+B.pct+"%）";
+      wrap.prepend(x);
+    }
+    if(A&&A.ch===CH&&A.pct>=3&&A.pct<97){
+      var tip=document.createElement("div");tip.className="resume-tip";
+      tip.innerHTML="📌 上次读至 "+A.pct+"% · <a href='javascript:void(0)' id='resumeGo'>回到原位</a>";
+      wrap.prepend(tip);
+      document.getElementById("resumeGo").onclick=function(){tip.remove();scrollToPct(A.pct);};
+    }
+    if(B&&B.ch===CH&&B.pct>0){
+      var btip=document.createElement("div");btip.className="resume-tip";
+      btip.innerHTML="🔖 本章书签：钉在 "+B.pct+"% · <a href='javascript:void(0)' id='bmGo'>回到书签</a>";
+      wrap.prepend(btip);
+      document.getElementById("bmGo").onclick=function(){btip.remove();scrollToPct(B.pct);};
+    }
+  }
+
+  /* 自动存档：随滚动更新（节流 1.2s），离开页面再记一次 */
+  var timer=null;
+  function record(){
+    var mh=maxH();if(mh<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/mh*100));
+    var d=loadR();d.auto={ch:CH,pct:p,t:Date.now()};saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record();},1200)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(record,800);
+
+  /* 手动书签：一键钉住 / 再点清除（全书仅此一格） */
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  function paint(){
+    var b=(loadR().manual)||null;
+    if(b&&b.ch===CH&&b.pct>0)btn.textContent="🔖 书签 "+b.pct+"%";
+    else if(b&&b.ch)btn.textContent="🔖 书签·第"+b.ch+"章";
+    else btn.textContent="🔖 书签";
+  }
+  document.getElementById("__bmSlot").appendChild(btn);
+  paint();
+  btn.onclick=function(){
+    var mh=maxH();
+    var p=mh>0?Math.min(100,Math.round(document.documentElement.scrollTop/mh*100)):0;
+    var d=loadR();
+    if(d.manual&&d.manual.ch===CH&&Math.abs((d.manual.pct||0)-p)<=2){
+      delete d.manual;saveR(d);paint();
+      btn.textContent="已清除书签";setTimeout(paint,1400);
+    }else{
+      d.manual={ch:CH,pct:p,t:Date.now()};saveR(d);paint();
+      btn.textContent="✓ 已存书签 "+p+"%";setTimeout(paint,1600);
+    }
+  };
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>镖局 3D 道具预览</title>
+<style>
+  html,body{margin:0;padding:0;height:100%;background:#16161d;overflow:hidden;font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+  #c{display:block;width:100%;height:100%}
+  .label{position:absolute;transform:translate(-50%,0);color:#e8d5a3;font-size:14px;letter-spacing:2px;text-shadow:0 1px 3px #000;pointer-events:none;white-space:nowrap}
+  #tip{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);color:#8a8a99;font-size:12px;pointer-events:none}
+  #err{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);color:#c96;font-size:14px;display:none;text-align:center;line-height:1.8}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="tip">拖动旋转 · 滚轮/双指缩放</div>
+<div id="err"></div>
+<script src="img/three.min.js"></script>
+<script src="img/GLTFLoader.js"></script>
+<script>
+(function(){
+  var PROPS=[
+    {name:'长 剑',file:'models/sword.glb',x:-4.8},
+    {name:'宝 箱',file:'models/chest.glb',x:-1.6},
+    {name:'灯 笼',file:'models/lantern.glb',x:1.6},
+    {name:'酒 坛',file:'models/jar.glb',x:4.8}
+  ];
+  var canvas=document.getElementById('c');
+  var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.outputEncoding=THREE.sRGBEncoding;
+
+  var scene=new THREE.Scene();
+  var camera=new THREE.PerspectiveCamera(45,1,0.1,100);
+  var camDist=10.5, camAng=0.5, camH=2.2, target=new THREE.Vector3(0,0.6,0);
+
+  scene.add(new THREE.HemisphereLight(0xfff6e0,0x33291a,0.9));
+  var key=new THREE.DirectionalLight(0xffffff,0.9);
+  key.position.set(4,7,5); scene.add(key);
+  var fill=new THREE.DirectionalLight(0x88aaff,0.25);
+  fill.position.set(-5,3,-4); scene.add(fill);
+
+  // 地台
+  var ground=new THREE.Mesh(
+    new THREE.CircleGeometry(8,48),
+    new THREE.MeshStandardMaterial({color:0x242430,roughness:0.95,metalness:0})
+  );
+  ground.rotation.x=-Math.PI/2; ground.position.y=-0.01; scene.add(ground);
+  var ring=new THREE.Mesh(
+    new THREE.RingGeometry(7.6,7.8,64),
+    new THREE.MeshBasicMaterial({color:0x8a6d3b,side:THREE.DoubleSide,transparent:true,opacity:0.55})
+  );
+  ring.rotation.x=-Math.PI/2; ring.position.y=0.002; scene.add(ring);
+
+  // 文字标签（DOM）
+  function placeLabels(){
+    PROPS.forEach(function(p){
+      if(!p.el)return;
+      var v=new THREE.Vector3(p.x,0,0).project(camera);
+      p.el.style.left=((v.x*0.5+0.5)*window.innerWidth)+'px';
+      p.el.style.top =((-v.y*0.5+0.5)*window.innerHeight - window.innerHeight*0.34)+'px';
+    });
+  }
+  PROPS.forEach(function(p){
+    var d=document.createElement('div');
+    d.className='label'; d.textContent=p.name;
+    document.body.appendChild(d); p.el=d;
+  });
+
+  function resize(){
+    var w=window.innerWidth,h=window.innerHeight;
+    renderer.setSize(w,h,false);
+    camera.aspect=w/h; camera.updateProjectionMatrix();
+    placeLabels();
+  }
+  window.addEventListener('resize',resize); resize();
+
+  // 交互：拖拽旋转 / 滚轮缩放
+  var dragging=false,px=0,py=0;
+  canvas.addEventListener('pointerdown',function(e){dragging=true;px=e.clientX;py=e.clientY;});
+  window.addEventListener('pointermove',function(e){
+    if(!dragging)return;
+    camAng+=(e.clientX-px)*0.008;
+    camH=Math.max(0.5,Math.min(8,camH+(e.clientY-py)*0.02));
+    px=e.clientX;py=e.clientY;
+  });
+  window.addEventListener('pointerup',function(){dragging=false;});
+  canvas.addEventListener('wheel',function(e){
+    e.preventDefault();
+    camDist=Math.max(4,Math.min(16,camDist+e.deltaY*0.01));
+  },{passive:false});
+  // 双指缩放
+  var pinch0=0,dist0=0;
+  canvas.addEventListener('touchstart',function(e){
+    if(e.touches.length===2){
+      pinch0=tDist(e); dist0=camDist;
+    }
+  });
+  canvas.addEventListener('touchmove',function(e){
+    if(e.touches.length===2){
+      e.preventDefault();
+      camDist=Math.max(4,Math.min(16,dist0*pinch0/tDist(e)));
+    }
+  },{passive:false});
+  function tDist(e){
+    var dx=e.touches[0].clientX-e.touches[1].clientX;
+    var dy=e.touches[0].clientY-e.touches[1].clientY;
+    return Math.sqrt(dx*dx+dy*dy);
+  }
+
+  // 加载模型：自动归一化尺寸，落到地台上
+  var loader=new THREE.GLTFLoader();
+  var pending=PROPS.length;
+  PROPS.forEach(function(p){
+    loader.load(p.file,function(gltf){
+      var m=gltf.scene;
+      var box=new THREE.Box3().setFromObject(m);
+      var size=box.getSize(new THREE.Vector3());
+      var s=2.4/Math.max(size.x,size.y,size.z);
+      m.scale.setScalar(s);
+      box.setFromObject(m);
+      var c=box.getCenter(new THREE.Vector3());
+      m.position.x+=p.x-c.x;
+      m.position.y+=-box.min.y-c.y; // 底部贴地
+      m.position.z+=-c.z;
+      m.rotation.y=0.6;
+      scene.add(m);
+      p.el.style.opacity=1;
+    },undefined,function(err){
+      showErr('模型加载失败：'+p.file);
+    });
+  });
+
+  function showErr(t){
+    var e=document.getElementById('err');
+    e.style.display='block';
+    e.innerHTML=t+'<br>请确认本地预览服务已启动';
+  }
+  if(typeof THREE.GLTFLoader==='undefined'){
+    showErr('GLTFLoader 加载失败（需要网络加载 CDN 脚本）');
+  }
+
+  function loop(t){
+    requestAnimationFrame(loop);
+    camera.position.set(
+      target.x+camDist*Math.sin(camAng),
+      camH+1.5,
+      target.z+camDist*Math.cos(camAng)
+    );
+    camera.lookAt(target);
+    // 灯笼轻微摆动
+    PROPS.forEach(function(p){ if(p.mesh){} });
+    renderer.render(scene,camera);
+    placeLabels();
+  }
+  loop();
+})();
+</script>
+</body>
+</html>

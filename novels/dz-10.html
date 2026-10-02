@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第十章 · 背工 - 斗载</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第十章 · 背工</h1>
+  <p>泽远在米码头上扛了七八天包。</p>
+  <p>七八天下来，人瘦了，肩膀却硬了。背上那道麻布垫子，先前硌得慌，如今也磨顺了。扛包的门道，他也摸出些：包上肩要“顶”不要“扛”，顶在肩窝里，才压得住；上跳板要“匀”不要“快”，脚一乱，连人带货都下水。头几天他每扛两三包就要歇一歇，到后来，一船粮他也能一包接一包顶上去，中间不喘。</p>
+  <p>背二哥们慢慢认了他。老背工姓秦，大伙喊他秦老幺，五十出头，背了一辈子包，背驼得像张弓。歇气的时候，他教泽远认人：</p>
+  <p>哪个夫头手松，哪个手黑；哪条船是涪江上来的、给的力钱爽，哪条是渠江下来的、惯会拖账；哪个巡丁好烟、哪个好酒。这些学问，比沟里看谷子的成色，只多不少。</p>
+  <p>泽远一一记在心里。他这才晓得，码头上的活路，一半在肩上，一半在嘴头、在眼头。</p>
+  <p>秦老幺扛了三十年包，落下了一身病，天阴就咳。他常说：“我这背，是给这江压驼的。你年轻，莫学我，扛到四十，就得想别的出路。”</p>
+  <p>泽远问他：“那有啥出路？”</p>
+  <p>秦老幺笑：“出路在斗房里。斗房那些掌斗的，不扛包，只动嘴、动手，一天挣的比我们多十倍。可那道门，比金竹堂的门还难进。”</p>
+  <p>泽远不吭声了。他心里那只斗，又响了一下。</p>
+  <p>第三天，泽远在码头边上，头一回见着了周老五。</p>
+  <p>那是个下晌，两条船的船户为谁的货先过跳板，吵了起来，越吵越凶，眼看要动手。边上围了一圈人，没人敢劝。这时一个穿灰短褂的汉子踱过来，不慌不忙，一手按住一个，笑着说了几句什么。两个船户竟都低了头，让了道。</p>
+  <p>泽远问秦老幺：“那人是谁？”</p>
+  <p>秦老幺瞥了一眼，声音压低：“周老五。周立堂。你记着这张脸。”他顿了顿，“他不是扛包的，可这江边的事，他插得进手。有人怕他，有人求他。”</p>
+  <p>“他是好人还是坏人？”</p>
+  <p>秦老幺想了想，只说了句：“他是个‘有用’的人。”</p>
+  <p>泽远当时没懂这句话。他也顾不上多想。他有一桩事，一直没敢碰——“码头捐”。</p>
+  <p>按规矩，外来的背工，要挂个“保”，交一笔捐，才算入了这一片的册，往后领钱、上船，才有份。他一个游家沟来的，没亲没故，挂谁去？</p>
+  <p>他说给秦老幺听。秦老幺蹲在船帮上，把烟袋在鞋底磕了磕。</p>
+  <p>“你莫去问夫头，”秦老幺说，“夫头那关，是明要钱；‘上水’那关，是暗要命。”</p>
+  <p>泽远没懂。</p>
+  <p>“上水，就是专管你们这些没挂保的。”秦老幺压低声音，“上头养着几个野人，专在江边寻这种空子。寻着了，拉去金竹堂，训几天，罚一笔，人脱层皮才出得来。”</p>
+  <p>泽远听得后背发凉。</p>
+  <p>“那……挂谁？”</p>
+  <p>“挂保，得有对保人，替你在簿子上捺个手印。出了事，他替你担着。”秦老幺看他一眼，“你认得谁？”</p>
+  <p>泽远摇头。</p>
+  <p>秦老幺叹口气，没再说。</p>
+  <p>没等他懂，那“上水”就来了。</p>
+  <p>那天晌午，泽远正从船上顶一包谷子下跳板。岸上来了三个人，当先一个穿蓝褂的，是常来收捐的巡丁；他屁股后头跟着两个短褂汉子，一左一右，眼睛阴阴的。</p>
+  <p>巡丁拿棍子往船帮上一敲：“这船的人，都下来。”</p>
+  <p>背二哥们一个个下了船，站在岸上。</p>
+  <p>巡丁手里那张纸条子一扬：“游泽远，是不是你？”</p>
+  <p>泽远上前一步。</p>
+  <p>“你这十来天的捐，挂谁名下？”巡丁问。</p>
+  <p>“没……没挂。”</p>
+  <p>“没挂？”巡丁脸一沉，“没挂你在这儿扛了十来天的包？哪个许你的？”</p>
+  <p>泽远张了张嘴。他确实不知道这许不许，得谁许。</p>
+  <p>“不晓得？”巡丁冷笑一声，把棍子一举，“那我告诉你，不挂捐，就是偷活路。按规，力钱全扣，人还要送去‘金竹堂’教化几日。”</p>
+  <p>那两个字一出，周围的背二哥都低了头。秦老幺在后头，朝泽远轻轻摇头。</p>
+  <p>泽远没听懂“金竹堂”是什么，但他看见同行们的脸都白了——那不是个好地方。</p>
+  <p>他没动。他想争一句，可他想起沟里那只斗，想起公道要挨打的那一课，话到了嘴边又咽了回去。</p>
+  <p>“棍子放下。”他听见自己说，声音有点抖，可是没退。</p>
+  <p>巡丁的棍子，到底挥了下来。</p>
+  <p>那一下，没落到泽远身上。</p>
+  <p>一个人影横插进来，抬手一挡，棍子“啪”地砸在那人胳膊上。那人闷哼一声，胳膊一沉，却没让开。</p>
+  <p>“陈三哥，”那人笑着说，“为一个新来的乡下人，值得动这么大的气？”</p>
+  <p>泽远看那人——正是前几天码头边上那个周老五。三十不到，中等个子，脸比背二哥们白净些，眼睛亮，穿件半新不旧的灰短褂，腰上别着杆包铜的小烟杆。他不扛包，站在人堆里，却像站在自家堂屋里。</p>
+  <p>巡丁陈三认得他，收了棍：“周老五，你少管闲事。”</p>
+  <p>“这不是闲事。”周立堂把胳膊揉了揉，笑着说，“这是我兄弟。”</p>
+  <p>泽远一愣——他什么时候成了这人的“兄弟”？</p>
+  <p>周立堂转头，朝泽远使个眼色，又对巡丁道：“陈三哥，规矩是死的，人是活的。这兄弟初来，不懂路子，怪我做哥哥的没早关照。他这几天的捐，我替他补；金竹堂，就免了。你看要得不要得？”</p>
+  <p>说着，他从怀里摸出一把铜板，塞进巡丁手里，又凑过去，低声说了句什么。</p>
+  <p>巡丁的脸色，慢慢缓了。</p>
+  <p>“下不为例。”巡丁把铜板揣了，收棍走人。那两个短褂汉子跟在后头，回头瞪了泽远一眼。</p>
+  <p>人散了。</p>
+  <p>背二哥们看周立堂的眼神，又敬又怕。秦老幺远远朝泽远摆手，那意思是：小心。</p>
+  <p>周立堂却像没事人一般，拍了拍泽远的肩：“走，我请你吃碗面。”</p>
+  <p>面摊在河街拐角。两碗素面，一碟泡菜。</p>
+  <p>周立堂吸面吸得响，吃得顺口了，才抬眼：“叫啥名字？”</p>
+  <p>“游泽远。”</p>
+  <p>“游家沟来的？”</p>
+  <p>“嗯。”</p>
+  <p>“那地方我晓得，涪江边上。”周立堂夹了口泡菜，“我叫周立堂，排行老五，码头上都喊我‘周老五’。你喊我立堂哥，要得。”</p>
+  <p>泽远应了一声。</p>
+  <p>“你方才为啥不退？”周立堂忽然问，“那棍子下来，是要见血的。”</p>
+  <p>泽远想了想：“退了，往后就没得活路。我肩上还扛着人呢。”</p>
+  <p>“扛人？”</p>
+  <p>“乡里还有娘。”</p>
+  <p>周立堂“哦”了一声，看了他一眼，那一眼里有点东西，泽远当时没看透。</p>
+  <p>“记着，在这码头上，”周立堂把筷子一放，“光有膀子不行，还得有人。你一个人，是块料也是块柴，任人劈；你身后有几个人，是块柴也没人敢碰。”</p>
+  <p>“所以，”他伸出手，“我们拜个把子。”</p>
+  <p>泽远怔住。</p>
+  <p>“你就是嫌我？”周立堂笑了，“莫看我现在不扛包，我在这江边，还算说得上话。跟我拜了，明天你上船、领钱、避开金竹堂，都有人替你这个兄弟撑。”</p>
+  <p>泽远心里，像被人挠了一下。</p>
+  <p>他进城十来天，头一回有人跟他说“撑”这个字。</p>
+  <p>他想起了母亲塞给他的那只秤砣——“认秤，也认人”。</p>
+  <p>他不认得江边的人，可他认得出，眼前这个人，方才真替他挡了一棍。</p>
+  <p>“要得。”泽远点了头。</p>
+  <p>当天夜里，在河街背后一间小屋里，摆起香案。</p>
+  <p>香案简单：一张矮桌，一只粗瓷碗，一把香，两个铜钱。周立堂请来两个靠得住的汉子作见证，秦老幺也被拉来了，站在墙角不放心地看着。</p>
+  <p>泽远和周立堂，双双跪下，对天磕头。</p>
+  <p>香插上。周立堂割破手指，滴血进碗，泽远也割了。两滴血在酒里散开，慢慢合到一处。两人各饮一口。</p>
+  <p>“有福同享，有难同当。”周立堂先开口。</p>
+  <p>泽远跟着念了。他的声音，比周立堂的轻。</p>
+  <p>磕完头，周立堂扶起他，把烟杆往他手里一塞，哈哈大笑：“从今往后，我周老五在，就有你游泽远的位置。”</p>
+  <p>两个证人跟着起哄，端起碗来，一人敬了泽远一口酒。酒辣，辣得他眼睛发酸。</p>
+  <p>屋外，江风起来了，吹得窗纸哗哗响。</p>
+  <p>泽远被这阵子热闹冲得有些发热。他掂了掂手里那杆烟，暖的——烟杆上还留着周立堂手心的温度。他心里那点没着没落的感觉，被这点温度，压下去一些。</p>
+  <p>那一夜，他回到背工棚，通铺上的人都睡了。他在草席上躺下，睁着眼睛，看屋顶上漏下来的一线月光。</p>
+  <p>他想起沟里，想起那只斗，想起爹给他换的那根扁担。他摸了摸怀里的秤砣，凉。</p>
+  <p>秦老幺的话，忽然又冒出来——“他是个‘有用’的人。”</p>
+  <p>有用的人。泽远咂着这三个字，咂到半夜，也没咂透。</p>
+  <p>只是秦老幺走的时候，在门口停了一下，回头看了泽远一眼。</p>
+  <p>那一眼里的意思，泽远到底还是没懂。他当时只顾着高兴——他一个游家沟来的乡下人，终于在这三江城，有了“人”。</p>
+  <p>他还不晓得，这“人”字，是拿“人情”一笔一笔换来的。而人情这东西，在码头上，比高利贷还重。</p>
+  <p>今夜他欠周立堂的，是第一笔。</p>
+  <p>往后还要还。</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，听书键跳转纯语音页 ===== */
+  var TOTAL=70;
+  var m=location.pathname.match(/dz-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="dz-catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="dz-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<a class="rbtn gold" href="dz-listen.html?ch='+n+'">🎧 听书</a>'+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="dz-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null,dragging=false;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+
+  /* 翻页：只有「横向滑动」（>64px 且横向明显占优）才翻章；轻点只开关工具栏。
+     不再用「点侧边就翻页」，避免误点一下就莫名跳章。 */
+  var sx=0,sy=0,stk=false,moved=false;
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a"))return;
+    sx=e.clientX||0;sy=e.clientY||0;stk=true;moved=false;
+  },{passive:true});
+  document.body.addEventListener("pointermove",function(e){
+    if(!stk)return;
+    if(Math.abs((e.clientX||0)-sx)>10||Math.abs((e.clientY||0)-sy)>10)moved=true;
+  },{passive:true});
+  document.body.addEventListener("pointerup",function(e){
+    if(!stk)return;stk=false;
+    var dx=(e.clientX||0)-sx,dy=(e.clientY||0)-sy;
+    if(Math.abs(dx)>=64&&Math.abs(dx)>Math.abs(dy)*1.6){
+      if(dx<0&&n<TOTAL){location.href="dz-"+(n+1)+".html";return;}
+      if(dx>0&&n>1){location.href="dz-"+(n-1)+".html";return;}
+    }
+    if(!moved){if(document.body.classList.contains("ui-show"))hide();else show();}
+  },{passive:true});
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  /* ===== 进度与书签：每本书只有两格 =====
+     ① auto   自动存档位：读到哪里自动记，无需操作
+     ② manual 手动书签位：点一下按钮钉住，全书共享这一个
+     进页面时绝不擅自跳转，只给提示；只有从「续读/书签」入口进来才定位。 */
+  var RKEY="dz_reader_v1";
+  var mm=location.pathname.match(/dz-(\d+)/);
+  var CH=(mm?parseInt(mm[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var TITLE=h1?h1.textContent.trim():("第"+CH+"章");
+
+  function migrate(d){
+    if(!d.auto&&!d.manual&&(d.bookmark||d.resume||d.chapters)){
+      var nd={};
+      if(d.resume&&d.resume.ch){nd.auto={ch:d.resume.ch,pct:d.resume.pct|0,t:d.resume.t||0};}
+      if(d.bookmark&&d.bookmark.ch){nd.manual={ch:d.bookmark.ch,pct:d.bookmark.pct|0,t:d.bookmark.t||0};}
+      return nd;
+    }
+    return d;
+  }
+  function loadR(){
+    var d={};
+    try{d=JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){d={}}
+    var o=migrate(d);
+    if(o!==d){try{localStorage.setItem(RKEY,JSON.stringify(o))}catch(e){}}
+    return o;
+  }
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function scrollToPct(p){var h=maxH();if(h>0)window.scrollTo(0,Math.round(h*p/100));}
+
+  var cur=loadR();
+  var A=cur.auto||null, B=cur.manual||null;
+  var hash=location.hash;
+
+  /* 只在带 #auto / #manual 进来时定位；多点几次，等版式稳定，避免“跳歪” */
+  var restoring=false;
+  function restore(p){
+    if(!(p>0))return;
+    restoring=true;
+    [0,90,220,420,700].forEach(function(dt){
+      setTimeout(function(){if(restoring)scrollToPct(p);},dt);
+    });
+    setTimeout(function(){restoring=false;},960);
+  }
+  addEventListener("wheel",function(){restoring=false;},{passive:true,once:true});
+  addEventListener("touchstart",function(){restoring=false;},{passive:true,once:true});
+
+  if(hash==="#manual"&&B&&B.ch===CH&&B.pct>0){restore(B.pct);}
+  else if(hash==="#auto"&&A&&A.ch===CH&&A.pct>0){restore(A.pct);}
+  else{
+    var wrap=document.querySelector(".wrap");
+    if(B&&B.ch&&B.ch!==CH){
+      var x=document.createElement("div");x.className="resume-tip";
+      x.innerHTML="🔖 书签在 <a href='dz-"+B.ch+".html#manual'>第"+B.ch+"章</a>（钉在 "+B.pct+"%）";
+      wrap.prepend(x);
+    }
+    if(A&&A.ch===CH&&A.pct>=3&&A.pct<97){
+      var tip=document.createElement("div");tip.className="resume-tip";
+      tip.innerHTML="📌 上次读至 "+A.pct+"% · <a href='javascript:void(0)' id='resumeGo'>回到原位</a>";
+      wrap.prepend(tip);
+      document.getElementById("resumeGo").onclick=function(){tip.remove();scrollToPct(A.pct);};
+    }
+    if(B&&B.ch===CH&&B.pct>0){
+      var btip=document.createElement("div");btip.className="resume-tip";
+      btip.innerHTML="🔖 本章书签：钉在 "+B.pct+"% · <a href='javascript:void(0)' id='bmGo'>回到书签</a>";
+      wrap.prepend(btip);
+      document.getElementById("bmGo").onclick=function(){btip.remove();scrollToPct(B.pct);};
+    }
+  }
+
+  /* 自动存档：随滚动更新（节流 1.2s），离开页面再记一次 */
+  var timer=null;
+  function record(){
+    var mh=maxH();if(mh<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/mh*100));
+    var d=loadR();d.auto={ch:CH,pct:p,t:Date.now()};saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record();},1200)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(record,800);
+
+  /* 手动书签：一键钉住 / 再点清除（全书仅此一格） */
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  function paint(){
+    var b=(loadR().manual)||null;
+    if(b&&b.ch===CH&&b.pct>0)btn.textContent="🔖 书签 "+b.pct+"%";
+    else if(b&&b.ch)btn.textContent="🔖 书签·第"+b.ch+"章";
+    else btn.textContent="🔖 书签";
+  }
+  document.getElementById("__bmSlot").appendChild(btn);
+  paint();
+  btn.onclick=function(){
+    var mh=maxH();
+    var p=mh>0?Math.min(100,Math.round(document.documentElement.scrollTop/mh*100)):0;
+    var d=loadR();
+    if(d.manual&&d.manual.ch===CH&&Math.abs((d.manual.pct||0)-p)<=2){
+      delete d.manual;saveR(d);paint();
+      btn.textContent="已清除书签";setTimeout(paint,1400);
+    }else{
+      d.manual={ch:CH,pct:p,t:Date.now()};saveR(d);paint();
+      btn.textContent="✓ 已存书签 "+p+"%";setTimeout(paint,1600);
+    }
+  };
+})();
+
+</script>
+</body>
+</html>
