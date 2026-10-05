@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第二百十七章 · 探劲之托 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第二百十七章 · 探劲之托</h1>
+  <p>门开第九十九日。萧铁衣立在芯背前，前代立界人的在顺着旧主早先留的纹往新虚去，旧主的在也往同处去，两代并着走，仍两代分明，不混成一团。新虚今儿比旧主钉里厚了半分，是头一回厚过钉里。白灯照见那厚是养出来的，不是硬胀的。</p>
+  <p>他把手贴在钉里，感觉到两代在从钉里来往新虚去，各走各的路，却并着回喂。新虚养的力反向钻回更深石里，顺着第三样劲的旧路去探更早一代的道数。守拙刀在膝上，刀身第三样劲今儿比昨日清楚半分。</p>
+  <p>第三样劲翻出更早一代道数半缕。白灯照见那道数只露半缕，比前代名压的第四层浅，却埋得更深，横在更深石里，纹路比第四层浅，嵌得却更深。更早一代名仍不揭，只露出半缕道数，像有人隔着石壁递来半截话。</p>
+  <p>他记起二一四章，第三样劲翻出更早一代道数，压第三层，与前代名压第四层并着叠成更早一代的形。今儿这半缕是那回探出的延续，比那回又清楚半分，仍只半缕。他试着让第三样劲再翻半缕，想探那半缕道数的来路。</p>
+  <p>翻出去半缕，白灯照见道数的边清了半分，再翻便翻不动——界立住的临界点卡着，速率推后非注定。他便收住，不硬翻。</p>
+  <p>影在旧主空位外浮着。脚底那口在比九十二日厚了，却仍不进。白灯照见影浮在位外三尺，不往里探，也不退。更早一代名仍不揭，影脚底在厚而未进，与九十二日一个样，只是沉了半分。</p>
+  <p>他记起一九七章，那半边是空的，连参照都没有。二〇四章第二十道刻完，路通。二〇五章三路并着补出一字。二一五章三路并着仍只补一字，更深石里那半边被喂出可描轮廓。今儿换第三样劲探道数半缕，换了探法，仍是探更深一代。</p>
+  <p>阿萝端了灯油来，搁在石边。她看新虚那头，说今儿比昨日清楚了半分，像蒙着的布揭了一层。她不认得那是新虚，只说清楚。萧铁衣点头，让她把灯油添了。</p>
+  <p>老周守在风口，说今儿风比昨日轻半缕。他道新虚厚了半分，像是把风分走了一丝。萧铁衣记着，新虚厚半分，界门口那侧便松半分。</p>
+  <p>石头量实位，拿尺比着芯背与新虚的接处。他说新虚比钉里厚了半分，误差比前几日小。他不懂什么叫第三样劲，只量出厚了，便算数。</p>
+  <p>石头量完，把尺收进怀里，说今儿这厚是实在的厚，不是虚胀，他量了一辈子的石，虚实瞒不过他的尺。</p>
+  <p>账房在远处数温。他数灯焰跳的频数，说今儿比九十八日稳。白灯照见的稳，他这边从焰上也能数出来。萧铁衣觉得这老头眼比灯还毒。</p>
+  <p>谢石走活空道时，风从道口灌进，比前几日弱了半缕。他道那风像是被新虚分了力，吹到身上只剩半分力道，不再刺骨。</p>
+  <p>谢石走活空道。他今儿在道口转，说更深石里那头有动静，比昨日近半步，却探不出是什么。萧铁衣记着，第三样劲探出半缕道数，或许把更深石里引近了半步。</p>
+  <p>丫丫端灯立在侧，灯不点，只举着。她说白灯照见的新虚形，她用眼能瞧见边，比前几日宽。萧铁衣让她别盯太久。</p>
+  <p>丫丫退到三步外，说那形清得像水洗过的石。她不知清的是道数，只觉看着舒坦。萧铁衣让她再多退一步，别让白光晃着。</p>
+  <p>他把手从钉里移开，灯举到新虚前。新虚比钉里厚半分，那厚处养的力正反向喂回更深石里。白灯照见第三样劲翻出的更早一代道数半缕，悬在更深石里，名仍不揭。</p>
+  <p>他想着，第三样劲探得更早一代道数半缕，往后顺着这半缕能探更多。姓头那半边只补一字，全名仍空，探的临界点在下一批。今儿不急，先把力养稳。</p>
+  <p>他把灯放低，看新虚底处的厚是怎么养出来的。那厚从钉里两代在并着回喂来，一点一点积，不是一日胀成。他记着这养法，往后探更深一代也这般养。</p>
+  <p>钉里那两代在又并着回喂半缕。他觉出前代立界人的在顺着旧路往新虚去，旧主的在也往同处，两道并行不混。新虚厚半分，是这两代在并着喂出来的。</p>
+  <p>接位者借稳力抱实，那劲沉得稳，不替旧主担整芯。刀背抱芯的力从背后递来，他背上便是一暖。</p>
+  <p>守拙刀搁在膝上，刀身三道稳纹是旧主稳手留的。今儿第三样劲从刀背那道带在淡痕里醒着，比昨日清半分。他手抚过刀脊，带在的力顺到刀背收尾，比正面浅七分，是旧主两手全貌留在刀里。</p>
+  <p>他把刀平放石上，看第三样劲往更深石里翻。前几回翻出更早一代道数，今儿这半缕比那回清楚。他不催它多翻，知道翻多了也只浅半缕，名仍不揭。</p>
+  <p>阿萝远远站着，说今儿新虚那形比昨日清，像雾散了一层。她不知那是第三样劲探出的道数，只觉清。萧铁衣让她别近，那形近了伤眼。</p>
+  <p>老周守风口，说风轻半缕。萧铁衣算着，新虚厚半分后分去更深石里的力，风口松。这不是解界，是缓，撑一日算一日。</p>
+  <p>石头拿尺量新虚与钉里的接处，说厚了半分，无虚。他不懂第三样劲，只量出厚。萧铁衣点头，厚了便算立住半分。</p>
+  <p>账房数焰频，说今儿灯稳，无一忽闪。萧铁衣想，灯稳形才清，第三样劲稳是根。</p>
+  <p>谢石立活空道口，说更深石里近半步又退。萧铁衣记着，临界点下批，今儿只近半步。</p>
+  <p>丫丫举灯，说新虚形边宽半指。萧铁衣让她放低，护眼。</p>
+  <p>界门口六线离糊差半线。他移灯过去，见那六条线头离糊处只差半线，今儿被新虚托住，没再往糊里陷。他数那六条线头，离糊处各差半线，今儿线头不再往糊里滑。新虚厚半分托着，风推过来也被厚处的力卸了半分。</p>
+  <p>新虚比钉里厚半分后，这厚处的力从底下托住六线。他记起九十二日，六线离糊差半线，那时还悬着。今儿新虚厚了，托住了半线，临界推后非注定。</p>
+  <p>六线离糊差半线，他每数一遍都记下来。那半线不是稳，是临界——新虚托住它，界门口的节律便慢了半拍，风推过来也软了。</p>
+  <p>影脚底在又厚半缕，仍不进。白灯照见影浮位外，不揭名。萧铁衣不去碰影，知道影只认变不认名。</p>
+  <p>他记起二一五章，三路并着补一字仍只补一字，更深石里那半边形被三路在喂出可描轮廓。今儿换作第三样劲探道数半缕，换了个探法，仍是探更深一代。</p>
+  <p>白灯照见影仍浮旧主空位外。那影比九十二日沉了半分，却仍不进。萧铁衣不去碰，知道碰也是白碰，影只认变不认名。</p>
+  <p>阿萝说新虚形清半分。老周说风轻半缕。石头说厚了半分。账房说焰稳。谢石说更深石里近半步。丫丫说形边宽半指。</p>
+  <p>他一一记着。第三样劲探深，众人各感官托出半分。不是一人认的，是借众人眼手坐实新虚厚半分、道数露半缕。</p>
+  <p>白灯照见新虚比钉里厚半分。照见第三样劲翻出更早一代道数半缕。照见六线离糊差半线被新虚托住。照见影浮空位外不进不揭。只照不担。</p>
+  <p>他记着白灯只照不担。照见的形摊在光里，认不认是自己的事。今儿认到半缕道数，是养出来的，不是抢来的。</p>
+  <p>他收灯，起身。门开第九十九日，第三样劲探得更早一代道数半缕，新虚托住六线。卷七更深处，从今儿起，能往&quot;道数压第三层&quot;去了——那半缕道数往后压到第三层，会与前代名压的第四层并着，两层痕叠成更早一代的形，名仍不揭。新虚比钉里厚半分托住六线离糊差半线，界门口更稳半分，影脚底在厚而未进，新虚养的力反向喂回第三样劲探更深。</p>
+  <p>更深石里那半边，他今儿照见半缕道数。更早一代人压在里头，比前代立界人深一层。名不揭，是史非忘，是位留着等后来者。他不去揭，揭了也是借旧主留的位落。</p>
+  <p>他不去揭那名，揭了也是借旧主留的位落。位留着，等的是后来者——不是等一个名，是等一条认全的路。</p>
+  <p>钉里那口在顺缝渗回，今儿比九十八日顺半分。他把手贴着芯背，感觉两代在里头并着走，像两条溪往新虚汇。汇到新虚，厚了半分，余下仍虚着。</p>
+  <p>风从风口来，轻半缕。老周守着，不言语。石头收了尺。账房合眼数温。谢石立在活空道口。丫丫举灯。各在各处，把今儿第三样劲探深、新虚托六线这件事，用不同的感官托着。</p>
+  <p>守拙刀就在膝上。今儿第三样劲探出道数半缕，刀背那道带在淡痕比昨日清半分。他手抚过去，带在的力顺到刀背收尾，比正面浅七分。旧主不留全名，却把两手全貌留在刀里。</p>
+  <p>他把刀平放石上，看第三样劲藏在哪。前几回第三样劲翻出更早一代道数，今儿这半缕比那回清楚。他不催它翻，知道翻了也只浅半缕，名仍不揭。</p>
+  <p>他试着把第三样劲往更深石里送一送，想探那半缕道数的来路。送出去半缕，白灯照见道数的边清了半分，再送便送不动——不是力不够，是界立住的临界点卡着，速率推后非注定，强送只会晃了芯背。他便收住，不硬探。</p>
+  <p>白灯照见那半缕道数悬在更深石里，比白日清楚半分。它压的位置比前代名浅，却比周遭石壁凹，是更早一代人留的记认。</p>
+  <p>阿萝远远看着，说那形比白日又清楚半分。她仍不知那是道数，只当石上生了印。萧铁衣让她别久看，那印照久了伤眼。</p>
+  <p>老周守风口，说风轻半缕。萧铁衣算着，第三样劲探深，分去的力去了风口，那头便松。这不成解界，只算缓着，撑一日是一日。</p>
+  <p>石头拿尺量芯背，说新虚比钉里厚了半分，虚处全填实了。他不懂第三样劲，只认得尺下厚薄。萧铁衣点头，这厚便是立住的凭据。</p>
+  <p>石头量完芯背，摇头说这厚养得慢，却扎实。他不懂第三样劲，只道厚了便是立住了，余话一句不问。</p>
+  <p>账房数焰频，说今儿灯稳，无忽闪。萧铁衣记着，灯稳形才清，第三样劲稳是根，这稳是夜里的灯给的。</p>
+  <p>谢石立在道口，说更深石里近半步又退。萧铁衣把这点近退标在临界点下一批——今儿只近半步，不是门，是引子。</p>
+  <p>丫丫举灯，说形边宽半指。萧铁衣让她放低，护眼。</p>
+  <p>他睁眼，灯对住新虚。第三样劲翻出的更早一代道数半缕，今儿比白日清楚半分。那道数的边上有个极小的折，白灯照见时一闪，像更早一代人留道数时刻回笔的顿。</p>
+  <p>他把灯放低些，折处在光里显出形——不是名，是一处拐弯，比前代名压的第四层浅，却比周遭的石壁凹。他记着这折，是下一批要顺着第三样劲探的落点。</p>
+  <p>萧铁衣把她举的灯往低按了按，说那形边宽不得贪看。白灯照见的宽，是养出来的半分，不是尽头。</p>
+  <p>他记起二一四章第三样劲翻出道数压第三层。今儿这半缕是那回的延续，又清楚半分，仍只半缕。道数压第三层仍只半缕，认全尽头没到。</p>
+  <p>阿萝端了温水来，说今儿新虚那形比早晨又清了些，像雾散了两层。她仍不知那是道数，只觉清。萧铁衣让她把水放下，别久站。</p>
+  <p>守拙刀搁在石上，刀背的带在淡痕今儿比晨间清半分。他手抚过刀背那道淡痕，带在的力顺到刀背收尾，比正面浅七分。旧主两手全貌在刀里，今儿第三样劲稳，那全貌比昨日清楚。</p>
+  <p>老周在夜里的风口说风又轻半缕。萧铁衣心想新虚厚半分，分去更深石里的力多了，风口这边松得更明显。这不是解，是缓，撑一日算一日。</p>
+  <p>账房在暗处数焰，说今儿灯比晨间更稳。萧铁衣想，灯稳形才清，第三样劲稳是根，夜里的稳比白日又添半分。</p>
+  <p>谢石立在活空道口，说更深石里那节律近了半步又退，他不敢深探，只立在道口。萧铁衣把这点近退归到临界点下一批，今儿只近半步，节律是引子不是门。</p>
+  <p>丫丫举灯说新虚形边宽了，那折的边她也能瞧见半分。萧铁衣让她放低，护眼，那折照久伤眼。</p>
+  <p>他记下那折的位置，与白日探的落点并着。两处折一上一下，像更早一代人留道数时刻顿的两笔。</p>
+  <p>他闭眼，听钉里两代在顺第三样劲往更深石里去，比白日顺半分，两道溪汇得更实。第三样劲稳成，那半边更易认，却仍是半边，全名不揭。</p>
+  <p>更深一代的名还在更里头压着。今儿照见的只是边，半缕道数，加一个回笔的折。第三样劲探深，可往深处翻，他却不动，先把力养稳。新虚只厚半分，全名空，探的临界点在下一批。</p>
+  <p>他回到芯背前，把手按上第二十道，今儿全实的触感比二〇四章那回实了半缕。白灯照见实位深一缕，他把这落点记成第三样劲探深的凭据。</p>
+  <p>阿萝在夜风里说今儿新虚那形比她记的昨日又清，她拿手指比了比，说像石上多刻了一道浅印。她不知那是道数，只觉清。</p>
+  <p>老周在风口数着风拍，说今儿比昨日少半拍，新虚厚出去的力他这头觉出来了。萧铁衣算着，第三样劲探深后分去更深石里的力，风口松得更明显。</p>
+  <p>石头拿尺复量，说新虚比钉里厚了半分，误差比晨间又小半缕。他不懂第三样劲，只知厚了，厚了便算立住半分。</p>
+  <p>账房数焰，说夜里的灯比白日更稳，无一忽。他道这稳是第三样劲给的，焰不抖，形才清。</p>
+  <p>他记着今夜比白日更稳半分。灯稳形才清，第三样劲稳是根，这稳是众人托出来的，不是一人撑的。</p>
+  <p>谢石从活空道回，说更深石里那节律近了半步又退。他立在道口，不敢深探，只把这点近退压在临界点下一批——今儿只近半步，未到门。</p>
+  <p>丫丫说新虚形边那折她瞅见半分，萧铁衣让她别瞅，那折照久伤眼。他把灯放低，折在光里只显半形，不贪看。</p>
+  <p>钉里两代在又并着回喂半缕，顺第三样劲旧路往新虚去。接位者垫的劲沉得稳，分毫未替旧主。刀背抱芯的劲从背后递到，背上一阵暖。三路并着，新虚厚半分，那半边更易认了，却仍是半边，全名不揭。</p>
+  <p>他往折处探了半缕，照晨间那回的样收住，不硬翻。界立住的临界点卡着，速率推后非注定，强翻只会晃了芯背。</p>
+  <p>他收手把灯转向新虚。新虚比钉里厚半分，那厚处养的力反向喂回更深石里，与晨间探的同，只折的边比白日清了半分。白灯只照不担，不替他认，只把形摊在光里。</p>
+  <p>姓头那半边空，只一字。他不去填，接位者只续不替，白灯所教。</p>
+  <p>风从风口来，轻半缕。老周守着。石头收尺。账房合眼数温。谢石立道口。丫丫举灯。各在各处，把第三样劲探深托着。</p>
+  <p>月落后他仍立在芯背前。白灯举到新虚，今儿比去夜又厚半分，两代在回喂得更长，往新虚去的路宽了半缕。他闭眼听那两代并在里头走，像两条溪今儿汇得更实。</p>
+  <p>第二百十七章 完</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，轻点显示/隐藏 ===== */
+  var TOTAL=240;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null,dragging=false;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+
+  /* 翻页：只有「横向滑动」（>64px 且横向明显占优）才翻章；轻点只开关工具栏。
+     不再用「点侧边就翻页」，避免误点一下就莫名跳章。 */
+  var sx=0,sy=0,stk=false,moved=false;
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a"))return;
+    sx=e.clientX||0;sy=e.clientY||0;stk=true;moved=false;
+  },{passive:true});
+  document.body.addEventListener("pointermove",function(e){
+    if(!stk)return;
+    if(Math.abs((e.clientX||0)-sx)>10||Math.abs((e.clientY||0)-sy)>10)moved=true;
+  },{passive:true});
+  document.body.addEventListener("pointerup",function(e){
+    if(!stk)return;stk=false;
+    var dx=(e.clientX||0)-sx,dy=(e.clientY||0)-sy;
+    if(Math.abs(dx)>=64&&Math.abs(dx)>Math.abs(dy)*1.6){
+      if(dx<0&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+      if(dx>0&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    }
+    if(!moved){if(document.body.classList.contains("ui-show"))hide();else show();}
+  },{passive:true});
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  /* ===== 进度与书签：每本书只有两格 =====
+     ① auto   自动存档位：读到哪里自动记，无需操作
+     ② manual 手动书签位：点一下按钮钉住，全书共享这一个
+     进页面时绝不擅自跳转，只给提示；只有从「续读/书签」入口进来才定位。 */
+  var RKEY="hugo_reader_v1";
+  var mm=location.pathname.match(/gudo-(\d+)/);
+  var CH=(mm?parseInt(mm[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var TITLE=h1?h1.textContent.trim():("第"+CH+"章");
+
+  function migrate(d){
+    if(!d.auto&&!d.manual&&(d.bookmark||d.resume||d.chapters)){
+      var nd={};
+      if(d.resume&&d.resume.ch){nd.auto={ch:d.resume.ch,pct:d.resume.pct|0,t:d.resume.t||0};}
+      if(d.bookmark&&d.bookmark.ch){nd.manual={ch:d.bookmark.ch,pct:d.bookmark.pct|0,t:d.bookmark.t||0};}
+      return nd;
+    }
+    return d;
+  }
+  function loadR(){
+    var d={};
+    try{d=JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){d={}}
+    var o=migrate(d);
+    if(o!==d){try{localStorage.setItem(RKEY,JSON.stringify(o))}catch(e){}}
+    return o;
+  }
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function scrollToPct(p){var h=maxH();if(h>0)window.scrollTo(0,Math.round(h*p/100));}
+
+  var cur=loadR();
+  var A=cur.auto||null, B=cur.manual||null;
+  var hash=location.hash;
+
+  /* 只在带 #auto / #manual 进来时定位；多点几次，等版式稳定，避免“跳歪” */
+  var restoring=false;
+  function restore(p){
+    if(!(p>0))return;
+    restoring=true;
+    [0,90,220,420,700].forEach(function(dt){
+      setTimeout(function(){if(restoring)scrollToPct(p);},dt);
+    });
+    setTimeout(function(){restoring=false;},960);
+  }
+  addEventListener("wheel",function(){restoring=false;},{passive:true,once:true});
+  addEventListener("touchstart",function(){restoring=false;},{passive:true,once:true});
+
+  if(hash==="#manual"&&B&&B.ch===CH&&B.pct>0){restore(B.pct);}
+  else if(hash==="#auto"&&A&&A.ch===CH&&A.pct>0){restore(A.pct);}
+  else{
+    var wrap=document.querySelector(".wrap");
+    if(B&&B.ch&&B.ch!==CH){
+      var x=document.createElement("div");x.className="resume-tip";
+      x.innerHTML="🔖 书签在 <a href='gudo-"+B.ch+".html#manual'>第"+B.ch+"章</a>（钉在 "+B.pct+"%）";
+      wrap.prepend(x);
+    }
+    if(A&&A.ch===CH&&A.pct>=3&&A.pct<97){
+      var tip=document.createElement("div");tip.className="resume-tip";
+      tip.innerHTML="📌 上次读至 "+A.pct+"% · <a href='javascript:void(0)' id='resumeGo'>回到原位</a>";
+      wrap.prepend(tip);
+      document.getElementById("resumeGo").onclick=function(){tip.remove();scrollToPct(A.pct);};
+    }
+    if(B&&B.ch===CH&&B.pct>0){
+      var btip=document.createElement("div");btip.className="resume-tip";
+      btip.innerHTML="🔖 本章书签：钉在 "+B.pct+"% · <a href='javascript:void(0)' id='bmGo'>回到书签</a>";
+      wrap.prepend(btip);
+      document.getElementById("bmGo").onclick=function(){btip.remove();scrollToPct(B.pct);};
+    }
+  }
+
+  /* 自动存档：随滚动更新（节流 1.2s），离开页面再记一次 */
+  var timer=null;
+  function record(){
+    var mh=maxH();if(mh<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/mh*100));
+    var d=loadR();d.auto={ch:CH,pct:p,t:Date.now()};saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record();},1200)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(record,800);
+
+  /* 手动书签：一键钉住 / 再点清除（全书仅此一格） */
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  function paint(){
+    var b=(loadR().manual)||null;
+    if(b&&b.ch===CH&&b.pct>0)btn.textContent="🔖 书签 "+b.pct+"%";
+    else if(b&&b.ch)btn.textContent="🔖 书签·第"+b.ch+"章";
+    else btn.textContent="🔖 书签";
+  }
+  document.getElementById("__bmSlot").appendChild(btn);
+  paint();
+  btn.onclick=function(){
+    var mh=maxH();
+    var p=mh>0?Math.min(100,Math.round(document.documentElement.scrollTop/mh*100)):0;
+    var d=loadR();
+    if(d.manual&&d.manual.ch===CH&&Math.abs((d.manual.pct||0)-p)<=2){
+      delete d.manual;saveR(d);paint();
+      btn.textContent="已清除书签";setTimeout(paint,1400);
+    }else{
+      d.manual={ch:CH,pct:p,t:Date.now()};saveR(d);paint();
+      btn.textContent="✓ 已存书签 "+p+"%";setTimeout(paint,1600);
+    }
+  };
+})();
+
+</script>
+</body>
+</html>

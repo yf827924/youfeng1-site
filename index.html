@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="Iv08qr2anEJYB5B3mMtRzy">
+<head data-page-node-id="YGsvFiMWww9a9y3Cxk3aLw">
+<meta charset="UTF-8" data-page-node-id="F1ZoEm4qOPNtQLv3FMYFuR">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="r7SDiFfJnCs2eQ7TZi7Leu">
+<title>雨果的作品小屋 · 个人作品集</title>
+<style>
+  /* ============================================================
+     设计系统 —— 温润文人风：暖纸底 + 陶土红 + 苔绿 + 描金点缀
+     配色集中在此，想换风格改这几个变量即可
+     ============================================================ */
+  :root{
+    --bg:#FBF7F0;          /* 页面背景（暖米纸） */
+    --surface:#FFFFFF;      /* 卡片底色 */
+    --ink:#2B2620;          /* 正文墨色 */
+    --muted:#837A6E;        /* 次要文字 */
+    --line:#ECE3D4;         /* 分隔线 */
+    --accent:#B5532E;       /* 主色（陶土红） */
+    --accent-soft:#F3E3D6;  /* 主色淡底（标签） */
+    --accent2:#4A6B5D;      /* 辅助色（苔绿） */
+    --gold:#C9A24A;         /* 点缀金 */
+    --shadow:0 8px 28px rgba(90,60,30,.10);
+    --radius:18px;
+    --base:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    background:var(--bg);color:var(--ink);
+    font-size:var(--base);line-height:1.78;
+  }
+  h1,h2,h3{font-family:"Noto Serif SC","Songti SC",serif;line-height:1.35;color:var(--ink)}
+  a{color:var(--accent);text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  section{padding:60px 0;border-bottom:1px solid var(--line)}
+  .sec-title{font-size:1.7em;display:inline-block}
+  .sec-title::after{content:"";display:block;width:52px;height:3px;background:var(--accent);border-radius:2px;margin-top:10px}
+  .sec-sub{color:var(--muted);margin:14px 0 30px;font-size:.95em}
+
+  /* ===== 顶部导航 ===== */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(251,247,240,.92);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;height:66px}
+  .brand{font-family:"Noto Serif SC",serif;font-size:1.25em;font-weight:700;color:var(--accent);letter-spacing:.04em}
+  .nav-links{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+  .nav-links a{
+    padding:8px 15px;border-radius:999px;color:var(--ink);font-size:.92em;transition:.2s;
+  }
+  .nav-links a:hover{background:var(--accent-soft);color:var(--accent)}
+  .font-ctrl{display:flex;gap:4px;margin-left:6px}
+  .font-ctrl button{
+    width:38px;height:38px;border:1px solid var(--line);background:#fff;border-radius:10px;
+    font-size:1em;cursor:pointer;color:var(--ink);transition:.2s;
+  }
+  .font-ctrl button:hover{border-color:var(--accent);color:var(--accent)}
+  .menu-btn{display:none;border:none;background:none;font-size:1.6em;cursor:pointer;color:var(--ink)}
+
+  /* ===== Hero ===== */
+  .hero{position:relative;overflow:hidden;padding:74px 0 58px;text-align:center;background:var(--bg)}
+  .hero-bg{position:absolute;inset:0;z-index:0;width:100%;height:100%}
+  .hero-bg svg{width:100%;height:100%;display:block}
+  .hero .wrap{position:relative;z-index:1}
+  .hero .avatar{
+    width:118px;height:118px;border-radius:50%;margin:0 auto 24px;
+    background:linear-gradient(135deg,#E7C9A0,#B5532E);
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-family:serif;font-size:2em;letter-spacing:.08em;box-shadow:var(--shadow)
+  }
+  .hero h1{font-size:2.5em;margin-bottom:16px;letter-spacing:.02em}
+  .hero p{color:var(--muted);max-width:620px;margin:0 auto 32px;font-size:1.05em}
+  .btn{
+    display:inline-block;padding:13px 28px;border-radius:999px;font-size:.98em;cursor:pointer;
+    border:1px solid transparent;transition:.2s;margin:6px
+  }
+  .btn-primary{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(181,83,46,.28)}
+  .btn-primary:hover{background:#9c4424}
+  .btn-ghost{background:#fff;color:var(--ink);border-color:var(--line)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+  .btn-game{background:#3E5C4B;color:#fff;box-shadow:0 6px 16px rgba(62,92,75,.28);padding:14px 32px;font-size:1.05em;border-radius:999px}
+  .btn-game:hover{background:#2d4638;transform:translateY(-2px)}
+
+  /* ===== 卡片网格 ===== */
+  .grid{display:grid;gap:22px}
+  .grid-3{grid-template-columns:repeat(3,1fr)}
+  .grid-2{grid-template-columns:repeat(2,1fr)}
+  .card{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    overflow:hidden;box-shadow:var(--shadow);transition:.22s;display:flex;flex-direction:column
+  }
+  .card:hover{transform:translateY(-5px);box-shadow:0 14px 34px rgba(90,60,30,.16)}
+  .thumb{
+    aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;
+    color:#fff;font-family:serif;font-size:1.3em;text-align:center;padding:10px;letter-spacing:.05em
+  }
+  .card-body{padding:16px 18px;flex:1;display:flex;flex-direction:column}
+  .card-body h3{font-size:1.12em;margin-bottom:6px}
+  .card-body p{color:var(--muted);font-size:.9em;flex:1}
+  .card-body .video-desc{color:var(--muted);font-size:.87em;line-height:1.6;margin:6px 0 0;
+    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em}
+  .card-actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+  .mini{
+    padding:9px 16px;border-radius:10px;font-size:.88em;cursor:pointer;border:1px solid var(--line);
+    background:#fff;color:var(--ink);transition:.2s
+  }
+  .mini.play{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+  .mini.play:hover{opacity:.9}
+  .mini:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* 文章/小说列表 */
+  .list-item{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:18px 22px;background:var(--surface);border:1px solid var(--line);
+    border-radius:14px;margin-bottom:12px;transition:.2s
+  }
+  .list-item:hover{box-shadow:var(--shadow);transform:translateX(5px);border-color:var(--accent-soft)}
+  .list-item .meta{color:var(--muted);font-size:.85em;margin-top:4px}
+  .tag{display:inline-block;font-size:.76em;color:var(--accent);background:var(--accent-soft);
+    padding:3px 11px;border-radius:999px;margin-right:8px}
+
+  /* 关于我 */
+  .about{display:flex;gap:30px;align-items:flex-start;flex-wrap:wrap}
+  .about .txt{flex:1;min-width:260px}
+  .about .portrait{
+    width:158px;height:158px;border-radius:20px;flex-shrink:0;
+    background:linear-gradient(135deg,#E7C9A0,#B5532E);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.8em;
+    font-family:serif;letter-spacing:.08em;box-shadow:var(--shadow)
+  }
+
+  /* 弹窗 */
+  .modal{
+    position:fixed;inset:0;background:rgba(30,22,16,.82);display:none;
+    align-items:center;justify-content:center;z-index:100;padding:24px
+  }
+  .modal.show{display:flex}
+  .modal video,.modal img{max-width:100%;max-height:80vh;border-radius:12px;display:block;margin:0 auto}
+  .modal .close{position:absolute;top:20px;right:26px;color:#fff;font-size:2em;cursor:pointer;background:none;border:none}
+  .modal .cap{color:#fff;text-align:center;margin-top:12px;font-size:.95em}
+  /* 影院模式：从分享链接直达播放页时启用（黑底铺满、隐藏文字说明） */
+  .modal.cinema{background:#000;padding:0}
+  .modal.cinema video{max-height:100vh;max-height:100dvh;max-width:100vw;width:auto;border-radius:0}
+  .modal.cinema .cap,.modal.cinema .share-ui{display:none}
+  .cinema-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:88px;height:88px;border-radius:50%;border:2px solid rgba(255,255,255,.85);
+    background:rgba(0,0,0,.55);color:#fff;font-size:2.4em;line-height:1;cursor:pointer;display:none;z-index:2}
+  .cinema-play:active{background:rgba(255,255,255,.25)}
+
+  /* 下载进度弹窗 */
+  .dl-box{
+    background:var(--surface);border-radius:var(--radius);padding:32px 36px;
+    max-width:400px;width:100%;box-shadow:var(--shadow)
+  }
+  .progress-bar{transition:width .3s}
+
+  /* 首页提示弹窗（听小说小妙招） */
+  .tip-mask{position:fixed;inset:0;background:rgba(30,22,16,.55);z-index:200;display:none;align-items:center;justify-content:center;padding:24px}
+  .tip-mask.show{display:flex}
+  .tip-pop{position:relative;background:var(--surface);border-radius:var(--radius);padding:30px 30px 26px;
+    max-width:360px;width:100%;box-shadow:var(--shadow),0 0 0 1px var(--line)}
+  .tip-pop .tip-close{position:absolute;top:6px;right:12px;background:none;border:none;
+    font-size:1.8em;line-height:1;color:var(--muted);cursor:pointer;padding:4px}
+  .tip-pop .tip-close:hover{color:var(--accent)}
+  .tip-pop .tip-title{font-weight:700;font-size:1.12em;margin-bottom:12px;color:var(--accent)}
+  .tip-pop .tip-text{margin:0;font-size:.95em;line-height:1.85;color:var(--text)}
+  .tip-pop .tip-text b{color:var(--accent)}
+
+  footer{padding:42px 0;text-align:center;color:var(--muted);font-size:.88em}
+
+  @media(max-width:820px){
+    .grid-3,.grid-2{grid-template-columns:1fr}
+    .menu-btn{display:block}
+    .nav-links{display:none;position:absolute;top:66px;left:0;right:0;flex-direction:column;
+      background:var(--bg);padding:14px 22px;border-bottom:1px solid var(--line)}
+    .nav-links.open{display:flex}
+    .font-ctrl{margin:8px 0 0}
+    .hero h1{font-size:2em}
+  }
+  /* 小说书卡 */
+  .book-card{display:flex;gap:26px;background:var(--bg);border:1px solid var(--line);border-radius:18px;padding:26px;align-items:stretch;margin-top:8px}
+  .book-cover{width:118px;min-height:176px;flex-shrink:0;border-radius:10px;background:linear-gradient(160deg,#E7C9A0,#B5532E);color:#FFF9F0;display:flex;align-items:center;justify-content:center;writing-mode:vertical-rl;font-size:1.25em;font-weight:700;letter-spacing:6px;padding:16px 10px;box-shadow:0 6px 18px rgba(181,83,46,.22)}
+  .book-info{flex:1;display:flex;flex-direction:column;gap:10px;min-width:0}
+  .book-info h3{font-size:1.35em;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .book-tag{font-size:.62em;font-weight:400;color:#3E5C4B;background:#E4EEE6;border:1px solid #C9DCCF;padding:2px 10px;border-radius:999px}
+  .book-intro{color:var(--muted);font-size:.92em;line-height:1.8;margin:0}
+  .book-meta{color:var(--muted);font-size:.85em}
+  .book-latest{color:var(--muted);font-size:.88em;line-height:2.2}
+  .book-latest .mini{margin:0 6px 4px 0;display:inline-block}
+  .book-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:2px}
+  #resumeBar .btn{display:inline-block}
+  @media(max-width:640px){
+    .book-card{flex-direction:column}
+    .book-cover{width:100%;min-height:96px;writing-mode:horizontal-tb;letter-spacing:5px;font-size:1.15em}
+  }
+</style>
+</head>
+<body data-page-node-id="94j1IDzgGmIuGQ2n4YJgtM">
+
+<!-- ============ 顶部导航 ============ -->
+<header data-page-node-id="gPtoFfpl2GDcmRskoIwx56">
+  <div class="wrap nav" data-page-node-id="qdhAlLShqb8NOnK3ZdD1y6">
+    <div class="brand" data-page-node-id="2lBLYyafj94tuiwCPWtbGT">雨果 · 作品小屋</div>
+    <button class="menu-btn" onclick="document.getElementById('navlinks').classList.toggle('open')" data-page-node-id="4aHzIUVDAFUe6iXqSJQsOp">☰</button>
+    <nav class="nav-links" id="navlinks" data-page-node-id="w85f1k3hFfBcOO7tEFXOKX">
+      <a href="#games" style="color:var(--accent)" data-page-node-id="SqfrXEqmlHquqxJkYNB4OV">🎮 我的游戏</a>
+      <a href="#home" data-page-node-id="9dacLKBWDexKVyQ7EXIjtf">首页</a>
+      <a href="#novels" data-page-node-id="bq9QlrttNU6CpQnjbkua56">我的小说</a>
+      <a href="#travel" data-page-node-id="ACAxqqzvj3rDsNxtHMLaLN">旅行影像</a>
+      <a href="#articles" data-page-node-id="Csc2AOsbmkC9ve6QHKTKC2">我的文章</a>
+      <a href="#about" data-page-node-id="Lowvglpw7EcKwmScIAMiX1">关于我</a>
+      <div class="font-ctrl" data-page-node-id="rEciBCJGzmr2ax5hEKcbNl">
+        <button onclick="changeFont(-1)" title="缩小字体" data-page-node-id="S0Ib7PXkmJMtizUaAbZUNE">A−</button>
+        <button onclick="changeFont(1)" title="放大字体" data-page-node-id="t9ksiNeeE7ChpLsTEg2Jrh">A+</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ 首页 Hero ============ -->
+<section id="home" class="hero" data-page-node-id="AfxHY8f6xwCuiOkg9HNksS">
+  <div class="hero-bg" aria-hidden="true" data-page-node-id="vy8kZfJoY8e9TUlxnUJIEu">
+    <svg viewBox="0 0 1440 620" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" data-page-node-id="OkCw7NiXf57iSUo8Yrag4v">
+      <defs data-page-node-id="2AICmaI9a7k0QKjyG16uZK">
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1" data-page-node-id="Siq5naA8MDZmGZbD46DPvw">
+          <stop offset="0" stop-color="#FBF7F0" data-page-node-id="q9rPJq0RctLtc5JrwXE8i7"/>
+          <stop offset="0.55" stop-color="#F7ECDC" data-page-node-id="rpwIZ9AWDdnycDx4iolyhj"/>
+          <stop offset="1" stop-color="#F1E0CB" data-page-node-id="l7wobFBR1opSfLjL7AkSa8"/>
+        </linearGradient>
+        <radialGradient id="moonGlow" cx="0.5" cy="0.5" r="0.5" data-page-node-id="18qC9Yb651VztaCEgSbqMD">
+          <stop offset="0" stop-color="#F6E7C6" stop-opacity="0.85" data-page-node-id="UEFcw6CRj4F2BY9zTUBr0Y"/>
+          <stop offset="1" stop-color="#F6E7C6" stop-opacity="0" data-page-node-id="FrDJNKI5A4GuYuO1crBa2Q"/>
+        </radialGradient>
+        <linearGradient id="h1" x1="0" y1="0" x2="0" y2="1" data-page-node-id="VvtxRGgrYCgFC7LUrCyO7d">
+          <stop offset="0" stop-color="#8FA99A" stop-opacity="0.30" data-page-node-id="SaGw2KgV1akIiGKB49ZNAE"/>
+          <stop offset="1" stop-color="#4A6B5D" stop-opacity="0.20" data-page-node-id="WYH8LQsAsnjwhVdyOEBIa7"/>
+        </linearGradient>
+        <linearGradient id="h2" x1="0" y1="0" x2="0" y2="1" data-page-node-id="459sY1mBWjDHh6scLGjFN0">
+          <stop offset="0" stop-color="#C98A5E" stop-opacity="0.26" data-page-node-id="ZS4EqA9PTqtQ46gUXFfWDZ"/>
+          <stop offset="1" stop-color="#B5532E" stop-opacity="0.18" data-page-node-id="kEH4CQkw78O8GYKDMzgbzu"/>
+        </linearGradient>
+        <linearGradient id="h3" x1="0" y1="0" x2="0" y2="1" data-page-node-id="T79AloUjiMiE0YW2czzStz">
+          <stop offset="0" stop-color="#7E6A55" stop-opacity="0.22" data-page-node-id="oKlMQm8sqptHO3VaQP2TFk"/>
+          <stop offset="1" stop-color="#5C4A3A" stop-opacity="0.14" data-page-node-id="h01ZMOhYsGDenAi6HO1kiw"/>
+        </linearGradient>
+      </defs>
+
+      <rect width="1440" height="620" fill="url(#sky)" data-page-node-id="zNpd4BoiAuvmktpHENdu7u"/>
+
+      <!-- 明月与柔光 -->
+      <circle cx="1158" cy="148" r="150" fill="url(#moonGlow)" data-page-node-id="BJElZTy0NUgE7RGUZ5BX3X"/>
+      <circle cx="1158" cy="148" r="60" fill="#F4E6C4" opacity="0.9" data-page-node-id="eYFCSxNZ9zo49jCUNG8DZH"/>
+      <circle cx="1158" cy="148" r="60" fill="none" stroke="#E4CB94" stroke-opacity="0.5" stroke-width="2" data-page-node-id="ZzV1glz3vnGEWDb5L1utx9"/>
+
+      <!-- 飞鸟 -->
+      <g stroke="#6B5A48" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-opacity="0.5" data-page-node-id="e5BIB7riqRUpamIXAH4VcG">
+        <path d="M300 140 q14 -12 28 0 q14 -12 28 0" data-page-node-id="I5CCpCFkLryc00WTwP44Mh"/>
+        <path d="M362 170 q11 -9 22 0 q11 -9 22 0" data-page-node-id="SQpHoaSeX8VK4T067g5HoY"/>
+        <path d="M250 178 q9 -8 18 0 q9 -8 18 0" data-page-node-id="WsiAq4NgYaEYeWxm8kMk4O"/>
+      </g>
+
+      <!-- 远山三层 -->
+      <path d="M0 430 Q 240 330 480 400 T 960 380 T 1440 412 L1440 620 L0 620 Z" fill="url(#h1)" data-page-node-id="bMqJyBWlbEQjxhYKAzAdc5"/>
+      <path d="M0 482 Q 300 402 620 462 T 1180 452 T 1440 472 L1440 620 L0 620 Z" fill="url(#h2)" data-page-node-id="YtQHMv9sLI2SY65FPH6fy9"/>
+      <path d="M0 542 Q 360 472 720 522 T 1440 522 L1440 620 L0 620 Z" fill="url(#h3)" data-page-node-id="b8J77bMDsXrkSGpM6qePg4"/>
+
+      <!-- 水面波纹 -->
+      <g stroke="#B5532E" stroke-opacity="0.12" stroke-width="2" fill="none" data-page-node-id="6ewQ9ApW8668jxzpvw5OGE">
+        <path d="M0 588 Q 360 572 720 588 T 1440 588" data-page-node-id="ijdyY3BDgepdmkAtS2xBRP"/>
+        <path d="M0 603 Q 360 591 720 603 T 1440 603" data-page-node-id="JtO6KFRqhZst7TAnFKCqEb"/>
+      </g>
+
+      <!-- 雾霭 -->
+      <ellipse cx="500" cy="468" rx="520" ry="40" fill="#FBF7F0" opacity="0.35" data-page-node-id="EO1Zj1lQfZNxAeD7C9u8WH"/>
+      <ellipse cx="1050" cy="500" rx="460" ry="34" fill="#FBF7F0" opacity="0.30" data-page-node-id="bAj5MDtKVkETONaZL7Jlyy"/>
+    </svg>
+  </div>
+  <div class="wrap" data-page-node-id="0CZhv57UEIuAVoP7LjfofO">
+    <div class="avatar" data-page-node-id="XINkpzqatkK7NNsdvBYWEI">雨果</div>
+    <h1 data-page-node-id="LsZhdbmC3Itr1FJ7BXmL9E">欢迎来到雨果的作品小屋</h1>
+    <p data-page-node-id="kfWRZKvyx2mmn1pO3eMlXy">这里收录了我生活里的点滴：和家人出游的影像、自己琢磨的小游戏、平时写下的文章，还有一直在连载的小说。愿你也在这里找到一点乐趣。</p>
+    <div style="margin-bottom:18px" data-page-node-id="WE3ynEHFYSEkEnYZJgQJ3T">
+      <a class="btn btn-game" href="#games" data-page-node-id="Q7IhpPXni4fbSPTuQtAANX">🎮 玩镖局 · 走镖录</a>
+    </div>
+    <a class="btn btn-primary" href="#novels" data-page-node-id="ZSXslQGXMPGAzPIFAmPpLv">读读小说 →</a>
+    <a class="btn btn-ghost" href="#about" data-page-node-id="07g4cDpceGvIJHVZ0e6HSQ">认识我</a>
+  </div>
+</section>
+
+<!-- ============ 我的小游戏 ============ -->
+<section id="games" data-page-node-id="74uWLdAjf2WCohwe0Rd7WM">
+  <div class="wrap" data-page-node-id="M7QPKZuxQmqxI3xTGOxHap">
+    <h2 class="sec-title" data-page-node-id="JTFJLDYtK6D7TC6OoGCMwM">我的小游戏</h2>
+    <p class="sec-sub" data-page-node-id="NzmkEkVPpc6DOgIZfxmKRY">自己动手做的小游戏，点「在线玩」直接开玩，也可下载到本地。</p>
+    <div class="grid grid-3" id="gameGrid" data-page-node-id="8TZULFe2Fv7omZ1FJjaP4B"></div>
+  </div>
+</section>
+
+<!-- ============ 我的小说 ============ -->
+<section id="novels" data-page-node-id="vW7Lyeugek7vpUPIvIGkzL">
+  <div class="wrap" data-page-node-id="uK5Cy1F5mFJVHsmrqtzhKB">
+    <h2 class="sec-title" data-page-node-id="KQD8AThmpMIUV6JgoqRsgv">我的小说</h2>
+    <p class="sec-sub" data-page-node-id="UxeuYobRWAEy2kworf972u">正在连载的故事，随时接着上次的进度读。</p>
+
+    <div id="resumeBar" style="display:none;margin:14px 0 20px">
+      <a id="resumeLink" class="btn btn-game" href="#">📖 继续阅读</a>
+    </div>
+
+    <div id="bookList" data-page-node-id="og6NrjqePVOHiEMGaJHL9V"></div>
+  </div>
+</section>
+
+<!-- ============ 旅行影像 ============ -->
+<section id="travel" data-page-node-id="XoKJXglcUV0ObleJtdf2TF">
+  <div class="wrap" data-page-node-id="eumm3aZcfA1sVTYdLlFpZG">
+    <h2 class="sec-title" data-page-node-id="JLyQnxQm0mjQjhBL5KUuZP">旅行影像</h2>
+    <p class="sec-sub" data-page-node-id="0GN3xKLWqF7BxsGefpuCiS">家庭出游的视频与照片，可在线观看，也可下载收藏。</p>
+
+    <h3 style="margin:6px 0 16px;font-size:1.2em" data-page-node-id="1ROlMpZ6GQ7qhKpb47HQYm">🎬 视频</h3>
+    <div class="grid grid-3" id="videoGrid" data-page-node-id="kweje4OxLoKg5DAkcNWVnB"></div>
+
+    <h3 style="margin:36px 0 16px;font-size:1.2em" data-page-node-id="oOWt7P3oJsBHsOIQB7N06A">📷 照片墙</h3>
+    <div class="grid grid-3" id="photoGrid" data-page-node-id="Q8cqwGCBQ7mUQHdodsBLNb"></div>
+  </div>
+</section>
+
+<!-- ============ 我的文章 ============ -->
+<section id="articles" data-page-node-id="DKXu23OrJxUiiANmIDAuPI">
+  <div class="wrap" data-page-node-id="yKRlHdC0h6rizzq8UEn1zT">
+    <h2 class="sec-title" data-page-node-id="T1IiBZ3IsaF8lWrZOia44G">我的文章</h2>
+    <p class="sec-sub" data-page-node-id="ZouFjSkn8pLfWcdFP9uJ5f">平时写下的随笔与心得，点开即可阅读。</p>
+    <div id="articleList" data-page-node-id="sTtsRbHKLb2MsEn5jcAlR7"></div>
+  </div>
+</section>
+
+<!-- ============ 关于我 ============ -->
+<section id="about" data-page-node-id="OcAZdZ3MojDX7yGym4qzui">
+  <div class="wrap" data-page-node-id="ZDJoL8fFd0T47OWgnZbr88">
+    <h2 class="sec-title" data-page-node-id="F20pJrb5qikrfjnOedTrMN">关于我</h2>
+    <div class="about" style="margin-top:24px" data-page-node-id="fW8YCVTNDjhS3DKqknKnCZ">
+      <div class="portrait" data-page-node-id="v0CRFsk8AN1NWO9utV4hVm">雨果</div>
+      <div class="txt" data-page-node-id="MgIGCDsySGJdFnUPLXNDgz">
+        <p style="margin-bottom:14px" data-page-node-id="FmqMleUtPWeDDfUA1RkkQo">我平时喜欢记录生活：带着相机和家人走走停停，偶尔写点东西，也爱鼓捣些小玩意儿——比如自己写写小游戏。</p>
+        <p style="margin-bottom:14px" data-page-node-id="KGaVRMhKfqpYO2RRYQRkVc">这个小小的网站，是我给自己留的一份纪念，也希望能给看到的人带去一点轻松和温暖。</p>
+        <p class="meta" data-page-node-id="JNsi9KI4pkSkpT2lpkHU4V">📧 联系我：<a href="mailto:your-email@example.com" data-page-node-id="QOqivAYBgCFCVwFY7Ej2xb">your-email@example.com</a>（把邮箱换成你自己的）</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer data-page-node-id="CDOPxRQGVmJ7UFqICzexrr">
+  <div class="wrap" data-page-node-id="mHKP56AaqCeDB4Ip2lBtBy">
+    <p data-page-node-id="jAWWOrYVIThQyRSt8jwHjP">© <span id="year" data-page-node-id="7HCFmmiRaxmQ2fb8W9wvoX"></span> 雨果的作品小屋 · 用心记录生活</p>
+    <p style="margin-top:6px;font-size:.82em" data-page-node-id="WeaAfur8SrAlYuDbtfzbWA">本网站由 WorkBuddy 智能设计助手生成</p>
+  </div>
+</footer>
+
+<!-- 弹窗：视频播放 / 照片放大 -->
+<div class="modal" id="modal" data-page-node-id="5GKX4tChFmMKCwg8dOs9IF">
+  <button class="close" onclick="closeModal()" data-page-node-id="akE9e7nVycv8GCzhYK0Oqu">×</button>
+  <div class="modal-content" id="modalContent" data-page-node-id="gQg7GllAfXCefD0WTwhWca"></div>
+</div>
+
+<!-- 下载进度弹窗 -->
+<div class="modal" id="downloadModal" style="pointer-events:auto" onclick="if(event.target.id===this)this.classList.remove('show')" data-page-node-id="8xrT2QtVCIhtQK7DaAgYA9">
+  <div class="dl-box" data-page-node-id="OCAP5LZrAsVubbJLWbaBeY">
+    <div style="font-size:1.3em;font-weight:700;margin-bottom:18px;text-align:center" data-page-node-id="HewiTCrXhYbOMs5oQbtlY7">⬇ 下载中</div>
+    <div style="background:var(--line);border-radius:999px;height:14px;overflow:hidden;margin-bottom:12px" data-page-node-id="aVDbuYltxZR8DZA6MxYGg0">
+      <div class="progress-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#B5532E,#E9C9A0);border-radius:999px;transition:width .3s" data-page-node-id="AYGS9vpBgtM4uKFXQQjtGq"></div>
+    </div>
+    <div style="text-align:center;margin-bottom:8px" data-page-node-id="lMzjDbCLNNKbNoCuPfBSpq"><span class="pct-text" style="font-size:1.1em;font-weight:700;color:var(--accent)" data-page-node-id="WFJo6QvdFgBgsZGKGeAO3A">0%</span></div>
+    <div class="dl-status" style="text-align:center;color:var(--muted);font-size:.9em" data-page-node-id="C7YWFckHeylsRGDK0LCbTG"></div>
+  </div>
+</div>
+
+<!-- 听小说提示弹窗：关闭后 7 天内不再弹出 -->
+<div class="tip-mask" id="tipMask" onclick="closeTip()">
+  <div class="tip-pop" onclick="event.stopPropagation()">
+    <button class="tip-close" onclick="closeTip()" aria-label="关闭">×</button>
+    <div class="tip-title">🎧 听小说小妙招</div>
+    <p class="tip-text">如喜欢听小说的话，用<b>夸克、UC浏览器</b>照样可以听。方法是在夸克、UC浏览器输入 <b>youfeng1.com</b> 打开本网页，然后收藏。</p>
+  </div>
+</div>
+
+<script src="js/hls.light.min.js"></script>
+<script>
+/* ============================================================
+   作品数据 —— 在这里增删内容，网站自动更新
+   媒体文件请放在对应文件夹：videos/ photos/ games/ articles/ novels/
+   还没有真实文件时，留空或写占位名都行，网站仍能正常打开
+   ============================================================ */
+
+const videos = [
+  { title:'中秋月圆', file:'videos/中秋月圆.mp4', hls:'videos/zhongqiu/index.m3u8', cover:'中秋·月圆', desc:'中秋节祝矿山兄弟和家人朋友们节日快乐、阖家幸福' },
+  { title:'风帆渡 · 伊比利亚', file:'videos/风帆渡.伊比利亚1.mp4', hls:'videos/fengfandu/index.m3u8', cover:'伊比利亚·远帆', desc:'2025年秋，与家人朋友一起到西葡旅游，有感而创作的一首歌曲。' },
+  { title:'泰达谷的夏', file:'videos/泰达谷的夏.mp4', hls:'videos/taidagu/index.m3u8', cover:'泰达谷·盛夏', desc:'在习水仙源镇泰达谷避暑，空气清新、天气凉爽、景色优美、雅兴大发而作。' },
+  { title:'合川秋韵', file:'videos/合川秋韵.mp4', cover:'合川·三江', desc:'合川三江回流、"合洲八景"脍炙人口，合川的秋天很美，为家乡而作。' },
+  { title:'仙源听雨', file:'videos/仙源听雨 (2).mp4', cover:'仙源·听雨', desc:'避暑地习水仙源泰达谷下雨，凉爽宜人，应景而作。' },
+];
+
+const photos = [
+  { title:'古镇的清晨', file:'photos/town.jpg' },
+  { title:'雪后的院子', file:'photos/snow.jpg' },
+  { title:'阳台上的花', file:'photos/flower.jpg' },
+  { title:'草原骑马', file:'photos/horse.jpg' },
+  { title:'孙子的涂鸦', file:'photos/draw.jpg' },
+  { title:'年夜饭', file:'photos/dinner.jpg' },
+];
+
+const games = [
+  // 「镖局」为真实游戏，整个 games/biaoju 文件夹已复制进站点，可直接在线玩
+  // APK 版本为安卓安装包，适合在手机上安装体验完整功能
+  { title:'镖局 · 走镖录', file:'games/biaoju/index.html', desc:'经营一家镖局，招募镖师、接取委托、走南闯北的模拟经营小游戏。', cover:'镖局', apk:'downloads/biaoju-app-release.apk' },
+];
+
+const articles = [
+  { title:'初学摄影的一点心得', file:'articles/p1.html', date:'2026-03-12', tag:'随笔' },
+  { title:'怎样把老照片存进电脑', file:'articles/p2.html', date:'2026-02-08', tag:'教程' },
+  { title:'写给我未来的信', file:'articles/p3.html', date:'2025-12-30', tag:'心情' },
+];
+
+const novels = [
+  {
+    title:'万古第一执刀人',
+    intro:'萧家满门一夜被灭，活下来的少年执刀人能看见刀锋里的纹路。他带着父亲的旧刀走进郡城，一刀一刀，讨回公道。',
+    key:'gudo',
+    prefix:'gudo',
+    catalog:'novels/catalog.html',
+    store:'hugo_reader_v1',
+    chapters:[
+      { name:'第一章 · 血夜', file:'novels/gudo-1.html' },
+      { name:'第二章 · 裂痕', file:'novels/gudo-2.html' },
+      { name:'第三章 · 第一刀', file:'novels/gudo-3.html' },
+      { name:'第四章 · 补刀的人', file:'novels/gudo-4.html' },
+      { name:'第五章 · 郎中与刀', file:'novels/gudo-5.html' },
+      { name:'第六章 · 城门', file:'novels/gudo-6.html' },
+      { name:'第七章 · 墨记', file:'novels/gudo-7.html' },
+      { name:'第八章 · 灰牌', file:'novels/gudo-8.html' },
+      { name:'第九章 · 碑脚料', file:'novels/gudo-9.html' },
+      { name:'第十章 · 守碑人', file:'novels/gudo-10.html' },
+      { name:'第十一章 · 春祭前', file:'novels/gudo-11.html' },
+      { name:'第十二章 · 春祭', file:'novels/gudo-12.html' },
+      { name:'第十三章 · 锚', file:'novels/gudo-13.html' },
+      { name:'第十四章 · 符底样', file:'novels/gudo-14.html' },
+      { name:'第十五章 · 茶', file:'novels/gudo-15.html' },
+      { name:'第十六章 · 账房', file:'novels/gudo-16.html' },
+      { name:'第十七章 · 三只哨', file:'novels/gudo-17.html' },
+      { name:'第十八章 · 披红', file:'novels/gudo-18.html' },
+      { name:'第十九章 · 送符入府', file:'novels/gudo-19.html' },
+      { name:'第二十章 · 钉', file:'novels/gudo-20.html' },
+      { name:'第二十一章 · 箱子开了', file:'novels/gudo-21.html' },
+      { name:'第二十二章 · 借刀', file:'novels/gudo-22.html' },
+      { name:'第二十三章 · 收锚', file:'novels/gudo-23.html' },
+      { name:'第二十四章 · 瘦竹', file:'novels/gudo-24.html' },
+      { name:'第二十五章 · 公价', file:'novels/gudo-25.html' },
+      { name:'第二十六章 · 摊牌', file:'novels/gudo-26.html' },
+      { name:'第二十七章 · 观礼', file:'novels/gudo-27.html' },
+      { name:'第二十八章 · 当面', file:'novels/gudo-28.html' },
+      { name:'第二十九章 · 开箱', file:'novels/gudo-29.html' },
+      { name:'第三十章 · 破纹', file:'novels/gudo-30.html' },
+      { name:'第三十一章 · 灯灭', file:'novels/gudo-31.html' },
+      { name:'第三十二章 · 夜奔', file:'novels/gudo-32.html' },
+      { name:'第三十三章 · 苏家渡', file:'novels/gudo-33.html' },
+      { name:'第三十四章 · 葬灯', file:'novels/gudo-34.html' },
+      { name:'第三十五章 · 灯在碑上', file:'novels/gudo-35.html' },
+      { name:'第三十六章 · 重开第一天', file:'novels/gudo-36.html' },
+      { name:'第三十七章 · 账里的人', file:'novels/gudo-37.html' },
+      { name:'第三十八章 · 三十年前的线头', file:'novels/gudo-38.html' },
+      { name:'第三十九章 · 司里的眼', file:'novels/gudo-39.html' },
+      { name:'第四十章 · 往深处长', file:'novels/gudo-40.html' },
+      { name:'第四十一章 · 丫丫的碑林', file:'novels/gudo-41.html' },
+      { name:'第四十二章 · 隔空落子', file:'novels/gudo-42.html' },
+      { name:'第四十三章 · 明面上的风浪', file:'novels/gudo-43.html' },
+      { name:'第四十四章 · 网', file:'novels/gudo-44.html' },
+      { name:'第四十五章 · 出城的念头', file:'novels/gudo-45.html' },
+      { name:'第四十六章 · 第一程', file:'novels/gudo-46.html' },
+      { name:'第四十七章 · 走碑', file:'novels/gudo-47.html' },
+      { name:'第四十八章 · 碑上的灯', file:'novels/gudo-48.html' },
+      { name:'第四十九章 · 渊口', file:'novels/gudo-49.html' },
+      { name:'第五十章 · 渊下名册', file:'novels/gudo-50.html' },
+      { name:'第五十一章 · 交叉杠', file:'novels/gudo-51.html' },
+      { name:'第五十二章 · 换命之约', file:'novels/gudo-52.html' },
+      { name:'第五十三章 · 渊口封人', file:'novels/gudo-53.html' },
+      { name:'第五十四章 · 门认人', file:'novels/gudo-54.html' },
+      { name:'第五十五章 · 灯变了颜色', file:'novels/gudo-55.html' },
+      { name:'第五十六章 · 夜渡青灯', file:'novels/gudo-56.html' },
+      { name:'第五十七章 · 青灯照夜', file:'novels/gudo-57.html' },
+      { name:'第五十八章 · 灯影婆娑', file:'novels/gudo-58.html' },
+      { name:'第五十九章 · 灯下读书', file:'novels/gudo-59.html' },
+      { name:'第六十章 · 一夜改灯', file:'novels/gudo-60.html' },
+      { name:'第六十一章 · 灯灭灯燃', file:'novels/gudo-61.html' },
+      { name:'第六十二章 · 灯芯', file:'novels/gudo-62.html' },
+      { name:'第六十三章 · 灯油', file:'novels/gudo-63.html' },
+      { name:'第六十四章 · 灯火阑珊', file:'novels/gudo-64.html' },
+      { name:'第六十五章 · 青灯之乱', file:'novels/gudo-65.html' },
+      { name:'第六十六章 · 出云荒途', file:'novels/gudo-66.html' },
+      { name:'第六十七章 · 灯屋之局', file:'novels/gudo-67.html' },
+      { name:'第六十八章 · 填灯救魂', file:'novels/gudo-68.html' },
+      { name:'第六十九章 · 云荒收束', file:'novels/gudo-69.html' },
+      { name:'第七十章 · 卷三启程', file:'novels/gudo-70.html' },
+      { name:'第七十一章 · 渡荒口', file:'novels/gudo-71.html' },
+      { name:'第七十二章 · 孤坟', file:'novels/gudo-72.html' },
+      { name:'第七十三章 · 空城', file:'novels/gudo-73.html' },
+      { name:'第七十四章 · 刀叫三回', file:'novels/gudo-74.html' },
+      { name:'第七十五章 · 第三声', file:'novels/gudo-75.html' },
+      { name:'第七十六章 · 桩圈', file:'novels/gudo-76.html' },
+      { name:'第七十七章 · 同号', file:'novels/gudo-77.html' },
+      { name:'第七十八章 · 卸号', file:'novels/gudo-78.html' },
+      { name:'第七十九章 · 数人', file:'novels/gudo-79.html' },
+      { name:'第八十章 · 丫丫', file:'novels/gudo-80.html' },
+      { name:'第八十一章 · 禾', file:'novels/gudo-81.html' },
+      { name:'第八十二章 · 两半灯', file:'novels/gudo-82.html' },
+      { name:'第八十三章 · 回家的人', file:'novels/gudo-83.html' },
+      { name:'第八十四章 · 合印', file:'novels/gudo-84.html' },
+      { name:'第八十五章 · 我是老周', file:'novels/gudo-85.html' },
+      { name:'第八十六章 · 在册', file:'novels/gudo-86.html' },
+      { name:'第八十七章 · 填谁', file:'novels/gudo-87.html' },
+      { name:'第八十八章 · 换', file:'novels/gudo-88.html' },
+      { name:'第八十九章 · 开门之日', file:'novels/gudo-89.html' },
+      { name:'第九十章 · 在里头', file:'novels/gudo-90.html' },
+      { name:'第九十一章 · 进门', file:'novels/gudo-91.html' },
+      { name:'第九十二章 · 门里', file:'novels/gudo-92.html' },
+      { name:'第九十三章 · 四千年', file:'novels/gudo-93.html' },
+      { name:'第九十四章 · 第一个号', file:'novels/gudo-94.html' },
+      { name:'第九十五章 · 第三声', file:'novels/gudo-95.html' },
+                { name:"第九十六章 · 第二笔", file:"novels/gudo-96.html" },
+                { name:"第九十七章 · 谢砚的空名", file:"novels/gudo-97.html" },
+                { name:"第九十八章 · 走着的空", file:"novels/gudo-98.html" },
+                { name:"第九十九章 · 城外有风", file:"novels/gudo-99.html" },
+                { name:"第一百章 · 谁刻的位牌", file:"novels/gudo-100.html" },
+                { name:"第一百零一章 · 换父", file:"novels/gudo-101.html" },
+                { name:"第一百零二章 · 缝越来越多", file:"novels/gudo-102.html" },
+                { name:"第一百零三章 · 两声", file:"novels/gudo-103.html" },
+                { name:"第一百零四章 · 三声一起来", file:"novels/gudo-104.html" },
+                { name:"第一百零五章 · 一个人的命", file:"novels/gudo-105.html" },
+                { name:"第一百零六章 · 第一笔分给众人", file:"novels/gudo-106.html" },
+                { name:"第一百零七章 · 四千双睁开的眼", file:"novels/gudo-107.html" },
+                { name:"第一百零八章 · 缝大到修不平", file:"novels/gudo-108.html" },
+                { name:"第一百零九章 · 空名有人接", file:"novels/gudo-109.html" },
+                { name:"第一百十章 · 首样落地", file:"novels/gudo-110.html" },
+                { name:"第一百十一章 · 排着来", file:"novels/gudo-111.html" },
+                { name:"第一百十二章 · 弦断了", file:"novels/gudo-112.html" },
+                { name:"第一百十三章 · 塌下来的缝", file:"novels/gudo-113.html" },
+                { name:"第一百十四章 · 手离了墙", file:"novels/gudo-114.html" },
+                { name:"第一百十五章 · 那半个名", file:"novels/gudo-115.html" },
+                { name:"第一百十六章 · 守着的人", file:"novels/gudo-116.html" },
+                { name:"第一百十七章 · 病中的数", file:"novels/gudo-117.html" },
+                { name:"第一百十八章 · 白灯照处", file:"novels/gudo-118.html" },
+                { name:"第一百十九章 · 谢家三百年", file:"novels/gudo-119.html" },
+                { name:"第一百二十章 · 自担一处", file:"novels/gudo-120.html" },
+                { name:"第一百二十一章 · 推门的人", file:"novels/gudo-121.html" },
+                { name:"第一百二十二章 · 七日一粒", file:"novels/gudo-122.html" },
+                { name:"第一百二十三章 · 只照不担", file:"novels/gudo-123.html" },
+                { name:"第一百二十四章 · 谢字页", file:"novels/gudo-124.html" },
+                { name:"第一百二十五章 · 两道收法", file:"novels/gudo-125.html" },
+                { name:"第一百二十六章 · 第十四天的手", file:"novels/gudo-126.html" },
+                { name:"第一百二十七章 · 谁先松", file:"novels/gudo-127.html" },
+                { name:"第一百二十八章 · 谢页落笔", file:"novels/gudo-128.html" },
+                { name:"第一百二十九章 · 门开后的光", file:"novels/gudo-129.html" },
+                { name:"第一百三十章 · 第十天", file:"novels/gudo-130.html" },
+                { name:"第一百三十一章 · 门外的味", file:"novels/gudo-131.html" },
+                { name:"第一百三十二章 · 那道空位", file:"novels/gudo-132.html" },
+                { name:"第一百三十三章 · 七处保", file:"novels/gudo-133.html" },
+                { name:"第一百三十四章 · 风日日灌", file:"novels/gudo-134.html" },
+                { name:"第一百三十五章 · 账房停了半息", file:"novels/gudo-135.html" },
+                { name:"第一百三十六章 · 占处的人", file:"novels/gudo-136.html" },
+                { name:"第一百三十七章 · 谢页的空", file:"novels/gudo-137.html" },
+                { name:"第一百三十八章 · 保的顶", file:"novels/gudo-138.html" },
+                { name:"第一百三十九章 · 两本账的界", file:"novels/gudo-139.html" },
+                { name:"第一百四十章 · 纹沉的线", file:"novels/gudo-140.html" },
+                { name:"第一百四十一章 · 空守的立", file:"novels/gudo-141.html" },
+                { name:"第一百四十二章 · 落名的人", file:"novels/gudo-142.html" },
+                { name:"第一百四十三章 · 第七处保", file:"novels/gudo-143.html" },
+                { name:"第一百四十四章 · 界的试", file:"novels/gudo-144.html" },
+                { name:"第一百四十五章 · 秤的立", file:"novels/gudo-145.html" },
+                { name:"第一百四十六章 · 淡远味的形", file:"novels/gudo-146.html" },
+                { name:"第一百四十七章 · 空守的尽头", file:"novels/gudo-147.html" },
+                { name:"第一百四十八章 · 第七个名", file:"novels/gudo-148.html" },
+                { name:"第一百四十九章 · 传空那回", file:"novels/gudo-149.html" },
+                { name:"第一百五十章 · 门槛与走的人", file:"novels/gudo-150.html" },
+                { name:"第一百五十一章 · 七处灯", file:"novels/gudo-151.html" },
+                { name:"第一百五十二章 · 借在立界", file:"novels/gudo-152.html" },
+                { name:"第一百五十三章 · 名淡", file:"novels/gudo-153.html" },
+                { name:"第一百五十四章 · 一号两头漏", file:"novels/gudo-154.html" },
+                { name:"第一百五十五章 · 门槛到顶", file:"novels/gudo-155.html" },
+                { name:"第一百五十六章 · 第六处同应", file:"novels/gudo-156.html" },
+                { name:"第一百五十七章 · 壳穿风口无人", file:"novels/gudo-157.html" },
+                { name:"第一百五十八章 · 新路之凭", file:"novels/gudo-158.html" },
+                { name:"第一百五十九章 · 挡沉之界", file:"novels/gudo-159.html" },
+                { name:"第一百六十章 · 谢石归来", file:"novels/gudo-160.html" },
+                { name:"第一百六十一章 · 七处齐点", file:"novels/gudo-161.html" },
+                { name:"第一百六十二章 · 风口换班", file:"novels/gudo-162.html" },
+                { name:"第一百六十三章 · 四项凭实战", file:"novels/gudo-163.html" },
+                { name:"第一百六十四章 · 沉风第四路", file:"novels/gudo-164.html" },
+                { name:"第一百六十五章 · 谢石全归", file:"novels/gudo-165.html" },
+                { name:"第一百六十六章 · 界薄之限", file:"novels/gudo-166.html" },
+                { name:"第一百六十七章 · 抱芯的人", file:"novels/gudo-167.html" },
+                { name:"第一百六十八章 · 重号之数", file:"novels/gudo-168.html" },
+                { name:"第一百六十九章 · 账房数到谁", file:"novels/gudo-169.html" },
+                { name:"第一百七十章 · 第十一道落处", file:"novels/gudo-170.html" },
+                { name:"第一百七十一章 · 薄在一头", file:"novels/gudo-171.html" },
+                { name:"第一百七十二章 · 芯背之期", file:"novels/gudo-172.html" },
+                { name:"第一百七十三章 · 余下的重号", file:"novels/gudo-173.html" },
+                { name:"第一百七十四章 · 无名者的名号", file:"novels/gudo-174.html" },
+                { name:"第一百七十五章 · 界立不立得住", file:"novels/gudo-175.html" },
+                { name:"第一百七十六章 · 认手之印", file:"novels/gudo-176.html" },
+                { name:"第一百七十七章 · 同纹之痕", file:"novels/gudo-177.html" },
+                { name:"第一百七十八章 · 抱芯之人", file:"novels/gudo-178.html" },
+                { name:"第一百七十九章 · 风口之账", file:"novels/gudo-179.html" },
+                { name:"第一百八十章 · 空行落笔", file:"novels/gudo-180.html" },
+                { name:"第一百八十一章 · 渊下比手", file:"novels/gudo-181.html" },
+                { name:"第一百八十二章 · 支脉指人", file:"novels/gudo-182.html" },
+                { name:"第一百八十三章 · 两套之纹", file:"novels/gudo-183.html" },
+                { name:"第一百八十四章 · 班短之尽", file:"novels/gudo-184.html" },
+                { name:"第一百八十五章 · 旧主空名", file:"novels/gudo-185.html" },
+                { name:"第一百八十六章 · 界实之兆", file:"novels/gudo-186.html" },
+                { name:"第一百八十七章 · 全短之补", file:"novels/gudo-187.html" },
+                { name:"第一百八十八章 · 抽手再改", file:"novels/gudo-188.html" },
+                { name:"第一百八十九章 · 早年走出者", file:"novels/gudo-189.html" },
+                { name:"第一百九十章 · 旧主落名", file:"novels/gudo-190.html" },
+                { name:"第一百九十一章 · 界立之后", file:"novels/gudo-191.html" },
+                { name:"第一百九十二章 · 名尾之实", file:"novels/gudo-192.html" },
+                { name:"第一百九十三章 · 抽手再起", file:"novels/gudo-193.html" },
+                { name:"第一百九十四章 · 影之去", file:"novels/gudo-194.html" },
+                { name:"第一百九十五章 · 旧主之刀", file:"novels/gudo-195.html" },
+                { name:"第一百九十六章 · 芯背之接", file:"novels/gudo-196.html" },
+                { name:"第一百九十七章 · 姓头之空", file:"novels/gudo-197.html" },
+                { name:"第一百九十八章 · 新虚之痕", file:"novels/gudo-198.html" },
+                { name:"第一百九十九章 · 第二十道", file:"novels/gudo-199.html" },
+                { name:"第二百章 · 借在补新虚", file:"novels/gudo-200.html" },
+                { name:"第二百零一章 · 抽手第五回", file:"novels/gudo-201.html" },
+                { name:"第二百零二章 · 更深之石", file:"novels/gudo-202.html" },
+                { name:"第二百零三章 · 钉里之在", file:"novels/gudo-203.html" },
+                { name:"第二百零四章 · 第二十道之刻", file:"novels/gudo-204.html" },
+                { name:"第二百零五章 · 名之接", file:"novels/gudo-205.html" },
+                { name:"第二百零六章 · 抱实之借", file:"novels/gudo-206.html" },
+                { name:"第二百零七章 · 石里之名", file:"novels/gudo-207.html" },
+                { name:"第二百零八章 · 描字之悬", file:"novels/gudo-208.html" },
+                { name:"第二百零九章 · 更早一道", file:"novels/gudo-209.html" },
+                { name:"第二百十章 · 认全之路", file:"novels/gudo-210.html" },
+                { name:"第二百十一章 · 参照之实", file:"novels/gudo-211.html" },
+                { name:"第二百十二章 · 两代之厚", file:"novels/gudo-212.html" },
+                { name:"第二百十三章 · 描痕之近", file:"novels/gudo-213.html" },
+                { name:"第二百十四章 · 层压之深", file:"novels/gudo-214.html" },
+                { name:"第二百十五章 · 更深之路", file:"novels/gudo-215.html" },
+                { name:"第二百十六章 · 浅痕之照", file:"novels/gudo-216.html" },
+                { name:"第二百十七章 · 探劲之托", file:"novels/gudo-217.html" },
+                { name:"第二百十八章 · 描笔之续", file:"novels/gudo-218.html" },
+                { name:"第二百十九章 · 层叠之深", file:"novels/gudo-219.html" },
+                { name:"第二百二十章 · 悬路之尽", file:"novels/gudo-220.html" },
+                { name:"第二百二十一章 · 三路之用", file:"novels/gudo-221.html" },
+                { name:"第二百二十二章 · 探劲之分", file:"novels/gudo-222.html" },
+                { name:"第二百二十三章 · 描笔之悬", file:"novels/gudo-223.html" },
+                { name:"第二百二十四章 · 叠痕之锋", file:"novels/gudo-224.html" },
+                { name:"第二百二十五章 · 余悬之待", file:"novels/gudo-225.html" },
+                { name:"第二百二十六章 · 断口之初", file:"novels/gudo-226.html" },
+                { name:"第二百二十七章 · 探劲之分", file:"novels/gudo-227.html" },
+                { name:"第二百二十八章 · 描笔之承", file:"novels/gudo-228.html" },
+                { name:"第二百二十九章 · 叠锋之痕", file:"novels/gudo-229.html" },
+                { name:"第二百三十章 · 凉绕之尽", file:"novels/gudo-230.html" },
+                { name:"第二百三十一章 · 断口之早", file:"novels/gudo-231.html" },
+                { name:"第二百三十二章 · 叠痕之始", file:"novels/gudo-232.html" },
+                { name:"第二百三十三章 · 半笔之量", file:"novels/gudo-233.html" },
+                { name:"第二百三十四章 · 试锋之引", file:"novels/gudo-234.html" },
+                { name:"第二百三十五章 · 收束之悬", file:"novels/gudo-235.html" },
+                { name:"第二百三十六章 · 引名之深", file:"novels/gudo-236.html" },
+                { name:"第二百三十七章 · 叠笔之拼", file:"novels/gudo-237.html" },
+                { name:"第二百三十八章 · 试锋之往", file:"novels/gudo-238.html" },
+                { name:"第二百三十九章 · 并着之去", file:"novels/gudo-239.html" },
+                { name:"第二百四十章 · 收束更深", file:"novels/gudo-240.html" },
+    ]
+  },
+  {
+    title:'斗载',
+    intro:'涪江边游家沟的少年游泽远，识破大斗里的门道，十八岁出沟进汇川，从帮人过斗做起，一步步当上斗载帮帮主。一杆秤、一只手，量的是谷子，称的是人心。',
+    status:'done',
+    key:'dz',
+    prefix:'dz',
+    catalog:'novels/dz-catalog.html',
+    store:'dz_reader_v1',
+    chapters:[
+      { name:'第一章 · 大斗', file:'novels/dz-1.html' },
+      { name:'第二章 · 卖谷子', file:'novels/dz-2.html' },
+      { name:'第三章 · 草鞋', file:'novels/dz-3.html' },
+      { name:'第四章 · 先生', file:'novels/dz-4.html' },
+      { name:'第五章 · 赶场', file:'novels/dz-5.html' },
+      { name:'第六章 · 义仓', file:'novels/dz-6.html' },
+      { name:'第七章 · 夜渡', file:'novels/dz-7.html' },
+      { name:'第八章 · 离家', file:'novels/dz-8.html' },
+      { name:'第九章 · 码头', file:'novels/dz-9.html' },
+      { name:'第十章 · 背工', file:'novels/dz-10.html' },
+      { name:'第十一章 · 过载', file:'novels/dz-11.html' },
+      { name:'第十二章 · 斗房', file:'novels/dz-12.html' },
+      { name:'第十三章 · 讲茶', file:'novels/dz-13.html' },
+      { name:'第十四章 · 人情', file:'novels/dz-14.html' },
+      { name:'第十五章 · 提亲', file:'novels/dz-15.html' },
+      { name:'第十六章 · 门', file:'novels/dz-16.html' },
+      { name:'第十七章 · 伙计', file:'novels/dz-17.html' },
+      { name:'第十八章 · 运价', file:'novels/dz-18.html' },
+      { name:'第十九章 · 管事', file:'novels/dz-19.html' },
+      { name:'第二十章 · 抢行', file:'novels/dz-20.html' },
+      { name:'第二十一章 · 粮争', file:'novels/dz-21.html' },
+      { name:'第二十二章 · 松手', file:'novels/dz-22.html' },
+      { name:'第二十三章 · 老了', file:'novels/dz-23.html' },
+      { name:'第二十四章 · 掌秤', file:'novels/dz-24.html' },
+      { name:'第二十五章 · 白幡', file:'novels/dz-25.html' },
+      { name:'第二十六章 · 大爷', file:'novels/dz-26.html' },
+      { name:'第二十七章 · 上水', file:'novels/dz-27.html' },
+      { name:'第二十八章 · 分帮', file:'novels/dz-28.html' },
+      { name:'第二十九章 · 置田', file:'novels/dz-29.html' },
+      { name:'第三十章 · 趁手', file:'novels/dz-30.html' },
+      { name:'第三十一章 · 两路', file:'novels/dz-31.html' },
+      { name:'第三十二章 · 庆功', file:'novels/dz-32.html' },
+      { name:'第三十三章 · 绣铺', file:'novels/dz-33.html' },
+      { name:'第三十四章 · 灯月', file:'novels/dz-34.html' },
+      { name:'第三十五章 · 儿女', file:'novels/dz-35.html' },
+      { name:'第三十六章 · 风言', file:'novels/dz-36.html' },
+      { name:'第三十七章 · 童言', file:'novels/dz-37.html' },
+      { name:'第三十八章 · 开口', file:'novels/dz-38.html' },
+      { name:'第三十九章 · 患得', file:'novels/dz-39.html' },
+      { name:'第四十章 · 远走', file:'novels/dz-40.html' },
+      { name:'第四十一章 · 开仓', file:'novels/dz-41.html' },
+      { name:'第四十二章 · 过载', file:'novels/dz-42.html' },
+      { name:'第四十三章 · 挑二', file:'novels/dz-43.html' },
+      { name:'第四十四章 · 官斗', file:'novels/dz-44.html' },
+      { name:'第四十五章 · 轰炸', file:'novels/dz-45.html' },
+      { name:'第四十六章 · 抢米', file:'novels/dz-46.html' },
+      { name:'第四十七章 · 灯下', file:'novels/dz-47.html' },
+      { name:'第四十八章 · 胜利', file:'novels/dz-48.html' },
+      { name:'第四十九章 · 召回', file:'novels/dz-49.html' },
+      { name:'第五十章 · 说媒', file:'novels/dz-50.html' },
+      { name:'第五十一章 · 拜堂', file:'novels/dz-51.html' },
+      { name:'第五十二章 · 识字', file:'novels/dz-52.html' },
+      { name:'第五十三章 · 两处灯', file:'novels/dz-53.html' },
+      { name:'第五十四章 · 归去', file:'novels/dz-54.html' },
+      { name:'第五十五章 · 空屋', file:'novels/dz-55.html' },
+      { name:'第五十六章 · 让路', file:'novels/dz-56.html' },
+      { name:'第五十七章 · 半身', file:'novels/dz-57.html' },
+      { name:'第五十八章 · 回沟', file:'novels/dz-58.html' },
+      { name:'第五十九章 · 招牌', file:'novels/dz-59.html' },
+      { name:'第六十章 · 变天', file:'novels/dz-60.html' },
+      { name:'第六十一章 · 去远', file:'novels/dz-61.html' },
+      { name:'第六十二章 · 划线', file:'novels/dz-62.html' },
+      { name:'第六十三章 · 交秤', file:'novels/dz-63.html' },
+      { name:'第六十四章 · 榜', file:'novels/dz-64.html' },
+      { name:'第六十五章 · 半幅芙蓉', file:'novels/dz-65.html' },
+      { name:'第六十六章 · 练字本', file:'novels/dz-66.html' },
+      { name:'第六十七章 · 江声', file:'novels/dz-67.html' },
+      { name:'第六十八章 · 四少爷', file:'novels/dz-68.html' },
+      { name:'第六十九章 · 布拖', file:'novels/dz-69.html' },
+      { name:'第七十章 · 认亲', file:'novels/dz-70.html' },
+    ]
+  },
+];
+
+/* ===================== 渲染逻辑（一般无需改动） ===================== */
+const palette=['linear-gradient(135deg,#E7C9A0,#B5532E)','linear-gradient(135deg,#A9C7B0,#4A6B5D)','linear-gradient(135deg,#E9C9D2,#A8556E)','linear-gradient(135deg,#C9B98A,#8A6D3B)'];
+
+function el(html){const d=document.createElement('div');d.innerHTML=html.trim();return d.firstChild;}
+
+const vg=document.getElementById('videoGrid');
+videos.forEach((v,i)=>{
+  vg.appendChild(el(`
+    <div class="card">
+      <div class="thumb" style="background:${palette[i%palette.length]}">${v.cover||'视频'}</div>
+      <div class="card-body">
+        <h3>${v.title}</h3>
+        <p class="video-desc">${v.desc||''}</p>
+        <div class="card-actions">
+          <button class="mini play" onclick="playVideo('${encodeURI(v.hls||v.file)}','${v.title}',false,'${encodeURI(v.file)}')">▶ 在线观看</button>
+          <a class="mini" href="${encodeURI(v.dl||v.file)}" download>⬇ 下载</a>
+        </div>
+      </div>
+    </div>`));
+});
+
+const pg=document.getElementById('photoGrid');
+photos.forEach((p,i)=>{
+  pg.appendChild(el(`
+    <div class="card">
+      <div class="thumb" style="background:${palette[i%palette.length]}">${p.title}</div>
+      <div class="card-actions" style="padding:14px 18px">
+        <button class="mini play" style="flex:1" onclick="openPhoto('${p.file}','${p.title}')">🔍 放大查看</button>
+        <a class="mini" href="${p.file}" download>⬇ 下载</a>
+      </div>
+    </div>`));
+});
+
+const gg=document.getElementById('gameGrid');
+games.forEach((g,i)=>{
+  const hasApk = g.apk;
+  gg.appendChild(el(`
+    <div class="card">
+      <div class="thumb" style="background:${palette[i%palette.length]}">${g.cover||g.title}</div>
+      <div class="card-body">
+        <h3>${g.title}</h3>
+        <p>${g.desc||''}</p>
+        <div class="card-actions">
+          <a class="mini play" href="${g.file}" target="_blank">🎮 在线玩</a>
+          ${hasApk ? `<button class="mini" onclick="downloadWithProgress('${encodeURI(g.apk)}','${g.title}.apk')">⬇ 下载APP</button>` : ''}
+        </div>
+      </div>
+    </div>`));
+});
+
+const al=document.getElementById('articleList');
+articles.forEach(a=>{
+  al.appendChild(el(`
+    <div class="list-item">
+      <div>
+        <span class="tag">${a.tag||'文章'}</span>
+        <strong>${a.title}</strong>
+        <div class="meta">${a.date||''}</div>
+      </div>
+      <a class="mini play" href="${a.file}" target="_blank">阅读 →</a>
+    </div>`));
+});
+
+/* ---------- 小说书卡 + 阅读进度/书签（每本书仅两格：auto 自动存档 / manual 手动书签） ---------- */
+function loadStore(key){try{return JSON.parse(localStorage.getItem(key||'hugo_reader_v1'))||{}}catch(e){return{}}}
+function slotOf(n){
+  const key=n.store||'hugo_reader_v1';
+  let d=loadStore(key);
+  /* 旧版（全局 bookmark/resume + 逐章 chapters）合并为两格 */
+  if(!d.auto&&!d.manual&&(d.bookmark||d.resume||d.chapters)){
+    const nd={};
+    if(d.resume&&d.resume.ch)nd.auto={ch:d.resume.ch,pct:d.resume.pct|0,t:d.resume.t||0};
+    if(d.bookmark&&d.bookmark.ch)nd.manual={ch:d.bookmark.ch,pct:d.bookmark.pct|0,t:d.bookmark.t||0};
+    d=nd;try{localStorage.setItem(key,JSON.stringify(d))}catch(e){}
+  }
+  return {auto:d.auto||null,manual:d.manual||null};
+}
+function chLink(n,ch,hash){return `novels/${n.prefix||'gudo'}-${ch}.html${hash?'#'+hash:''}`;}
+function chName(n,ch){const c=n.chapters[ch-1];return c?c.name:('第'+ch+'章');}
+
+function renderBooks(){
+  const bl=document.getElementById('bookList');
+  if(!bl)return;
+
+  /* 顶部“继续阅读”：取最近在读的一本书的自动存档位 */
+  let recent=null;
+  novels.forEach(n=>{
+    const s=slotOf(n);
+    if(s.auto&&(!recent||(s.auto.t||0)>recent.t))recent={t:s.auto.t||0,n:n,a:s.auto};
+  });
+  const bar=document.getElementById('resumeBar');
+  if(bar){
+    if(recent){
+      const rl=document.getElementById('resumeLink');
+      rl.href=chLink(recent.n,recent.a.ch,'auto');
+      rl.textContent=`▶ 继续阅读《${recent.n.title}》：${chName(recent.n,recent.a.ch)}${recent.a.pct>0?`（读至 ${recent.a.pct}%）`:''}`;
+      bar.style.display='block';
+    }else{
+      bar.style.display='none';
+    }
+  }
+
+  bl.innerHTML='';
+  novels.forEach(n=>{
+    const total=n.chapters.length;
+    const s=slotOf(n);
+    const latest=n.chapters.slice(-3).reverse().map(c=>
+      `<a class="mini" href="${c.file}" target="_blank">${c.name}</a>`).join('');
+    const autoBtn=s.auto
+      ? `<a class="mini" style="padding:9px 18px" href="${chLink(n,s.auto.ch,'auto')}" target="_blank">▶ 续读 ${chName(n,s.auto.ch)}${s.auto.pct>0?' · '+s.auto.pct+'%':''}</a>`
+      : `<a class="mini" style="padding:9px 18px" href="${n.chapters[0].file}" target="_blank">▶ 从第一章读</a>`;
+    const bmBtn=s.manual
+      ? `<a class="mini" style="padding:9px 18px" href="${chLink(n,s.manual.ch,'manual')}" target="_blank">🔖 书签 ${chName(n,s.manual.ch)}${s.manual.pct>0?' · '+s.manual.pct+'%':''}</a>`
+      : '';
+    bl.appendChild(el(`
+      <div class="book-card">
+        <div class="book-cover">${n.title}</div>
+        <div class="book-info">
+          <h3>📖 ${n.title} <span class="book-tag">${n.status==='done'?'已完结':'连载中'}</span></h3>
+          <p class="book-intro">${n.intro||''}</p>
+          <div class="book-meta">共 ${total} 章 · ${n.status==='done'?'已完结':'持续更新中'}</div>
+          <div class="book-latest">最近更新：${latest}<a class="mini play" href="${n.catalog||'novels/catalog.html'}" target="_blank">全部目录 →</a></div>
+          <div class="book-actions">
+            <a class="mini play" style="padding:9px 18px" href="${n.catalog||'novels/catalog.html'}" target="_blank">📚 查看目录</a>
+            ${autoBtn}${bmBtn}
+          </div>
+        </div>
+      </div>`));
+  });
+}
+renderBooks();
+
+/* ===================== 交互 ===================== */
+let currentVideoLink='';
+let hlsEngine=null;
+const baseTitle=document.title;
+const isWeChat=/MicroMessenger/i.test(navigator.userAgent);
+/* HLS 播放：iOS/微信 iOS 原生支持；安卓等其他浏览器用本地 hls.js */
+function attachHls(v,url){
+  if(v.canPlayType('application/vnd.apple.mpegurl')){v.src=url;return;}
+  if(window.Hls&&Hls.isSupported()){hlsEngine=new Hls();hlsEngine.loadSource(url);hlsEngine.attachMedia(v);return;}
+  v.src=url; /* 兜底：直接给地址，播不了再说 */
+}
+function playVideo(file,title,cinema,linkFile){
+  const shareArea=isWeChat
+    ? `<div class="share-ui" style="text-align:center;margin-top:12px;font-size:.92em;color:var(--muted)">微信里分享这条视频：点右上角「···」→「发送给朋友」</div>`+
+      `<div class="share-ui" style="text-align:center;margin-top:8px"><button class="mini" onclick="copyVideoLink('${file}')">🔗 复制链接（备用）</button></div>`
+    : `<div class="share-ui" style="text-align:center;margin-top:12px"><button class="mini play" onclick="shareVideo('${file}')">🔗 分享这条视频</button></div>`;
+  document.getElementById('modalContent').innerHTML=
+    `<video id="cinemaVideo"${/\.m3u8$/i.test(file)?'':' src="'+file+'"'} controls autoplay playsinline webkit-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="true" x5-video-orientation="portraintlandscape" style="width:100%"></video>`+
+    (cinema?`<button class="cinema-play" id="bigPlay" onclick="cinemaGo()" aria-label="播放">▶</button>`:'')+
+    `<div class="cap">${title}</div>`+shareArea;
+  const m=document.getElementById('modal');
+  m.classList.add('show');
+  if(/\.m3u8$/i.test(file)){const vEl=document.getElementById('cinemaVideo');if(vEl)attachHls(vEl,file);}
+  if(cinema){m.classList.add('cinema');cinemaStart();}else{m.classList.remove('cinema');}
+  /* 微信分享卡片的标题取自页面 title —— 播放时换成视频名，朋友看到的卡片就是这条视频 */
+  if(title){document.title=title+' — 雨果的作品小屋';}
+  /* 深链接写进地址栏：用 ?v= 查询参数（linkFile=原始 mp4 名，保证链接可还原），微信/浏览器分享都不会丢 */
+  currentVideoLink=location.pathname+'?v='+(linkFile||file);
+  try{ history.replaceState(null,'',currentVideoLink); }catch(e){ location.href=currentVideoLink; }
+}
+/* 影院模式自动播放：被浏览器拦截就在画面中央亮出大播放键，点一下即播 */
+/* 尝试进原生全屏：requestFullscreen / 安卓 webkit / iOS webkitEnterFullscreen 逐个试 */
+function tryVideoFs(v){
+  const fn=v.requestFullscreen||v.webkitRequestFullscreen||v.webkitEnterFullscreen||v.msRequestFullscreen;
+  if(!fn)return;
+  try{const p=fn.call(v);if(p&&p.catch)p.catch(function(){});}catch(e){}
+}
+function cinemaStart(){
+  const v=document.getElementById('cinemaVideo');
+  if(!v)return;
+  const go=()=>{const p=v.play();if(p&&p.catch)p.catch(()=>{const b=document.getElementById('bigPlay');if(b)b.style.display='block';});};
+  go();
+  tryVideoFs(v); /* 无用户手势多半被拒，先试一次，失败不影响影院铺满 */
+  if(isWeChat&&typeof WeixinJSBridge==='undefined'){
+    document.addEventListener('WeixinJSBridgeReady',()=>{go();tryVideoFs(v);},{once:true});
+  }
+  /* 浏览器要求手势才能原生全屏：第一次点视频任意位置 → 立即全屏 */
+  v.addEventListener('click',()=>{tryVideoFs(v);},{once:true});
+}
+function cinemaGo(){
+  const b=document.getElementById('bigPlay');if(b)b.style.display='none';
+  const v=document.getElementById('cinemaVideo');
+  if(v){if(v.paused)v.play();tryVideoFs(v);}
+}
+function openPhoto(file,title){
+  document.getElementById('modalContent').innerHTML=
+    `<img src="${file}" alt="${title}"><div class="cap">${title}</div>`;
+  document.getElementById('modal').classList.add('show');
+}
+function closeModal(){document.getElementById('modal').classList.remove('show','cinema');
+  document.getElementById('modalContent').innerHTML='';
+  if(hlsEngine){try{hlsEngine.destroy();}catch(e){}hlsEngine=null;}
+  currentVideoLink='';
+  document.title=baseTitle;
+  if(location.search){try{history.replaceState(null,'',location.pathname);}catch(e){}}}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal();});
+
+/* ---------- 视频深链接：打开带 ?v=（或旧版 #video=）的分享链接时，直接弹出对应视频 ---------- */
+function openVideoFromUrl(){
+  let raw='';
+  const q=/[?&]v=([^&#]+)/.exec(location.search||'');
+  if(q){raw=q[1];}
+  else{
+    const m=/^#video=(.+)$/.exec(location.hash||'');
+    if(m){raw=m[1];}
+  }
+  if(!raw)return false;
+  let target=raw;try{target=decodeURIComponent(raw);}catch(e){}
+  const v=videos.find(x=>x.file===target)||videos.find(x=>encodeURI(x.file)===target)||videos.find(x=>encodeURIComponent(x.file)===raw)
+    ||videos.find(x=>x.hls&&(x.hls===target||encodeURI(x.hls)===target||encodeURIComponent(x.hls)===raw));
+  if(!v)return false;
+  const t=document.getElementById('travel');if(t&&t.scrollIntoView)t.scrollIntoView();
+  /* 从分享链接进来 → 影院模式：黑底铺满、自动尝试播放；有 HLS 走 HLS（地址栏仍记 mp4 名，链接可还原） */
+  playVideo(encodeURI(v.hls||v.file),v.title,true,encodeURI(v.file));
+  return true;
+}
+openVideoFromUrl();
+
+/* ---------- 分享链接（?v= 形式，微信/浏览器分享都不会丢） ---------- */
+function shareLink(file){return location.origin+location.pathname+'?v='+file;}
+function copyVideoLink(file){
+  const u=shareLink(file);
+  copyText(u).then(function(){alert('链接已复制，粘贴给朋友即可直达这条视频：\n'+u);});
+}
+/* 非微信环境：手机走系统分享面板，桌面回退复制链接 */
+function shareVideo(file){
+  let title='',raw=file;try{raw=decodeURIComponent(file);}catch(e){}
+  const v=videos.find(x=>x.file===raw);if(v)title=v.title;
+  const u=shareLink(file);
+  if(navigator.share){navigator.share({title:title,text:title+' — 雨果的作品小屋',url:u}).catch(function(){});return;}
+  copyVideoLink(file);
+}
+function copyText(s){
+  if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(s);
+  return new Promise(function(res){const t=document.createElement('textarea');t.value=s;document.body.appendChild(t);t.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(t);res();});
+}
+
+let fontStep=0;
+function changeFont(d){
+  fontStep=Math.max(-2,Math.min(4,fontStep+d));
+  document.documentElement.style.setProperty('--base',(18+fontStep*2)+'px');
+}
+
+/* 下载进度弹窗 */
+function downloadWithProgress(fileUrl,filename){
+  const modal=document.getElementById('downloadModal');
+  if(!modal)return;
+  const bar=modal.querySelector('.progress-bar');
+  const pct=modal.querySelector('.pct-text');
+  const status=modal.querySelector('.dl-status');
+  bar.style.width='0%';
+  pct.textContent='0%';
+  status.textContent='准备下载...';
+  modal.classList.add('show');
+
+  const xhr=new XMLHttpRequest();
+  xhr.open('GET',fileUrl,true);
+  xhr.responseType='blob';
+  xhr.onprogress=function(e){
+    if(e.lengthComputable){
+      const percent=Math.round((e.loaded/e.total)*100);
+      bar.style.width=percent+'%';
+      pct.textContent=percent+'%';
+      status.textContent='正在下载：'+filename+' ('+formatSize(e.loaded)+' / '+formatSize(e.total)+')';
+    }
+  };
+  xhr.onload=function(){
+    if(xhr.status===200){
+      status.textContent='下载完成，正在保存...';
+      const url=URL.createObjectURL(xhr.response);
+      const a=document.createElement('a');
+      a.href=url;
+      a.download=filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      setTimeout(()=>modal.classList.remove('show'),1500);
+    }else{
+      status.textContent='下载失败，请重试';
+      setTimeout(()=>modal.classList.remove('show'),2000);
+    }
+  };
+  xhr.onerror=function(){
+    status.textContent='网络错误，请检查连接';
+    setTimeout(()=>modal.classList.remove('show'),2000);
+  };
+  xhr.send();
+}
+
+function formatSize(bytes){
+  if(bytes===0)return '0 B';
+  const k=1024;
+  const sizes=['B','KB','MB','GB'];
+  const i=Math.floor(Math.log(bytes)/Math.log(k));
+  return parseFloat((bytes/Math.pow(k,i)).toFixed(1))+sizes[i];
+}
+
+document.getElementById('year').textContent=new Date().getFullYear();
+
+/* 首页提示弹窗：进入 0.6 秒后弹出，点 × 或点遮罩关闭，关闭后 7 天内不再打扰 */
+(function(){
+  const K='hugo_tip_v1',DAYS=7;
+  let last=0;
+  try{last=parseInt((JSON.parse(localStorage.getItem(K))||{}).t)||0;}catch(e){}
+  if(Date.now()-last<DAYS*86400000)return;
+  const m=document.getElementById('tipMask');
+  if(!m)return;
+  setTimeout(function(){m.classList.add('show');},600);
+  window.closeTip=function(){
+    m.classList.remove('show');
+    try{localStorage.setItem(K,JSON.stringify({t:Date.now()}));}catch(e){}
+  };
+})();
+</script>
+</body>
+</html>

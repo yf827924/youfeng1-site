@@ -1,0 +1,1987 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>镖局经营·走镖录</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body { height:100%; width:100%; background:#15110c; color:#f3e9d2; font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; overflow:hidden; }
+  #wrap { position:relative; width:100vw; height:100vh; }
+  canvas { background:#231a10; touch-action:none; width:100%; height:100%; display:block; }
+  .hud { position:absolute; top:10px; left:10px; right:10px; display:flex; justify-content:space-between; gap:8px; font-size:14px; pointer-events:none; z-index:5; }
+  .pill { background:rgba(20,15,8,.78); border:1px solid #6b4f2a; border-radius:999px; padding:6px 12px; white-space:nowrap; }
+  .pill b { color:#ffd479; }
+  .panel { position:absolute; left:10px; right:10px; bottom:10px; display:flex; gap:8px; z-index:5; flex-wrap:wrap; }
+  .panel button { flex:1; min-width:90px; font-size:14px; padding:10px 8px; border:0; border-radius:10px; background:linear-gradient(135deg,#7a5a2e,#a9803d); color:#fff; cursor:pointer; }
+  .panel button:disabled { opacity:.4; cursor:not-allowed; }
+  .center { position:absolute; left:50%; top:54%; transform:translate(-50%,-50%); width:min(92%,460px); z-index:6; display:flex; flex-direction:column; gap:10px; max-height:62%; overflow:auto; }
+  .card { background:rgba(28,21,12,.92); border:1px solid #6b4f2a; border-radius:12px; padding:12px 14px; cursor:pointer; transition:.15s; }
+  .card:hover { border-color:#ffd479; transform:translateY(-1px); }
+  .card.locked { opacity:.5; cursor:not-allowed; }
+  .card h3 { font-size:15px; color:#ffd479; margin-bottom:6px; }
+  .card .row { display:flex; justify-content:space-between; font-size:13px; color:#d8c8a8; margin:2px 0; }
+  .tag { font-size:11px; padding:1px 7px; border-radius:6px; background:#3a2c18; color:#ffd479; }
+  .overlay { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; background:rgba(10,8,4,.85); text-align:center; padding:24px; z-index:10; backdrop-filter:blur(4px); }
+  .hidden { display:none !important; }
+  .overlay h1 { font-size:30px; color:#ffd479; letter-spacing:4px; }
+  .overlay p { font-size:15px; color:#d8c8a8; line-height:1.7; max-width:360px; }
+  .overlay button { font-size:18px; padding:12px 32px; border:0; border-radius:999px; background:linear-gradient(135deg,#7a5a2e,#a9803d); color:#fff; cursor:pointer; }
+  .toast { position:absolute; left:50%; top:18%; transform:translateX(-50%); background:rgba(20,15,8,.95); border:1px solid #ffd479; border-radius:10px; padding:10px 18px; font-size:14px; z-index:8; opacity:0; transition:.25s; pointer-events:none; color:#ffd479; }
+  .toast.show { opacity:1; }
+  .escortCanvas { position:absolute; inset:0; z-index:9; display:flex; align-items:center; justify-content:center; }
+  .hint { position:absolute; left:50%; top:9%; transform:translateX(-50%); font-size:13px; color:#c9b48c; z-index:6; }
+  .modal { position:absolute; inset:0; background:rgba(10,8,4,.7); display:flex; align-items:center; justify-content:center; z-index:11; }
+  .modal .box { background:rgba(28,21,12,.95); border:1px solid #6b4f2a; border-radius:14px; padding:18px; width:min(90%,420px); backdrop-filter:blur(8px); }
+  .modal .box h3 { color:#ffd479; margin-bottom:12px; font-size:17px; }
+  .modal .opt { display:flex; justify-content:space-between; align-items:center; padding:10px 12px; border:1px solid #4a3a22; border-radius:10px; margin:8px 0; cursor:pointer; }
+  .modal .opt:hover { border-color:#ffd479; }
+  .modal .opt small { color:#c9b48c; }
+  .modal .close { margin-top:10px; width:100%; padding:10px; border:0; border-radius:10px; background:#3a2c18; color:#f3e9d2; cursor:pointer; }
+  /* 库房 / 战斗 */
+  .tabs { display:flex; gap:6px; margin-bottom:10px; }
+  .tabs button { flex:1; padding:8px; border:0; border-radius:8px; background:#3a2c18; color:#f3e9d2; cursor:pointer; font-size:14px; }
+  .tabs button.active { background:linear-gradient(135deg,#7a5a2e,#a9803d); color:#fff; }
+  .subtabs { display:flex; gap:6px; margin-bottom:10px; }
+  .subtabs button { flex:1; padding:7px; border:0; border-radius:8px; background:#3a2c18; color:#f3e9d2; cursor:pointer; font-size:13px; }
+  .subtabs button.active { background:linear-gradient(135deg,#7a5a2e,#a9803d); color:#fff; }
+  .danger { background:linear-gradient(135deg,#8a3a2e,#b0473a) !important; }
+
+  .storeItem { display:flex; justify-content:space-between; align-items:center; padding:10px 12px; border:1px solid #4a3a22; border-radius:10px; margin:8px 0; }
+  .storeItem .info { font-size:13px; color:#d8c8a8; }
+  .storeItem .info small { color:#c9b48c; display:block; margin-top:3px; }
+  .storeItem button { padding:7px 12px; border:0; border-radius:8px; background:linear-gradient(135deg,#7a5a2e,#a9803d); color:#fff; cursor:pointer; font-size:13px; white-space:nowrap; }
+  .storeItem button:disabled { opacity:.4; cursor:not-allowed; }
+  .rosterItem { padding:10px 12px; border:1px solid #4a3a22; border-radius:10px; margin:8px 0; cursor:pointer; font-size:13px; color:#d8c8a8; }
+  .rosterItem:hover { border-color:#ffd479; }
+  .rosterItem small { color:#c9b48c; }
+  .combatUI { position:absolute; left:0; right:0; bottom:0; padding:10px; z-index:12; display:flex; flex-direction:column; gap:8px; }
+  .combatLog { background:rgba(0,0,0,.55); border:1px solid #6b4f2a; border-radius:8px; padding:8px 10px; font-size:12px; color:#ffe6b0; height:58px; overflow:hidden; line-height:1.5; }
+  .combatActions { display:flex; gap:6px; flex-wrap:wrap; }
+  .combatActions button { flex:1; min-width:84px; font-size:14px; padding:11px 6px; border:0; border-radius:10px; background:linear-gradient(135deg,#7a5a2e,#a9803d); color:#fff; cursor:pointer; }
+  .combatActions button:disabled { opacity:.4; cursor:not-allowed; }
+  .combatActions button.flee { background:linear-gradient(135deg,#5a3a2a,#7a4a3a); }
+  .authScreen input { width:100%; font-size:16px; padding:12px; border-radius:10px; border:1px solid #6b4f2a; background:#1c150c; color:#f3e9d2; box-sizing:border-box; }
+  .authScreen .row2 { display:flex; gap:10px; }
+  .authScreen .row2 button { flex:1; }
+  #authErr { color:#e0533b; font-size:13px; min-height:16px; }
+  /* 运镖委托书悬停弹窗 */
+  .ctip{position:fixed;z-index:60;width:280px;background:linear-gradient(160deg,#2a1f12,#3a2c18);border:2px solid #8a6a32;border-radius:12px;padding:14px;color:#f3e9d2;box-shadow:0 12px 36px rgba(0,0,0,.6);display:none;font-size:13px;pointer-events:none;}
+  .ctip .ct-title{font-size:16px;font-weight:bold;color:#ffd479;border-bottom:1px dashed #8a6a32;padding-bottom:6px;margin-bottom:8px;letter-spacing:2px;}
+  .ctip .ct-client{display:flex;gap:12px;align-items:center;margin-bottom:8px;}
+  .ctip .ct-photo{width:54px;height:54px;border-radius:8px;object-fit:cover;border:2px solid #6b4f2a;}
+  .ctip .ct-name{font-weight:bold;color:#fff;}
+  .ctip .ct-sub{font-size:12px;color:#c9b48c;margin-top:2px;}
+  .ctip .ct-rows{margin:6px 0;}
+  .ctip .ct-rows div{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px dotted rgba(255,255,255,.1);}
+  .ctip .ct-rows b{color:#ffd479;}
+  .ctip .ct-note{margin-top:8px;font-size:12px;color:#ffcf9a;background:rgba(255,180,90,.14);padding:6px 8px;border-radius:8px;line-height:1.5;}
+  .storeItem button.danger{ background:linear-gradient(135deg,#7a3a2e,#a94a3d); }
+
+  /* 委托书印章 / 火漆 */
+  .ctip .ct-seal{position:absolute;right:14px;bottom:54px;width:46px;height:46px;border:3px solid #c0392b;border-radius:8px;color:#c0392b;font-family:"KaiTi","STKaiti",serif;font-weight:bold;font-size:15px;display:flex;align-items:center;justify-content:center;line-height:1.05;text-align:center;transform:rotate(-12deg);opacity:.82;box-shadow:0 0 0 2px rgba(192,57,43,.25) inset;}
+  .ctip .ct-wax{position:absolute;right:10px;bottom:10px;width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 35% 30%, #e85b4a, #9b2417 70%);box-shadow:0 3px 8px rgba(0,0,0,.5), inset 0 -4px 8px rgba(0,0,0,.4), inset 0 3px 6px rgba(255,255,255,.25);color:#ffe6df;font-family:"KaiTi","STKaiti",serif;font-weight:bold;font-size:18px;display:flex;align-items:center;justify-content:center;transform:rotate(8deg);text-shadow:0 1px 1px rgba(0,0,0,.4);}
+  /* 战斗结算卡 */
+  .endcard{position:relative;width:min(86%,380px);background:linear-gradient(160deg,#2a1f12,#3a2c18);border:2px solid #8a6a32;border-radius:16px;padding:20px;color:#f3e9d2;box-shadow:0 16px 48px rgba(0,0,0,.7);overflow:hidden;}
+  .endcard.win{border-color:#d4af37;}
+  .endcard.lose{border-color:#a23b2f;}
+  .endcard .ec-result{font-size:22px;font-weight:bold;text-align:center;letter-spacing:3px;margin-bottom:14px;}
+  .endcard.win .ec-result{color:#ffd479;}
+  .endcard.lose .ec-result{color:#ff8a7a;}
+  .endcard.retreat .ec-result{color:#9fd0ff;}
+  .endcard .ec-body{display:flex;gap:14px;align-items:flex-start;}
+  .endcard .ec-photo{width:72px;height:72px;border-radius:10px;object-fit:cover;border:2px solid #6b4f2a;flex:0 0 auto;}
+  .endcard .ec-info{flex:1;}
+  .endcard .ec-client{font-weight:bold;color:#fff;font-size:15px;}
+  .endcard .ec-title{font-size:12px;color:#c9b48c;margin:2px 0 10px;}
+  .endcard .ec-rewards{margin-top:4px;}
+  .endcard .ec-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dotted rgba(255,255,255,.12);}
+  .endcard .ec-row b{color:#ffd479;}
+  .endcard .ec-row b.pos{color:#9be29b;}
+  .endcard .ec-row b.neg{color:#ff8a7a;}
+  .endcard .ec-seal{position:absolute;right:16px;bottom:58px;width:52px;height:52px;border:3px solid #c0392b;border-radius:8px;color:#c0392b;font-family:"KaiTi","STKaiti",serif;font-weight:bold;font-size:16px;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.05;transform:rotate(-12deg);opacity:.85;}
+  .endcard .ec-wax{position:absolute;right:12px;bottom:12px;width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 35% 30%, #e85b4a, #9b2417 70%);box-shadow:0 3px 8px rgba(0,0,0,.5), inset 0 -4px 8px rgba(0,0,0,.4), inset 0 3px 6px rgba(255,255,255,.25);color:#ffe6df;font-family:"KaiTi","STKaiti",serif;font-weight:bold;font-size:20px;display:flex;align-items:center;justify-content:center;transform:rotate(8deg);text-shadow:0 1px 1px rgba(0,0,0,.4);}
+  .endcard .ec-btn{margin-top:16px;width:100%;padding:11px;border:0;border-radius:10px;background:linear-gradient(160deg,#caa24a,#8a6a32);color:#1a1208;font-weight:bold;font-size:15px;cursor:pointer;}
+</style>
+<script src="midi/embed.js"></script>
+</head>
+<body>
+<div id="wrap">
+  <!-- 背景图片 -->
+  <img id="bgHall" src="img/bg_hall.jpeg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;display:none;" alt="">
+  <img id="bgLandscape" src="img/bg_landscape.jpeg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;display:none;" alt="">
+  <img id="bgBattle" src="img/bg_battle.jpeg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;display:none;" alt="">
+
+  <canvas id="game"></canvas>
+
+  <div class="hud">
+    <span class="pill">💰 <b id="silver">0</b> 两</span>
+    <span class="pill">🏆 声望 <b id="repute">0</b></span>
+    <span class="pill">📅 第 <b id="day">1</b> 天</span>
+    <span class="pill">🏯 镖局 <b id="lv">1</b> 级</span>
+  </div>
+
+  <div class="hint" id="hint">选择一张镖单，派遣镖师走镖</div>
+
+  <div class="center" id="cards"></div>
+
+  <div class="panel">
+    <button id="recruitBtn">🍶 招募镖师</button>
+    <button id="upgradeBtn">⬆️ 升级镖局</button>
+    <button id="healBtn">💊 全员休整</button>
+    <button id="storeBtn">📦 库房</button>
+    <button id="nextBtn">🌙 过一天</button>
+    <button id="achBtn">🏅 成就</button>
+    <button id="bgmBtn">🎵 音乐·开</button>
+    <button id="saveBtn">💾 存档</button>
+    <button id="loadBtn">📂 读档</button>
+    <button id="accountBtn">👤 账号</button>
+    <button id="exitBtn">🚪 退出</button>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- 登录 / 注册 -->
+  <div id="authScreen" class="overlay authScreen">
+    <h1>威远镖局</h1>
+    <p>登录或注册账号，进度自动存档于本机浏览器。</p>
+    <div style="display:flex;flex-direction:column;gap:10px;width:min(86%,320px);">
+      <input id="authUser" placeholder="用户名" autocomplete="username">
+      <input id="authPw" type="password" placeholder="密码" autocomplete="current-password">
+      <div id="authErr"></div>
+      <div class="row2">
+        <button id="authLogin">登录</button>
+        <button id="authReg">注册</button>
+      </div>
+      <button id="authGuest" style="background:#3a2c18;font-size:14px;padding:8px;">游客试玩（不存档）</button>
+    </div>
+  </div>
+
+  <!-- 开始/结束界面 -->
+  <div id="startScreen" class="overlay hidden">
+    <h1>镖局经营</h1>
+    <p>你接手了一家小小的镖局。接下江湖镖单，派遣镖师走南闯北，<br>一路小心劫匪山贼——<b>遇劫可回合制迎战</b>（攻击/绝技/用药/防御/撤退）。<br>点「📦库房」打理<b>武器库</b>、<b>药材库</b>、查阅<b>镖师资料</b>。<br>攒银两、博声望，把镖局做成名动天下的「威远镖局」。</p>
+    <button id="startBtn">开张大吉</button>
+  </div>
+
+  <div id="overScreen" class="overlay hidden">
+    <h1 id="overTitle">歇业了</h1>
+    <p id="finalScore"></p>
+    <button id="restartBtn">重开镖局</button>
+  </div>
+
+  <!-- 走镖动画层 -->
+  <div id="escortLayer" class="escortCanvas hidden">
+    <canvas id="escort"></canvas>
+  </div>
+
+  <!-- 回合制战斗层 -->
+  <div id="combatLayer" class="escortCanvas hidden">
+    <div id="combat3D" style="position:absolute;inset:0;z-index:1;"></div>
+    <canvas id="combat" style="position:absolute;inset:0;z-index:2;"></canvas>
+    <div class="combatUI">
+      <div class="combatLog" id="combatLog"></div>
+      <div class="combatActions">
+        <button data-act="attack">⚔️ 攻击</button>
+        <button data-act="skill">💥 绝技</button>
+        <button data-act="heal">💊 用药</button>
+        <button data-act="defend">🛡️ 防御</button>
+        <button data-act="flee" class="flee">🏃 撤退</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 库房（武器 / 药材 / 镖师） -->
+  <div id="storeModal" class="modal hidden">
+    <div class="box" style="width:min(92%,440px); max-height:84%; overflow:auto;">
+      <div class="tabs">
+        <button data-tab="weapon" class="active">🗡️ 武器库</button>
+        <button data-tab="herb">💊 药材库</button>
+        <button data-tab="roster">📖 镖师</button>
+      </div>
+      <div id="storeBody"></div>
+      <button class="close" id="storeClose">关闭</button>
+    </div>
+  </div>
+
+  <!-- 运镖委托书（悬停弹出） -->
+  <div id="commissionTip" class="ctip"></div>
+  <div id="endModal" class="modal hidden"></div>
+
+</div>
+
+<script src="img/three.min.js"></script>
+<script>
+const cv = document.getElementById('game'), ctx = cv.getContext('2d');
+let W = window.innerWidth, H = window.innerHeight;
+
+// 镖师头像池（6张真人风格图片）
+const PORTraits = [
+  'img/portraits/p01.jpeg',
+  'img/portraits/p02.jpeg',
+  'img/portraits/p03.jpeg',
+  'img/portraits/p04.jpeg',
+  'img/portraits/p05.jpeg',
+  'img/portraits/p06.jpeg'
+];
+
+// ===== 状态 =====
+let state = 'menu';
+let silver, repute, day, biaojuLv;
+let escorts = [];     // 镖师
+let orders = [];      // 当前镖单
+let goalRepute = 150; // 通关声望
+let orderSeq = 0;
+let armory = [];      // 武器库（拥有的武器 id 列表）
+let herbs = {};       // 药材库存 {herbId: count}
+let gearOwned = [];   // 穿戴用品库（拥有的防具 id 列表）
+let bgMode = 'hall';  // 'hall' | 'landscape' | 'battle'
+let achieved = {};   // 已解锁成就
+
+const FIRST_NAMES = ['铁臂','飞燕','镇远','断魂','追风','霹雳','醉仙','卧云','金刀','银枪','神行','笑面'];
+const LAST_NAMES = ['王猛','李三','赵磊','周通','孙浩','钱彪','吴霜','郑九','冯远','陈平','楚云','卫青'];
+const GOODS = ['绸缎','瓷器','药材','金银','书信','盐引','茶叶','兵甲','古籍','珠宝'];
+const CITIES = ['洛阳','长安','汴京','临安','成都','江陵','太原','凤翔','广陵','幽州'];
+
+// 武器铺（购置后入武器库，可装备给镖师）
+const WEAPON_SHOP = [
+  {id:'w_xiudao',  name:'袖刀',   type:'刀',   atk:4,  def:1, cost:60,  skill:'快刀',      lv:1, star:1},
+  {id:'w_qimei',   name:'齐眉棍', type:'棍',   atk:6,  def:5, cost:100, skill:'横扫千军',  lv:1, star:1},
+  {id:'w_liuxing', name:'流星镖', type:'暗器', atk:7,  def:0, cost:90,  skill:'连珠镖',    lv:1, star:1},
+  {id:'w_qingfeng',name:'青锋剑', type:'剑',   atk:8,  def:2, cost:120, skill:'刺喉',      lv:2, star:2},
+  {id:'w_yanling', name:'雁翎刀', type:'刀',   atk:9,  def:3, cost:140, skill:'力劈华山',  lv:3, star:2},
+  {id:'w_liangyin',name:'亮银枪', type:'枪',   atk:11, def:1, cost:160, skill:'回马枪',    lv:4, star:3}
+];
+// 药材铺（购置后入药材库，可用药恢复镖师体力）
+const HERB_SHOP = [
+  {id:'h_jin',  name:'金疮药',   heal:35, cost:40,  lv:1, star:1},
+  {id:'h_da',   name:'大活络丹', heal:55, cost:75,  lv:2, star:2},
+  {id:'h_shen', name:'老山参',   heal:80, cost:130, lv:4, star:3}
+];
+const WEAPON_EMOJI = {'刀':'🗡️','剑':'⚔️','枪':'🔱','棍':'🥢','暗器':'✨'};
+function getWeapon(id){ return WEAPON_SHOP.find(w=>w.id===id); }
+function getHerb(id){ return HERB_SHOP.find(h=>h.id===id); }
+// 穿戴用品铺（防具，可穿戴给镖师加防御）
+const GEAR_SHOP = [
+  {id:'g_pijia',  name:'皮甲',   def:3, cost:70,  desc:'轻便皮甲',   lv:1, star:1},
+  {id:'g_zhanxue',name:'战靴',   def:2, cost:55,  desc:'防滑战靴',   lv:1, star:1},
+  {id:'g_huxin',  name:'护心镜', def:5, cost:120, desc:'胸前护镜',   lv:3, star:2},
+  {id:'g_suozi',  name:'锁子甲', def:8, cost:170, desc:'铁环锁子甲', lv:5, star:3}
+];
+function getGear(id){ return GEAR_SHOP.find(g=>g.id===id); }
+function shopUnlocked(it){ return (it.lv||1) <= (typeof biaojuLv==='number' ? biaojuLv : 1); }
+function starStr(n){ return '★'.repeat(n||1); }
+
+function rnd(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+function pick(arr){ return arr[rnd(0,arr.length-1)]; }
+function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
+
+// 镖师特质（影响数值与战斗手感）
+const TRAITS = [
+  {key:'meng', name:'猛攻', desc:'攻击 +4', atk:4, def:0, rarity:3},
+  {key:'tie',  name:'铁壁', desc:'防御 +3', atk:0, def:3, rarity:3},
+  {key:'shen', name:'神行', desc:'撤退更易成功', flee:0.18, rarity:2},
+  {key:'lao',  name:'老练', desc:'经验与体力损耗更优', exp:0.2, tili:0.2, rarity:2},
+  {key:'zhao', name:'招财', desc:'走镖报酬 +10%', reward:0.1, rarity:2},
+  {key:'fu',   name:'福将', desc:'遇劫概率降低', bandit:-0.1, rarity:1}
+];
+function rollTrait(){ return TRAITS[rnd(0, TRAITS.length-1)]; }
+
+// 生成镖师（随机分配头像 + 特质）
+function makeEscort(){
+  const wuli = rnd(28, 55) + biaojuLv*2;
+  const trait = rollTrait();
+  return {
+    id: Math.random().toString(36).slice(2,8),
+    name: pick(FIRST_NAMES)+pick(LAST_NAMES),
+    wuli: clamp(wuli,20,92),
+    tili: 100,
+    exp: 0,
+    lv: 1,
+    busy: false,
+    weapon: null,
+    gear: null,
+    star: 1 + (wuli>=72?2:(wuli>=50?1:0)),
+    cost: Math.round(60 + wuli*1.6 + (trait.rarity||1)*35 + ((typeof biaojuLv==='number'?biaojuLv:1)*15)),
+    wins: 0,
+    losses: 0,
+    portrait: PORTraits[rnd(0, PORTraits.length-1)],
+    trait: trait
+  };
+}
+// 生成镖单
+const CLIENT_TITLES = ['锦衣绸缎庄东家','江南盐商','边军粮官','皇商采办','武林世家','镖行老主顾','漕运把头','书香门第'];
+function makeOrder(){
+  const threat = clamp(rnd(1, 2 + biaojuLv), 1, 5);
+  const need = [0,20,35,50,65,82][threat];
+  const reward = Math.round((threat*55 + rnd(10,40)) * (1 + biaojuLv*0.08));
+  const rep = threat*2 + rnd(1,3);
+  const goods = pick(GOODS), dest = pick(CITIES);
+  const client = {
+    name: pick(LAST_NAMES) + pick(['员外','掌柜','夫人','公子','将军','商贾','小姐','老爷']),
+    title: pick(CLIENT_TITLES),
+    portrait: PORTraits[rnd(0, PORTraits.length-1)]
+  };
+  const notes = ['加急！事成另有重谢','沿途多匪，务必谨慎','货极贵重，失不得','东家催得紧','逢山过寨，小心为上','平安抵境，赏银翻倍'];
+  return {
+    id: ++orderSeq,
+    name: '押送'+goods+'至'+dest,
+    goods, dest, threat, need, reward, rep,
+    miles: rnd(120, 880),
+    client,
+    note: pick(notes),
+    done: false
+  };
+}
+
+function reset(){
+  silver = 200; repute = 0; day = 1; biaojuLv = 1;
+  escorts = [ makeEscort(), makeEscort() ];
+  orders = [ makeOrder(), makeOrder(), makeOrder() ];
+  armory = ['w_xiudao'];          // 开局赠一把袖刀
+  herbs = { h_jin: 2 };           // 开局赠两帖金疮药
+  gearOwned = [];                 // 穿戴用品库清空
+  achieved = {};                  // 成就重置
+  state = 'playing';
+  renderAll();
+  showHint('选镖单派镖师走镖 · 遇劫可回合制迎战 · 📦库房管兵器药材');
+}
+
+
+// ===== 玩家账号 / 存档 / 读档 / 战斗特效 =====
+let currentUser = null;
+function el(id){ return document.getElementById(id); }
+function hashStr(s){ let h = 5381; for(let i=0;i<s.length;i++){ h = ((h<<5) + h + s.charCodeAt(i)) >>> 0; } return h.toString(16); }
+function getAccounts(){ try { return JSON.parse(localStorage.getItem('biaoju_accounts') || '{}'); } catch(e){ return {}; } }
+function setAccounts(a){ localStorage.setItem('biaoju_accounts', JSON.stringify(a)); }
+function hasSave(u){ return !!localStorage.getItem('biaoju_save_' + u); }
+function authErr(t){ const e = el('authErr'); if(e) e.textContent = t || ''; }
+
+// 劫匪半身像素材
+const BANDIT_POOL = ['img/bandits/b01.jpeg', 'img/bandits/b02.jpeg', 'img/bandits/b03.jpeg'];
+function banditPortraitFor(en){ return (en && en.emoji === '🧟') ? BANDIT_POOL[2] : BANDIT_POOL[rnd(0,1)]; }
+
+// 存档 / 读档
+// 存档 / 读档（多槽：3 手动槽 + 自动槽）
+function slotKey(s){ return 'biaoju_slot_' + currentUser + '_' + s; }
+function makeSaveData(){ return { v:1, ts:Date.now(), silver, repute, day, biaojuLv, goalRepute, orderSeq, escorts, orders, armory, herbs, gearOwned, achieved, state }; }
+function saveGameToSlot(s){
+  if(!currentUser || currentUser === '__guest__'){ if(currentUser === '__guest__') toast('游客模式不存档'); return; }
+  localStorage.setItem(slotKey(s), JSON.stringify(makeSaveData()));
+  toast('💾 已存入存档槽 ' + (s === 'auto' ? '（自动）' : s));
+}
+function applySave(d){
+  silver = d.silver; repute = d.repute; day = d.day; biaojuLv = d.biaojuLv;
+  goalRepute = d.goalRepute; orderSeq = d.orderSeq;
+  escorts = d.escorts; orders = d.orders; armory = d.armory; herbs = d.herbs || {}; gearOwned = d.gearOwned || [];
+  achieved = d.achieved || {}; state = d.state || 'playing';
+  renderAll();
+}
+function loadGameFromSlot(s){
+  if(!currentUser || currentUser === '__guest__') return false;
+  const raw = localStorage.getItem(slotKey(s));
+  if(!raw) return false;
+  try { applySave(JSON.parse(raw)); toast('📂 已读取存档槽 ' + (s === 'auto' ? '（自动）' : s)); return true; }
+  catch(e){ toast('读档失败'); return false; }
+}
+function trySave(){
+  if(!currentUser || currentUser === '__guest__') return;
+  if(state !== 'playing' || combat) return;     // 仅游戏中、非战斗时可自动存档
+  localStorage.setItem(slotKey('auto'), JSON.stringify(makeSaveData()));
+}
+function saveGame(){ showSlotPicker('save'); }
+function loadGame(){ return loadGameFromSlot('auto'); }
+function showSlotPicker(mode){
+  if(!currentUser || currentUser === '__guest__'){ if(currentUser === '__guest__') toast('游客模式不存档'); return; }
+  const slots = [['1','存档槽 1'],['2','存档槽 2'],['3','存档槽 3'],['auto','自动存档']];
+  let html = '<div class="box"><h3>' + (mode === 'save' ? '💾 选择存档槽' : '📂 选择要读取的存档') + '</h3>';
+  slots.forEach(function(sk){
+    const raw = localStorage.getItem(slotKey(sk[0]));
+    let info = '— 空槽 —';
+    if(raw){ try { const d = JSON.parse(raw); const dt = new Date(d.ts || 0); info = (d.day || '-') + '天 · 声望' + (d.repute || 0) + ' · 银' + (d.silver || 0) + ' · 等级' + (d.biaojuLv || 1) + ' · ' + (dt.getMonth() + 1) + '/' + dt.getDate(); } catch(e){} }
+    const dis = (mode === 'save' && sk[0] === 'auto') ? ' style="opacity:.45;pointer-events:none"' : '';
+    html += '<div class="opt" data-s="' + sk[0] + '"' + dis + '><div style="flex:1">' + sk[1] + '</div><div style="font-size:12px;color:#c9b48c;text-align:right">' + info + '</div></div>';
+  });
+  html += '<button class="close">取消</button></div>';
+  const m = document.createElement('div'); m.className = 'modal'; m.innerHTML = html;
+  m.querySelector('.close').onclick = function(){ m.remove(); };
+  m.querySelectorAll('.opt').forEach(function(op){
+    op.onclick = function(){
+      m.remove();
+      if(mode === 'save') saveGameToSlot(op.dataset.s);
+      else { if(!loadGameFromSlot(op.dataset.s)) toast('该槽暂无存档'); }
+    };
+  });
+  el('wrap').appendChild(m);
+}
+
+// 进入游戏
+function enterGame(fresh){
+  el('authScreen').classList.add('hidden');
+  el('startScreen').classList.add('hidden');
+  el('overScreen').classList.add('hidden');
+  el('accountBtn').textContent = '👤 ' + (currentUser === '__guest__' ? '游客' : currentUser);
+  if(fresh) reset(); else { if(!loadGame()) reset(); }
+  if(!bgmOn){ toggleBGM(); el('bgmBtn').textContent = '🎵 音乐·开'; }
+}
+function showContinueChoice(u){
+  const m = document.createElement('div'); m.className = 'modal';
+  m.innerHTML = '<div class="box"><h3>欢迎回来，' + u + '</h3>' +
+    '<div class="opt" data-c="load">📂 读取上次的存档</div>' +
+    '<div class="opt" data-c="new">🆕 开始新游戏（覆盖存档）</div>' +
+    '<button class="close">取消</button></div>';
+  m.querySelector('.close').onclick = ()=> m.remove();
+  m.querySelectorAll('.opt').forEach(o=> o.onclick = ()=>{ m.remove(); enterGame(o.dataset.c === 'load' ? false : true); });
+  el('wrap').appendChild(m);
+}
+function doRegister(){
+  const u = (el('authUser').value || '').trim(), p = el('authPw').value || '';
+  if(!u || !p){ authErr('请输入用户名和密码'); return; }
+  const A = getAccounts();
+  if(A[u]){ authErr('该用户名已被注册，请直接登录'); return; }
+  A[u] = { pw: hashStr(u + ':' + p) }; setAccounts(A);
+  currentUser = u; localStorage.setItem('biaoju_current', u);
+  authErr(''); enterGame(true);
+}
+function doLogin(){
+  const u = (el('authUser').value || '').trim(), p = el('authPw').value || '';
+  const A = getAccounts();
+  if(!A[u] || A[u].pw !== hashStr(u + ':' + p)){ authErr('用户名或密码错误'); return; }
+  currentUser = u; localStorage.setItem('biaoju_current', u);
+  authErr('');
+  if(hasSave(u)) showContinueChoice(u); else enterGame(true);
+}
+function guestPlay(){ currentUser = '__guest__'; authErr(''); enterGame(true); }
+function doLogout(){
+  currentUser = null; localStorage.removeItem('biaoju_current');
+  el('accountBtn').textContent = '👤 账号';
+  el('authScreen').classList.remove('hidden');
+  el('startScreen').classList.add('hidden');
+  el('overScreen').classList.add('hidden');
+  el('combatLayer').classList.add('hidden');
+  el('escortLayer').classList.add('hidden');
+  authErr('');
+}
+function confirmExit(){
+  const m = document.createElement('div'); m.className = 'modal';
+  m.innerHTML = '<div class="box"><h3>退出游戏？</h3>' +
+    '<p style="color:#c9b48c;font-size:14px">当前进度已自动保存，退出后将返回登录界面。</p>' +
+    '<div class="opt" data-y="1">🚪 确认退出</div>' +
+    '<button class="close">取消</button></div>';
+  m.querySelector('.close').onclick = function(){ m.remove(); };
+  m.querySelector('[data-y]').onclick = function(){ m.remove(); doLogout(); };
+  el('wrap').appendChild(m);
+}
+
+// ===== 战斗音效（WebAudio 合成，零外部资源）=====
+let sfxAc = null;
+function ensureSfx(){
+  try {
+    if(!sfxAc){ sfxAc = new (window.AudioContext || window.webkitAudioContext)(); }
+    if(sfxAc && sfxAc.state === 'suspended') sfxAc.resume();
+  } catch(e){ sfxAc = null; }
+  return sfxAc;
+}
+function sfxTone(freq, dur, type, vol, slideTo){
+  const ac = ensureSfx(); if(!ac) return;
+  const t = ac.currentTime;
+  const o = ac.createOscillator(); const g = ac.createGain();
+  o.type = type || 'square';
+  o.frequency.setValueAtTime(freq, t);
+  if(slideTo) o.frequency.exponentialRampToValueAtTime(Math.max(1, slideTo), t + dur);
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(vol || 0.2, t + 0.012);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g); g.connect(ac.destination);
+  o.start(t); o.stop(t + dur + 0.03);
+}
+function sfxNoise(dur, vol){
+  const ac = ensureSfx(); if(!ac) return;
+  const t = ac.currentTime;
+  const n = ac.createBufferSource();
+  const buf = ac.createBuffer(1, Math.max(1, Math.floor(ac.sampleRate * dur)), ac.sampleRate);
+  const dat = buf.getChannelData(0);
+  for(let i=0;i<dat.length;i++) dat[i] = (Math.random()*2 - 1) * (1 - i/dat.length);
+  n.buffer = buf;
+  const lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1400;
+  const g = ac.createGain();
+  g.gain.setValueAtTime(vol || 0.14, t);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  n.connect(lp); lp.connect(g); g.connect(ac.destination);
+  n.start(t); n.stop(t + dur);
+}
+function playSfx(type){
+  switch(type){
+    case 'attack': sfxTone(520, 0.10, 'square', 0.16, 300); sfxNoise(0.07, 0.08); break;
+    case 'crit':   sfxTone(740, 0.14, 'sawtooth', 0.22, 240); sfxNoise(0.12, 0.15); break;
+    case 'hit':    sfxTone(150, 0.16, 'triangle', 0.24, 90); sfxNoise(0.10, 0.13); break;
+    case 'heal':   sfxTone(440, 0.18, 'sine', 0.16, 660); break;
+    case 'flee':   sfxTone(300, 0.16, 'sine', 0.15, 520); break;
+    case 'win':    sfxTone(523,0.12,'square',0.18); setTimeout(function(){ sfxTone(659,0.12,'square',0.18); },120); setTimeout(function(){ sfxTone(784,0.22,'square',0.18); },240); break;
+    case 'lose':   sfxTone(392,0.20,'triangle',0.18,200); setTimeout(function(){ sfxTone(294,0.32,'triangle',0.18,150); },170); break;
+    case 'boss':   sfxTone(92,0.9,'sawtooth',0.28,70); sfxTone(140,0.9,'square',0.12); break;
+    default: sfxTone(360, 0.05, 'square', 0.10);
+  }
+}
+
+// ===== 战斗特效系统 =====
+function roundRect(x, y, w, h, r){
+  cctx.beginPath();
+  cctx.moveTo(x+r, y);
+  cctx.arcTo(x+w, y, x+w, y+h, r);
+  cctx.arcTo(x+w, y+h, x, y+h, r);
+  cctx.arcTo(x, y+h, x, y, r);
+  cctx.arcTo(x, y, x+w, y, r);
+  cctx.closePath();
+}
+function drawPortraitCard(img, corner, name, sub, color){
+  const size = Math.max(120, Math.min(CWW, CWH) * 0.24);
+  const pad = 14;
+  const y = pad + (Math.sin((combat ? combat.tick : 0) * 2.2) * 4);
+  const x = corner === 'left' ? pad : CWW - size - pad;
+  cctx.save();
+  roundRect(x, y, size, size * 1.15, 12);
+  cctx.fillStyle = 'rgba(20,15,8,0.82)'; cctx.fill();
+  cctx.lineWidth = 3; cctx.strokeStyle = color; cctx.stroke();
+  if(img && img.complete && img.naturalWidth){
+    cctx.save(); roundRect(x, y, size, size * 1.15, 12); cctx.clip();
+    cctx.drawImage(img, x, y, size, size * 1.15);
+    cctx.restore();
+    cctx.fillStyle = 'rgba(20,15,8,0.55)';
+    cctx.fillRect(x, y + size*0.82, size, size*0.33);
+  } else {
+    cctx.fillStyle = '#3a2c18'; cctx.fillRect(x, y, size, size*1.15);
+  }
+  cctx.fillStyle = '#ffd479'; cctx.font = 'bold 14px sans-serif'; cctx.textAlign = 'center';
+  cctx.fillText(name, x + size/2, y + size*1.15 - 10);
+  cctx.fillStyle = '#d8c8a8'; cctx.font = '11px sans-serif';
+  cctx.fillText(sub, x + size/2, y + size*1.15 - 26);
+  cctx.restore();
+}
+function spawnHitFx(who, crit){
+  if(!combat) return;
+  const X = who === 'enemy' ? CWW * 0.80 : CWW * 0.20;
+  const Y = CWH * 0.32;
+  combat.fx.push({ type:'slash', x:X, y:Y, t:0, life:0.35, crit:!!crit });
+  combat.fx.push({ type:'spark', x:X, y:Y, t:0, life:0.5, color: who==='enemy' ? '#ffce54' : '#e0533b' });
+  combat.fx.push({ type:'flash', x:X, y:Y, t:0, life:0.3, r: (who==='enemy' ? CWW*0.22 : CWW*0.18), color: who==='enemy' ? '#ffce54' : '#e0533b' });
+  combat.shake = Math.max(combat.shake || 0, (crit || (combat && combat.boss)) ? 12 : 6);
+}
+function spawnHealFx(){
+  if(!combat) return;
+  const X = CWW * 0.20, Y = CWH * 0.32;
+  combat.fx.push({ type:'flash', x:X, y:Y, t:0, life:0.45, r:CWW*0.18, color:'#5fd36a' });
+  for(let i=0;i<8;i++) combat.fx.push({ type:'spark', x:X, y:Y, t:0, life:0.7, color:'#9be8a0', spread:true });
+}
+function drawFx(){
+  combat.fx.forEach(f=>{
+    const k = f.t / f.life;
+    if(f.type === 'slash'){
+      cctx.save(); cctx.globalAlpha = 1 - k;
+      cctx.strokeStyle = f.crit ? '#ffffff' : '#ffce54'; cctx.lineWidth = f.crit ? 10 : 6;
+      const a0 = -0.9 + k * 1.6;
+      cctx.beginPath(); cctx.arc(f.x, f.y, 46 + (f.crit ? 16 : 0), a0, a0 + 0.9); cctx.stroke();
+      cctx.restore();
+    } else if(f.type === 'spark'){
+      cctx.save(); cctx.globalAlpha = 1 - k;
+      for(let i=0;i<10;i++){
+        const ang = (i/10) * Math.PI * 2 + (f.spread ? 0 : k);
+        const dist = 20 + k * (f.spread ? 70 : 46);
+        cctx.fillStyle = f.color; cctx.beginPath();
+        cctx.arc(f.x + Math.cos(ang)*dist, f.y + Math.sin(ang)*dist, 3*(1-k)+1, 0, Math.PI*2); cctx.fill();
+      }
+      cctx.restore();
+    } else if(f.type === 'flash'){
+      cctx.save(); cctx.globalAlpha = (1 - k) * 0.5;
+      const g = cctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.r);
+      g.addColorStop(0, f.color); g.addColorStop(1, 'rgba(0,0,0,0)');
+      cctx.fillStyle = g; cctx.beginPath(); cctx.arc(f.x, f.y, f.r, 0, Math.PI*2); cctx.fill();
+      cctx.restore();
+    }
+  });
+}
+
+
+// ===== 渲染（DOM 卡片 + Canvas 背景）=====
+function renderHUD(){
+  document.getElementById('silver').textContent = silver;
+  document.getElementById('repute').textContent = repute;
+  document.getElementById('day').textContent = day;
+  document.getElementById('lv').textContent = biaojuLv;
+}
+function renderOrders(){
+  const box = document.getElementById('cards');
+  box.innerHTML = '';
+  orders.forEach(o=>{
+    const busy = escorts.some(e=>e.busy);
+    const div = document.createElement('div');
+    div.className = 'card' + (o.done||busy ? ' locked':'');
+    div.dataset.oid = o.id;
+    div.innerHTML = '<h3>📜 ' + o.name + '</h3>'
+      + '<div class="row"><span>威胁</span><span class="tag">' + '⚔️'.repeat(o.threat) + ' ' + o.threat + '级</span></div>'
+      + '<div class="row"><span>所需武力</span><span>' + o.need + '</span></div>'
+      + '<div class="row"><span>报酬</span><span style="color:#ffd479">💰 ' + o.reward + ' 两</span></div>'
+      + '<div class="row"><span>声望</span><span>🏆 +' + o.rep + '</span></div>';
+    div.onclick = ()=>{ if(!o.done && !escorts.some(e=>e.busy)) chooseEscort(o); };
+    div.onmouseenter = ()=> showCommission(o, div);
+    div.onmouseleave = hideCommission;
+    box.appendChild(div);
+  });
+}
+function showCommission(o, el){
+  const tip = document.getElementById('commissionTip');
+  if(!tip) return;
+  const c = o.client || {name:'佚名', title:'江湖客', portrait: PORTraits[0]};
+  function row(k,v){ return '<div><span>' + k + '</span><b>' + v + '</b></div>'; }
+  tip.innerHTML =
+    '<div class="ct-title">📜 运镖委托书</div>'
+    + '<div class="ct-client"><img src="' + c.portrait + '" class="ct-photo"><div>'
+      + '<div class="ct-name">委托人：' + c.name + '</div>'
+      + '<div class="ct-sub">' + c.title + '</div></div></div>'
+    + '<div class="ct-rows">'
+      + row('委托事项', '押送' + (o.goods||'货物') + '至' + (o.dest||'目的地'))
+      + row('里程', (o.miles||0) + ' 里')
+      + row('威胁等级', o.threat + ' 级')
+      + row('所需武力', o.need)
+      + row('报酬', '💰 ' + o.reward + ' 两')
+      + row('声望', '🏆 +' + o.rep)
+    + '</div>'
+    + '<div class="ct-note">📌 ' + (o.note || '') + '</div>'
+    + '<div class="ct-seal">承运</div>'
+    + '<div class="ct-wax">镖</div>';
+  tip.style.display = 'block';
+  const r = el.getBoundingClientRect();
+  let left = r.right + 12;
+  if(left + 290 > window.innerWidth) left = r.left - 302;
+  if(left < 8) left = 8;
+  let top = r.top;
+  if(top + tip.offsetHeight > window.innerHeight) top = Math.max(8, window.innerHeight - tip.offsetHeight - 8);
+  tip.style.left = left + 'px';
+  tip.style.top = top + 'px';
+}
+function hideCommission(){ const t = document.getElementById('commissionTip'); if(t) t.style.display = 'none'; }
+function renderEscortsInfo(){
+  // 镖师信息融合进镖单选择弹窗，这里仅刷新提示
+}
+function renderAll(){ renderHUD(); renderOrders(); checkAchievements(); trySave(); }
+
+function showHint(t){ document.getElementById('hint').textContent = t; }
+function toast(t){
+  const el = document.getElementById('toast');
+  el.textContent = t; el.classList.add('show');
+  clearTimeout(el._t); el._t = setTimeout(()=>el.classList.remove('show'),1600);
+}
+
+// ===== 选择镖师 =====
+function chooseEscort(order){
+  const avail = escorts.filter(e=>!e.busy && e.tili>=20);
+  if(avail.length===0){ toast('没有可派遣的镖师，先休整或招募'); return; }
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  let html = `<div class="box"><h3>派遣哪位镖师走「${order.name}」？</h3>`;
+  avail.forEach(e=>{
+    const fit = e.wuli>=order.need ? '✅够格' : '⚠️勉强';
+    html += `<div class="opt" data-id="${e.id}">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <img src="${e.portrait}" style="width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid #6b4f2a;">
+        <div>🐎 ${e.name} <small>Lv.${e.lv}</small><br><small>武力 ${e.wuli} · 体力 ${e.tili}</small><br><small>兵器 ${e.weapon?getWeapon(e.weapon).name:'徒手'}</small><br><small>特质 ${e.trait?e.trait.name:'—'}</small></div>
+      </div>
+      <div>${fit}</div></div>`;
+  });
+  html += `<button class="close">取消</button></div>`;
+  modal.innerHTML = html;
+  modal.querySelector('.close').onclick = ()=>modal.remove();
+  modal.querySelectorAll('.opt').forEach(op=>{
+    op.onclick = ()=>{ modal.remove(); startEscort(order, avail.find(e=>e.id===op.dataset.id)); };
+  });
+  document.getElementById('wrap').appendChild(modal);
+}
+
+// ===== 走镖动画 + 结算 =====
+const ecv = document.getElementById('escort'), ectx = ecv.getContext('2d');
+let escortAnim = null;
+function resizeEscortCanvas(){
+  ecv.width = window.innerWidth;
+  ecv.height = window.innerHeight;
+}
+resizeEscortCanvas();
+window.addEventListener('resize', resizeEscortCanvas);
+
+function startEscort(order, e){
+  e.busy = true; renderOrders();
+  bgMode = 'landscape';
+  document.getElementById('escortLayer').classList.remove('hidden');
+  resizeEscortCanvas();
+  
+  const ww = ecv.width, wh = ecv.height;
+  const scale = ww / 480;
+  
+  const chance = clamp(0.5 + (e.wuli - order.need)*0.012 - (e.tili<40?0.12:0), 0.12, 0.96);
+  const destCity = (order.name.match(/至(.+)$/)||[])[1] || pick(CITIES);
+  const pool = CITIES.filter(c=>c!==destCity);
+  const mid1 = pool[rnd(0,pool.length-1)];
+  const pool2 = pool.filter(c=>c!==mid1);
+  const mid2 = pool2[rnd(0,pool2.length-1)];
+  const nodes = [
+    {name:'威远镖局', x:64*scale, y:wh*0.25},
+    {name:mid1,      x:ww*0.36, y:wh*0.50},
+    {name:mid2,      x:ww*0.67, y:wh*0.40},
+    {name:destCity,  x:ww*0.85, y:wh*0.70}
+  ];
+  let banditChance = clamp(0.4 + order.threat*0.1, 0.4, 0.85);
+  if(e.trait && e.trait.bandit) banditChance = clamp(banditChance + e.trait.bandit, 0.2, 0.9);
+  const t0 = performance.now();
+  const dur = 3400;
+  let eventFired = false;
+  function frame(now){
+    const p = clamp((now-t0)/dur, 0, 1);
+    drawMap(nodes, p, ww, wh);
+    const pos = posOnPath(nodes, p);
+    ectx.font = '32px serif'; ectx.textAlign='center';
+    ectx.fillText('🐴', pos.x, pos.y);
+    ectx.fillText('📦', pos.x, pos.y-32);
+    ectx.fillStyle='#5a3a1a'; ectx.font='15px "KaiTi","STKaiti",serif';
+    ectx.fillText('走镖 '+Math.round(p*100)+'%', ww/2, wh-28);
+    if(p>0.5 && p<0.62 && !eventFired){
+      eventFired = true;
+      if(Math.random() < banditChance){
+        escortAnim = null;
+        startCombat(order, e);
+        return;
+      }
+      const jp = posOnPath(nodes, 0.56);
+      ectx.font='28px serif'; ectx.fillText('💢', jp.x, jp.y-52);
+    }
+    if(p>=1){ finishEscort(order, e, Math.random()<chance?'win':'lose'); return; }
+    escortAnim = requestAnimationFrame(frame);
+  }
+  escortAnim = requestAnimationFrame(frame);
+}
+
+function finishEscort(order, e, outcome){
+  document.getElementById('escortLayer').classList.add('hidden');
+  e.busy = false;
+  order.done = true;
+  bgMode = 'hall';
+  const s = { outcome, gain:0, repGain:0, expGain:0, lvUp:0, big:false, msg:'' };
+  if(outcome === 'win'){
+    const big = Math.random() < 0.3;
+    let gain = order.reward + (big ? Math.round(order.reward*0.3) : 0);
+    if(e.trait && e.trait.reward) gain = Math.round(gain * (1 + e.trait.reward));
+    silver += gain; repute += order.rep;
+    const expMul = (e.trait && e.trait.exp) ? (1 + e.trait.exp) : 1;
+    const expGain = Math.round(order.reward/12 * expMul);
+    e.exp += expGain;
+    e.wins++;
+    const tiliLoss = (e.trait && e.trait.tili) ? Math.round(rnd(8,16) * (1 - e.trait.tili)) : rnd(8,16);
+    e.tili = clamp(e.tili - tiliLoss, 1, 100);
+    s.gain = gain; s.repGain = order.rep; s.expGain = expGain; s.big = big;
+    let msg = `✅ ${e.name} 击退劫匪、平安送达！+${gain}两 +${order.rep}声望`;
+    if(big) msg += '（沿途还捡了笔外快）';
+    if(e.exp >= e.lv*30){ e.lv++; e.wuli += rnd(3,6); s.lvUp = e.lv; msg += ` · ${e.name}升到 Lv.${e.lv}！`; }
+    s.msg = msg; toast(msg);
+  } else if(outcome === 'retreat'){
+    const loss = Math.round(order.reward*0.15);
+    silver = Math.max(0, silver - loss);
+    repute = Math.max(0, repute - 1);
+    e.tili = clamp(e.tili - rnd(6,12), 1, 100);
+    e.losses++;
+    s.gain = -loss; s.repGain = -1;
+    s.msg = `🏃 ${e.name} 见势不妙，全身而退（镖单未达）`; toast(s.msg);
+  } else {
+    const loss = Math.round(order.reward*0.3);
+    silver = Math.max(0, silver - loss);
+    repute = Math.max(0, repute - 2);
+    e.tili = clamp(e.tili - rnd(20,35), 1, 100);
+    e.wuli = clamp(e.wuli - rnd(0,3), 10, 99);
+    e.losses++;
+    s.gain = -loss; s.repGain = -2;
+    s.msg = `❌ 被劫！${e.name} 失手，损失 ${loss}两，体力大损`; toast(s.msg);
+  }
+  showSettlement(order, e, outcome, s);
+}
+function showSettlement(order, e, outcome, s){
+  const c = order.client || {name:'佚名', title:'江湖客', portrait: PORTraits[0]};
+  const m = document.getElementById('endModal');
+  const resTxt = outcome==='win' ? '🎉 平安送达' : outcome==='retreat' ? '🏃 中途撤退' : '💥 镖物被劫';
+  const resCls = outcome==='win' ? 'win' : outcome==='retreat' ? 'retreat' : 'lose';
+  const sealTxt = outcome==='win' ? '承运功成' : outcome==='retreat' ? '全身而退' : '失镖之印';
+  const waxStyle = biaojuLv >= 3 ? 'background:radial-gradient(circle at 35% 30%, #ffe08a, #b8860b 70%);color:#3a2a08;text-shadow:0 1px 1px rgba(255,255,255,.4);' : '';
+  const remarks = outcome==='win'
+    ? ['\u201c\u5a01\u8fdc\u9ed1\u5c40\uff0c\u540d\u4e0d\u865a\u4f20\uff01\u201d','\u201c\u8d27\u5230\u5982\u521d\uff0c\u8f9b\u82e6\u8bf8\u4f4d\u3002\u201d','\u201c\u65e5\u540e\u4e70\u5356\uff0c\u8fd8\u5bfb\u4f60\u4eec\u3002\u201d','\u201c\u5c11\u5e74\u597d\u8eab\u624b\uff0c\u540e\u751f\u53ef\u754f\u3002\u201d']
+    : outcome==='retreat'
+      ? ['\u201c\u5e73\u5b89\u4fbf\u597d\uff0c\u8d27\u5374\u2026\u2026\u5509\u3002\u201d','\u201c\u4e0b\u6b21\u52a1\u5fc5\u62a4\u5468\u5168\u3002\u201d','\u201c\u867d\u9000\u72ec\u5b89\uff0c\u6743\u5f53\u5386\u7ec3\u3002\u201d']
+      : ['\u201c\u9ed1\u7269\u7adf\u5931\uff0c\u4ee4\u4eba\u5931\u671b\uff01\u201d','\u201c\u6c5f\u6e56\u9669\u6076\uff0c\u602a\u4e0d\u5f97\u4f60\u3002\u201d','\u201c\u6b64\u4ec7\uff0c\u8001\u592b\u8bb0\u4e0b\u4e86\u3002\u201d'];
+  const remark = remarks[Math.floor(Math.random()*remarks.length)];
+  const can3D = (typeof B3D !== 'undefined') && B3D.ensure();
+  let rewardLines;
+  if(outcome==='win'){
+    rewardLines = '<div class="ec-row"><span>委托人</span><b>'+c.name+'（'+c.title+'）</b></div>'
+      + '<div class="ec-row"><span>报酬</span><b class="pos">+'+s.gain+' 两</b></div>'
+      + '<div class="ec-row"><span>声望</span><b class="pos">+'+s.repGain+'</b></div>'
+      + '<div class="ec-row"><span>经验</span><b class="pos">+'+s.expGain+'</b></div>'
+      + (s.lvUp ? '<div class="ec-row"><span>升级</span><b class="pos">Lv.'+s.lvUp+'！</b></div>' : '')
+      + (s.big ? '<div class="ec-row"><span>外快</span><b class="pos">沿途横财</b></div>' : '');
+  } else {
+    rewardLines = '<div class="ec-row"><span>委托人</span><b>'+c.name+'（'+c.title+'）</b></div>'
+      + '<div class="ec-row"><span>银两</span><b class="neg">'+(s.gain>=0?'+':'')+s.gain+' 两</b></div>'
+      + '<div class="ec-row"><span>声望</span><b class="neg">'+(s.repGain>=0?'+':'')+s.repGain+'</b></div>';
+  }
+  rewardLines += '<div style="margin-top:8px;font-size:12px;color:#ffcf9a;background:rgba(255,180,90,.12);padding:6px 8px;border-radius:8px;line-height:1.5;">💬 '+remark+'</div>';
+  m.innerHTML =
+    '<div class="endcard '+resCls+'">'
+    + '<div class="ec-result">'+resTxt+'</div>'
+    + '<div class="ec-body">'
+      + '<img class="ec-photo" src="'+c.portrait+'" style="width:96px;height:128px;" alt="委托人">'
+      + (can3D ? '<div id="ec3d" style="width:76px;height:100px;border-radius:10px;overflow:hidden;border:2px solid #6b4f2a;flex:0 0 auto;background:radial-gradient(circle at 50% 30%,#3a2c18,#160f07);"></div>' : '')  
+      + '<div class="ec-info"><div class="ec-client">委托人 '+c.name+'</div><div class="ec-title">'+c.title+'</div><div class="ec-rewards">'+rewardLines+'</div></div>'
+    + '</div>'
+    + '<div class="ec-seal">'+sealTxt+'</div>'
+    + '<div class="ec-wax" style="'+waxStyle+'">镖</div>'
+    + '<button class="ec-btn" id="ecContinue">继续 ▶</button>'
+    + '</div>';
+  m.classList.remove('hidden');
+  if(can3D){
+    const ec3d = document.getElementById('ec3d');
+    if(ec3d){ B3D.mount(ec3d); B3D.setStage('preview'); B3D.setCharacter(B3D.buildCharacter(client3DCfg(c))); B3D.render(0, {}); }
+  }
+  document.getElementById('ecContinue').onclick = ()=>{
+    m.classList.add('hidden');
+    orders = orders.filter(o=>!o.done).concat([makeOrder()]);
+    if(repute >= goalRepute){ win(); return; }
+    if(silver <= 0 && escorts.every(x=>x.tili<20) && silver < 30){ lose(); return; }
+    renderAll();
+  };
+}
+
+
+// ===== 古朴走镖舆图绘制 =====
+function drawMountain(cx, baseY, h, scale){
+  ectx.fillStyle='rgba(120,100,70,0.45)';
+  ectx.beginPath(); ectx.moveTo(cx-h, baseY); ectx.lineTo(cx, baseY-h); ectx.lineTo(cx+h, baseY); ectx.closePath(); ectx.fill();
+}
+function posOnPath(nodes, p){
+  const segs = nodes.length-1;
+  const fp = clamp(p,0,1)*segs;
+  let i = Math.floor(fp); if(i>=segs) i=segs-1;
+  const lt = fp - i; const a=nodes[i], b=nodes[i+1];
+  return { x:a.x+(b.x-a.x)*lt, y:a.y+(b.y-a.y)*lt };
+}
+function drawMap(nodes, p, ww, wh){
+  ectx.clearRect(0,0,ww,wh);
+  
+  // 加载背景图
+  const bgImg = new Image();
+  bgImg.src = 'img/bg_landscape.jpeg';
+  
+  // 绘制背景图
+  ectx.drawImage(bgImg, 0, 0, ww, wh);
+  
+  // 半透明遮罩
+  ectx.fillStyle='rgba(233,216,176,0.3)';
+  ectx.fillRect(0,0,ww,wh);
+  
+  const scale = ww / 480;
+  
+  // 双线边框
+  ectx.strokeStyle='#7a5a2e'; ectx.lineWidth=6*scale; 
+  ectx.strokeRect(12*scale,12*scale,ww-24*scale,wh-24*scale);
+  ectx.lineWidth=2*scale; 
+  ectx.strokeRect(20*scale,20*scale,ww-40*scale,wh-40*scale);
+  
+  // 河流
+  ectx.strokeStyle='rgba(86,140,172,0.55)'; ectx.lineWidth=9*scale; ectx.setLineDash([]);
+  ectx.beginPath(); ectx.moveTo(16*scale,wh*0.75);
+  ectx.bezierCurveTo(ww*0.31,wh*0.80,ww*0.42,wh*0.62,ww*0.63,wh*0.68);
+  ectx.bezierCurveTo(ww*0.79,wh*0.73,ww*0.87,wh*0.66,ww*0.97,wh*0.71); 
+  ectx.stroke();
+  
+  // 山脉
+  drawMountain(ww*0.25, wh*0.35, 64*scale); 
+  drawMountain(ww*0.52, wh*0.28, 72*scale); 
+  drawMountain(ww*0.77, wh*0.52, 56*scale);
+  
+  // 标题
+  ectx.fillStyle='#5a3a1a'; ectx.font='bold 24px "KaiTi","STKaiti",serif'; 
+  ectx.textAlign='center';
+  ectx.fillText('走 镖 舆 图', ww/2, 52);
+  
+  // 全程路线（虚线）
+  ectx.strokeStyle='#8a5a2a'; ectx.lineWidth=3*scale; ectx.setLineDash([8,8]);
+  ectx.beginPath(); ectx.moveTo(nodes[0].x,nodes[0].y);
+  for(let i=1;i<nodes.length;i++) ectx.lineTo(nodes[i].x,nodes[i].y);
+  ectx.stroke(); ectx.setLineDash([]);
+  
+  // 已走过的路线（实线红）
+  const done = posOnPath(nodes, p);
+  ectx.strokeStyle='#c0392b'; ectx.lineWidth=3*scale;
+  ectx.beginPath(); ectx.moveTo(nodes[0].x,nodes[0].y); 
+  ectx.lineTo(done.x,done.y); 
+  ectx.stroke();
+  
+  // 驿站节点 + 地名标注
+  nodes.forEach(n=>{
+    ectx.fillStyle='#c0392b'; ectx.beginPath(); 
+    ectx.arc(n.x,n.y,7*scale,0,Math.PI*2); 
+    ectx.fill();
+    ectx.fillStyle='#fff'; ectx.beginPath(); 
+    ectx.arc(n.x,n.y,3*scale,0,Math.PI*2); 
+    ectx.fill();
+    ectx.font='15px "KaiTi","STKaiti",serif'; 
+    ectx.textAlign='center';
+    const ly = n.y < wh/2 ? n.y-24 : n.y+34;
+    const tw = ectx.measureText(n.name).width + 14;
+    ectx.fillStyle='rgba(233,216,176,0.92)'; 
+    ectx.fillRect(n.x-tw/2, ly-17, tw, 23);
+    ectx.strokeStyle='#7a5a2e'; ectx.lineWidth=1.5; 
+    ectx.strokeRect(n.x-tw/2, ly-17, tw, 23);
+    ectx.fillStyle='#3a2a12'; 
+    ectx.fillText(n.name, n.x, ly);
+  });
+}
+
+// ===== 中国风背景音乐（真实 MIDI + 完整 88 键钢琴采样，随机循环）=====
+// 旋律取自真实歌曲（茉莉花 / 彩云追月）的 MIDI，用本地镜像的完整 88 键真实钢琴采样演奏（逐键录音、不变调，音色真实）。
+const SONGS = ['jasmine', 'caiyun'];
+// 完整 88 键钢琴采样（mudcube/MIDI.js 的 acoustic_grand_piano，逐键真实录音）已内联为 base64，见 midi/embed.js 的 window.PIANO_MIDI / window.SONGS_DATA。零 fetch 依赖，file:// 双击也能响。
+const NOTE_IDX = {'C':0,'D':2,'E':4,'F':5,'G':7,'A':9,'B':11};
+function noteMidi(n){ const m=n[0], acc=n[1]==='#'?1:0, o=parseInt(n.slice(acc?2:1),10); return (o+1)*12 + NOTE_IDX[m] + acc; }
+function b64ToBuf(b64){ const bin=atob(b64.split(',')[1]); const len=bin.length; const arr=new Uint8Array(len); for(let i=0;i<len;i++) arr[i]=bin.charCodeAt(i); return arr.buffer; }
+let ac=null, master=null, reverb=null, wet=null, bgmOn=false, bgmTimer=null, sampReady=false, sampLoad=null, buffers={};
+function ensureAudio(){
+  if(ac) return;
+  ac = new (window.AudioContext||window.webkitAudioContext)();
+  master = ac.createGain(); master.gain.value=0.7; master.connect(ac.destination);
+  // 轻混响，让钢琴有空间感（不再干硬）
+  reverb = ac.createConvolver(); reverb.buffer = buildIR(1.5, 2.4);
+  wet = ac.createGain(); wet.gain.value=0.20; reverb.connect(wet); wet.connect(ac.destination);
+}
+function buildIR(sec, decay){
+  const len = Math.floor(ac.sampleRate*sec), ir = ac.createBuffer(2, len, ac.sampleRate);
+  for(let c=0;c<2;c++){ const d=ir.getChannelData(c); for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len, decay); }
+  return ir;
+}
+function loadSamples(){
+  if(sampReady) return Promise.resolve();
+  if(sampLoad) return sampLoad;
+  ensureAudio();
+  const mids = new Set();
+  for(const k of SONGS){ for(const nt of ((window.SONGS_DATA[k]||{}).notes||[])) mids.add(noteMidi(nt.n)); }
+  sampLoad = Promise.all([...mids].map(mid=>{
+    const b64 = window.PIANO_MIDI[mid];
+    if(!b64) return Promise.resolve();
+    try{ return ac.decodeAudioData(b64ToBuf(b64)).then(buf=>{ buffers[mid]=buf; }).catch(()=>{}); }
+    catch(e){ return Promise.resolve(); }
+  })).then(()=>{ sampReady=true; });
+  return sampLoad;
+}
+function playNote(name, time, dur, vel, voice, leg){
+  const m = noteMidi(name), buf = buffers[m];
+  if(!buf) return;
+  const src = ac.createBufferSource(); src.buffer = buf; src.playbackRate.value = 1;  // 全集精确命中，原速播放，零变调
+  const g = ac.createGain();
+  let peak, rel, atk = 0.006;
+  if(voice === 1){                       // 低音：轻、长释放，铺底
+    peak = 0.14 + vel*0.40;
+    rel  = leg ? 0.35 : 0.55;
+  } else {                               // 旋律：连音短释放、长音长释放，强弱由 vel 决定
+    peak = 0.20 + vel*0.58;
+    rel  = leg ? 0.14 : Math.min(dur*0.9 + 0.20, 1.3);
+  }
+  peak = Math.min(0.92, peak);
+  const sus = peak * (voice===1 ? 0.80 : 0.62);
+  g.gain.setValueAtTime(0.0001, time);
+  g.gain.linearRampToValueAtTime(peak, time+atk);
+  g.gain.exponentialRampToValueAtTime(Math.max(0.0001, sus), time+atk+0.14);
+  g.gain.setValueAtTime(Math.max(0.0001, sus), time+dur);
+  g.gain.exponentialRampToValueAtTime(0.0001, time+dur+rel);
+  src.connect(g); g.connect(master);
+  if(voice !== 1) g.connect(reverb);    // 旋律加混响，低音保持清晰
+  src.start(time); src.stop(time+dur+rel+0.05);
+}
+function playSong(name){
+  const song = window.SONGS_DATA[name];
+  if(!bgmOn || !sampReady || !song) return;
+  const base = ac.currentTime + 0.2;
+  (song.notes||[]).forEach(nt=>{
+    const v = Math.max(0.05, Math.min(1, nt.v||0.8));
+    const d = Math.max(0.1, nt.d * (nt.leg ? 0.98 : 0.96));
+    try{ playNote(nt.n, base+nt.t, d, v, nt.voice||0, nt.leg||false); }catch(e){}
+  });
+  const gap = (song.dur||20) + 1.6; // 段间留白后随机切下一首
+  bgmTimer = setTimeout(()=>{
+    if(bgmOn){ const nxt = SONGS[Math.floor(Math.random()*SONGS.length)]; playSong(nxt); }
+  }, gap*1000);
+}
+function toggleBGM(){
+  if(bgmOn){ bgmOn=false; if(bgmTimer) clearTimeout(bgmTimer); if(ac && ac.suspend) ac.suspend(); return false; }
+  bgmOn=true; ensureAudio(); if(ac.state==='suspended') ac.resume();
+  loadSamples().then(()=>{ if(bgmOn){ const first = SONGS[Math.floor(Math.random()*SONGS.length)]; playSong(first); } }).catch(()=>{});
+  return true;
+}
+
+
+// ===== 江湖随机事件 =====
+const EVENTS = [
+  { t:'路遇流民', d:'荒郊外一群衣衫褴褛的流民拦路乞食，行列中孩童啼哭。',
+    a:[ {label:'施粥接济（-30两，声望+3）', f:()=>{ silver=Math.max(0,silver-30); repute+=3; return '你开仓施粥，声望 +3'; }},
+        {label:'绕道而行', f:()=>{ return '你悄然绕开，省下银两却无人称道'; }} ] },
+  { t:'神秘老者', d:'茶棚里一白须老者邀你对弈，言「胜者赠秘籍」。',
+    a:[ {label:'欣然对弈', f:()=>{ if(Math.random()<0.5){ repute+=4; return '你棋胜一着，老者赠你江湖名望 +4'; } return '惜败，却也得老者点拨一二'; }},
+        {label:'婉拒赶路', f:()=>{ return '你拱手告辞，继续赶路'; }} ] },
+  { t:'黑市传闻', d:'市井流传一批来路不明的兵甲，价低却烫手。',
+    a:[ {label:'低价收一批（+袖刀，声望-2）', f:()=>{ armory.push('w_xiudao'); repute=Math.max(0,repute-2); return '你悄悄收入库房一把袖刀，声望 -2'; }},
+        {label:'不碰脏物', f:()=>{ return '你守本分，未沾惹是非'; }} ] },
+  { t:'同行挑衅', d:'另一家镖局的趟子手当面嘲你「威远无名」。',
+    a:[ {label:'据理力争（体力-8，声望+2）', f:()=>{ escorts.forEach(e=> e.tili=clamp(e.tili-8,1,100)); repute+=2; return '一番唇枪舌剑，威远声名 +2'; }},
+        {label:'一笑了之', f:()=>{ return '你付之一笑，江湖自有公论'; }} ] },
+  { t:'义救落难', d:'林中一商贾被山贼围困，向你呼救。',
+    a:[ {label:'拔刀相助（体力-12，声望+5，+40两）', f:()=>{ const h=escorts.find(e=>!e.busy); if(h) h.tili=clamp(h.tili-12,1,100); silver+=40; repute+=5; return '你救下商贾，获谢银 +40两、声望 +5'; }},
+        {label:'明哲保身', f:()=>{ return '你权衡利弊，悄然退去'; }} ] },
+  { t:'镖局喜庆', d:'今日乃威远镖局开张大吉之日，街坊送来贺礼。',
+    a:[ {label:'设宴同庆（-25两，全员体力+15）', f:()=>{ silver=Math.max(0,silver-25); escorts.forEach(e=> e.tili=clamp(e.tili+15,1,100)); return '觥筹交错间，镖师体力恢复些许'; }},
+        {label:'简朴度日', f:()=>{ return '你一切从简，积蓄银两'; }} ] }
+];
+function triggerEvent(){
+  const ev = EVENTS[rnd(0, EVENTS.length-1)];
+  const modal = document.createElement('div'); modal.className='modal';
+  let html = `<div class="box"><h3>📜 ${ev.t}</h3><p style="font-size:13px;color:#d8c8a8;line-height:1.6;margin:8px 0;">${ev.d}</p>`;
+  ev.a.forEach((c,i)=> html += `<div class="opt" data-i="${i}"><div>${c.label}</div></div>`);
+  html += `<button class="close">不理会</button></div>`;
+  modal.innerHTML = html;
+  modal.querySelector('.close').onclick = ()=> modal.remove();
+  modal.querySelectorAll('.opt').forEach(op=> op.onclick = ()=>{
+    const msg = ev.a[parseInt(op.dataset.i,10)].f();
+    modal.remove(); renderAll(); toast('📜 '+msg); checkAchievements();
+  });
+  document.getElementById('wrap').appendChild(modal);
+}
+
+// ===== 成就 =====
+const ACHIEVEMENTS = [
+  {id:'first_win', name:'初出茅庐', desc:'完成第一趟走镖'},
+  {id:'repute100', name:'小有名气', desc:'声望达到 100'},
+  {id:'lv5',       name:'镖局兴隆', desc:'镖局升至 5 级'},
+  {id:'rich',      name:'腰缠万贯', desc:'银两达到 800'},
+  {id:'max_escort',name:'人才济济', desc:'镖师达到 6 人'},
+  {id:'hero',      name:'百战百胜', desc:'累计胜场达到 30'}
+];
+function unlockAch(id){
+  if(achieved[id]) return;
+  const a = ACHIEVEMENTS.find(x=>x.id===id); if(!a) return;
+  achieved[id] = true; toast('🏅 成就解锁：'+a.name);
+}
+function checkAchievements(){
+  if(escorts.some(e=>e.wins>0)) unlockAch('first_win');
+  if(repute>=100) unlockAch('repute100');
+  if(biaojuLv>=5) unlockAch('lv5');
+  if(silver>=800) unlockAch('rich');
+  if(escorts.length>=6) unlockAch('max_escort');
+  if(escorts.reduce((s,e)=>s+e.wins,0)>=30) unlockAch('hero');
+}
+function showAchievements(){
+  const modal = document.createElement('div'); modal.className='modal';
+  let h = '<div class="box"><h3>🏅 成就</h3>';
+  ACHIEVEMENTS.forEach(a=>{
+    const got = achieved[a.id];
+    h += `<div class="storeItem"><div class="info"><b style="color:${got?'#ffd479':'#888'}">${got?'🏅':'🔒'} ${a.name}</b><small>${a.desc}</small></div>${got?'<span class="tag">已得</span>':'<span class="tag">未解锁</span>'}</div>`;
+  });
+  h += '<button class="close">关闭</button></div>';
+  modal.innerHTML = h; modal.querySelector('.close').onclick = ()=> modal.remove();
+  document.getElementById('wrap').appendChild(modal);
+}
+
+// ===== 面板操作 =====
+function openRecruit(){
+  if(silver < 80){ toast('银两不足，无法招募'); return; }
+  const modal = document.createElement('div'); modal.className = 'modal'; modal.id = 'recruitModal';
+  function paint(cs){
+    let h = '<div class="box"><h3>🍶 招募镖师（价格各异 · 择一入伙）</h3>';
+    h += '<div id="recruit3D" style="height:232px;margin:6px 0 10px;border-radius:12px;overflow:hidden;background:radial-gradient(circle at 50% 30%,#3a2c18,#160f07);"></div>';
+    cs.forEach((e,idx)=>{
+      const afford = silver >= e.cost;
+      h += '<div class="opt" data-i="' + idx + '"' + (afford ? '' : ' style="opacity:.55;filter:grayscale(.4)"') + '><div style="display:flex;align-items:center;gap:12px;">'
+        + '<img src="' + e.portrait + '" style="width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid #6b4f2a;">'
+        + '<div>🐎 ' + e.name + ' <small>Lv.' + e.lv + '</small><br><small>武力 ' + e.wuli + ' · 体力 ' + e.tili + '</small><br><small>特质 ' + e.trait.name + '（' + e.trait.desc + '） · ' + starStr(e.star) + '</small></div></div>'
+        + '<div style="font-size:13px;color:#ffd479;text-align:right">💰<br>' + e.cost + ' 两</div></div>';
+    });
+    h += '<button id="reReroll" style="background:#3a2c18">🔄 换一批（免费看人）</button><button class="close">取消</button></div>';
+    modal.innerHTML = h;
+    modal.querySelector('.close').onclick = ()=> modal.remove();
+    const prev = modal.querySelector('#recruit3D');
+    cs.forEach((e,idx)=>{
+      const op = modal.querySelector('.opt[data-i="' + idx + '"]');
+      op.onmouseenter = ()=>{ if(B3D.isReady()){ B3D.mount(prev); B3D.setStage('preview'); B3D.setCharacter(B3D.buildCharacter(escort3DCfg(e))); } };
+      op.onclick = ()=>{
+        if(silver < e.cost){ toast('银两不足，招募需 ' + e.cost + ' 两'); return; }
+        silver -= e.cost; const ee = e; escorts.push(ee);
+        modal.remove(); toast('🍶 招募到 ' + ee.name + '（武力' + ee.wuli + ' · 花费' + ee.cost + '两）'); renderAll();
+      };
+    });
+    const re = modal.querySelector('#reReroll');
+    if(re) re.onclick = ()=>{ const ncs=[]; for(let i=0;i<4;i++){ const e=makeEscort(); e.wuli=clamp(e.wuli+rnd(0,8),20,95); ncs.push(e); } paint(ncs); };
+    if(B3D.isReady() && cs[0]){ B3D.mount(prev); B3D.setStage('preview'); B3D.setCharacter(B3D.buildCharacter(escort3DCfg(cs[0]))); }
+  }
+  const init=[]; for(let i=0;i<4;i++){ const e=makeEscort(); e.wuli=clamp(e.wuli+rnd(0,8),20,95); init.push(e); }
+  paint(init);
+  document.getElementById('wrap').appendChild(modal);
+}
+document.getElementById('recruitBtn').onclick = openRecruit;
+document.getElementById('upgradeBtn').onclick = ()=>{
+  const cost = 150 + biaojuLv*120;
+  if(silver < cost){ toast('升级需 '+cost+'两'); return; }
+  silver -= cost; biaojuLv++;
+  toast('⬆️ 镖局升至 '+biaojuLv+'级！镖单更肥、镖师更强');
+  renderAll();
+};
+document.getElementById('healBtn').onclick = ()=>{
+  const hurt = escorts.filter(e=>e.tili<100);
+  if(hurt.length===0){ toast('镖师都生龙活虎'); return; }
+  const cost = hurt.length*25;
+  if(silver < cost){ toast('全员休整需 '+cost+'两'); return; }
+  silver -= cost;
+  escorts.forEach(e=> e.tili = 100);
+  toast('💊 全员体力恢复');
+  renderAll();
+};
+document.getElementById('nextBtn').onclick = ()=>{
+  day++;
+  escorts.forEach(e=> e.tili = clamp(e.tili + 30, 0, 100));
+  orders = orders.filter(o=>!o.done).concat([makeOrder()]);
+  toast('🌙 第 '+day+' 天，镖师体力恢复些许');
+  renderAll();
+  if(bgMode === 'hall' && Math.random() < 0.7) triggerEvent();
+};
+
+// ===== 回合制战斗（遇劫匪）=====
+const ccv = document.getElementById('combat'), cctx = ccv.getContext('2d');
+let CWW = window.innerWidth, CWH = window.innerHeight;
+let combat = null, combatAnim = null;
+
+function resizeCombatCanvas(){
+  ccv.width = window.innerWidth;
+  ccv.height = window.innerHeight;
+  CWW = ccv.width;
+  CWH = ccv.height;
+}
+resizeCombatCanvas();
+window.addEventListener('resize', resizeCombatCanvas);
+
+function drawHP(x, y, w, hp, max, color, label){
+  cctx.fillStyle = 'rgba(0,0,0,.5)'; cctx.fillRect(x-2, y-2, w+4, 18);
+  cctx.fillStyle = '#3a2c18'; cctx.fillRect(x, y, w, 14);
+  cctx.fillStyle = color; cctx.fillRect(x, y, w*clamp(hp/max,0,1), 14);
+  cctx.fillStyle = '#fff'; cctx.font = '12px sans-serif'; cctx.textAlign = 'center';
+  cctx.fillText(label + '  ' + Math.max(0,Math.round(hp)) + '/' + max, x+w/2, y+11);
+}
+
+// ===== 3D 人物 / 道具（Three.js，缺失时自动降级到 2D）=====
+const B3D = (function(){
+  let renderer, scene, camera, clock, ready = false;
+  let charL = null, charR = null, single = null, singleMode = 'char';
+  let target = null;
+  function init(){
+    if(typeof THREE === 'undefined') return false;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x140e07);
+      camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+      camera.position.set(0, 1.2, 5.2);
+      camera.lookAt(0, 1.0, 0);
+      scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+      const d1 = new THREE.DirectionalLight(0xfff0d8, 0.95); d1.position.set(3,6,4); scene.add(d1);
+      const d2 = new THREE.DirectionalLight(0x88aaff, 0.4); d2.position.set(-4,3,-3); scene.add(d2);
+      clock = new THREE.Clock();
+      ready = true; return true;
+    } catch(e){ console.warn('B3D init fail', e); return false; }
+  }
+  function ensure(){ if(!ready) init(); return ready; }
+  function mat(c){ return new THREE.MeshLambertMaterial({ color:c }); }
+  function box(w,h,d,c){ return new THREE.Mesh(new THREE.BoxGeometry(w,h,d), mat(c)); }
+  function cyl(rt,rb,h,c,s){ return new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,s||10), mat(c)); }
+  function sph(r,c){ return new THREE.Mesh(new THREE.SphereGeometry(r,14,14), mat(c)); }
+  function buildCharacter(cfg){
+    cfg = cfg || {};
+    const g = new THREE.Group();
+    const skin = cfg.skin || 0xe8b98a;
+    const body = cfg.body || 0x6b4f2a;
+    const torso = box(0.72,0.9,0.42, body); torso.position.y = 1.05; g.add(torso);
+    const belt = box(0.76,0.16,0.46, 0x2a1c10); belt.position.y = 0.66; g.add(belt);
+    const head = sph(0.28, skin); head.position.y = 1.72; g.add(head);
+    const hair = cyl(0.30,0.30,0.18, cfg.hair || 0x2a1c10); hair.position.y = 1.94; g.add(hair);
+    const legL = box(0.24,0.7,0.26, body); legL.position.set(-0.18,0.30,0); g.add(legL);
+    const legR = box(0.24,0.7,0.26, body); legR.position.set(0.18,0.30,0); g.add(legR);
+    const bootL = box(0.26,0.16,0.30, 0x1a1008); bootL.position.set(-0.18,0.02,0.02); g.add(bootL);
+    const bootR = box(0.26,0.16,0.30, 0x1a1008); bootR.position.set(0.18,0.02,0.02); g.add(bootR);
+    const armL = box(0.18,0.7,0.2, body); armL.position.set(-0.48,1.05,0); armL.rotation.z = 0.16; g.add(armL);
+    const armR = box(0.18,0.7,0.2, body); armR.position.set(0.48,1.05,0); armR.rotation.z = -0.16; g.add(armR);
+    if(cfg.mask){ const mk = box(0.30,0.16,0.30, cfg.mask); mk.position.set(0,1.68,0.16); g.add(mk); }
+    if(cfg.bandana){ const bn = box(0.36,0.14,0.36, cfg.bandana); bn.position.set(0,1.82,0); g.add(bn); }
+    let wm = null; const wg = new THREE.Group();
+    const wt = cfg.weapon || 'fist';
+    if(wt === '刀' || wt === '剑'){
+      const blade = box(0.07,1.0,0.14, 0xd8d8e0); blade.position.y = 0.5; wg.add(blade);
+      wg.add(box(0.30,0.08,0.18, 0x8a6a2a));
+      const hilt = cyl(0.05,0.05,0.28, 0x3a2a14); hilt.position.y = -0.18; wg.add(hilt); wm = wg;
+    } else if(wt === '枪'){
+      wg.add(cyl(0.04,0.04,1.6, 0x6a4a24));
+      const tip = new THREE.Mesh(new THREE.ConeGeometry(0.09,0.32,8), mat(0xd8d8e0)); tip.position.y = 0.95; wg.add(tip); wm = wg;
+    } else if(wt === '棍'){
+      wg.add(cyl(0.07,0.07,1.3, 0x7a5a2a)); wm = wg;
+    } else if(wt === '暗器'){
+      wg.add(sph(0.13, 0xcfcfd8)); wm = wg;
+    } else {
+      const f = sph(0.11, skin); f.position.set(0,0,0.16); wg.add(f); wm = wg;
+    }
+    if(wm){ wm.position.set(0.48,1.25,0.22); wm.rotation.z = -0.2; g.add(wm); g.userData.weapon = wm; }
+    if(cfg.traitKey === 'tie'){ const sh = box(0.92,0.7,0.12, 0x3a5a8a); sh.position.set(0,1.1,-0.24); g.add(sh); }
+    if(cfg.traitKey === 'meng'){ const cl = box(0.98,1.4,0.06, 0xc0392b); cl.position.set(-0.08,1.1,-0.30); cl.rotation.z = 0.1; g.add(cl); }
+    g.userData.parts = { torso: torso, head: head, armR: armR, belt: belt };
+    return g;
+  }
+  function buildProp(cfg){
+    cfg = cfg || {};
+    const g = new THREE.Group();
+    if(cfg.kind === 'weapon'){
+      const w = (typeof getWeapon === 'function') ? getWeapon(cfg.id) : null;
+      const t = w ? w.type : '刀';
+      const blade = box(0.08,1.4,0.16, 0xd8d8e0); blade.position.y = 0.2; g.add(blade);
+      g.add(box(0.42,0.1,0.2, 0x8a6a2a));
+      const hilt = cyl(0.07,0.07,0.4, 0x3a2a14); hilt.position.y = -0.75; g.add(hilt);
+      if(t === '枪'){ const tip = new THREE.Mesh(new THREE.ConeGeometry(0.12,0.4,8), mat(0xd8d8e0)); tip.position.y = 1.05; g.add(tip); }
+      if(t === '棍'){ blade.scale.set(0.8,0.9,0.8); }
+    } else if(cfg.kind === 'gear'){
+      const gg = (typeof getGear === 'function') ? getGear(cfg.id) : null;
+      const col = gg ? (0x8a6a32 + (gg.star || 1) * 0x070500) : 0x8a6a32;
+      g.add(box(0.9,1.0,0.5, col));
+      const sh = box(1.0,0.2,0.6, 0x5a3a1a); sh.position.y = 0.5; g.add(sh);
+      const bel = box(1.0,0.18,0.6, 0x3a2a14); bel.position.y = -0.5; g.add(bel);
+    } else if(cfg.kind === 'herb'){
+      g.add(cyl(0.28,0.32,0.9, 0x6fae8a, 12));
+      const neck = cyl(0.12,0.14,0.25, 0x6fae8a, 12); neck.position.y = 0.7; g.add(neck);
+      const cork = cyl(0.14,0.14,0.16, 0x8a6a2a, 12); cork.position.y = 0.86; g.add(cork);
+      const liq = cyl(0.24,0.28,0.5, 0xc0392b, 12); liq.position.y = -0.05; g.add(liq);
+    }
+    return g;
+  }
+  function clearAll(){
+    [charL, charR, single].forEach(o=>{ if(o){ scene.remove(o); o.traverse(n=>{ if(n.geometry) n.geometry.dispose(); if(n.material) n.material.dispose(); }); } });
+    charL = charR = single = null;
+  }
+  function mount(container){
+    if(!ensure() || !container) return false;
+    if(renderer.domElement.parentNode !== container) container.appendChild(renderer.domElement);
+    target = container; resize(); return true;
+  }
+  function resize(){
+    if(!ready || !target) return;
+    const w = target.clientWidth || window.innerWidth, h = target.clientHeight || window.innerHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h; camera.updateProjectionMatrix();
+  }
+  function setStage(mode){
+    if(mode === 'battle'){ camera.position.set(0,1.2,5.2); camera.lookAt(0,1.0,0); }
+    else { camera.position.set(0,1.25,3.9); camera.lookAt(0,1.05,0); }
+  }
+  function setBattle(L, R){ clearAll(); charL = L; charR = R; if(L){ L.position.x = -1.35; scene.add(L); } if(R){ R.position.x = 1.35; scene.add(R); } }
+  function setCharacter(g){ clearAll(); single = g; singleMode = 'char'; if(g) scene.add(g); }
+  function setProp(g){ clearAll(); single = g; singleMode = 'prop'; if(g) scene.add(g); }
+  function render(dt, st){
+    if(!ready) return; st = st || {};
+    const t = clock.getElapsedTime();
+    if(charL || charR){
+      const breathe = Math.sin(t*2)*0.03;
+      const look = Math.sin(t*0.7)*0.25;
+      if(charL){
+        const atk = st.lunge||0, hit = st.enemyLunge||0;
+        charL.position.x = -1.35 + atk*0.8;
+        charL.position.y = Math.sin(t*2)*0.02;
+        charL.rotation.y = -0.35 - atk*0.7 + look*0.3;
+        charL.rotation.x = hit*0.35;
+        const p = charL.userData.parts || {};
+        if(p.torso) p.torso.scale.y = 1 + breathe - atk*0.1;
+        if(p.head) p.head.rotation.y = look;
+        if(p.armR) p.armR.rotation.z = -0.16 - atk*0.8;
+        if(charL.userData.weapon) charL.userData.weapon.rotation.x = -atk*1.6;
+      }
+      if(charR){
+        const atk = st.enemyLunge||0, hit = st.lunge||0;
+        charR.position.x = 1.35 - atk*0.8;
+        charR.position.y = Math.sin(t*2 + 1)*0.02;
+        charR.rotation.y = Math.PI + 0.35 + atk*0.7 - look*0.3;
+        charR.rotation.x = hit*0.35;
+        const p = charR.userData.parts || {};
+        if(p.torso) p.torso.scale.y = 1 + breathe - atk*0.1;
+        if(p.head) p.head.rotation.y = -look;
+        if(p.armR) p.armR.rotation.z = -0.16 - atk*0.8;
+        if(charR.userData.weapon) charR.userData.weapon.rotation.x = -atk*1.6;
+      }
+    } else if(single){
+      const breathe = Math.sin(t*2)*0.03;
+      const look = Math.sin(t*0.8)*0.3;
+      if(singleMode === 'prop'){
+        single.rotation.y += dt*0.9;
+        single.position.y = 0.95 + Math.sin(t*1.5)*0.06;
+      } else {
+        single.position.y = Math.sin(t*1.6)*0.03;
+        single.rotation.y = Math.sin(t*1.0)*0.5;
+        const p = single.userData.parts || {};
+        if(p.torso) p.torso.scale.y = 1 + breathe;
+        if(p.head) p.head.rotation.y = look;
+      }
+    }
+    renderer.render(scene, camera);
+  }
+  return { ensure, mount, setStage, setBattle, setCharacter, setProp, buildCharacter, buildProp, render, resize, isReady: ()=> ready, hasTarget: ()=> !!target };
+})();
+
+// 3D 预览常驻渲染循环：招募 / 库房 / 结算等预览依赖它出图；
+// 战斗画面由 combatFrame 驱动（带 lunge 状态），此处跳过以免重复渲染。
+function b3dLoop(){
+  requestAnimationFrame(b3dLoop);
+  if(!B3D.ensure()) return;
+  if(combat) return;
+  if(!B3D.hasTarget()) return;
+  B3D.render(1/60, {});
+}
+requestAnimationFrame(b3dLoop);
+function hashHue(s){ let h = 0; for(let i=0;i<s.length;i++) h = (h*31 + s.charCodeAt(i)) >>> 0; return h; }
+function hashColor(s){ const hue = hashHue(s) % 360; if(typeof THREE !== 'undefined') return new THREE.Color().setHSL(hue/360, 0.45, 0.46).getHex(); return 0x6b4f2a; }
+function escort3DCfg(e){ return { body: hashColor(e.id || e.name), skin: 0xe8b98a, weapon: (e.weapon && getWeapon(e.weapon)) ? getWeapon(e.weapon).type : 'fist', traitKey: e.trait ? e.trait.key : null }; }
+function enemy3DCfg(enemy, order){
+  const boss = enemy.emoji === '🧟';
+  const mask = boss ? 0x2e7d32 : [0xc0392b, 0x2a5b9b][hashHue(enemy.name) % 2];
+  return { body: 0x4a4a4a, skin: 0xc9a07a, weapon: ['刀','棍','拳'][hashHue(enemy.name) % 3], mask: mask, bandana: mask, traitKey: null };
+}
+function client3DCfg(c){ return { body: hashColor(c.name || 'client'), skin: 0xe8b98a, weapon: 'fist', traitKey: null }; }
+function prop3DCfg(kind, id){ return { kind: kind, id: id }; }
+
+
+function drawPortrait(img, x, y, w, h){
+  cctx.save();
+  if(img && img.complete && img.naturalWidth){
+    cctx.drawImage(img, x, y, w, h);
+  } else {
+    cctx.fillStyle = 'rgba(0,0,0,.35)';
+    cctx.fillRect(x, y, w, h);
+  }
+  cctx.strokeStyle = '#6b4f2a'; cctx.lineWidth = 2;
+  cctx.strokeRect(x-1, y-1, w+2, h+2);
+  cctx.restore();
+}
+function drawCombat(){
+  cctx.clearRect(0,0,CWW,CWH);
+  const use3D = B3D.isReady();
+  if(!use3D){
+    const bgImg = new Image(); bgImg.src = 'img/bg_battle.jpeg';
+    cctx.drawImage(bgImg, 0, 0, CWW, CWH);
+    cctx.fillStyle = 'rgba(42,32,20,0.5)'; cctx.fillRect(0,0,CWW,CWH);
+  }
+  cctx.save();
+  if(combat && combat.shake > 0){
+    const s = combat.shake;
+    cctx.translate((Math.random()*2-1)*s/2, (Math.random()*2-1)*s/2);
+  }
+  const p = combat.player, en = combat.enemy;
+  cctx.fillStyle = '#ffd479'; cctx.font = 'bold 24px serif'; cctx.textAlign = 'center';
+  cctx.fillText('⚔️ 走 镖 遇 劫 ⚔️', CWW/2, 32);
+  // 左右上角半身像：镖师真实头像 / 劫匪图，始终绘制（3D 只负责中央对战演出）
+  const pw = 88, ph = 116, ppy = 52;
+  drawPortrait(combat.pImg, 16, ppy, pw, ph);
+  drawPortrait(combat.eImg, CWW - 16 - pw, ppy, pw, ph);
+  const hpY = ppy + ph + 12;
+  const hpw = Math.min(240, Math.max(150, Math.min(CWW, CWH) * 0.3));
+  drawHP(16, hpY, hpw, p.hp, p.max, '#5fd36a', p.name + ' · ' + (p.weapon ? p.weapon.name : '徒手'));
+  drawHP(CWW - 16 - hpw, hpY, hpw, en.hp, en.max, '#e0533b', en.name + ' · 攻' + en.atk);
+  combat.dmg.forEach(d=>{
+    cctx.globalAlpha = clamp(d.life,0,1);
+    cctx.fillStyle = d.color; cctx.font = 'bold 32px sans-serif'; cctx.textAlign = 'center';
+    cctx.fillText(d.text, d.x, d.y); cctx.globalAlpha = 1;
+  });
+  drawFx();
+  if(combat.bossIntro > 0){
+    const a = clamp(combat.bossIntro / 1.8, 0, 1);
+    cctx.save();
+    cctx.fillStyle = 'rgba(28,0,0,' + (0.5 * a) + ')';
+    cctx.fillRect(0, 0, CWW, CWH);
+    cctx.fillStyle = '#ff5b5b';
+    cctx.font = 'bold ' + Math.round(34 * (1.15 + (1-a)*0.4)) + 'px serif';
+    cctx.textAlign = 'center';
+    cctx.fillText('⚠️ 头 目 现 身 ⚠️', CWW/2, CWH*0.5);
+    cctx.restore();
+  }
+  cctx.restore();
+}
+
+
+function combatFrame(){
+  if(!combat) return;
+  const dt = 1/60;
+  combat.tick = (combat.tick || 0) + dt;
+  if(combat.lunge) combat.lunge *= 0.82;
+  combat.dmg.forEach(d=>{ d.y -= 0.6; d.life -= dt*1.4; });
+  combat.dmg = combat.dmg.filter(d=> d.life>0);
+  combat.fx.forEach(f=>{ f.t += dt; });
+  combat.fx = combat.fx.filter(f=> f.t < f.life);
+  if(combat.shake > 0) combat.shake = Math.max(0, combat.shake - dt*40);
+  if(combat.enemyLunge) combat.enemyLunge *= 0.82;
+  if(combat.bossIntro > 0) combat.bossIntro -= dt;
+  drawCombat();
+  if(B3D.isReady()){ B3D.render(dt, { lunge: combat.lunge||0, enemyLunge: combat.enemyLunge||0 }); }
+  combatAnim = requestAnimationFrame(combatFrame);
+}
+function logCombat(t){
+  combat.log.push(t);
+  document.getElementById('combatLog').innerHTML = combat.log.slice(-3).join('<br>');
+}
+function pushDmg(x, y, text, color){ if(combat) combat.dmg.push({x, y, text, color, life:1}); }
+function setCombatButtons(on){ document.querySelectorAll('.combatActions button').forEach(b=> b.disabled = !on); }
+
+function startCombat(order, e){
+  const enWuli = clamp(order.need + rnd(-4,10) + order.threat*2, 18, 96);
+  const enMax = 40 + order.threat*20 + rnd(0,18);
+  const enemy = {
+    name: pick(['山贼','响马','劫匪','毛贼','恶徒']) + (order.threat>=4 ? '（头目）' : ''),
+    emoji: order.threat>=4 ? '🧟' : '👹',
+    hp: enMax, max: enMax, atk: enWuli
+  };
+  const w = e.weapon ? getWeapon(e.weapon) : null;
+  const g = e.gear ? getGear(e.gear) : null;
+  const tr = e.trait || null;
+  const player = {
+    name: e.name,
+    hp: clamp(e.tili, 25, 100), max: clamp(e.tili, 25, 100),
+    atk: e.wuli + (w ? w.atk : 0) + (tr ? (tr.atk||0) : 0),
+    def: (w ? w.def : 0) + (g ? g.def : 0) + (tr ? (tr.def||0) : 0),
+    weapon: w, defending: false,
+    e: e  // 保留镖师对象用于头像
+  };
+  combat = { order, e, player, enemy, dmg: [], fx: [], tick: 0, lunge: 0, enemyLunge: 0, shake: 0, busy: false, over: false, log: [], boss: enemy.emoji === '🧟', bossIntro: enemy.emoji === '🧟' ? 1.8 : 0 };
+  // 预加载双方半身像（避免每帧 new Image 造成空白）
+  combat.pImg = new Image(); combat.pImg.src = e.portrait || PORTraits[0];
+  combat.eImg = new Image(); combat.eImg.src = combat.boss ? BANDIT_POOL[2] : BANDIT_POOL[hashHue(enemy.name) % BANDIT_POOL.length];
+  bgMode = 'battle';
+  document.getElementById('escortLayer').classList.add('hidden');
+  document.getElementById('combatLayer').classList.remove('hidden');
+  resizeCombatCanvas();
+  if(B3D.isReady()){
+    const cc = document.getElementById('combat3D');
+    B3D.mount(cc); B3D.setStage('battle');
+    B3D.setBattle(B3D.buildCharacter(escort3DCfg(e)), B3D.buildCharacter(enemy3DCfg(enemy, order)));
+  }
+  logCombat('💢 半路杀出' + enemy.name + '！');
+  if(combatAnim) cancelAnimationFrame(combatAnim);
+  combatFrame();
+  if(combat.boss) playSfx('boss');
+  setCombatButtons(true);
+}
+function doAttack(isSkill){
+  const p = combat.player, en = combat.enemy;
+  let base = p.atk + rnd(-3,4);
+  const crit = Math.random() < 0.15;
+  if(isSkill){
+    base = Math.round(base * 1.6);
+    p.hp = clamp(p.hp - 6, 1, p.max);
+    logCombat('💥 ' + p.name + ' 使出「' + (p.weapon ? p.weapon.skill : '重击') + '」！');
+  } else {
+    logCombat('⚔️ ' + p.name + ' 挥兵直取');
+  }
+  let dmg = Math.max(1, base - rnd(0,2));
+  if(crit) dmg = Math.round(dmg * 1.5);
+  en.hp = clamp(en.hp - dmg, 0, en.max);
+  const scale = CWW / 480;
+  pushDmg(CWW*0.80, CWH*0.32, '-' + dmg + (crit ? ' 暴击!' : ''), '#ffce54');
+  spawnHitFx('enemy', crit || isSkill);
+  playSfx(crit || isSkill ? 'crit' : 'attack');
+  combat.lunge = 1;
+  logCombat((crit ? '暴击！' : '') + '对' + en.name + ' 造成 ' + dmg + ' 伤害');
+  if(en.hp <= 0){ endCombat('win'); return; }
+  enemyTurn();
+}
+function useHerbInCombat(){
+  const p = combat.player;
+  const id = Object.keys(herbs).find(k=> herbs[k] > 0);
+  if(!id){ toast('药材库空空如也'); return; }
+  const h = getHerb(id); herbs[id]--;
+  p.hp = clamp(p.hp + h.heal, 1, p.max);
+  logCombat('💊 服下' + h.name + '，恢复 ' + h.heal + ' 气血');
+  const scale = CWW / 480;
+  pushDmg(CWW*0.20, CWH*0.32, '+' + h.heal, '#5fd36a');
+  spawnHealFx();
+  playSfx('heal');
+  enemyTurn();
+}
+function tryFlee(){
+  const p = combat.player;
+  let chance = clamp(0.35 + p.hp/220, 0.3, 0.8);
+  if(p.e && p.e.trait && p.e.trait.flee) chance = clamp(chance + p.e.trait.flee, 0.3, 0.9);
+  if(Math.random() < chance){ logCombat('🏃 ' + p.name + ' 施展轻功，全身而退'); playSfx('flee'); endCombat('retreat'); }
+  else { 
+    logCombat('⚠️ 撤退失败，被绊了一跤！'); playSfx('hit'); 
+    p.hp = clamp(p.hp - rnd(6,12), 1, p.max); 
+    const scale = CWW / 480;
+    pushDmg(CWW*0.20, CWH*0.32,'','#e0533b');
+    combat.lunge = -0.5; 
+    enemyTurn(); 
+  }
+}
+function enemyTurn(){
+  const p = combat.player, en = combat.enemy;
+  if(en.hp <= 0){ endCombat('win'); return; }
+  combat.busy = true; setCombatButtons(false);
+  setTimeout(()=>{
+    if(!combat || combat.over) return;
+    let dmg = Math.max(1, en.atk + rnd(-3,4) - p.def);
+    if(p.defending){ dmg = Math.max(1, Math.round(dmg*0.5)); p.defending = false; logCombat('🛡️ 挡下大半攻势'); }
+    else logCombat('👹 ' + en.name + ' 反扑而来');
+    p.hp = clamp(p.hp - dmg, 0, p.max);
+    const scale = CWW / 480;
+    pushDmg(CWW*0.20, CWH*0.32, '-' + dmg, '#e0533b');
+    spawnHitFx('player', false);
+    playSfx('hit');
+    combat.lunge = -0.5; combat.enemyLunge = 1;
+    if(p.hp <= 0){ endCombat('lose'); return; }
+    combat.busy = false; setCombatButtons(true);
+  }, 650);
+}
+function endCombat(result){
+  if(!combat || combat.over) return;
+  combat.over = true;
+  if(result === 'win') playSfx('win'); else if(result === 'lose') playSfx('lose'); else if(result === 'retreat') playSfx('flee');
+  if(combatAnim) cancelAnimationFrame(combatAnim);
+  const p = combat.player, e = combat.e, order = combat.order;
+  e.tili = clamp(Math.round(p.hp), 1, 100);   // 气血化为体力
+  document.getElementById('combatLayer').classList.add('hidden');
+  combat = null;
+  finishEscort(order, e, result);
+}
+document.querySelectorAll('.combatActions button').forEach(b=>{
+  b.onclick = ()=>{
+    if(!combat || combat.busy || combat.over) return;
+    const act = b.dataset.act;
+    if(act === 'attack') doAttack(false);
+    else if(act === 'skill'){ if(!combat.player.weapon){ toast('未装备兵器，无法施展绝技'); return; } doAttack(true); }
+    else if(act === 'heal') useHerbInCombat();
+    else if(act === 'defend'){ combat.player.defending = true; logCombat('🛡️ ' + combat.player.name + ' 凝神防御'); enemyTurn(); }
+    else if(act === 'flee') tryFlee();
+  };
+});
+
+// ===== 库房：武器库 / 药材库 / 镖师 =====
+let currentStoreTab = 'weapon';
+let currentWeaponSub = 'weapon'; // 武器栏子页：weapon | gear
+function openStore(tab){ document.getElementById('storeModal').classList.remove('hidden'); renderStore(tab || 'weapon'); }
+function closeStore(){ document.getElementById('storeModal').classList.add('hidden'); }
+function bindStore3D(body){
+  const prev = body.querySelector('#gear3D');
+  if(!prev || !B3D.isReady()) return;
+  body.querySelectorAll('.storeItem').forEach(it=>{
+    let kind = null, id = null;
+    const probe = (k, v)=>{ if(v){ kind = k; id = v; } };
+    ['equip','buyw','sellw','equipg','buyg','sellg','buyh','useh','sellh'].forEach(d=>{
+      const b = it.querySelector('[data-' + d + ']');
+      if(b) probe(d.indexOf('g') >= 0 ? 'gear' : (d.indexOf('h') >= 0 ? 'herb' : 'weapon'), b.dataset[d]);
+    });
+    if(kind && id){
+      it.onmouseenter = ()=>{ B3D.mount(prev); B3D.setStage('prop'); B3D.setProp(B3D.buildProp(prop3DCfg(kind, id))); };
+    }
+  });
+}
+
+function renderStore(tab){
+  tab = tab || currentStoreTab; currentStoreTab = tab;
+  document.querySelectorAll('#storeModal .tabs button').forEach(b=> b.classList.toggle('active', b.dataset.tab === tab));
+  const body = document.getElementById('storeBody');
+  if(tab === 'weapon') body.innerHTML = renderWeaponTab();
+  else if(tab === 'herb') body.innerHTML = renderHerbTab();
+  else body.innerHTML = renderRosterTab();
+  bindStore(tab);
+  bindStore3D(body);
+}
+function renderWeaponTab(){
+  let h = '<div class="subtabs">'
+    + '<button data-wsub="weapon" class="' + (currentWeaponSub==='weapon'?'active':'') + '">🗡️ 武器</button>'
+    + '<button data-wsub="gear" class="' + (currentWeaponSub==='gear'?'active':'') + '">🥋 穿戴用品</button>'
+    + '</div>';
+  h += '<div id="gear3D" style="height:200px;margin:8px 0;border-radius:12px;overflow:hidden;background:radial-gradient(circle at 50% 30%,#3a2c18,#160f07);"></div>';
+  h += (currentWeaponSub === 'gear') ? renderGearList() : renderWeaponList();
+  return h;
+}
+function renderWeaponList(){
+  let h = '<div style="font-size:13px;color:#c9b48c;margin-bottom:6px;">本局兵器 ' + armory.length + ' 件 · 点「装备」选镖师 · 「卖」回收半数银两</div>';
+  armory.forEach(id=>{
+    const w = getWeapon(id); const holder = escorts.find(x=> x.weapon === id);
+    const back = Math.round(w.cost*0.5);
+    h += '<div class="storeItem"><div class="info">' + w.name + ' <small>' + w.type + ' · 攻+' + w.atk + ' 防+' + w.def + ' · 绝技「' + w.skill + '」 · ' + starStr(w.star) + '</small>' + (holder ? ('已装备：'+holder.name) : '') + '</div><div style="display:flex;gap:6px"><button data-equip="' + id + '">装备</button><button data-sellw="' + id + '" class="danger">卖' + back + '</button></div></div>';
+  });
+  h += '<div style="margin-top:10px;font-size:13px;color:#c9b48c;">购置新兵器（镖局升级解锁更高品质）</div>';
+  WEAPON_SHOP.forEach(w=>{
+    const owned = armory.includes(w.id);
+    const ok = shopUnlocked(w);
+    if(!ok){
+      h += '<div class="storeItem"><div class="info">' + w.name + ' <small>' + w.type + ' · 攻+' + w.atk + ' 防+' + w.def + ' · ' + starStr(w.star) + '</small></div><span class="tag">🔒镖局' + w.lv + '级</span></div>';
+    } else if(owned){
+      h += '<div class="storeItem"><div class="info">' + w.name + ' <small>' + w.type + ' · 攻+' + w.atk + ' 防+' + w.def + ' · ' + starStr(w.star) + '</small></div><span class="tag">已有</span></div>';
+    } else {
+      h += '<div class="storeItem"><div class="info">' + w.name + ' <small>' + w.type + ' · 攻+' + w.atk + ' 防+' + w.def + ' · 绝技「' + w.skill + '」 · ' + starStr(w.star) + '</small></div><button data-buyw="' + w.id + '" ' + (silver<w.cost?'disabled':'') + '>💰' + w.cost + '两</button></div>';
+    }
+  });
+  return h;
+}
+function renderGearList(){
+  let h = '<div style="font-size:13px;color:#c9b48c;margin-bottom:6px;">本局穿戴用品 ' + gearOwned.length + ' 件 · 点「穿戴」选镖师 · 「卖」回收半数银两</div>';
+  gearOwned.forEach(id=>{
+    const gg = getGear(id); const holder = escorts.find(x=> x.gear === id);
+    const back = Math.round(gg.cost*0.5);
+    h += '<div class="storeItem"><div class="info">' + gg.name + ' <small>防具 · 防御+' + gg.def + ' · ' + starStr(gg.star) + '</small>' + (holder ? ('已穿戴：'+holder.name) : '') + '</div><div style="display:flex;gap:6px"><button data-equipg="' + id + '">穿戴</button><button data-sellg="' + id + '" class="danger">卖' + back + '</button></div></div>';
+  });
+  h += '<div style="margin-top:10px;font-size:13px;color:#c9b48c;">购置新防具（镖局升级解锁更高品质）</div>';
+  GEAR_SHOP.forEach(gg=>{
+    const owned = gearOwned.includes(gg.id);
+    const ok = shopUnlocked(gg);
+    if(!ok){
+      h += '<div class="storeItem"><div class="info">' + gg.name + ' <small>防具 · 防御+' + gg.def + ' · ' + starStr(gg.star) + '</small></div><span class="tag">🔒镖局' + gg.lv + '级</span></div>';
+    } else if(owned){
+      h += '<div class="storeItem"><div class="info">' + gg.name + ' <small>防具 · 防御+' + gg.def + ' · ' + starStr(gg.star) + '</small></div><span class="tag">已有</span></div>';
+    } else {
+      h += '<div class="storeItem"><div class="info">' + gg.name + ' <small>防具 · 防御+' + gg.def + ' · ' + starStr(gg.star) + '</small></div><button data-buyg="' + gg.id + '" ' + (silver<gg.cost?'disabled':'') + '>💰' + gg.cost + '两</button></div>';
+    }
+  });
+  return h;
+}
+function renderHerbTab(){
+  let h = '<div id="gear3D" style="height:180px;margin:0 0 8px;border-radius:12px;overflow:hidden;background:radial-gradient(circle at 50% 30%,#3a2c18,#160f07);"></div>';
+  h += '<div style="font-size:13px;color:#c9b48c;margin-bottom:6px;">药材库存（用药恢复体力 · 「卖」回收半数银两）</div>';
+  let any = false;
+  HERB_SHOP.forEach(hb=>{
+    const cnt = herbs[hb.id] || 0; if(cnt > 0) any = true;
+    const back = Math.round(hb.cost*0.5);
+    h += '<div class="storeItem"><div class="info">' + hb.name + ' <small>恢复 ' + hb.heal + ' 体力 · 库存 ' + cnt + ' · ' + starStr(hb.star) + '</small></div>' + (cnt>0 ? '<div style="display:flex;gap:6px"><button data-useh="' + hb.id + '">使用</button><button data-sellh="' + hb.id + '" class="danger">卖' + back + '</button></div>' : '<span class="tag">无</span>') + '</div>';
+  });
+  if(!any) h += '<div style="color:#c9b48c;font-size:13px;">库房暂无药材，去下方购置。</div>';
+  h += '<div style="margin-top:10px;font-size:13px;color:#c9b48c;">购置药材（镖局升级解锁更佳）</div>';
+  HERB_SHOP.forEach(hb=>{
+    const ok = shopUnlocked(hb);
+    if(!ok){
+      h += '<div class="storeItem"><div class="info">' + hb.name + ' <small>恢复 ' + hb.heal + ' 体力 · ' + starStr(hb.star) + '</small></div><span class="tag">🔒镖局' + hb.lv + '级</span></div>';
+    } else {
+      h += '<div class="storeItem"><div class="info">' + hb.name + ' <small>恢复 ' + hb.heal + ' 体力 · ' + starStr(hb.star) + '</small></div><button data-buyh="' + hb.id + '" ' + (silver<hb.cost?'disabled':'') + '>💰' + hb.cost + '两</button></div>';
+    }
+  });
+  return h;
+}
+function renderRosterTab(){
+  let h = '<div style="font-size:13px;color:#c9b48c;margin-bottom:6px;">镖局在册 ' + escorts.length + ' 人 · 点选查看详情</div>';
+  escorts.forEach(e=>{
+    const w = e.weapon ? getWeapon(e.weapon) : null;
+    h += `<div class="rosterItem" data-detail="${e.id}">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <img src="${e.portrait}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #6b4f2a;">
+        <div>
+          <b style="color:#ffd479">🐎 ${e.name}</b> <small>Lv.${e.lv} · 武力${e.wuli} · 体力${e.tili}</small><br>
+          <small>${w ? '兵器：'+w.name+' · ' : ''}${e.gear ? '防具：'+getGear(e.gear).name+' · ' : ''}${e.trait ? '特质：'+e.trait.name+' · ' : ''}战绩 ${e.wins}胜 ${e.losses}负 · 经验${e.exp}</small>
+        </div>
+      </div>
+    </div>`;
+  });
+  return h;
+}
+function bindStore(tab){
+  const body = document.getElementById('storeBody');
+  if(tab === 'weapon'){
+    body.querySelectorAll('[data-wsub]').forEach(b=> b.onclick = ()=>{ currentWeaponSub = b.dataset.wsub; renderStore('weapon'); });
+    if(currentWeaponSub === 'gear'){
+      body.querySelectorAll('[data-equipg]').forEach(b=> b.onclick = ()=> equipGearChoose(b.dataset.equipg));
+      body.querySelectorAll('[data-buyg]').forEach(b=> b.onclick = ()=> buyGear(b.dataset.buyg));
+      body.querySelectorAll('[data-sellg]').forEach(b=> b.onclick = ()=> sellGear(b.dataset.sellg));
+    } else {
+      body.querySelectorAll('[data-equip]').forEach(b=> b.onclick = ()=> equipChoose(b.dataset.equip));
+      body.querySelectorAll('[data-buyw]').forEach(b=> b.onclick = ()=> buyWeapon(b.dataset.buyw));
+      body.querySelectorAll('[data-sellw]').forEach(b=> b.onclick = ()=> sellWeapon(b.dataset.sellw));
+    }
+  } else if(tab === 'herb'){
+    body.querySelectorAll('[data-useh]').forEach(b=> b.onclick = ()=> useHerb(b.dataset.useh));
+    body.querySelectorAll('[data-buyh]').forEach(b=> b.onclick = ()=> buyHerb(b.dataset.buyh));
+    body.querySelectorAll('[data-sellh]').forEach(b=> b.onclick = ()=> sellHerb(b.dataset.sellh));
+  } else {
+    body.querySelectorAll('[data-detail]').forEach(b=> b.onclick = ()=> showEscortDetail(b.dataset.detail));
+  }
+}
+function buyWeapon(id){
+  const w = getWeapon(id); if(silver < w.cost){ toast('银两不足'); return; }
+  silver -= w.cost; armory.push(id); toast('购得' + w.name); renderAll(); renderStore('weapon');
+}
+function buyGear(id){
+  const gg = getGear(id); if(silver < gg.cost){ toast('银两不足'); return; }
+  silver -= gg.cost; gearOwned.push(id); toast('购得' + gg.name); renderAll(); renderStore('weapon');
+}
+function equipGearChoose(id){
+  if(escorts.length === 0){ toast('还没有镖师'); return; }
+  const modal = document.createElement('div'); modal.className = 'modal';
+  let h = `<div class="box"><h3>把「${getGear(id).name}」穿戴给谁？</h3>`;
+  escorts.forEach(e=> h += `<div class="opt" data-e="${e.id}">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <img src="${e.portrait}" style="width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid #6b4f2a;">
+      <div>🐎 ${e.name} <small>Lv.${e.lv} · 武力${e.wuli} · 体${e.tili}</small></div>
+    </div>
+    <div>${e.gear===id ? '✅当前' : (e.gear ? '（换下'+getGear(e.gear).name+'）' : '')}</div>
+  </div>`);
+  h += '<button class="close">取消</button></div>';
+  modal.innerHTML = h;
+  modal.querySelector('.close').onclick = ()=> modal.remove();
+  modal.querySelectorAll('.opt').forEach(op=> op.onclick = ()=>{
+    const e = escorts.find(x=> x.id === op.dataset.e);
+    escorts.forEach(x=>{ if(x.gear === id) x.gear = null; });
+    e.gear = id;
+    modal.remove(); toast(e.name + ' 穿戴了' + getGear(id).name); renderStore('weapon');
+  });
+  document.getElementById('wrap').appendChild(modal);
+}
+function equipChoose(id){
+  if(escorts.length === 0){ toast('还没有镖师'); return; }
+  const modal = document.createElement('div'); modal.className = 'modal';
+  let h = `<div class="box"><h3>把「${getWeapon(id).name}」装备给谁？</h3>`;
+  escorts.forEach(e=> h += `<div class="opt" data-e="${e.id}">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <img src="${e.portrait}" style="width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid #6b4f2a;">
+      <div>🐎 ${e.name} <small>Lv.${e.lv} · 武力${e.wuli} · 体${e.tili}</small></div>
+    </div>
+    <div>${e.weapon===id ? '✅当前' : (e.weapon ? '（换下'+getWeapon(e.weapon).name+'）' : '')}</div>
+  </div>`);
+  h += '<button class="close">取消</button></div>';
+  modal.innerHTML = h;
+  modal.querySelector('.close').onclick = ()=> modal.remove();
+  modal.querySelectorAll('.opt').forEach(op=> op.onclick = ()=>{
+    const e = escorts.find(x=> x.id === op.dataset.e);
+    escorts.forEach(x=>{ if(x.weapon === id) x.weapon = null; });
+    e.weapon = id;
+    modal.remove(); toast(e.name + ' 装备了' + getWeapon(id).name); renderStore('weapon');
+  });
+  document.getElementById('wrap').appendChild(modal);
+}
+function buyHerb(id){
+  const hb = getHerb(id); if(silver < hb.cost){ toast('银两不足'); return; }
+  silver -= hb.cost; herbs[id] = (herbs[id] || 0) + 1; toast('购得' + hb.name); renderAll(); renderStore('herb');
+}
+function sellWeapon(id){
+  const w = getWeapon(id); if(!w) return;
+  escorts.forEach(x=>{ if(x.weapon === id) x.weapon = null; });
+  armory = armory.filter(x=> x !== id);
+  const back = Math.round(w.cost * 0.5);
+  silver += back; toast('卖出' + w.name + '，+' + back + '两'); renderAll(); renderStore('weapon');
+}
+function sellGear(id){
+  const gg = getGear(id); if(!gg) return;
+  escorts.forEach(x=>{ if(x.gear === id) x.gear = null; });
+  gearOwned = gearOwned.filter(x=> x !== id);
+  const back = Math.round(gg.cost * 0.5);
+  silver += back; toast('卖出' + gg.name + '，+' + back + '两'); renderAll(); renderStore('weapon');
+}
+function sellHerb(id){
+  const hb = getHerb(id); if((herbs[id]||0) <= 0) return;
+  herbs[id] -= 1; if(herbs[id] <= 0) delete herbs[id];
+  const back = Math.round(hb.cost * 0.5);
+  silver += back; toast('卖出' + hb.name + '，+' + back + '两'); renderAll(); renderStore('herb');
+}
+function useHerb(id){
+  const hb = getHerb(id); if((herbs[id] || 0) <= 0){ toast('没有' + hb.name); return; }
+  const hurt = escorts.filter(e=> e.tili < 100);
+  if(hurt.length === 0){ toast('镖师体力都充沛'); return; }
+  const modal = document.createElement('div'); modal.className = 'modal';
+  let hh = `<div class="box"><h3>用「${hb.name}」恢复谁？（+${hb.heal}体力）</h3>`;
+  hurt.forEach(e=> hh += `<div class="opt" data-e="${e.id}">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <img src="${e.portrait}" style="width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid #6b4f2a;">
+      <div>🐎 ${e.name} <small>体力 ${e.tili}</small></div>
+    </div>
+    <div>→ ${clamp(e.tili+hb.heal,0,100)}</div>
+  </div>`);
+  hh += '<button class="close">取消</button></div>';
+  modal.innerHTML = hh;
+  modal.querySelector('.close').onclick = ()=> modal.remove();
+  modal.querySelectorAll('.opt').forEach(op=> op.onclick = ()=>{
+    const e = escorts.find(x=> x.id === op.dataset.e);
+    herbs[id]--; e.tili = clamp(e.tili + hb.heal, 0, 100);
+    modal.remove(); toast(e.name + ' 服下' + hb.name + '，体力恢复'); renderAll(); renderStore('herb');
+  });
+  document.getElementById('wrap').appendChild(modal);
+}
+function showEscortDetail(id){
+  const e = escorts.find(x=> x.id === id); if(!e) return;
+  const w = e.weapon ? getWeapon(e.weapon) : null;
+  const modal = document.createElement('div'); modal.className = 'modal';
+  modal.innerHTML = `<div class="box">
+    <div style="text-align:center;margin-bottom:16px;">
+      <img src="${e.portrait}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #6b4f2a;">
+      <h3 style="margin-top:10px;">🐎 ${e.name}</h3>
+    </div>
+    <div class="row" style="display:flex;justify-content:space-between;margin:6px 0;"><span>等级</span><span>Lv.${e.lv}</span></div>
+    <div class="row" style="display:flex;justify-content:space-between;margin:6px 0;"><span>武力</span><span>${e.wuli}</span></div>
+    <div class="row" style="display:flex;justify-content:space-between;margin:6px 0;"><span>体力</span><span>${e.tili}</span></div>
+    <div class="row" style="display:flex;justify-content:space-between;margin:6px 0;"><span>经验</span><span>${e.exp} / ${e.lv*30}</span></div>
+    <div class="row" style="display:flex;justify-content:space-between;margin:6px 0;"><span>兵器</span><span>${w ? w.name+'（攻+'+w.atk+' 防+'+w.def+'）' : '徒手'}</span></div>
+    <div class="row" style="display:flex;justify-content:space-between;margin:6px 0;"><span>防具</span><span>${e.gear ? getGear(e.gear).name+'（防御+'+getGear(e.gear).def+'）' : '无'}</span></div>
+    <div class="row" style="display:flex;justify-content:space-between;margin:6px 0;"><span>特质</span><span>${e.trait ? e.trait.name+'（'+e.trait.desc+'）' : '无'}</span></div>
+    <div class="row" style="display:flex;justify-content:space-between;margin:6px 0;"><span>战绩</span><span>${e.wins}胜 ${e.losses}负</span></div>
+    ${ (e.busy || escorts.length<=1) ? '<div style="font-size:12px;color:#8a7a55;margin-top:8px;">（出镖中或仅剩一人，暂不可解雇）</div>' : `<button class="danger" id="dismissBtn" style="width:100%;margin-top:10px;padding:9px;">🚫 解雇（返还 ${Math.floor((e.cost||0)*0.5)} 两）</button>` }
+    <button class="close">关闭</button></div>`;
+  modal.querySelector('.close').onclick = ()=> modal.remove();
+  const db = modal.querySelector('#dismissBtn'); if(db) db.onclick = ()=> confirmDismiss(e.id, modal);
+  document.getElementById('wrap').appendChild(modal);
+}
+document.querySelectorAll('#storeModal .tabs button').forEach(b=> b.onclick = ()=> renderStore(b.dataset.tab));
+document.getElementById('storeClose').onclick = ()=> closeStore();
+document.getElementById('achBtn').onclick = ()=> showAchievements();
+
+function confirmDismiss(id, detailModal){
+  const e = escorts.find(x=> x.id === id); if(!e) return;
+  const refund = Math.floor((e.cost||0)*0.5);
+  const modal = document.createElement('div'); modal.className = 'modal';
+  modal.innerHTML = `<div class="box"><h3>解雇 ${e.name}？</h3>
+    <p style="color:#c9b48c;font-size:14px;line-height:1.6;">将返还招募费一半：<b style="color:#ffd479">${refund} 两</b>。<br>其携带的兵器 / 防具自动归还库房。</p>
+    <div style="display:flex;gap:10px;margin-top:14px;">
+      <button class="danger" id="dismissYes" style="flex:1;padding:9px;">确认解雇</button>
+      <button class="close" id="dismissNo" style="flex:1;padding:9px;">取消</button>
+    </div></div>`;
+  document.getElementById('wrap').appendChild(modal);
+  modal.querySelector('#dismissNo').onclick = ()=> modal.remove();
+  modal.querySelector('#dismissYes').onclick = ()=>{
+    const r = Math.floor((e.cost||0)*0.5);
+    silver += r;
+    escorts = escorts.filter(x=> x.id !== id);
+    modal.remove();
+    if(detailModal) detailModal.remove();
+    toast('🚫 已解雇 ' + e.name + '，返还 ' + r + ' 两');
+    renderAll();
+    openStore('roster');
+  };
+}
+function win(){
+  state='over';
+  document.getElementById('overTitle').textContent = '威震武林';
+  document.getElementById('finalScore').innerHTML = `声望达 ${repute}，镖局 ${biaojuLv} 级，银两 ${silver}。<br>你的「威远镖局」名动天下！`;
+  document.getElementById('overScreen').classList.remove('hidden');
+}
+function lose(){
+  state='over';
+  document.getElementById('overTitle').textContent = '镖局歇业';
+  document.getElementById('finalScore').innerHTML = `银两耗尽、镖师力竭。<br>江湖路远，来日再战。`;
+  document.getElementById('overScreen').classList.remove('hidden');
+}
+
+// ===== 背景装饰：镖局牌匾 + 全屏适配 =====
+function bg(){
+  // 根据场景切换背景图
+  const bgHall = document.getElementById('bgHall');
+  const bgLandscape = document.getElementById('bgLandscape');
+  const bgBattle = document.getElementById('bgBattle');
+  
+  bgHall.style.display = bgMode === 'hall' ? 'block' : 'none';
+  bgLandscape.style.display = bgMode === 'landscape' ? 'block' : 'none';
+  bgBattle.style.display = bgMode === 'battle' ? 'block' : 'none';
+  
+  ctx.clearRect(0,0,W,H);
+  
+  // 半透明遮罩层
+  ctx.fillStyle='rgba(21,17,12,0.65)'; 
+  ctx.fillRect(0,0,W,H);
+  
+  // 镖局牌匾
+  ctx.fillStyle='#3a2c18'; 
+  ctx.fillRect(W/2-100,40,200,60);
+  ctx.fillStyle='#ffd479'; 
+  ctx.font='bold 28px serif'; 
+  ctx.textAlign='center';
+  ctx.fillText('威远镖局', W/2, 80);
+  
+  // 灯笼
+  ctx.font='32px serif'; 
+  ctx.fillText('🏮', W/2-120, 70); 
+  ctx.fillText('🏮', W/2+120, 70);
+  
+  // 镖师站台（带头像）
+  const startX = W/2 - (escorts.length * 80) / 2;
+  escorts.forEach((e,i)=>{
+    const x = startX + i * 80;
+    const y = H - 100;
+    
+    // 头像
+    const img = new Image();
+    img.src = e.portrait;
+    ctx.drawImage(img, x-25, y-50, 50, 50);
+    
+    // 头像边框
+    ctx.strokeStyle = '#6b4f2a';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(x, y-25, 26, 0, Math.PI*2);
+    ctx.stroke();
+    
+    // 名字和状态
+    ctx.fillStyle='#d8c8a8'; 
+    ctx.font='13px sans-serif';
+    ctx.fillText(e.name+'·武'+e.wuli, x, y+10);
+    ctx.fillStyle='#ffd479'; 
+    ctx.fillText('体力'+e.tili, x, y+28);
+    
+    if(e.busy){
+      ctx.font='28px serif';
+      ctx.fillText('🐴', x, y-60);
+    }
+  });
+}
+let last=performance.now();
+function loop(now){
+  const dt=(now-last)/1000; last=now;
+  if(state==='playing'){ 
+    bg(); 
+  }
+  requestAnimationFrame(loop);
+}
+
+// 响应窗口大小变化
+window.addEventListener('resize', () => {
+  W = window.innerWidth;
+  H = window.innerHeight;
+  cv.width = W;
+  cv.height = H;
+});
+
+// 初始化canvas尺寸
+cv.width = W;
+cv.height = H;
+
+requestAnimationFrame(loop);
+
+// ===== UI 绑定 =====
+document.getElementById('bgmBtn').onclick = ()=>{
+  const on = toggleBGM();
+  document.getElementById('bgmBtn').textContent = on ? '🎵 音乐·开' : '🎵 音乐·关';
+};
+document.getElementById('storeBtn').onclick = ()=> openStore();
+document.getElementById('authLogin').onclick = ()=> doLogin();
+document.getElementById('authReg').onclick = ()=> doRegister();
+document.getElementById('authGuest').onclick = ()=> guestPlay();
+document.getElementById('saveBtn').onclick = ()=> showSlotPicker('save');
+document.getElementById('loadBtn').onclick = ()=> {
+  if(combat){ toast('战斗中无法读档'); return; }
+  showSlotPicker('load');
+};
+document.getElementById('accountBtn').onclick = ()=> doLogout();
+document.getElementById('exitBtn').onclick = ()=> confirmExit();
+document.getElementById('startBtn').onclick = ()=>{
+  reset();
+  document.getElementById('startScreen').classList.add('hidden');
+  if(!bgmOn){ toggleBGM(); document.getElementById('bgmBtn').textContent='🎵 音乐·开'; }
+};
+document.getElementById('restartBtn').onclick = ()=>{
+  reset();
+  document.getElementById('overScreen').classList.add('hidden');
+};
+// 初始画一帧背景
+bg();
+</script>
+</body>
+</html>
