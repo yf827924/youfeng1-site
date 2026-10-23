@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第三百三十三章 · 量手 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第三百三十三章 · 量手</h1>
+  <p>「半声也算」这句话传了三天。</p>
+  <p>传法很简单：吴家嫂子自己站到村口的石碾子上，把手举起来给人看。她的食指白到第二个关节，只有一根指头，举起来的时候太阳照在手背上，那一节是灰白的，跟旁边的手指不一样。她举了一炷香，一句话没有说，然后下来走了。她不认字，也说不出什么道理，她只知道把手举起来。村里人看见那一节灰白，比听见十句话都管用。</p>
+  <p>第三天，自己来举手的有了三个。来的人不是一起来的：头一个清早来，第二个晌午来，第三个天快黑了才来。三个人站在场院上，互相不看。</p>
+  <p>头一个是吴家嫂子。她男人去年走了，家里两个孩子，一个八岁一个五岁。她来的时候把两个孩子也带来了，让他们站在场院边上，不许出声。她穿的是洗得发白的青布褂子，头发梳得很紧。她站到场院中间的时候，两腿是并着的，脚跟靠得死紧。</p>
+  <p>第二个是孙婆。孙婆六十七，牙全掉了，说话漏风。她说她那年也张了嘴，出了半个音，是她自己咽回去的，咽的时候把舌头咬了，肿了半个月。她走得很慢，一步一步挪到场院中间，挪到了就站住，两只手先伸出来，伸完才说话。</p>
+  <p>第三个是满仓。满仓十三，是周家的老三，个子还没有他娘高。他来了之后不说话，只把手伸出来。他的右手食指不白，是凉的——摸上去像摸到一块放在阴处的石头。他站在两个人后头，个子矮，只露出半个头。他来了之后不说话，只把手伸出来，伸得直直的，像交什么东西。</p>
+  <p>他一个一个看过去，看完站在门槛前两步，没有往前走。两步是他定的界。他这半个月说话都站在这个位置上，从来没有跨过去一步，哪怕对面是个孩子。</p>
+  <p>他说：你们三个，从今天起不许守夜。</p>
+  <p>吴家嫂子说：我来就是要守。</p>
+  <p>他说：我知道。</p>
+  <p>吴家嫂子说：半声也算，是你说的。</p>
+  <p>他说：是我说的。半声也算，可半声的人不能守。</p>
+  <p>吴家嫂子说：为什么。</p>
+  <p>他说：应过的人身上已经有一半在门那头了。站上去不是守，是喂。</p>
+  <p>满仓在这时候开口了。他的声音很细，他说：我没有应过。</p>
+  <p>他说：你伸出来的这只手是凉的。</p>
+  <p>满仓说：我没有应过。我就是听见了。</p>
+  <p>他说：听见了，就够了吗。</p>
+  <p>满仓说：我不知道。</p>
+  <p>他蹲下来，跟满仓一般高，说：你把那天的事说一遍，说慢一点。</p>
+  <p>满仓说：那天夜里我起来解手，听见有人叫我的名字，叫得很全。我没有应，我把嘴闭着。可我听见的时候，脚自己往前走了两步。</p>
+  <p>他说：走了两步。</p>
+  <p>满仓说：走了两步就停住了。我心里知道不能走，可我脚先动了。</p>
+  <p>他站起来，看着满仓的脚。满仓的鞋是旧的，鞋头破了一个洞，露出里头的脚趾。他看的不是鞋，是脚背——脚背上有一道浅印，是鞋带勒的，勒得很深。</p>
+  <p>他心里说：脚先动，脖子先动，嘴最后动。这三样都比人快。人能管住的只有嘴，管不住脚，也管不住脖子。所以他教的三步里，第一步才不是「别应」，是「应了别慌」。</p>
+  <p>他把这句话在心里说了一遍，说第二遍的时候加了一句：这三样都比人快。</p>
+  <p>他让三个人站在场院的东头，自己在西头搬了一张凳子坐下，然后叫第一个人过来。东头有一堵矮墙，墙根下有一排石头。他让他们坐在石头上，说：坐着等，一个一个来，不急。</p>
+  <p>量手是他自己想出来的。想了两夜。头一夜他想的是一双手一双地看，看完记在心里；第二夜他改了：记在心里不算记，记在墙上才算。心里会忘，墙上不会。</p>
+  <p>他先前只知道一样：白。白到哪一节，就收了多少。可白是看得见的，凉是看不见的。看得见的能记账，看不见的不能。白是这半个月唯一能拿出来给人看的东西。他跟人讲道理讲不通，把手一伸，人一看，就通了。</p>
+  <p>所以他定了三样：白到哪一节、凉到哪里、按下去回不回血。三样里头，白最准，可白只在应得实的人身上才看得出；凉比白早，凉是头一样来的；回血最慢，可回血能看出一个人还剩多少。</p>
+  <p>白用眼睛看。凉用手指背贴。回血用手指按一下，按完数三个数，松开，看那一块是马上红回来，还是慢。看的时候要在日头底下看，不能在灯下看。灯照出来的白是假的，日头照出来的白才是那个白。</p>
+  <p>吴家嫂子先来。她的食指白到第二个关节，别的指头是好的。凉到手腕下一寸。按下去回血慢，数到三个数还是白的。她坐得笔直，把手放在膝盖上，手心朝上。他摸的时候她的手指头动了一下，动完就压住了。</p>
+  <p>他在土墙上写：吴家嫂子，一指二节，凉一寸，回血慢。</p>
+  <p>孙婆第二。她的手指不白，可她整只手是凉的，凉到肘。按下去回血快。</p>
+  <p>他在土墙上写：孙婆，不白，凉到肘，回血快。</p>
+  <p>满仓第三。他的食指凉，不白，凉到指根。按下去回血快。</p>
+  <p>他在土墙上写：满仓，不白，凉到指根，回血快。</p>
+  <p>写完他退后两步看那面墙。土墙是黄泥的，炭字写上去是黑的，黑得很清楚。他看着那三行字，忽然觉得这面墙比门槛还重。</p>
+  <p>墙上从前只写两样东西：谁家的地、谁家的粮。现在多了三行字，三行字写的都是人。那两样都是能数的东西：几亩、几斗、几升。现在多了人。人也能数，可数出来的是减法——数一个，少一个。</p>
+  <p>他心里说：这是村里第一本数人的账。</p>
+  <p>第二天他把全村人都叫到了场院上。他没有敲锣，也没有让人去喊。他只让陈四在村里走了一圈，说了一句话：都到场院上来，量手。</p>
+  <p>不是叫应过的人，是叫所有人：男人、女人、老人、孩子，连抱在怀里的都算。他站在门槛前两步，说：把手伸出来，我摸一遍。应过的人自己知道应过，没应过的人不知道自己应没应过。半声的人最不清楚——他们一直以为半声不算。</p>
+  <p>有人问：摸手做什么。</p>
+  <p>他说：记账。</p>
+  <p>有人问：记什么账。</p>
+  <p>他说：记谁还能站，谁不能站。</p>
+  <p>场院上静了一下。然后有人把手伸出来了，先是一个，再是三个，再是一片。静的时候有人往后退了半步，退完又站回来。他看见了，没有说破。</p>
+  <p>他从东头往西头走，一个一个摸。摸到一个人的时候他会说一句话：手伸平。就三个字，说完就摸，摸完就走，不停。</p>
+  <p>摸到第十个人的时候，他摸出了一件事：有些人的手是白的，可他们不承认应过。有一个女人的手白到第二节，她说她没有应过，说得很快，快得像背过的。他没有问，只在她名字后头写了一个二。</p>
+  <p>他不问。他只记。</p>
+  <p>他记的规矩是自己定的：白到第一节，写一；白到第二节，写二；白到小臂，写三；白到肘，写四。凉另记，凉到手腕写一寸，凉到肘写一尺。定的时候他在心里算过：分得越细，记得越准；可分得太细，人就会拿数当命。他最后只分了四等，四等以外的不记。</p>
+  <p>一个上午，他摸完了四十七个人。四十七不是全村的人数。全村一百二十来口，能走到场院上的只有四十七个：剩下的是走不动的老人、抱在怀里的孩子，还有几个躲着没来的。</p>
+  <p>四十七个人里，应过的有七个：一个白到肘，三个白到小臂，两个白到第二节，一个白到第一节。半声的有三个。剩下三十七个，手是干净的。七个里头，最深的那一个是陈四。陈四的手白到肘，他把袖子挽起来给人看的时候，场院上有人抽了一口气。</p>
+  <p>他把这四组数写在土墙上，写完蹲下去看。他蹲着看的时候，用手在土上把四个数圈起来，圈完在中间画了一道线。线左边是应过的，线右边是干净的。</p>
+  <p>他心里说：七个应过，三个半声，三十七个干净。</p>
+  <p>他心里说：干净的有三十七个，可干净的里头，能站的只有四个。</p>
+  <p>这四个跟那三十七个不是一回事。三十七是没应过的，四是能站整夜的。能站整夜要三样：腿没有病、腰没有伤、家里不用他夜里回去。三十七个人是没被收过的，他们能干活、能吃饭、能睡觉。四个人是能站整夜的，他们得把整夜交出去。这两样不能互相替。</p>
+  <p>他数的时候把这三样在嘴里过了一遍，过完发现全村只有四个。过完他抬头看了看天。天阴着，云压得很低。他心里想：要是下雨，这四个人里有两个要病。</p>
+  <p>下午他把这四组数念给全村听。他念得很慢，一个数一个数念。念到人名的时候不念，只念数。他说：名字不念，念了就是叫。</p>
+  <p>念到「七个应过」的时候，场院上没有人说话。念到「三个半声」的时候，吴家嫂子把头低下了。念到「三十七个干净」的时候，有人松了一口气，那口气松得很响。</p>
+  <p>他说：还有一组数。</p>
+  <p>他说：肘以上的，我一个没有摸着。</p>
+  <p>他说：肘以上是什么，我不说，你们自己想。</p>
+  <p>场院上静得能听见风。风从村口那边过来，吹到场院上还是硬的，吹得人衣角都抬起来。没有人说话，也没有人走。</p>
+  <p>孙婆在这时候说了一句：肘以上是肩。肩下面是心口。</p>
+  <p>他说：对。</p>
+  <p>孙婆说：那要是凉到肩了呢。</p>
+  <p>他说：那就不是站不站的事了。</p>
+  <p>孙婆没有说话。她把手缩回袖子里，缩得很慢。缩完她把两只手交叉着抱在怀里，抱得很紧，像怕手自己跑掉。</p>
+  <p>量到丫丫的时候，天已经擦黑了。擦黑的时候手是看不清的，他让她把手举到灯底下。灯是白灯，照出来的白是假的，可他只能这样看。</p>
+  <p>丫丫排在最后，她自己排的。轮到她的时候她把两只手都伸出来，手心朝上，伸得很平。</p>
+  <p>他先摸右手。手指是热的，一节一节摸过去，摸到食指第二节的时候，他的手停住了。摸的顺序是他定的：先右手，再左手，先食指，再中指。食指最灵，也最先被收；中指其次；无名指和小指最钝，钝到最后才凉。</p>
+  <p>那里有一道很浅的白。</p>
+  <p>不是白到一节，也不是白到两节，是白了一道——横着，半指长，宽不到一分，像一道没有长开的痕。</p>
+  <p>他把她的手指翻过来看，又翻过去看。看了三遍。翻过来看是指腹，翻过去看是手背。指腹上有纹，纹是清楚的；手背上有皮，皮是薄的。两边都看，才敢下判断。</p>
+  <p>他说：你应过？</p>
+  <p>丫丫说：没有。</p>
+  <p>他说：一声都没有？</p>
+  <p>丫丫说：一声都没有。我听见了，我把嘴闭着，我数数，我数到一百它就不叫了。</p>
+  <p>他说：那你手上这道白是怎么来的。</p>
+  <p>丫丫说：我不知道。</p>
+  <p>他蹲在那儿，把她的食指捏在手里，捏了很久。捏的时候他能感觉到她的手指在跳。跳得很轻，一下一下，跟他自己的手指不是一个拍子。</p>
+  <p>他心里说：她没应过，可她天天念。</p>
+  <p>念别人的全名，能把共有的那一截念回来。这是她自己找出来的法子，用了半个月。半个月里她天天在村口念，念村里每一个人的名字，一天三遍。</p>
+  <p>他心里说：补也能补出痕来。这个念头一出来，他的手就凉了一下。他想起自己教她的时候说过一句话：叫别人的全名，会把自己缺的那一截带回来。他当时没有说下一句：带回来的东西，也在身上留印子。</p>
+  <p>这个念头一出来，他的手就凉了一下。</p>
+  <p>他想起自己说过的话：同一件东西，正着拿是收，反着拿是补。他当时只想到好的一面——反着拿能把缺的补回来。他没有想到另一面：补也是拿；拿多了，手上也会留印子，而且那印子跟收出来的长得一模一样。</p>
+  <p>他放开丫丫的手，说：从今天起你不要念了。</p>
+  <p>丫丫说：不念了？</p>
+  <p>他说：停一天。</p>
+  <p>丫丫说：停一天会怎么样。</p>
+  <p>他说：我看这道白退不退。</p>
+  <p>丫丫说：要是退了呢。</p>
+  <p>他说：退了就是补出来的。</p>
+  <p>丫丫说：要是不退呢。</p>
+  <p>他没有答。</p>
+  <p>天黑透了。场院上的人都散了，只剩下土墙上那几行字。字是他用炭写的，炭写的字经不住露水，明早就会淡。字是他用炭写的。炭写的字经不住露水，明早就会淡；可淡了还在，淡了还能再写深。</p>
+  <p>他站在墙前看了一会儿，抬手把「七个」那个数抹掉，重新写了一遍，写得比原来深。</p>
+  <p>他抹的时候手抖了一下。他知道自己为什么抖：七个应过的人，一排，正好一人长。这条数他算过两遍，两遍一样。他抖不是怕那个数，是怕这个数被人看见。七个应过的人，一排，正好一人长——这句话他只在心里说过，没有写。他抖完还是抹了，抹得很平，抹到看不出原来写的是什么。抖完他没有立刻动手，站在墙前等了一会儿，等手不抖了。</p>
+  <p>第二天天刚亮，他先去看丫丫的手。他起的时候天还是青的，鸡叫了头一遍。他走到门槛外头，看见她已经站在那儿了，两只手插在袖子里，等人。</p>
+  <p>丫丫起得比他早，站在门槛外头等他，两只手伸在前面。他把她的食指捏起来，对着日头看。</p>
+  <p>那道白没有退。不但没有退，还清楚了半分。他把她的手指对着日头转了两个角度，两个角度都看得见。</p>
+  <p>不但没有退，还清楚了半分。昨天是要偏着头才看得见，今天正着看就看得见。</p>
+  <p>他捏着她的手指，很久没有说话。他捏着的时候在心里算：昨天是半分，今天是半分半。一天多出半分，十天就是五分。五分是一节的一半。</p>
+  <p>丫丫说：退了么。</p>
+  <p>他说：没有。</p>
+  <p>丫丫说：那是不是我应过。</p>
+  <p>他说：不是。</p>
+  <p>丫丫说：那是什么。</p>
+  <p>他说：是补出来的。</p>
+  <p>丫丫想了一会儿，说：补出来的，要紧么。</p>
+  <p>他说：要紧。</p>
+  <p>丫丫说：要紧在哪儿。</p>
+  <p>他说：补出来的痕，跟收出来的痕，长得一样。往后谁看见你手上这道白，都会以为你应过。</p>
+  <p>丫丫把手收回去，把手插进袖子里。她插得很慢，插完抬头看他。她插得很慢，插完把袖子往下拉了拉，拉到手背都盖住。这个动作他见过——应过的人都是这么藏手的。</p>
+  <p>她说：那我就说我没有应过。</p>
+  <p>他说：别人不信。</p>
+  <p>丫丫说：你信就行。</p>
+  <p>他没有说话。</p>
+  <p>他心里说：补是有账的。</p>
+  <p>他心里说：这本账我昨天才开始记，记的时候以为只有一边。现在知道有两边：一边是收，一边是补。两边都记账，两边都要还。</p>
+  <p>日头升到屋脊上头，照在土墙上。墙上那几行炭字淡了一半，「四十七」那个数还看得清，「七个」那个数是他昨晚重写的，还深着。深的那一个看着比别的高，像后刻上去的。</p>
+  <p>他站在墙前，把袖子挽起来，看自己的手。他把两只手放在日头底下比：左手是暖的，右手是凉的，凉只到手腕上一寸，再往上还是暖的。</p>
+  <p>右手食指白到指根，中指凉到手腕上一寸，手背上有三道白印，是刮门框刮的。他把手翻过来，看手心。手心上什么都没有，是干净的。</p>
+  <p>他心里说：收的账在身上，补的账也在身上。</p>
+  <p>他把袖子放下来，走到三步的位置上，站住。站住的时候他想起一件事：这本账上还没有他自己。他一直没有量自己的手，因为不敢。他站在那儿，把手插进袖子里，插到手指全都不露出来。</p>
+  <p>第三百三十三章 完</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，轻点显示/隐藏 ===== */
+  var TOTAL=365;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null,dragging=false;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+
+  /* 翻页：只有「横向滑动」（>64px 且横向明显占优）才翻章；轻点只开关工具栏。
+     不再用「点侧边就翻页」，避免误点一下就莫名跳章。 */
+  var sx=0,sy=0,stk=false,moved=false;
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a"))return;
+    sx=e.clientX||0;sy=e.clientY||0;stk=true;moved=false;
+  },{passive:true});
+  document.body.addEventListener("pointermove",function(e){
+    if(!stk)return;
+    if(Math.abs((e.clientX||0)-sx)>10||Math.abs((e.clientY||0)-sy)>10)moved=true;
+  },{passive:true});
+  document.body.addEventListener("pointerup",function(e){
+    if(!stk)return;stk=false;
+    var dx=(e.clientX||0)-sx,dy=(e.clientY||0)-sy;
+    if(Math.abs(dx)>=64&&Math.abs(dx)>Math.abs(dy)*1.6){
+      if(dx<0&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+      if(dx>0&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    }
+    if(!moved){if(document.body.classList.contains("ui-show"))hide();else show();}
+  },{passive:true});
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  /* ===== 进度与书签：每本书只有两格 =====
+     ① auto   自动存档位：读到哪里自动记，无需操作
+     ② manual 手动书签位：点一下按钮钉住，全书共享这一个
+     进页面时绝不擅自跳转，只给提示；只有从「续读/书签」入口进来才定位。 */
+  var RKEY="hugo_reader_v1";
+  var mm=location.pathname.match(/gudo-(\d+)/);
+  var CH=(mm?parseInt(mm[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var TITLE=h1?h1.textContent.trim():("第"+CH+"章");
+
+  function migrate(d){
+    if(!d.auto&&!d.manual&&(d.bookmark||d.resume||d.chapters)){
+      var nd={};
+      if(d.resume&&d.resume.ch){nd.auto={ch:d.resume.ch,pct:d.resume.pct|0,t:d.resume.t||0};}
+      if(d.bookmark&&d.bookmark.ch){nd.manual={ch:d.bookmark.ch,pct:d.bookmark.pct|0,t:d.bookmark.t||0};}
+      return nd;
+    }
+    return d;
+  }
+  function loadR(){
+    var d={};
+    try{d=JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){d={}}
+    var o=migrate(d);
+    if(o!==d){try{localStorage.setItem(RKEY,JSON.stringify(o))}catch(e){}}
+    return o;
+  }
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function scrollToPct(p){var h=maxH();if(h>0)window.scrollTo(0,Math.round(h*p/100));}
+
+  var cur=loadR();
+  var A=cur.auto||null, B=cur.manual||null;
+  var hash=location.hash;
+
+  /* 只在带 #auto / #manual 进来时定位；多点几次，等版式稳定，避免“跳歪” */
+  var restoring=false;
+  function restore(p){
+    if(!(p>0))return;
+    restoring=true;
+    [0,90,220,420,700].forEach(function(dt){
+      setTimeout(function(){if(restoring)scrollToPct(p);},dt);
+    });
+    setTimeout(function(){restoring=false;},960);
+  }
+  addEventListener("wheel",function(){restoring=false;},{passive:true,once:true});
+  addEventListener("touchstart",function(){restoring=false;},{passive:true,once:true});
+
+  if(hash==="#manual"&&B&&B.ch===CH&&B.pct>0){restore(B.pct);}
+  else if(hash==="#auto"&&A&&A.ch===CH&&A.pct>0){restore(A.pct);}
+  else{
+    var wrap=document.querySelector(".wrap");
+    if(B&&B.ch&&B.ch!==CH){
+      var x=document.createElement("div");x.className="resume-tip";
+      x.innerHTML="🔖 书签在 <a href='gudo-"+B.ch+".html#manual'>第"+B.ch+"章</a>（钉在 "+B.pct+"%）";
+      wrap.prepend(x);
+    }
+    if(A&&A.ch===CH&&A.pct>=3&&A.pct<97){
+      var tip=document.createElement("div");tip.className="resume-tip";
+      tip.innerHTML="📌 上次读至 "+A.pct+"% · <a href='javascript:void(0)' id='resumeGo'>回到原位</a>";
+      wrap.prepend(tip);
+      document.getElementById("resumeGo").onclick=function(){tip.remove();scrollToPct(A.pct);};
+    }
+    if(B&&B.ch===CH&&B.pct>0){
+      var btip=document.createElement("div");btip.className="resume-tip";
+      btip.innerHTML="🔖 本章书签：钉在 "+B.pct+"% · <a href='javascript:void(0)' id='bmGo'>回到书签</a>";
+      wrap.prepend(btip);
+      document.getElementById("bmGo").onclick=function(){btip.remove();scrollToPct(B.pct);};
+    }
+  }
+
+  /* 自动存档：随滚动更新（节流 1.2s），离开页面再记一次 */
+  var timer=null;
+  function record(){
+    var mh=maxH();if(mh<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/mh*100));
+    var d=loadR();d.auto={ch:CH,pct:p,t:Date.now()};saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record();},1200)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(record,800);
+
+  /* 手动书签：一键钉住 / 再点清除（全书仅此一格） */
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  function paint(){
+    var b=(loadR().manual)||null;
+    if(b&&b.ch===CH&&b.pct>0)btn.textContent="🔖 书签 "+b.pct+"%";
+    else if(b&&b.ch)btn.textContent="🔖 书签·第"+b.ch+"章";
+    else btn.textContent="🔖 书签";
+  }
+  document.getElementById("__bmSlot").appendChild(btn);
+  paint();
+  btn.onclick=function(){
+    var mh=maxH();
+    var p=mh>0?Math.min(100,Math.round(document.documentElement.scrollTop/mh*100)):0;
+    var d=loadR();
+    if(d.manual&&d.manual.ch===CH&&Math.abs((d.manual.pct||0)-p)<=2){
+      delete d.manual;saveR(d);paint();
+      btn.textContent="已清除书签";setTimeout(paint,1400);
+    }else{
+      d.manual={ch:CH,pct:p,t:Date.now()};saveR(d);paint();
+      btn.textContent="✓ 已存书签 "+p+"%";setTimeout(paint,1600);
+    }
+  };
+})();
+
+</script>
+</body>
+</html>

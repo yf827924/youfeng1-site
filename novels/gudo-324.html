@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第三百二十四章 · 粥 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第三百二十四章 · 粥</h1>
+  <p>碗没有地方放。这是第四天早上的事。第四天的意思是，他跨在门槛上已经过了四夜。夜里的更次他现在记得很清楚：一更、二更、三更、四更、五更。这几天他吃饭都是个难题。婆子端着碗站在三步外，他得伸着脖子去够；够着了还要看缝，缝一宽就得退回来。一顿饭吃得比站一夜还累。他后来想，人活着原来不是靠站着，是靠这些琐碎的事。</p>
+  <p>门框那道浅槽只有一指宽，碗底圆，搁上去要斜着，一斜就滑。婆子试了三回，第三回碗翻在地上，粥泼了一半。槽是门轴转了几十年转出来的，槽口朝上，里面积着黑泥和碎木屑。第一回碗滑下来，她用手接住了；第二回碗歪了，粥洒出一点；第三回她没有接住，碗在地上转了半圈，扣住了。</p>
+  <p>婆子蹲下去，用手指把地上的粥刮回碗里，刮得很仔细，连土粒都挑出去。她刮的时候嘴里念了一句什么，他没有听清。像是骂人，又像是在跟谁赔不是。</p>
+  <p>他站在门槛上看着，没有出声。他不能弯腰。他试过一次，弯到一半，腰离开门板，缝立刻宽了一指。他直起来，缝又收回去，收得比宽的时候慢。</p>
+  <p>婆子站起来，说：我去拿泥。她走得很快。他后来才知道她是跑回自家灶房，从灶膛底下挖的泥——灶膛的泥烧过，结实。</p>
+  <p>她拿来一团湿泥，在浅槽里垫了一圈，垫成一个窝，把碗按进去。碗就稳了。婆子把碗按进去，又用手指在碗沿外头抹了一圈，把挤出来的泥抹平。他把左手从刀柄上挪开半寸，用指尖碰了碰碗。碗不动。他这才把手指收回去。</p>
+  <p>他说：这地方好。他说的是真话。这两天他把门框上每一处都摸过一遍，只有这里能放东西。</p>
+  <p>婆子说：这地方不好。她说：泥干了会裂。</p>
+  <p>他说：那就每天垫。</p>
+  <p>婆子看了他一眼，说：行。她说：反正我一天来三回。三回是早饭、晌午、天黑前。她说三回都是热的，凉了她再端回去。</p>
+  <p>碗稳了，可是吃不着。</p>
+  <p>他一只手按门框，一只手按刀柄。两只手都不能松。碗在浅槽上，离他的嘴有一尺半，他够不着。他量过：一尺半是他伸着脖子能够着的极限，再远半寸就得动腰。</p>
+  <p>婆子说：我端给你。她端碗的时候两只手都上了，一只手托底，一只手扶边。她的手在抖，抖得碗里的粥起了细纹。</p>
+  <p>她说这话的时候已经伸手了，把碗端起来，端到他嘴边。</p>
+  <p>他低头吃了一口。他吃得很小心，先把嘴凑上去，嘴唇碰到碗沿，才敢吸。低头之前他先试了一下：头低下去，上身就往前；上身往前，腰就离门板。他算过，低头这一下的工夫，缝最多宽半分。他吃饭的时候不看人，只看碗。他怕一抬头，眼睛就去看门后头那道缝。</p>
+  <p>低头的那一瞬，他的上身往前倾，腰离开棉袄，离开门板。</p>
+  <p>缝宽了。</p>
+  <p>宽得很小，只有半分。可他嘴里那口粥还没有咽下去，就得先把身子直回来。半分是他自己量的。他用门框上第一个凹的边做尺——那个凹的深浅就是半分。他量过很多回，闭着眼都能量。</p>
+  <p>粥在嘴里，热的，烫得舌头发麻。他没有吐出来。吐出来就要低头，低头缝又要宽。他含着，等它凉。</p>
+  <p>婆子说：你慢点。</p>
+  <p>他含着粥，点了点头。点头也算动，他一动不动地站着，等嘴里的粥凉一点。粥是小米熬的，里头有几粒没有熬开，硌牙。他把那几粒在舌头上推来推去，推到一边。</p>
+  <p>婆子把碗端回去，端在手里等着。她等着的时候一句话也不说。她这半个月学会了一件事：他不动的时候，最好也别动。</p>
+  <p>他咽了第一口。他咽的时候没有想。人咽东西是不会想的，喉咙自己就动了。</p>
+  <p>咽的时候喉咙里出了一声。</p>
+  <p>那一声很短，很轻，不是话，也不是咳，是从喉咙深处带出来的一点气音——像一个「嗯」，又不像。人在咽东西的时候都会有这一声，谁都一样，自己听不见。他自己听得见。这几天他听得见很多以前听不见的声音：自己的血、自己的骨头、自己咽东西。</p>
+  <p>他听见了。他自己抓住了这一声，像抓住一只从袖子里溜出去的东西。他心里一紧，紧得手心出汗。</p>
+  <p>他自己抓住了这一声。抓住的意思是：他知道了，他记住了，他以后要防它。</p>
+  <p>他不动了。整个人定在那儿，连眼睛都不转。他心里飞快地想：这一声有多响，响到哪儿去了，门后头听不听得见，听见了算不算。</p>
+  <p>婆子在对面，看见他这样，也不敢动，碗端在半空。碗端久了她的手开始抖。她换了一只手，换的时候碗沿碰了一下她的胸口，没有一点声音。</p>
+  <p>村口那棵槐树上有一只鸟叫了两声，叫完飞走了。他不认识那只鸟。村里人说那是灰喜鹊，可灰喜鹊的尾巴更长，这一只没有。飞走的时候翅膀擦过树叶，树叶响了一阵，响完又静下来。</p>
+  <p>他等着。</p>
+  <p>门后头没有声音。门板还是凉的，缝还是那一掌半，灰还是那层灰。他把耳朵往门板上靠了靠，靠得很近，近到能听见自己耳朵里的血。门板那边什么都没有。</p>
+  <p>他等了大概二十个数。二十个数是他自己定的。他数得不快，数到二十，一口气刚好用完。</p>
+  <p>然后他慢慢地、很轻地把那口气吐出来。吐气比吸气难。吸气是抢，吐气是放；放的时候手会松。他吐到一半，右手在门框上按了一下，按得指节发白。</p>
+  <p>婆子小声问：怎么了。她问的时候把碗搂在怀里，像护着一个孩子。</p>
+  <p>他说：我咽东西的时候，喉咙响了一下。</p>
+  <p>婆子说：人咽东西都响。她说：我咽东西也响。她说：我孙子喝粥响得跟小猪一样。她说这话的时候嘴角动了一下，像是要笑。</p>
+  <p>他说：我知道。</p>
+  <p>婆子说：那怎么了。</p>
+  <p>他说：它没有应。</p>
+  <p>婆子不明白。她说：没有应不是好事么。</p>
+  <p>他说：是好事。他说：可我不知道为什么。他说这句话的时候眼睛看着门板，不看婆子。</p>
+  <p>他把这件事在心里过了一遍。它叫人的名字，人应一声，界就薄半分。它应不应一声咽东西的响，他不知道。它是没有听见，还是听见了不算，还是听见了、正在记。他过得很慢。他这个人想事情就是这个样子：先把能确定的放在一边，再想不能确定的。确定的是它没有应；不能确定的是为什么。这三种差别很大。头一种是无事，第二种是宽恕，第三种最坏——第三种的意思是它在等一个价。</p>
+  <p>他想不出。他把能想到的几种可能排了一遍：听见了不认，认了不划账，划了账不显。三种都说得通，三种都没有凭据。</p>
+  <p>婆子说：还吃么。他说吃的时候看了她一眼。他这半个月很少看人的眼睛。</p>
+  <p>他说：吃。</p>
+  <p>这一回他学聪明了。他先把嘴闭紧，把舌头往下压，压住舌根；然后不吸气，直接咽。闭紧是上下牙咬住，嘴唇再抿上。他试了两次才找对那个劲。</p>
+  <p>咽下去了。一点声音都没有。他自己听着，耳朵里只剩血的声音，闷闷的，一下一下。</p>
+  <p>他自己听着，确实没有。</p>
+  <p>他抬起头。婆子把碗又端过来。他吃了五口，每一口都要停一下，听。五口之后他才敢把眼睛从门板上挪开。</p>
+  <p>他连吃了五口，一口都没有出声。第六口的时候他忘了，又「嗯」了一声，他停住，等了二十个数，还是没有应。忘得很快。人学一样新东西，学到第六回就以为自己会了。第五口吃完他觉得嘴里发干。发干不是渴，是紧张。他自己知道。</p>
+  <p>他就把心放下了一半。放下一半，另一半还悬着。他这半个月的心一直是这么悬着的，悬着悬着也就习惯了。</p>
+  <p>吃完他把碗推开。婆子把碗端走，走到三步外又回头，说：你嘴角有米。</p>
+  <p>他用袖子擦了。袖子上一块黄印，洗不掉。他看了一眼，没有再管。擦了两下，没有擦干净，也就不擦了。</p>
+  <p>晌午的时候丫丫来了。她来的时候太阳正毒，她的脸晒得通红，鼻尖上有一层汗。</p>
+  <p>她抱着那只罐子，罐子在怀里，走得很小心，像抱着一个睡着的东西。她每天来。来了不说话，先把罐子放下，再站着看他。看一会儿，问一个问题，问完就走。</p>
+  <p>她把罐子放在门轴边，放完就站在旁边看他。罐子放下的时候有石子互相挤的声音，很轻，像雨点落在瓦上。她站的位置跟昨天一样，也跟婆子不一样——婆子站三步外，她站一步半。</p>
+  <p>他那时候正在吃第二顿。婆子端碗，他低头，咽。第二顿是婆子回家又熬的，比早上那碗稠。</p>
+  <p>丫丫看了一会儿，说：你吃饭不出声。</p>
+  <p>他含着粥，没有说话。</p>
+  <p>她说：我数了。你咽了十一回，一声都没有。她说这话的时候很认真，眉头皱着，像在背一段书。</p>
+  <p>他把粥咽下去，才说：出声它会听见。他说的时候把声音压得很低，低到只有两步以内能听见。</p>
+  <p>丫丫说：它听见又怎么样。</p>
+  <p>他说：听见就知道我在这儿。</p>
+  <p>丫丫说：它本来就知道你在这儿。她说得很随意，像在说今天有太阳。他说不出话，是因为这句话太对了。</p>
+  <p>他愣了一下。他愣的时候手里的碗往下沉了一点，粥晃到碗沿上。</p>
+  <p>这个问题他答不出。它当然知道他在这儿——他站在它的门口，站了二百多天。它叫过他的名字，叫过全村人的名字。它当然知道。他答不出的时候会沉默。他这半个月沉默得越来越多。</p>
+  <p>可他还是不出声。他不知道这是谨慎还是别的什么。他只知道身子先做了，脑子后头才跟上来。</p>
+  <p>他说：我不知道。他说：我就是不想让它听见我吃饭。他说这话的时候，右手在门框上按了一下，按得木头响了一声。</p>
+  <p>丫丫想了想，说：那我不出声。她说得很干脆，像在说一件很小的事。</p>
+  <p>她说做就做。她跑回家端了碗来，蹲在槐树下，闭紧嘴，把舌头往下压，咽。她跑回家，跑得很快，跑到半路又回来，把罐子挪了挪，挪到门槛正对面，才又跑走。</p>
+  <p>第一口她呛了。粥从鼻子里出来，她咳得满脸通红，眼泪都出来了。她咳的时候蹲下去，两只手撑着膝盖，咳得很凶，肩膀一耸一耸的。</p>
+  <p>他赶紧说：别压太狠。他说着伸手想扶她，手抬到一半又收回去——他不能松门框。</p>
+  <p>她一边咳一边说：你压得多狠。他说：我压到舌根发麻就停。她说：我压到发麻还想再压。</p>
+  <p>他说：我压到不难受。</p>
+  <p>她把脸擦干净，试第二口。这一回慢，压在舌根上停了一下，才咽。这一口她含了很久，含到粥都凉了。</p>
+  <p>成了。她抬起头，眼睛亮得像捡到钱。</p>
+  <p>她说：我会了。她说这三个字的时候把下巴抬得很高，抬得脖子上的筋都出来了。</p>
+  <p>他说：会了也别一直这样。他说这话的时候知道自己说的是废话。</p>
+  <p>她说：为什么。</p>
+  <p>他说：憋着不好。他说这话的时候自己正在憋着。他没有觉得这有什么不对。</p>
+  <p>她说：那你怎么憋。</p>
+  <p>他没有答。他忽然觉得这个孩子问的每一个问题，都比他自己想得清楚。她问的不是道理，是日子。道理他能编，日子他编不出。</p>
+  <p>第二天全村人吃饭都不出声了。这事传得快。村里人本来就没什么可说的，一有点事，半天就传遍三十二户。</p>
+  <p>这事是婆子来告诉他的，说得又气又笑。</p>
+  <p>婆子说：一屋子人吃饭跟做贼一样。她说：我孙子呛了三回，呛得脸都紫了。她说：你教的什么法子。她说的时候把围裙解下来扇风，扇得很用力，扇得衣角都翻起来。</p>
+  <p>他说：我没有教。他说：是丫丫。</p>
+  <p>婆子说：丫丫说是你教的。</p>
+  <p>他说：我教的是法子，不是规矩。</p>
+  <p>婆子说：法子跟规矩有什么不一样。</p>
+  <p>他说：法子是自己愿意用，规矩是别人逼你用。婆子听完没有立刻说话。她把围裙重新系上，系得很紧，紧到腰都细了一圈。</p>
+  <p>婆子想了一会儿，说：那你说，吃饭出声到底要紧不要紧。</p>
+  <p>他想了很久。他想到咽东西那一声「嗯」，想到门后头没有应，想到自己不知道是它没听见还是它不算。他还想到第七层那一横。刻那一横的人，走之前是不是也想过这些。</p>
+  <p>他说：不要紧。他说这三个字的时候想了很久。婆子等着，没有催。</p>
+  <p>婆子说：不要紧你为什么不出声。</p>
+  <p>他说：因为我怕。他说的时候声音很平，平得不像在说自己的事。</p>
+  <p>他说完自己听见了这三个字。他很少说这个字。他说「我不知道」的时候多，说「怕」的时候少。这三个字从他嘴里出来，落到地上，他听见了，婆子也听见了。</p>
+  <p>婆子没有再问。她把手在围裙上擦了擦，说：那我让他们该出声就出声。她说：吃饭不出声，人要憋出病。</p>
+  <p>他说：好。</p>
+  <p>婆子走了两步又回头，说：你自己呢。他说习惯了的时候，把手在门框上换了个地方按。那个地方的木头已经被他按得发亮。</p>
+  <p>他说：我习惯了。</p>
+  <p>那天夜里，他试了一件事。</p>
+  <p>他端着半碗凉粥，站在门槛上，故意咽了一口，出声。凉粥比热粥难咽，咽的时候喉咙要用力，一用力就出声。粥是婆子三刻前端的，他没有吃，一直端着，端到手心发热。</p>
+  <p>门后头立刻回了一声。他手里的碗晃了一下，粥洒在手背上。烫。他没有动。</p>
+  <p>一样的。一样的短，一样的一点气音，一样的「嗯」。</p>
+  <p>他的手在碗上紧了一下。碗是粗瓷的，边上有豁口，他的拇指正好卡在豁口里。</p>
+  <p>他又咽了一口。第二声回得比第一声快。快得像在等着他。</p>
+  <p>门后头又回了一声。</p>
+  <p>第三口，他先说了四个字：今天的粥稀。他说得很清楚，一个字一个字地说。说完他等了一会儿，才咽。</p>
+  <p>说完他咽。他咽得很快，快得像在试一件东西会不会响。</p>
+  <p>门后头没有回。</p>
+  <p>他又说：今天的粥稀。说完不咽。他等了一会儿。他等的不是回应，是不回应。</p>
+  <p>还是没有回。</p>
+  <p>他站在那儿，把碗里的粥一口一口咽完，一共七口。门后头回了七声，一声不多，一声不少。第七声比前六声轻，像是也没力气了。他数着：第一口、第二口……数到第七口，碗空了。他数得很准。他数数的时候从来不出错，这是他唯一拿得准的本事。他站在门槛上，忽然有一点说不出的难受。那一点难受不是怕，是别的。他没有细想。</p>
+  <p>他把空碗放在浅槽上。碗底压在湿泥上，压出一个圆印。他看了一眼那个圆印，忽然觉得它像门框上那些凹。</p>
+  <p>门开二百零六日。缝一掌半，界一分。碗没处放，婆子用湿泥在门框浅槽里垫了个窝。他两只手都占着，得婆子端着碗喂；低头就离门板，缝宽半分。他咽第一口时喉咙里带出一点气音，自己抓住了；门后头没有应。他学会了不出声地咽——先压舌，再咽。丫丫学会了，全村也跟着学，一屋子人吃饭像做贼。婆子问他出声到底要紧不要紧，他说不要紧；婆子问他那为什么不出声，他说因为我怕。</p>
+  <p>他心里说：它不学我说的话。他心里说：它学我控制不住的那一声。他心里说：那么，我身上还有多少声音，是我自己控制不住的。他心里说：它学了七声，学的是咽，不是字。</p>
+  <p>第三百二十四章 完</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，轻点显示/隐藏 ===== */
+  var TOTAL=365;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null,dragging=false;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+
+  /* 翻页：只有「横向滑动」（>64px 且横向明显占优）才翻章；轻点只开关工具栏。
+     不再用「点侧边就翻页」，避免误点一下就莫名跳章。 */
+  var sx=0,sy=0,stk=false,moved=false;
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a"))return;
+    sx=e.clientX||0;sy=e.clientY||0;stk=true;moved=false;
+  },{passive:true});
+  document.body.addEventListener("pointermove",function(e){
+    if(!stk)return;
+    if(Math.abs((e.clientX||0)-sx)>10||Math.abs((e.clientY||0)-sy)>10)moved=true;
+  },{passive:true});
+  document.body.addEventListener("pointerup",function(e){
+    if(!stk)return;stk=false;
+    var dx=(e.clientX||0)-sx,dy=(e.clientY||0)-sy;
+    if(Math.abs(dx)>=64&&Math.abs(dx)>Math.abs(dy)*1.6){
+      if(dx<0&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+      if(dx>0&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    }
+    if(!moved){if(document.body.classList.contains("ui-show"))hide();else show();}
+  },{passive:true});
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  /* ===== 进度与书签：每本书只有两格 =====
+     ① auto   自动存档位：读到哪里自动记，无需操作
+     ② manual 手动书签位：点一下按钮钉住，全书共享这一个
+     进页面时绝不擅自跳转，只给提示；只有从「续读/书签」入口进来才定位。 */
+  var RKEY="hugo_reader_v1";
+  var mm=location.pathname.match(/gudo-(\d+)/);
+  var CH=(mm?parseInt(mm[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var TITLE=h1?h1.textContent.trim():("第"+CH+"章");
+
+  function migrate(d){
+    if(!d.auto&&!d.manual&&(d.bookmark||d.resume||d.chapters)){
+      var nd={};
+      if(d.resume&&d.resume.ch){nd.auto={ch:d.resume.ch,pct:d.resume.pct|0,t:d.resume.t||0};}
+      if(d.bookmark&&d.bookmark.ch){nd.manual={ch:d.bookmark.ch,pct:d.bookmark.pct|0,t:d.bookmark.t||0};}
+      return nd;
+    }
+    return d;
+  }
+  function loadR(){
+    var d={};
+    try{d=JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){d={}}
+    var o=migrate(d);
+    if(o!==d){try{localStorage.setItem(RKEY,JSON.stringify(o))}catch(e){}}
+    return o;
+  }
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function scrollToPct(p){var h=maxH();if(h>0)window.scrollTo(0,Math.round(h*p/100));}
+
+  var cur=loadR();
+  var A=cur.auto||null, B=cur.manual||null;
+  var hash=location.hash;
+
+  /* 只在带 #auto / #manual 进来时定位；多点几次，等版式稳定，避免“跳歪” */
+  var restoring=false;
+  function restore(p){
+    if(!(p>0))return;
+    restoring=true;
+    [0,90,220,420,700].forEach(function(dt){
+      setTimeout(function(){if(restoring)scrollToPct(p);},dt);
+    });
+    setTimeout(function(){restoring=false;},960);
+  }
+  addEventListener("wheel",function(){restoring=false;},{passive:true,once:true});
+  addEventListener("touchstart",function(){restoring=false;},{passive:true,once:true});
+
+  if(hash==="#manual"&&B&&B.ch===CH&&B.pct>0){restore(B.pct);}
+  else if(hash==="#auto"&&A&&A.ch===CH&&A.pct>0){restore(A.pct);}
+  else{
+    var wrap=document.querySelector(".wrap");
+    if(B&&B.ch&&B.ch!==CH){
+      var x=document.createElement("div");x.className="resume-tip";
+      x.innerHTML="🔖 书签在 <a href='gudo-"+B.ch+".html#manual'>第"+B.ch+"章</a>（钉在 "+B.pct+"%）";
+      wrap.prepend(x);
+    }
+    if(A&&A.ch===CH&&A.pct>=3&&A.pct<97){
+      var tip=document.createElement("div");tip.className="resume-tip";
+      tip.innerHTML="📌 上次读至 "+A.pct+"% · <a href='javascript:void(0)' id='resumeGo'>回到原位</a>";
+      wrap.prepend(tip);
+      document.getElementById("resumeGo").onclick=function(){tip.remove();scrollToPct(A.pct);};
+    }
+    if(B&&B.ch===CH&&B.pct>0){
+      var btip=document.createElement("div");btip.className="resume-tip";
+      btip.innerHTML="🔖 本章书签：钉在 "+B.pct+"% · <a href='javascript:void(0)' id='bmGo'>回到书签</a>";
+      wrap.prepend(btip);
+      document.getElementById("bmGo").onclick=function(){btip.remove();scrollToPct(B.pct);};
+    }
+  }
+
+  /* 自动存档：随滚动更新（节流 1.2s），离开页面再记一次 */
+  var timer=null;
+  function record(){
+    var mh=maxH();if(mh<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/mh*100));
+    var d=loadR();d.auto={ch:CH,pct:p,t:Date.now()};saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record();},1200)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(record,800);
+
+  /* 手动书签：一键钉住 / 再点清除（全书仅此一格） */
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  function paint(){
+    var b=(loadR().manual)||null;
+    if(b&&b.ch===CH&&b.pct>0)btn.textContent="🔖 书签 "+b.pct+"%";
+    else if(b&&b.ch)btn.textContent="🔖 书签·第"+b.ch+"章";
+    else btn.textContent="🔖 书签";
+  }
+  document.getElementById("__bmSlot").appendChild(btn);
+  paint();
+  btn.onclick=function(){
+    var mh=maxH();
+    var p=mh>0?Math.min(100,Math.round(document.documentElement.scrollTop/mh*100)):0;
+    var d=loadR();
+    if(d.manual&&d.manual.ch===CH&&Math.abs((d.manual.pct||0)-p)<=2){
+      delete d.manual;saveR(d);paint();
+      btn.textContent="已清除书签";setTimeout(paint,1400);
+    }else{
+      d.manual={ch:CH,pct:p,t:Date.now()};saveR(d);paint();
+      btn.textContent="✓ 已存书签 "+p+"%";setTimeout(paint,1600);
+    }
+  };
+})();
+
+</script>
+</body>
+</html>
