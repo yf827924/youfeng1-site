@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第二百三十八章 · 石 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第二百三十八章 · 石</h1>
+  <p>八月十六，后山路口。</p>
+  <p>焦六坐在路口的界石上，那根铁尺横在膝上。他瞧见人来，没有起身。</p>
+  <p>“后山不许上。”</p>
+  <p>“上去瞧一块石头。”</p>
+  <p>“瞧也不许。”焦六道，“正月里记过的人，一年不许上后山。这一条是给你记的。”</p>
+  <p>萧铁衣站着，没有动。</p>
+  <p>焦六把铁尺从膝上挪开，搁在界石边上。他挪得很慢，挪完了才开口。</p>
+  <p>“可你今天不是自己去。”他说，“戚九天亮的时候下来过一趟，跟我说了一句：这个人我带着。他带着，我就不管。”</p>
+  <p>他抬起下巴，朝山上一抬。</p>
+  <p>“上去。别碰。碰了，我这一年守的门就白守了。”</p>
+  <p>路走到头，石台在半山腰一块凸出来的岩上，四边砌着矮墙，墙高到膝。台面是整块的青石，磨得平，磨得能照见人影。台子中央立着一块石头，六尺高，三尺宽，一尺厚，四角磨圆了，顶上也磨圆了。</p>
+  <p>石头底下压着一块碑座。碑座三尺宽，一尺半高，四面磨光，正面上一个字也没有。</p>
+  <p>戚九坐在矮墙上，一条腿垂着，另一条盘着。他四十来岁，脸瘦，左眼那一片是塌的，眼皮合着，陷进去一个坑。右眼很亮，亮得有点过分。</p>
+  <p>“你来了。”</p>
+  <p>“来了。”</p>
+  <p>“蔺长老跟我说了。”戚九从墙上下来，“他说你要来瞧这块石头。我说瞧可以，别伸手。他说你手上有口子。”</p>
+  <p>“你信。”</p>
+  <p>“我不信人，我信石头。”戚九道，“通脉六重，一只眼，守这块石头十一年。这十一年我天天来，来了三千九百多回。”</p>
+  <p>“三千九百。”</p>
+  <p>“闰年多一天。”戚九道，“我数得清。”</p>
+  <p>他走到石头跟前，抬手在石面上拍了一下。声音是实的，拍完手就收回来。</p>
+  <p>“你来做什么。”</p>
+  <p>“量一个口。”</p>
+  <p>“哪个口。”</p>
+  <p>“碑座上的口。”</p>
+  <p>戚九没有立刻答。他绕着碑座走了半圈，走到正面，蹲下去，用手指在石面上点了一下。</p>
+  <p>“这个口，三十六年没人问过。”他说，“问过的人只有两个。一个是我师父，一个是我。”</p>
+  <p>“你师父呢。”</p>
+  <p>“死了十九年。”戚九道，“死在封山那年。”</p>
+  <p>萧铁衣蹲下去。碑座正面离地七寸的地方，有一个方口。方口三寸见方，边角凿得方正，四边抹过灰，灰是白的，白里带一点黄。</p>
+  <p>“量过吗。”</p>
+  <p>“量过。”戚九道，“三寸见方，深一尺二。深的地方我拿竹条探过，竹条到底碰着硬东西，碰出来的声音是空的。”</p>
+  <p>“空的。”</p>
+  <p>“底下是空的。”戚九道，“碑座是实的，可这个口进去一尺二，底下空着。空多大，不知道。我不敢再探。”</p>
+  <p>萧铁衣把手指伸进方口，伸到第二个指节，停住。</p>
+  <p>口里是凉的。不是石头的凉，是那种从深处上来的凉，凉得慢，凉得匀。</p>
+  <p>他把手指抽出来。</p>
+  <p>“底下那块铁牌。”</p>
+  <p>“你连这个也知道。”</p>
+  <p>“蔺长老说的。”</p>
+  <p>戚九伸手，从碑座底下的石缝里抠出一块铁牌，一寸半宽，三寸长，厚两分。铁牌正面一个“守”字，刻得深，背面四个字，笔画细。</p>
+  <p>萧氏第三十六。</p>
+  <p>“三十四、三十五在哪儿。”萧铁衣问。</p>
+  <p>“不知道。”戚九道，“我找过。山上的碑我都摸过一遍，前山后山，一共一百六十三块。没有三十四，没有三十五。”</p>
+  <p>“三十六在这儿。”</p>
+  <p>“三十六在这儿。”戚九把铁牌翻过来，又翻过去，“这块牌压在碑座底下，压了不知道多少年。我师父说，这块牌不是给活人认的，是给底下认的。”</p>
+  <p>“底下有什么。”</p>
+  <p>“不知道。”戚九道，“我师父不知道，我也不知道。这山上知道的人，都在底下。”</p>
+  <p>萧铁衣站起来，绕着碑座走了一圈。碑是六尺高。六尺这个数，他记得清。云州名籍司的碑是五尺三寸，萧家祖碑是六尺二寸。这一块是六尺，比祖碑矮两寸。</p>
+  <p>“这块石头是哪一年立的。”</p>
+  <p>“不知道。”戚九道，“山上的册子里没有这一块。我翻过，翻了三回。”</p>
+  <p>“册子里没有的石头，怎么会在山上。”</p>
+  <p>“册子里没有的石头多。”戚九道，“山上有一百六十三块石碑，册子里只有一百五十块。十三块不在册。不在册的石头，没有年头，没有来处，也没有守碑人。”</p>
+  <p>“不在册的石头，谁管。”</p>
+  <p>“我管。”戚九道，“守石头的不管册，管册的不守石头。两边一对不上，就有一块石头落在中间。”</p>
+  <p>他抬起那只右眼，瞧着萧铁衣。</p>
+  <p>“你要问它是什么。我告诉你我量出什么。”</p>
+  <p>“说。”</p>
+  <p>“这块石头不吃水。”戚九道，“雨天别的石头面上挂水，它不挂。水落在上头，往四边跑，跑得比别的石头快。”</p>
+  <p>“为什么不挂水。”</p>
+  <p>“因为底下有东西。”戚九道，“石头底下压着空，空里出气，气往上顶，水就挂不住。”</p>
+  <p>他把手放在碑座上，掌心贴着石面。</p>
+  <p>“还有一样。这块石头认手。”</p>
+  <p>“认手。”</p>
+  <p>“你把手放上去，放一会儿，它就热。”戚九道，“别的石头不这样。别的石头你怎么放手，它就是石头。这一块，手放上去半刻，石面上就有一块热的印子，跟你手一样大。”</p>
+  <p>萧铁衣把右手放在碑座上。他没有立刻觉得热。过了半刻，掌心底下那块石头开始温，温得很慢，从掌心往四周散，散到掌根，散到指根。</p>
+  <p>然后他心口那一阙热了一下。不是温，是热。热得突然，像有人把一小块烧红的铁放进去，放进去又收走。</p>
+  <p>他等着那股热往里去。热走到一半，停住了。</p>
+  <p>停了半刻，退了。心口那一阙还开着，还是两阙，没有第三阙。那股热像一个人走到门口，抬手要敲，手抬起来了，没有敲下去。</p>
+  <p>他把手从碑座上拿开。</p>
+  <p>“你这是第几回摸它。”</p>
+  <p>“头一回。”</p>
+  <p>“你的手在抖。”戚九道。</p>
+  <p>萧铁衣低头瞧自己的右手。指头在抖，抖得不厉害，可抖。</p>
+  <p>“我不抖。”他说。</p>
+  <p>“你抖。”戚九道，“我一只眼，望得比两只眼准。”</p>
+  <p>他在碑座边上坐下来，把那条盘着的腿伸直。</p>
+  <p>“十九年前有人来摸过。”他说。</p>
+  <p>“谁。”</p>
+  <p>“不知道叫什么。”戚九道，“我知道他手上的样子。他右手缠布，缠三层，布条在腕子上绕一个结。他摸完这块石头，在石台上坐了半夜。”</p>
+  <p>“坐了半夜。”</p>
+  <p>“从戌时坐到寅时。”戚九道，“我师父陪着他坐。两个人一句话没说。天快亮的时候他站起来，说了一句话，就下山了。”</p>
+  <p>“什么话。”</p>
+  <p>戚九没有立刻说。他抬起头，瞧着那块六尺高的石头，瞧了很久。</p>
+  <p>“他说，这块不是镇山石，是压在门上的一块石头。”</p>
+  <p>风吹过来，绕过石台，往山下走。石台边上的草被吹得伏下去，伏了一片。</p>
+  <p>“压在门上。”萧铁衣道。</p>
+  <p>“压在门上。”戚九道，“我师父听完这句话，第二天就开始记这块石头。他记了十七年，记满一本册。那本册现在在我屋里。”</p>
+  <p>“册上写什么。”</p>
+  <p>“写它什么时候出水，什么时候不出。写哪一年裂了一道，裂在哪儿。写哪一年冬天，石面上结的霜比别处薄。”戚九道，“我师父不识几个字，写得很慢。一本册写了十七年，写了两百多行。”</p>
+  <p>“你认得。”</p>
+  <p>“认得一半。”戚九道，“另一半是我师父自己造的字，他不告诉我，我也没问。”</p>
+  <p>“那本册我瞧过三回。第三回是在灯下瞧的，瞧到第九十几行，瞧出一样东西。”</p>
+  <p>“什么。”</p>
+  <p>“我师父每一年都记下雨的日子。哪一年雨水多，哪一年雨水少，记得比石头还细。”</p>
+  <p>“记这个做什么。”</p>
+  <p>“因为石头底下有水。”戚九道，“水多的时候，它不出声。水少的时候，夜里能听见响。响是从底下上来的，一声长，一声短。”</p>
+  <p>“为什么不问。”</p>
+  <p>“问了，他就得说。”戚九道，“有些事说出来，就成了事。不说，就还是一块石头。”</p>
+  <p>萧铁衣把右手抬起来，掌心朝上。掌心那道口子，从虎口往掌心去，合不上。</p>
+  <p>“蔺长老说，这块石头的底面有一个印子。”</p>
+  <p>戚九的右眼动了一下。</p>
+  <p>“他说了。”</p>
+  <p>“说了。”</p>
+  <p>“底面有印子这件事，我师父记在册上。”戚九道，“他写的是‘底下有手’。四个字，写在第二百零一行。”</p>
+  <p>“什么手。”</p>
+  <p>“不知道。”戚九道，“我师父没见过。他只在描碑座的时候，把底面翻过来瞧了一眼。瞧了一眼就翻回去，没敢再瞧。”</p>
+  <p>“为什么不敢。”</p>
+  <p>“因为那不是一块石头该有的东西。”戚九道，“石头底下有凹，凹是凿的，凿得规整，那叫工。凹是压出来的，压得圆，那叫印。这个凹不是凿的。”</p>
+  <p>萧铁衣把右手翻过来，掌心朝下，悬在碑座上方。</p>
+  <p>“多大的印。”</p>
+  <p>“不知道。”戚九道，“我师父没量。他写的是‘跟手一样大’。”</p>
+  <p>风又过来一回。石台边上的草压得更低了。</p>
+  <p>“这山上还有一块。”戚九忽然说。</p>
+  <p>“哪一块。”</p>
+  <p>“不知道。”戚九道，“我师父说的。他说这话的时候快死了，说了半句。他说‘这山上还有一块，在……’”</p>
+  <p>“在哪儿。”</p>
+  <p>“没说完。”戚九道，“他咳了一下，就没再说。”</p>
+  <p>萧铁衣蹲下去，把铁牌重新塞回碑座底下的石缝里。塞的时候，他的手指碰到石座的底面。</p>
+  <p>底面是平的。平得像一块磨过的案。他没有再往里探。他把手抽出来，站起来。</p>
+  <p>“你瞧完了。”戚九道。</p>
+  <p>“瞧完一半。”</p>
+  <p>“另一半在底下。”戚九道，“你要瞧底下，得把它抬起来。抬它要二十个人，两根大绳，一台绞架。还得有内门的令。这三样，你一样都没有。”</p>
+  <p>“我知道。”</p>
+  <p>“知道就好。”戚九道，“我守了十一年，没让它动过一寸。我不拦你，我拦不住。可我要你记着一件事。”</p>
+  <p>“什么。”</p>
+  <p>“它一抬，山上就要封。”戚九道，“封山封的是人。三十六年前封了两个月，死了七个。这一次封多久，我不知道。”</p>
+  <p>萧铁衣瞧着那块石头。石头立在那儿，六尺高，四角磨圆，顶上有一道旧凿痕。凿痕是斜的，从左上往右下，深半寸，宽两寸。</p>
+  <p>“这道凿痕是什么。”</p>
+  <p>“不知道。”戚九道，“我师父说是立石的时候留下的。立石的人先凿一个斜口，把绳子卡进去，再往上吊。吊上去了，斜口就留在上头，不补。”</p>
+  <p>“为什么不补。”</p>
+  <p>“补了，就没人知道它是怎么立起来的。”戚九道。</p>
+  <p>萧铁衣把这句话记下了。他转身要走，戚九在后头叫住他。</p>
+  <p>“喂。”</p>
+  <p>“嗯。”</p>
+  <p>“你摸的时候，它热了没有。”</p>
+  <p>“热了。”</p>
+  <p>“热到哪儿。”</p>
+  <p>萧铁衣没有答。</p>
+  <p>“热到哪儿。”戚九又问了一遍。</p>
+  <p>“热到门口。”</p>
+  <p>“什么门。”</p>
+  <p>“不知道。”萧铁衣道，“走到一半，停了。”</p>
+  <p>戚九沉默了一会儿。</p>
+  <p>“我师父记过一回。”他说，“册子上有一行是这么写的：宣和十六年腊月十九，夜，有人来摸，石热，热到顶。次日，山封。”</p>
+  <p>第二百三十八章 完</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，轻点显示/隐藏 ===== */
+  var TOTAL=430;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null,dragging=false;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+
+  /* 翻页：只有「横向滑动」（>64px 且横向明显占优）才翻章；轻点只开关工具栏。
+     不再用「点侧边就翻页」，避免误点一下就莫名跳章。 */
+  var sx=0,sy=0,stk=false,moved=false;
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a"))return;
+    sx=e.clientX||0;sy=e.clientY||0;stk=true;moved=false;
+  },{passive:true});
+  document.body.addEventListener("pointermove",function(e){
+    if(!stk)return;
+    if(Math.abs((e.clientX||0)-sx)>10||Math.abs((e.clientY||0)-sy)>10)moved=true;
+  },{passive:true});
+  document.body.addEventListener("pointerup",function(e){
+    if(!stk)return;stk=false;
+    var dx=(e.clientX||0)-sx,dy=(e.clientY||0)-sy;
+    if(Math.abs(dx)>=64&&Math.abs(dx)>Math.abs(dy)*1.6){
+      if(dx<0&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+      if(dx>0&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    }
+    if(!moved){if(document.body.classList.contains("ui-show"))hide();else show();}
+  },{passive:true});
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  /* ===== 进度与书签：每本书只有两格 =====
+     ① auto   自动存档位：读到哪里自动记，无需操作
+     ② manual 手动书签位：点一下按钮钉住，全书共享这一个
+     进页面时绝不擅自跳转，只给提示；只有从「续读/书签」入口进来才定位。 */
+  var RKEY="hugo_reader_v1";
+  var mm=location.pathname.match(/gudo-(\d+)/);
+  var CH=(mm?parseInt(mm[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var TITLE=h1?h1.textContent.trim():("第"+CH+"章");
+
+  function migrate(d){
+    if(!d.auto&&!d.manual&&(d.bookmark||d.resume||d.chapters)){
+      var nd={};
+      if(d.resume&&d.resume.ch){nd.auto={ch:d.resume.ch,pct:d.resume.pct|0,t:d.resume.t||0};}
+      if(d.bookmark&&d.bookmark.ch){nd.manual={ch:d.bookmark.ch,pct:d.bookmark.pct|0,t:d.bookmark.t||0};}
+      return nd;
+    }
+    return d;
+  }
+  function loadR(){
+    var d={};
+    try{d=JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){d={}}
+    var o=migrate(d);
+    if(o!==d){try{localStorage.setItem(RKEY,JSON.stringify(o))}catch(e){}}
+    return o;
+  }
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function scrollToPct(p){var h=maxH();if(h>0)window.scrollTo(0,Math.round(h*p/100));}
+
+  var cur=loadR();
+  var A=cur.auto||null, B=cur.manual||null;
+  var hash=location.hash;
+
+  /* 只在带 #auto / #manual 进来时定位；多点几次，等版式稳定，避免“跳歪” */
+  var restoring=false;
+  function restore(p){
+    if(!(p>0))return;
+    restoring=true;
+    [0,90,220,420,700].forEach(function(dt){
+      setTimeout(function(){if(restoring)scrollToPct(p);},dt);
+    });
+    setTimeout(function(){restoring=false;},960);
+  }
+  addEventListener("wheel",function(){restoring=false;},{passive:true,once:true});
+  addEventListener("touchstart",function(){restoring=false;},{passive:true,once:true});
+
+  if(hash==="#manual"&&B&&B.ch===CH&&B.pct>0){restore(B.pct);}
+  else if(hash==="#auto"&&A&&A.ch===CH&&A.pct>0){restore(A.pct);}
+  else{
+    var wrap=document.querySelector(".wrap");
+    if(B&&B.ch&&B.ch!==CH){
+      var x=document.createElement("div");x.className="resume-tip";
+      x.innerHTML="🔖 书签在 <a href='gudo-"+B.ch+".html#manual'>第"+B.ch+"章</a>（钉在 "+B.pct+"%）";
+      wrap.prepend(x);
+    }
+    if(A&&A.ch===CH&&A.pct>=3&&A.pct<97){
+      var tip=document.createElement("div");tip.className="resume-tip";
+      tip.innerHTML="📌 上次读至 "+A.pct+"% · <a href='javascript:void(0)' id='resumeGo'>回到原位</a>";
+      wrap.prepend(tip);
+      document.getElementById("resumeGo").onclick=function(){tip.remove();scrollToPct(A.pct);};
+    }
+    if(B&&B.ch===CH&&B.pct>0){
+      var btip=document.createElement("div");btip.className="resume-tip";
+      btip.innerHTML="🔖 本章书签：钉在 "+B.pct+"% · <a href='javascript:void(0)' id='bmGo'>回到书签</a>";
+      wrap.prepend(btip);
+      document.getElementById("bmGo").onclick=function(){btip.remove();scrollToPct(B.pct);};
+    }
+  }
+
+  /* 自动存档：随滚动更新（节流 1.2s），离开页面再记一次 */
+  var timer=null;
+  function record(){
+    var mh=maxH();if(mh<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/mh*100));
+    var d=loadR();d.auto={ch:CH,pct:p,t:Date.now()};saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record();},1200)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(record,800);
+
+  /* 手动书签：一键钉住 / 再点清除（全书仅此一格） */
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  function paint(){
+    var b=(loadR().manual)||null;
+    if(b&&b.ch===CH&&b.pct>0)btn.textContent="🔖 书签 "+b.pct+"%";
+    else if(b&&b.ch)btn.textContent="🔖 书签·第"+b.ch+"章";
+    else btn.textContent="🔖 书签";
+  }
+  document.getElementById("__bmSlot").appendChild(btn);
+  paint();
+  btn.onclick=function(){
+    var mh=maxH();
+    var p=mh>0?Math.min(100,Math.round(document.documentElement.scrollTop/mh*100)):0;
+    var d=loadR();
+    if(d.manual&&d.manual.ch===CH&&Math.abs((d.manual.pct||0)-p)<=2){
+      delete d.manual;saveR(d);paint();
+      btn.textContent="已清除书签";setTimeout(paint,1400);
+    }else{
+      d.manual={ch:CH,pct:p,t:Date.now()};saveR(d);paint();
+      btn.textContent="✓ 已存书签 "+p+"%";setTimeout(paint,1600);
+    }
+  };
+})();
+
+</script>
+</body>
+</html>

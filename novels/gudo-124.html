@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第一百二十四章 · 守夜 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第一百二十四章 · 守夜</h1>
+  <p>腊月十二，戌时。门脚的灯点到第三根芯，麦五把针线收了。</p>
+  <p>&quot;你今晚不睡。&quot;</p>
+  <p>&quot;不睡。&quot;</p>
+  <p>&quot;守什么。&quot;</p>
+  <p>&quot;守一把刀。&quot;</p>
+  <p>麦五把手在裤子上搓了两下。他从铺底下抽出一根榆木门闩，四尺长，一头包着铁皮。</p>
+  <p>&quot;拿着。&quot;</p>
+  <p>萧铁衣接过来。门闩压手，比他想的沉。</p>
+  <p>&quot;这个不管用。&quot;麦五道，&quot;通脉六重的人，一闩打下去，闩先断。&quot;</p>
+  <p>&quot;那你还给我。&quot;</p>
+  <p>&quot;给你，是让你有个东西攥着。&quot;麦五道，&quot;人手里空着，腿就软。&quot;</p>
+  <p>他把灯吹了一口，火苗歪了一下，又立起来。</p>
+  <p>&quot;还有一样。&quot;他朝门框上努了努嘴，&quot;器阁门框上挂着一面锣。报火警的。你要是不行，就敲锣。&quot;</p>
+  <p>&quot;敲了会怎么样。&quot;</p>
+  <p>&quot;敲了，全外院都来。&quot;麦五道，&quot;来的人不是帮你，是来瞧热闹。可瞧的人多了，他们就不敢把你打死。&quot;</p>
+  <p>萧铁衣把门闩横在膝上。</p>
+  <p>&quot;你守过没有。&quot;</p>
+  <p>&quot;守过三回。&quot;麦五道，&quot;前两回守的是丹房。第三回守的是人。&quot;</p>
+  <p>&quot;守住了没有。&quot;</p>
+  <p>&quot;头两回守住了。&quot;麦五道，&quot;第三回没守住。那人第二天早上抬出来，眼睛是睁着的。&quot;</p>
+  <p>他把被子往上拉了拉，背过身去。</p>
+  <p>&quot;三十七号。&quot;</p>
+  <p>&quot;嗯。&quot;</p>
+  <p>&quot;敲锣的时候别犹豫。&quot;麦五道，&quot;犹豫一下，锣就没了。&quot;</p>
+  <p>屋里另外五个人都没有睡。有两个坐在铺上，抱着膝盖；有一个把被子蒙在头上，蒙得很紧，只露一双脚在外面。</p>
+  <p>&quot;你们不睡。&quot;</p>
+  <p>&quot;睡不着。&quot;麦五道，&quot;门脚这地方，一年到头没出过事。&quot;</p>
+  <p>&quot;今年出了什么事。&quot;</p>
+  <p>&quot;出了个第二名。&quot;麦五道，&quot;第二名住门脚，门脚就有了事。&quot;</p>
+  <p>抱着膝盖那两个人里有一个笑了一声。笑声很短，笑完屋里又静下去。</p>
+  <p>萧铁衣把门闩立在墙边，站起来。</p>
+  <p>&quot;我去了。&quot;</p>
+  <p>&quot;三十七号。&quot;</p>
+  <p>&quot;嗯。&quot;</p>
+  <p>&quot;你打不过的。&quot;麦五道，&quot;打不过就跑。跑回来，门脚的门我不关。&quot;</p>
+  <p>亥时，器阁。</p>
+  <p>外院的灯一盏一盏灭下去。器阁这一间还亮着，油灯放在案上，灯芯剪得短，火只有豆子大。</p>
+  <p>钟七把锣从门框上取下来，用袖子擦了擦锣面，挂回去，绳子打了个死结。</p>
+  <p>&quot;这个结，解不开。&quot;他说，&quot;要敲，就拿闩砸。&quot;</p>
+  <p>&quot;砸了会坏。&quot;</p>
+  <p>&quot;坏了再买。&quot;钟七道，&quot;锣是铁的，人是肉的。&quot;</p>
+  <p>他往院外走。走到门口，回过头。</p>
+  <p>&quot;三十七号。&quot;</p>
+  <p>&quot;嗯。&quot;</p>
+  <p>&quot;你那只手，别抬。&quot;</p>
+  <p>萧铁衣把怀里的钥匙往里塞了塞，塞到贴肉的地方。</p>
+  <p>&quot;判语写着一年。&quot;钟七道，&quot;一年过了，你还能握刀。抬一次，一年就没了。&quot;</p>
+  <p>&quot;我知道。&quot;</p>
+  <p>钟七走了。器阁的门没有关，风从门口进来，把案上的灯吹得贴着灯芯烧。</p>
+  <p>萧铁衣把三截刀从柜里取出来。铜锁开了，柜门有点卡，他用手掌推了两下才推开。</p>
+  <p>灰布包在案上摊开。三截刀摆成一排。长的一尺五，短的二寸八，尖的三寸。</p>
+  <p>他从怀里摸出那块木牌，牌上一个&quot;二&quot;，放在刀旁边。又摸出那块刻着&quot;三十&quot;的木签，放在木牌旁边。</p>
+  <p>三样东西，摆成一排。</p>
+  <p>亥时三刻，院里有脚步声。</p>
+  <p>不是一个人的。四个。</p>
+  <p>郑四先进门，后头跟着三个青灰袍。领头那个二十八九岁，肩宽，腰上挂一块铁牌，牌面刻着十一。</p>
+  <p>通脉六重。</p>
+  <p>另外两个站在门口，一左一右，把门口堵住了。</p>
+  <p>&quot;三十七号。&quot;郑四道，&quot;我们来提刀。&quot;</p>
+  <p>他把提条摊在案上。条子被压得很平，四个角都没有翘。</p>
+  <p>萧铁衣低头瞧。</p>
+  <p>外账房的印，器阁的号，勘器人的签。三样齐。</p>
+  <p>&quot;条子上写的是熔。&quot;他说。</p>
+  <p>&quot;今日就熔。&quot;郑四道，&quot;炉在后院，我们就在这儿熔。&quot;</p>
+  <p>&quot;熔要三个人在场。&quot;萧铁衣道，&quot;器阁、外账房、勘器人。&quot;</p>
+  <p>&quot;器阁的人走了，勘器人的印在条上。&quot;</p>
+  <p>&quot;印是印，人是人。&quot;</p>
+  <p>郑四把条子往前推了半寸。&quot;你一个行走，挡内门的差事。&quot;</p>
+  <p>&quot;我不是挡差事。&quot;萧铁衣道，&quot;我挡一个字。&quot;</p>
+  <p>&quot;你不是在挡差事，你是在挡一个结果。&quot;郑四把条子往回抽了一点，&quot;腊月三十，册子上那一行。那一行写完，你就不在册上了。不在册上的人，住在门脚，算什么事。&quot;</p>
+  <p>萧铁衣把门闩往地上顿了顿，顿出一声闷响。</p>
+  <p>&quot;你挡这一回，能挡几回。&quot;郑四道，&quot;今日挡了，明日呢，腊月三十呢。&quot;</p>
+  <p>&quot;我守一夜。&quot;</p>
+  <p>&quot;一夜之后你还是你。&quot;</p>
+  <p>&quot;一夜之后我还是我。&quot;萧铁衣道，&quot;刀不在了，我就不是我了。&quot;</p>
+  <p>郑四把条子摊平，压上手掌，说话的时候不瞧人，只瞧纸。</p>
+  <p>&quot;三十七号，我算给你听。你手废了一半，判语一年。这一年你不上台，不试器，不动手，宗门里没人记得你。腊月三十一过，册上没你，门脚不留你，你连饭都没有。你现在挡的是一把刀。这刀熔了，你还剩什么。&quot;</p>
+  <p>萧铁衣瞧着案上那三截。</p>
+  <p>&quot;剩一条命。&quot;</p>
+  <p>&quot;命不值钱。&quot;</p>
+  <p>&quot;我的命，我算过。&quot;</p>
+  <p>郑四抬起头。</p>
+  <p>那个挂铁牌的人往前走了两步。他走得很慢，脚落地没有声音。</p>
+  <p>&quot;霍显。&quot;他说，&quot;内门弟子，铁牌十一号，通脉六重。&quot;</p>
+  <p>他伸出右手，五指张开，又收起来。</p>
+  <p>&quot;你通脉二重。&quot;霍显道，&quot;气出四尺九。三尺就散。&quot;</p>
+  <p>&quot;是。&quot;</p>
+  <p>&quot;我一掌下去，你的骨头会断成几截，我算不准。&quot;霍显道，&quot;我算得准的是，你会躺三天。&quot;</p>
+  <p>&quot;三天之后呢。&quot;</p>
+  <p>&quot;三天之后你还得躺。&quot;</p>
+  <p>&quot;那就躺三天。&quot;</p>
+  <p>霍显笑了一下。他回身对郑四说了一句。</p>
+  <p>&quot;搬炉。&quot;</p>
+  <p>两个门口的人进来了。他们绕开案，往后院走。一个提着铁钩，一个抱着一只水桶。</p>
+  <p>萧铁衣没有拦他们。</p>
+  <p>他把手伸到案下，拔了炉塞。</p>
+  <p>后院那座小炉，跟他隔着一堵墙。塞子拔了，火就往下塌。他听见墙那边有一声响，接着是铁钩落地的声音。</p>
+  <p>&quot;他把塞子拔了。&quot;</p>
+  <p>&quot;水呢。&quot;</p>
+  <p>&quot;水！&quot;</p>
+  <p>萧铁衣从案下提出一桶水，绕过案，三步到后院门口，把整桶水泼进炉膛。</p>
+  <p>炉炸了一声。</p>
+  <p>不是炸开，是里头的火被水一激，白汽从炉口冲出来，冲上房梁，撞在梁上散开。白汽里有火星，星星点点落在地上，落下就灭。白汽散尽，炉膛里黑了。</p>
+  <p>郑四站在门口，脸被白汽遮了一下。白汽散开，他的脸露出来。</p>
+  <p>&quot;你把炉毁了。&quot;</p>
+  <p>&quot;炉没毁。&quot;萧铁衣道，&quot;火没了。&quot;</p>
+  <p>&quot;火没了，炉就是废铁。&quot;</p>
+  <p>&quot;明日可以再生火。&quot;萧铁衣道，&quot;刀熔了，生不回来。&quot;</p>
+  <p>郑四不说话。他把条子折起来，收进怀里，往后退了一步。</p>
+  <p>&quot;霍显。&quot;</p>
+  <p>霍显已经进来了。</p>
+  <p>第一掌推在他胸口。萧铁衣退了两步，后背撞在墙上，墙上挂着的断器一齐响，响完，有一截断枪从钉子上掉下来，落在他脚边。他没有去捡。</p>
+  <p>第二掌打在右肩。通脉六重的一掌，力气不走直线，走的是斜面。他整个人往左边滑出去半尺，脚在沙上犁出一道沟。这一掌没有让他疼，先让他麻，麻从肩窝往下走，走到肘弯，手就抬不起来了。</p>
+  <p>第三掌打在右肋。那是旧伤，十月初六、十月十二、十一月十七，三回。他弯下腰，嘴里有铁味，铁味从舌根往上冒，冒到喉咙口，他咽了回去。</p>
+  <p>掌心那道口子跳了一下。跳得很重。</p>
+  <p>第二十四笔。</p>
+  <p>他数得清。十月初二那十八掌，十一月十七那一脚，试器那三招，昨天巷子里三下。今天这一下，是第二十四。</p>
+  <p>刀在案上，隔着三步。三截，用灰布松松地包着，麻绳捆了两道。</p>
+  <p>三步。他量过。他量过很多回，从门口到案三步，从案到柜五步。量过的东西，闭着眼也走得到。</p>
+  <p>可今天这三步没有用。刀断成三截，握不住。握住了也没有用，腕上的道是断的，气送不到刀上。</p>
+  <p>他站着，把气咽下去。</p>
+  <p>第四下是郑四。郑四没有用掌，他用册子。册子卷成筒，抽在他脸上。纸边划过颧骨，留了一道白印，白印慢慢变红。</p>
+  <p>这一下不重。重的是他抽完，把册子抖开，用指头抹平了纸边。</p>
+  <p>&quot;脸不算内门打你。&quot;郑四道，&quot;脸是我打的。你要记，记在我名下。&quot;</p>
+  <p>萧铁衣抬起头，瞧了他一眼。</p>
+  <p>&quot;记上了。&quot;</p>
+  <p>他一直数着。</p>
+  <p>一下，两下，三下，四下。</p>
+  <p>数到第五下的时候，霍显没有再打他。</p>
+  <p>霍显走到案前，把灰布包拿起来，掂了一下。</p>
+  <p>&quot;三截。&quot;</p>
+  <p>&quot;放下。&quot;</p>
+  <p>霍显没有理他。他把布包往怀里塞。</p>
+  <p>萧铁衣站起来了。他起身的时候用手撑了墙，撑得右臂一抖。</p>
+  <p>&quot;放下。&quot;</p>
+  <p>霍显把布包塞进怀里，转过身。</p>
+  <p>&quot;你怀里的钥匙。&quot;</p>
+  <p>萧铁衣把左手从袖子里抽出来，按在案角上。</p>
+  <p>&quot;待勘的器，钥匙在守的人手里。&quot;霍显道，&quot;今晚守的人是你。钥匙给我，我把刀带走，明天给你一把新的。&quot;</p>
+  <p>&quot;器阁的钥匙，不给内门。&quot;</p>
+  <p>&quot;内门的器，内门的钥匙。&quot;</p>
+  <p>&quot;这刀是待勘的。&quot;萧铁衣道，&quot;待勘的东西，灰袍说了算。&quot;</p>
+  <p>霍显往前一步，伸手来抓他怀里的钥匙。</p>
+  <p>萧铁衣抬手了。</p>
+  <p>右手，从下往上，横在胸前，挡住那只手。</p>
+  <p>他知道自己在做什么。他抬手的那一瞬，脑子里过了一件事：判语，一年。</p>
+  <p>手还是抬了。</p>
+  <p>霍显那一掌没有收。</p>
+  <p>通脉六重的一掌，落在腕上。</p>
+  <p>萧铁衣听见一声响。不是骨头断。是筋断。</p>
+  <p>腕上那道白痂，从中间裂开，裂口往下走，走过腕线，走过一寸，走过一寸半。血从裂口里出来，先是一线，然后一片，顺着手背流到指缝，滴在地上。</p>
+  <p>他跪下去。</p>
+  <p>钥匙还在怀里。霍显的手被他挡开了，退了半步。</p>
+  <p>&quot;断了一条。&quot;霍显道。</p>
+  <p>他把怀里的灰布包摸出来，扔回案上。</p>
+  <p>&quot;这刀我给你留着。&quot;他说，&quot;不值一条手。&quot;</p>
+  <p>霍显往院外走。走到门口，停下。</p>
+  <p>&quot;腊月三十，册子上见。&quot;</p>
+  <p>三个人走了。郑四最后一个出门，手里那本卷成筒的册子还捏着。</p>
+  <p>屋里静下来。灯还亮着，火苗比刚才高了一点，因为门开了，风进来了。</p>
+  <p>萧铁衣跪在地上，右手垂着。血从指缝里往下滴，滴在沙上，一滴一个坑。</p>
+  <p>他左手撑着膝盖，站起来。</p>
+  <p>然后走到案前，把灰布包重新包好。包得很慢，一只手包，包了三次才把麻绳捆上。</p>
+  <p>捆完，他从案下抽出一条布。布是钟七擦刀用的，脏，上头有磨石粉。他用左手和牙，把布绕在右腕上，绕了三圈。绕的时候右手抽了一下，抽得他牙关咬着不放。</p>
+  <p>扎得不成样子。布头塞不进去，只能掖在腕内侧。</p>
+  <p>钟七的锣还挂在门框上，没有敲。</p>
+  <p>钟七是卯时前回来的。他推门进来，先瞧炉，再瞧案，最后瞧门框上那面锣。</p>
+  <p>锣还在，绳子上的死结还在，锣面上落了一层灰。</p>
+  <p>&quot;你没敲。&quot;</p>
+  <p>&quot;没敲。&quot;</p>
+  <p>&quot;为什么。&quot;</p>
+  <p>&quot;敲了，人就来了。&quot;萧铁衣道，&quot;人来了，瞧见炉灭了，刀还在，他们会说，是钟七守的。&quot;</p>
+  <p>钟七没有说话。他走到案前，把灰布包打开，瞧那三截，一截一截瞧，瞧完重新包上。</p>
+  <p>&quot;你这一夜，挡了什么。&quot;</p>
+  <p>&quot;挡了一个字。&quot;</p>
+  <p>子时，灰袍下来了。</p>
+  <p>他进来先瞧炉。炉膛是黑的，塞子在案下，水桶倒在后院门口。</p>
+  <p>他没有问。</p>
+  <p>他走到案前，把萧铁衣的右手抬起来，把布解开。</p>
+  <p>腕上的裂口有一寸半长，血已经凝了，凝成一层暗红。裂口的两边翻起来，中间瞧得见一条白的，那是筋。</p>
+  <p>&quot;断了一条。&quot;灰袍道，&quot;腕上三条筋，管三根指头。断了中间那条，管中指和无名指。&quot;</p>
+  <p>他把手放下。</p>
+  <p>&quot;握。&quot;</p>
+  <p>萧铁衣握了一下。中指和无名指不动，食指和小指动了。</p>
+  <p>&quot;提不起东西。&quot;</p>
+  <p>&quot;提得起。&quot;萧铁衣道，&quot;提得起筷子。&quot;</p>
+  <p>&quot;提得起筷子，提不起刀。&quot;</p>
+  <p>萧铁衣把右手翻过来，掌心朝上，五根指头一根一根往回收。收到中指，收不动。</p>
+  <p>灰袍在他对面坐下，两只手拢在袖子里。</p>
+  <p>&quot;你抬手了。&quot;</p>
+  <p>&quot;抬了。&quot;</p>
+  <p>&quot;判语怎么办。&quot;</p>
+  <p>萧铁衣抬起头。</p>
+  <p>&quot;判语判的是手。&quot;他说，&quot;手废了，没手可判。&quot;</p>
+  <p>灰袍瞧着他。瞧了很久，久到案上的灯芯烧出一声轻响。</p>
+  <p>&quot;你说得对。&quot;</p>
+  <p>他站起来。</p>
+  <p>&quot;从今天起，你不是不能打。&quot;灰袍道，&quot;你是没手。&quot;</p>
+  <p>&quot;那我是什么。&quot;</p>
+  <p>&quot;你是废了手的人。&quot;灰袍道，&quot;废了手的人，宗门有一条规矩，写在器条后面。&quot;</p>
+  <p>&quot;哪一条。&quot;</p>
+  <p>&quot;十七条。&quot;灰袍道，&quot;器条最后头，一共四十九个字。&quot;</p>
+  <p>&quot;念。&quot;</p>
+  <p>&quot;宗门弟子因公废手者，饭、药、房，供三年。三年之内不得除名。三年之后，自去。&quot;</p>
+  <p>萧铁衣把手抬起来，抬到胸口。右手，垂着的，像一段挂在袖子里的东西。</p>
+  <p>&quot;三年里算什么。&quot;</p>
+  <p>&quot;什么都不算。&quot;灰袍道，&quot;养着的人，不算弟子。没有月供，没有功，不能上台，不能领差。&quot;</p>
+  <p>&quot;三年之后呢。&quot;</p>
+  <p>&quot;三年之后你还是今天的你。&quot;</p>
+  <p>&quot;我要。&quot;</p>
+  <p>灰袍点了一下头。他伸手，把萧铁衣的右手抬起来，抬到灯下，瞧那道裂口。</p>
+  <p>&quot;我不是因公。&quot;萧铁衣道。</p>
+  <p>&quot;你是。&quot;灰袍道，&quot;打你的人，是内门弟子。你守的东西，是器阁的柜。器阁归宗门，柜归宗门。&quot;</p>
+  <p>&quot;那他要赔。&quot;</p>
+  <p>&quot;谁打你，谁赔。&quot;灰袍道，&quot;可赔什么，得有人说。没人说，十七条就是四十九个字。&quot;</p>
+  <p>他把手放下。</p>
+  <p>他把铜锁打开，把三截刀取出来，摆在案上。</p>
+  <p>&quot;你的手废了，刀也废了。&quot;他说，&quot;两样都废了，反倒好办。&quot;</p>
+  <p>&quot;怎么好办。&quot;</p>
+  <p>&quot;废了的东西，可以重接。&quot;</p>
+  <p>萧铁衣把手抬到灯下。腕上的布已经解开，裂口晾在光里。</p>
+  <p>&quot;你的手接不回。&quot;灰袍道，&quot;筋断了，长不回去，这个我知道。刀能接。&quot;</p>
+  <p>&quot;接成什么。&quot;</p>
+  <p>&quot;接成一把短的。&quot;灰袍道，&quot;一尺五加三寸，接起来是一尺八。短刀，贴身用。&quot;</p>
+  <p>&quot;谁接。&quot;</p>
+  <p>&quot;会骨接的人。&quot;灰袍道，&quot;我不认识。你要去找。&quot;</p>
+  <p>他从袖子里摸出一块木牌，牌上刻一个字：差。</p>
+  <p>&quot;腊月十五走。腊月二十八回来。迟一天，册就封了。&quot;</p>
+  <p>萧铁衣用左手把木牌接过来。</p>
+  <p>&quot;去哪儿。&quot;</p>
+  <p>&quot;云州南门里第三家。&quot;灰袍道，&quot;找一个打铁的，问他，会骨接的人还剩几个。&quot;</p>
+  <p>他说完，往门口走。</p>
+  <p>&quot;灰袍。&quot;</p>
+  <p>灰袍停下。</p>
+  <p>&quot;你为什么要这把刀。&quot;</p>
+  <p>&quot;十九年前那批牌，是我验的册。&quot;灰袍道，&quot;验的时候，一百二十面，我一面一面过。过完了，签了字。&quot;</p>
+  <p>&quot;签了字怎么样。&quot;</p>
+  <p>&quot;签了字，出了事，我得查。&quot;</p>
+  <p>他走出去。门被风带了一下，撞在墙上，又弹回来。</p>
+  <p>丑时，执事堂。</p>
+  <p>堂里只点了一盏灯。郑四坐在案后，把册子摊开，翻到第三十七页。</p>
+  <p>他蘸了一次墨，在那一行末尾，把一枚小印按下去。</p>
+  <p>印是方的。他按了三下，抬起印，瞥了一眼，又按了一下补边。</p>
+  <p>印泥是朱的，朱里掺了油，按下去会洇。他把纸角提起来，对着灯，等墨干。</p>
+  <p>灯芯烧短了，他剪了一刀，火苗稳住。</p>
+  <p>案上还有一本册，薄，蓝布面，是腊月的功册。他翻到最后一页，添了一行。</p>
+  <p>腊月十二夜，器阁行走三十七号，与内门弟子斗，废手。</p>
+  <p>写完，他把笔搁下，笔杆朝北。</p>
+  <p>墨还没有干。</p>
+  <p>腊月三十。</p>
+  <p>第一百二十四章 完</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，轻点显示/隐藏 ===== */
+  var TOTAL=430;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null,dragging=false;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+
+  /* 翻页：只有「横向滑动」（>64px 且横向明显占优）才翻章；轻点只开关工具栏。
+     不再用「点侧边就翻页」，避免误点一下就莫名跳章。 */
+  var sx=0,sy=0,stk=false,moved=false;
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a"))return;
+    sx=e.clientX||0;sy=e.clientY||0;stk=true;moved=false;
+  },{passive:true});
+  document.body.addEventListener("pointermove",function(e){
+    if(!stk)return;
+    if(Math.abs((e.clientX||0)-sx)>10||Math.abs((e.clientY||0)-sy)>10)moved=true;
+  },{passive:true});
+  document.body.addEventListener("pointerup",function(e){
+    if(!stk)return;stk=false;
+    var dx=(e.clientX||0)-sx,dy=(e.clientY||0)-sy;
+    if(Math.abs(dx)>=64&&Math.abs(dx)>Math.abs(dy)*1.6){
+      if(dx<0&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+      if(dx>0&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    }
+    if(!moved){if(document.body.classList.contains("ui-show"))hide();else show();}
+  },{passive:true});
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  /* ===== 进度与书签：每本书只有两格 =====
+     ① auto   自动存档位：读到哪里自动记，无需操作
+     ② manual 手动书签位：点一下按钮钉住，全书共享这一个
+     进页面时绝不擅自跳转，只给提示；只有从「续读/书签」入口进来才定位。 */
+  var RKEY="hugo_reader_v1";
+  var mm=location.pathname.match(/gudo-(\d+)/);
+  var CH=(mm?parseInt(mm[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var TITLE=h1?h1.textContent.trim():("第"+CH+"章");
+
+  function migrate(d){
+    if(!d.auto&&!d.manual&&(d.bookmark||d.resume||d.chapters)){
+      var nd={};
+      if(d.resume&&d.resume.ch){nd.auto={ch:d.resume.ch,pct:d.resume.pct|0,t:d.resume.t||0};}
+      if(d.bookmark&&d.bookmark.ch){nd.manual={ch:d.bookmark.ch,pct:d.bookmark.pct|0,t:d.bookmark.t||0};}
+      return nd;
+    }
+    return d;
+  }
+  function loadR(){
+    var d={};
+    try{d=JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){d={}}
+    var o=migrate(d);
+    if(o!==d){try{localStorage.setItem(RKEY,JSON.stringify(o))}catch(e){}}
+    return o;
+  }
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function scrollToPct(p){var h=maxH();if(h>0)window.scrollTo(0,Math.round(h*p/100));}
+
+  var cur=loadR();
+  var A=cur.auto||null, B=cur.manual||null;
+  var hash=location.hash;
+
+  /* 只在带 #auto / #manual 进来时定位；多点几次，等版式稳定，避免“跳歪” */
+  var restoring=false;
+  function restore(p){
+    if(!(p>0))return;
+    restoring=true;
+    [0,90,220,420,700].forEach(function(dt){
+      setTimeout(function(){if(restoring)scrollToPct(p);},dt);
+    });
+    setTimeout(function(){restoring=false;},960);
+  }
+  addEventListener("wheel",function(){restoring=false;},{passive:true,once:true});
+  addEventListener("touchstart",function(){restoring=false;},{passive:true,once:true});
+
+  if(hash==="#manual"&&B&&B.ch===CH&&B.pct>0){restore(B.pct);}
+  else if(hash==="#auto"&&A&&A.ch===CH&&A.pct>0){restore(A.pct);}
+  else{
+    var wrap=document.querySelector(".wrap");
+    if(B&&B.ch&&B.ch!==CH){
+      var x=document.createElement("div");x.className="resume-tip";
+      x.innerHTML="🔖 书签在 <a href='gudo-"+B.ch+".html#manual'>第"+B.ch+"章</a>（钉在 "+B.pct+"%）";
+      wrap.prepend(x);
+    }
+    if(A&&A.ch===CH&&A.pct>=3&&A.pct<97){
+      var tip=document.createElement("div");tip.className="resume-tip";
+      tip.innerHTML="📌 上次读至 "+A.pct+"% · <a href='javascript:void(0)' id='resumeGo'>回到原位</a>";
+      wrap.prepend(tip);
+      document.getElementById("resumeGo").onclick=function(){tip.remove();scrollToPct(A.pct);};
+    }
+    if(B&&B.ch===CH&&B.pct>0){
+      var btip=document.createElement("div");btip.className="resume-tip";
+      btip.innerHTML="🔖 本章书签：钉在 "+B.pct+"% · <a href='javascript:void(0)' id='bmGo'>回到书签</a>";
+      wrap.prepend(btip);
+      document.getElementById("bmGo").onclick=function(){btip.remove();scrollToPct(B.pct);};
+    }
+  }
+
+  /* 自动存档：随滚动更新（节流 1.2s），离开页面再记一次 */
+  var timer=null;
+  function record(){
+    var mh=maxH();if(mh<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/mh*100));
+    var d=loadR();d.auto={ch:CH,pct:p,t:Date.now()};saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record();},1200)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(record,800);
+
+  /* 手动书签：一键钉住 / 再点清除（全书仅此一格） */
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  function paint(){
+    var b=(loadR().manual)||null;
+    if(b&&b.ch===CH&&b.pct>0)btn.textContent="🔖 书签 "+b.pct+"%";
+    else if(b&&b.ch)btn.textContent="🔖 书签·第"+b.ch+"章";
+    else btn.textContent="🔖 书签";
+  }
+  document.getElementById("__bmSlot").appendChild(btn);
+  paint();
+  btn.onclick=function(){
+    var mh=maxH();
+    var p=mh>0?Math.min(100,Math.round(document.documentElement.scrollTop/mh*100)):0;
+    var d=loadR();
+    if(d.manual&&d.manual.ch===CH&&Math.abs((d.manual.pct||0)-p)<=2){
+      delete d.manual;saveR(d);paint();
+      btn.textContent="已清除书签";setTimeout(paint,1400);
+    }else{
+      d.manual={ch:CH,pct:p,t:Date.now()};saveR(d);paint();
+      btn.textContent="✓ 已存书签 "+p+"%";setTimeout(paint,1600);
+    }
+  };
+})();
+
+</script>
+</body>
+</html>

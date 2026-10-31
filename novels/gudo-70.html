@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第七十章 · 一道斜 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第七十章 · 一道斜</h1>
+  <p>六月十九，云州南门。他跟郑四请了三天假。</p>
+  <p>&quot;三天。&quot;郑四说，&quot;三天不回，三十七号的牌子我给别人。&quot;</p>
+  <p>巩铁匠的铺子在城门里第三家。铺子一间半宽，门脸是黑的，是几十年炉烟熏出来的。</p>
+  <p>门口挂着一块木牌，牌上写着&quot;巩&quot;。</p>
+  <p>萧铁衣推门进去。铺子里没有人。炉子是凉的。炉膛里有一层灰，灰上有一块铁板，铁板上压着一把刀。</p>
+  <p>&quot;巩师傅。&quot;</p>
+  <p>后院里有人应了一声。巩铁匠从后院出来，手上还沾着水。他往萧铁衣的右手扫了一眼。</p>
+  <p>&quot;能握了。&quot;</p>
+  <p>&quot;能握了。&quot;</p>
+  <p>&quot;几个月。&quot;</p>
+  <p>&quot;一个半月。&quot;</p>
+  <p>巩铁匠没有说话。他走到炉前，把铁板搬开，把刀拿出来。刀身上有一层灰。他用袖子擦了两下。</p>
+  <p>&quot;温的。&quot;</p>
+  <p>&quot;炉子不是凉了吗。&quot;</p>
+  <p>&quot;凉了三天。&quot;巩铁匠说，&quot;刀还是温的。&quot;</p>
+  <p>萧铁衣接过刀。刀很沉。不是铁沉。是骨沉。</p>
+  <p>&quot;有人来问过。&quot;</p>
+  <p>&quot;什么时候。&quot;</p>
+  <p>&quot;前天。&quot;</p>
+  <p>&quot;什么人。&quot;</p>
+  <p>&quot;两个人。&quot;巩铁匠说，&quot;穿黑短褂，袖口有一块铁片。&quot;</p>
+  <p>萧铁衣的手指在刀柄上紧了一下。</p>
+  <p>&quot;铁衣门的。&quot;</p>
+  <p>&quot;他们出五十两。&quot;</p>
+  <p>&quot;买刀。&quot;</p>
+  <p>&quot;买刀。&quot;巩铁匠说，&quot;我说这把刀不卖。&quot;</p>
+  <p>&quot;他们说什么。&quot;</p>
+  <p>&quot;他们说，那就等。&quot;</p>
+  <p>巩铁匠往门口瞥了一眼。</p>
+  <p>&quot;他们还说，这把刀的主人，会自己回来。&quot;</p>
+  <p>巩铁匠往街对面抬了一下下巴。</p>
+  <p>&quot;那两个人，现在还在对面。&quot;</p>
+  <p>&quot;盯了一夜？&quot;</p>
+  <p>&quot;从昨天下午就在。&quot;</p>
+  <p>萧铁衣把刀放在铁砧上。</p>
+  <p>&quot;巩师傅。&quot;</p>
+  <p>&quot;嗯。&quot;</p>
+  <p>&quot;你儿子呢。&quot;</p>
+  <p>&quot;在后院。&quot;</p>
+  <p>&quot;让他带我女儿走。&quot;</p>
+  <p>巩铁匠的脸色变了一下。</p>
+  <p>&quot;你要在这儿打。&quot;</p>
+  <p>&quot;他要的是我的手。&quot;萧铁衣说，&quot;我走了，他会追。&quot;</p>
+  <p>&quot;追到哪儿。&quot;</p>
+  <p>&quot;追到我女儿身上。&quot;</p>
+  <p>巩铁匠没有说话。他把炉门关上，转过身。</p>
+  <p>&quot;你这把刀，打不过他。&quot;</p>
+  <p>&quot;我知道。&quot;</p>
+  <p>&quot;你知道还留下。&quot;</p>
+  <p>&quot;我走了，他会追。&quot;萧铁衣说，&quot;追到哪儿，我女儿就到哪儿。&quot;</p>
+  <p>&quot;那你就用一把出不了鞘的刀，打一个通脉六重。&quot;</p>
+  <p>&quot;是。&quot;</p>
+  <p>巩铁匠看着他。&quot;你娘是谁。&quot;</p>
+  <p>&quot;柳扶。&quot;</p>
+  <p>&quot;柳家的人。&quot;</p>
+  <p>&quot;铁衣门的。&quot;</p>
+  <p>巩铁匠的手在围裙上擦了两下。</p>
+  <p>&quot;你娘当年带着你爹来我这儿打过一把锄头。&quot;</p>
+  <p>&quot;你爹不会说话，一直是她在说。&quot;</p>
+  <p>&quot;她说话的时候，眼睛不躲人。&quot;</p>
+  <p>他转身进后院，把小满叫出来。小满十三岁，手上也沾着水。</p>
+  <p>&quot;带她走。&quot;</p>
+  <p>&quot;去哪儿。&quot;</p>
+  <p>&quot;城南土地庙。&quot;</p>
+  <p>&quot;什么时候回来。&quot;</p>
+  <p>&quot;天亮。&quot;</p>
+  <p>丫丫被小满牵着。她走到门口，回过头。</p>
+  <p>&quot;爹。&quot;</p>
+  <p>&quot;嗯。&quot;</p>
+  <p>&quot;刀取回来了吗。&quot;</p>
+  <p>&quot;取回来了。&quot;</p>
+  <p>丫丫望了一眼铁砧上的刀。</p>
+  <p>&quot;那你刻。&quot;</p>
+  <p>&quot;我刻。&quot;</p>
+  <p>他们走了。铺子里只剩下两个人。巩铁匠把炉子旁边的风箱拉开，把炉门打开。</p>
+  <p>炉膛是空的。底下有一块铁板，三尺见方，盖着一个口子。口子底下是出渣的坑，坑有一人深，坑底是碎渣和铁屑。</p>
+  <p>&quot;这个口子，一会儿有用。&quot;萧铁衣说。</p>
+  <p>巩铁匠瞟了他一眼。&quot;你想把他引到口子上。&quot;</p>
+  <p>&quot;我想。&quot;</p>
+  <p>&quot;六重的人，不好引。&quot;</p>
+  <p>&quot;六重的人，力大。&quot;萧铁衣说，&quot;力大的人，一刀劈空，收得慢。&quot;</p>
+  <p>巩铁匠没有再问。他把风箱拉了两下，炉子里没有一点火。</p>
+  <p>&quot;没有火。&quot;</p>
+  <p>&quot;要火做什么。&quot;</p>
+  <p>&quot;打铁要火。&quot;巩铁匠说，&quot;打人要什么。&quot;</p>
+  <p>&quot;要地。&quot;</p>
+  <p>戌时，天黑了。铺子里点了一盏油灯。灯放在铁砧上，只照得亮三尺。门被推开了。</p>
+  <p>进来一个人。五十来岁，个子不高，肩膀很宽，穿一件深褐色的袍子，袍子的下摆扎在腰里。</p>
+  <p>腰上挂着一把刀。刀鞘是黑的，鞘口有一圈金。他进门的时候，先低头看了一眼门槛。</p>
+  <p>然后才进来。&quot;萧铁衣。&quot;</p>
+  <p>&quot;是。&quot;</p>
+  <p>那人往铺子里扫了一圈。扫过铁砧，扫过炉子，扫过那块铁板。</p>
+  <p>&quot;邱九斤。&quot;</p>
+  <p>&quot;赵家三等供奉。&quot;</p>
+  <p>&quot;通脉六重。&quot;</p>
+  <p>赵家的供奉分三等。三等是门客里最能打的，一年一百二十两。二等能进内堂，见家主。</p>
+  <p>一等只有两个。邱九斤在三等待了十一年。二等供奉的位子，去年空了一个。</p>
+  <p>他去求过。家主说，拿一样东西来换。那样东西，是萧家小子的手。萧铁衣没有说话。</p>
+  <p>&quot;你知道我要什么。&quot;</p>
+  <p>&quot;我的手。&quot;</p>
+  <p>&quot;对。&quot;邱九斤说，&quot;赵家三房要活的，要你的手。&quot;</p>
+  <p>&quot;砍下来，还是连着人。&quot;</p>
+  <p>&quot;都行。&quot;</p>
+  <p>他把刀从鞘里抽出来。刀身很宽，厚背，刀身上有三道槽。槽里是暗的。</p>
+  <p>&quot;我不砍你的手。&quot;</p>
+  <p>&quot;为什么。&quot;</p>
+  <p>&quot;因为赵家要的是活的手。&quot;邱九斤说，&quot;活的手，得你自己砍。&quot;</p>
+  <p>&quot;我砍了，你就放过我。&quot;</p>
+  <p>&quot;我放过你。&quot;</p>
+  <p>&quot;我女儿呢。&quot;</p>
+  <p>邱九斤笑了一下。&quot;赵家只要手。&quot;</p>
+  <p>&quot;手是你的，女儿是你的。&quot;</p>
+  <p>&quot;跟我们没关系。&quot;</p>
+  <p>萧铁衣没有说话。</p>
+  <p>&quot;我给你一炷香。&quot;</p>
+  <p>&quot;铺子里有香吗。&quot;</p>
+  <p>&quot;没有。&quot;</p>
+  <p>&quot;那就不点了。&quot;</p>
+  <p>邱九斤把刀抬起来。&quot;我数三下。&quot;</p>
+  <p>&quot;一。&quot;</p>
+  <p>萧铁衣往后退了一步。&quot;二。&quot;</p>
+  <p>他退到炉边。&quot;三。&quot;</p>
+  <p>刀下来了。不是劈。是削。刀从右边横着削过来，削的是他的手腕。</p>
+  <p>萧铁衣抬起右手。不是挡。是让。他把手腕往刀上迎了两寸。</p>
+  <p>刀削在壳上。声音很尖。像刀削在瓷上。萧铁衣的整条右臂，从腕到肩，往下沉。</p>
+  <p>他的脚底在地上滑了半尺。滑出一道沟。壳上没有裂。邱九斤收刀。</p>
+  <p>&quot;你腕子上有东西。&quot;</p>
+  <p>&quot;有。&quot;</p>
+  <p>&quot;什么东西。&quot;</p>
+  <p>&quot;壳。&quot;</p>
+  <p>&quot;铁衣门的。&quot;</p>
+  <p>&quot;是。&quot;</p>
+  <p>邱九斤的眼睛眯了一下。</p>
+  <p>&quot;铁衣门的手，怎么长在萧家的人身上。&quot;</p>
+  <p>&quot;我娘是铁衣门的。&quot;</p>
+  <p>邱九斤没有说话。他把刀换到左手。不是换手。是试。</p>
+  <p>刀在左手上转了一圈，又回到右手。萧铁衣往他的脚上看。两只脚。前脚三分，后脚七分。</p>
+  <p>不是。他再往上看。邱九斤站着的时候，身子是斜的。左肩比右肩低半寸。</p>
+  <p>通脉六重，力分六份。六份不在脚上。六份在刀上。一个人把六份力都放在刀上，身上就没有护的了。</p>
+  <p>可他不需要护。因为他快。快的人不需要护。他把握刀的手松开了。</p>
+  <p>邱九斤第二刀来了。这一刀是劈。从上往下，劈的是头顶。萧铁衣往左闪。</p>
+  <p>刀劈空了。劈在地上。夯土的地，被劈出一道口子。刀进去了两寸。</p>
+  <p>两寸。</p>
+  <p>收刀的时候，邱九斤的手腕往上提了一下。提这一下，用了半息。</p>
+  <p>半息。</p>
+  <p>萧铁衣的右脚踢出去。不是踢人。是踢炉边那块铁板。铁板翻起来，翻到一边。</p>
+  <p>露出底下的黑口子。邱九斤的刀收回来了。他往后退了一步。后脚踩在口子边上。</p>
+  <p>踩住了。萧铁衣往前走了。他走进邱九斤的刀里。</p>
+  <p>一步。</p>
+  <p>两步。</p>
+  <p>邱九斤的第三刀下来了。这一刀是横的，削腰。萧铁衣没有躲。他把右臂横过来，迎上去。</p>
+  <p>刀削在壳上。力进来了。这一次的力，比前两次大。大得多。</p>
+  <p>力从腕上进，进到肘，肘弯撑不住，往肩上走。肩撑不住，往脊背上走。脊背撑不住，往腰上走。</p>
+  <p>萧铁衣往下一沉。他的膝盖弯了。不是跪。是蹲。</p>
+  <p>他把胯往下坐，把力从脊背引进胯，从胯引进两条腿。两条腿的力，引进脚底。</p>
+  <p>脚底下的地，是夯土。可这一块夯土，是压在铁板底下的。铁板压了三十年，底下的土从来没有被夯过。</p>
+  <p>压着的时候是实的。一掀开，就是松的。夯土底下，是空的。地塌了。</p>
+  <p>不是裂。是塌。三尺见方的一块地，整块往下坐。土块掉进渣坑，扬起一片灰。</p>
+  <p>邱九斤的后脚，跟着土块一起下去了。他的小腿陷进坑里，陷到膝盖。萧铁衣站起来了。</p>
+  <p>他没停。他一步跨到坑边，抬起右肘。肘从下往上，撞在邱九斤的胸口。邱九斤没有飞。</p>
+  <p>他的腿卡在坑里，飞不了。这一肘，把力全灌进去了。邱九斤的上半身往后仰。</p>
+  <p>仰到一半，腰折了。他没有倒。他用刀撑住了。刀尖插在地上，撑着。</p>
+  <p>巩铁匠从炉子后面出来了。他手里有一把锤。锤不大，六斤。</p>
+  <p>&quot;让开。&quot;</p>
+  <p>萧铁衣往旁边让了半步。巩铁匠一锤砸下去。砸的不是人。是刀。</p>
+  <p>刀身被砸断了。断在刀镡上头三寸的地方。断口是白的。邱九斤手里只剩半截刀。</p>
+  <p>铺子里静下来。油灯还在铁砧上。灯焰被刚才的风带得往一边倒，倒了一会儿，慢慢直起来。</p>
+  <p>邱九斤站在坑里。他的小腿卡在土里，出不来。他低头，手里那半截刀。</p>
+  <p>&quot;你打断了我的刀。&quot;</p>
+  <p>&quot;是他打断的。&quot;巩铁匠说，&quot;我砸的。&quot;</p>
+  <p>邱九斤抬起头。&quot;你知道我是谁。&quot;</p>
+  <p>&quot;赵家三等供奉。&quot;</p>
+  <p>&quot;你知道打断供奉的刀，是什么罪。&quot;</p>
+  <p>&quot;知道。&quot;巩铁匠说，&quot;赔钱。&quot;</p>
+  <p>邱九斤打量他。打量了很久。</p>
+  <p>&quot;你叫什么。&quot;</p>
+  <p>&quot;巩大山。&quot;</p>
+  <p>&quot;我记住了。&quot;</p>
+  <p>&quot;你记。&quot;巩铁匠说，&quot;我这铺子开了三十一年，没换过地方。&quot;</p>
+  <p>邱九斤把半截刀扔在地上。他弯下腰，两只手撑住坑沿，把腿从土里拔出来。</p>
+  <p>拔出腿的时候，裤管上全是灰。他立在坑边，望着萧铁衣。</p>
+  <p>&quot;你今天赢不了我。&quot;</p>
+  <p>&quot;我知道。&quot;</p>
+  <p>&quot;你是靠这个坑。&quot;</p>
+  <p>&quot;我知道。&quot;</p>
+  <p>&quot;下一次没有坑。&quot;</p>
+  <p>萧铁衣把铁砧上的刀拿起来。刀还在鞘里。</p>
+  <p>&quot;下一次我有刀。&quot;</p>
+  <p>邱九斤望着那把刀。</p>
+  <p>望了三息。&quot;那把刀，出不了鞘。&quot;</p>
+  <p>&quot;为什么。&quot;</p>
+  <p>&quot;因为它一出鞘，你的手就废了。&quot;邱九斤说，&quot;赵家知道。&quot;</p>
+  <p>&quot;赵家等的是你自己出鞘。&quot;</p>
+  <p>他转身走了。走到门口，他停下来。</p>
+  <p>&quot;萧铁衣。&quot;</p>
+  <p>&quot;嗯。&quot;</p>
+  <p>&quot;你娘那块牌，还在你身上。&quot;</p>
+  <p>萧铁衣的手停在刀柄上。</p>
+  <p>&quot;你怎么知道。&quot;</p>
+  <p>&quot;因为那块牌，是赵家送进铁衣门的。&quot;</p>
+  <p>他推门出去。门在他身后关上。巩铁匠走到门口，把门闩上。</p>
+  <p>&quot;对面的两个人，走了。&quot;</p>
+  <p>&quot;什么时候走的。&quot;</p>
+  <p>&quot;邱九斤出门的时候。&quot;</p>
+  <p>&quot;他们盯了一夜。&quot;</p>
+  <p>&quot;盯什么。&quot;</p>
+  <p>巩铁匠转过身。&quot;盯你能不能活。&quot;</p>
+  <p>铺子里静了一会儿。&quot;铁衣门要你活。&quot;巩铁匠说，&quot;可他们要盯的，是你自己活下来。&quot;</p>
+  <p>&quot;不是他们救下来的。&quot;</p>
+  <p>铺子里，油灯照着铁砧。巩铁匠把锤放回架子上。</p>
+  <p>&quot;他说的话，你信几分。&quot;</p>
+  <p>&quot;三分。&quot;</p>
+  <p>&quot;哪三分。&quot;</p>
+  <p>&quot;牌是赵家送进去的。&quot;萧铁衣说，&quot;这一分，我信。&quot;</p>
+  <p>&quot;还有两分呢。&quot;</p>
+  <p>&quot;他说下一次没有坑。&quot;</p>
+  <p>&quot;这一分我也信。&quot;</p>
+  <p>&quot;第三分。&quot;</p>
+  <p>萧铁衣把刀放在铁砧上。</p>
+  <p>&quot;他说我出鞘，手就废。&quot;</p>
+  <p>&quot;这一分，我早就知道。&quot;</p>
+  <p>出鞘，手废。不出鞘，赵家还会派人来。派来的一个比一个高。他把这两条路在心里摆了一遍。</p>
+  <p>两条都是死路。他选了第三条。先下河。六月十九，夜，子时。</p>
+  <p>铺子里重新点了灯。炉子里生起了火。火不大，只烧红了炉膛底下一层。巩铁匠把一张矮凳搬过来，放在铁砧前。</p>
+  <p>&quot;坐。&quot;</p>
+  <p>萧铁衣坐下。他把怀里的东西拿出来。一块木牌。牌很轻。</p>
+  <p>正面刻着两个字。柳氏。背面有两行小字。此人非萧氏</p>
+  <p>借籍二十年他把牌放在铁砧上。巩铁匠从架子底下摸出两块小铁片，压在牌的两个角上。</p>
+  <p>&quot;压住。&quot;</p>
+  <p>&quot;为什么。&quot;</p>
+  <p>&quot;刻的时候，牌会走。&quot;</p>
+  <p>&quot;刻哪儿。&quot;巩铁匠说。</p>
+  <p>&quot;正面。&quot;</p>
+  <p>&quot;刻什么。&quot;</p>
+  <p>&quot;扶。&quot;</p>
+  <p>&quot;哪个扶。&quot;</p>
+  <p>&quot;扶起来的扶。&quot;</p>
+  <p>巩铁匠从架子上拿下一把小凿，递过来。</p>
+  <p>&quot;用这个。&quot;</p>
+  <p>&quot;我要用刀。&quot;</p>
+  <p>巩铁匠瞟了他一眼。&quot;用刀刻字，手要稳。&quot;</p>
+  <p>&quot;我知道。&quot;</p>
+  <p>&quot;你的手稳吗。&quot;</p>
+  <p>萧铁衣把守拙刀从鞘里抽出来。刀出鞘的时候，铺子里的火光在刀身上走了一道。</p>
+  <p>他把刀横在膝上。右手握住刀柄。握得住。握得不紧。</p>
+  <p>&quot;刻名字，要一口气。&quot;巩铁匠说，&quot;中间不能停。&quot;</p>
+  <p>&quot;停了会怎么样。&quot;</p>
+  <p>&quot;字就断了。&quot;</p>
+  <p>&quot;断了呢。&quot;</p>
+  <p>&quot;断了，这个名字就不是一个名字。&quot;</p>
+  <p>萧铁衣低下头。刀尖落在木牌上。第一笔。一横。</p>
+  <p>刀尖偏了。偏了半分。起笔的地方多出一个小钩。萧铁衣把刀收回来。</p>
+  <p>他用刀尖在那个小钩上刮。刮了三下。木屑很细，落在铁砧上。</p>
+  <p>&quot;刮一次，牌就薄一分。&quot;巩铁匠说。</p>
+  <p>&quot;我知道。&quot;</p>
+  <p>&quot;刮三次，就刻不成了。&quot;</p>
+  <p>萧铁衣没有再刮。他把刀尖挪回原来的位置。第二笔。一竖钩。</p>
+  <p>第三笔。他的手在抖。不是抖得厉害。是刀尖在抖，抖出半个头发丝那么宽。</p>
+  <p>巩铁匠站在旁边，没有出声。第四笔。第五笔。刀尖走到第六笔的时候，火光照在木牌上，照出底下那两行小字。</p>
+  <p>此人非萧氏。萧铁衣的手停了一下。停了半息。然后他继续刻。</p>
+  <p>第七笔。最后一笔。刀尖往下走。走到牌底。</p>
+  <p>声音不对。不是木头的声音。是空的。萧铁衣的手停住了。</p>
+  <p>他把刀放下。用手指在牌面上敲了一下。空的。</p>
+  <p>&quot;巩师傅。&quot;</p>
+  <p>&quot;嗯。&quot;</p>
+  <p>&quot;这块牌，是空的。&quot;</p>
+  <p>巩铁匠走过来。他把牌拿起来，翻到背面。背面是一块薄木板，四角钉着四颗小钉。</p>
+  <p>钉子很小，钉头是平的。&quot;撬开。&quot;</p>
+  <p>萧铁衣用刀尖挑第一颗钉。钉子松了。</p>
+  <p>第二颗。</p>
+  <p>第三颗。</p>
+  <p>第四颗。</p>
+  <p>薄木板掀开。牌里是空的。空腔不深，两分。空腔里有一块石头。</p>
+  <p>一寸见方，青灰色，边上有凿痕。萧铁衣把石头拿出来。石头正面刻着三个字。</p>
+  <p>三六四铺子里没有人说话。</p>
+  <p>火在炉膛里响了一声。&quot;三六四。&quot;巩铁匠说。</p>
+  <p>&quot;三百六十四。&quot;</p>
+  <p>萧铁衣把石头翻过来。背面有一道凿痕。凿痕是从右上往左下走的。不直。</p>
+  <p>尾端往上翘了一点。&quot;这个凿痕，我见过。&quot;</p>
+  <p>萧铁衣抬起头。&quot;在哪儿。&quot;</p>
+  <p>巩铁匠走到后院的墙根底下，从一堆旧铁里翻出一块石头。石头不大，比拳头大一点。</p>
+  <p>他把石头放在铁砧上。&quot;去年冬天，从南门外的河底捞的。&quot;</p>
+  <p>&quot;捞上来的时候，裹着一块布。&quot;</p>
+  <p>&quot;布上写着一个萧字。&quot;</p>
+  <p>萧铁衣把两块石头并在一起。凿痕对上了。不是相似。是对上了。</p>
+  <p>断口的毛边，一根一根咬在一起。</p>
+  <p>&quot;这是一块。&quot;巩铁匠说。</p>
+  <p>&quot;是一块。&quot;</p>
+  <p>萧铁衣的手指在石头上按了一下。</p>
+  <p>&quot;巩师傅。&quot;</p>
+  <p>&quot;嗯。&quot;</p>
+  <p>&quot;第三百六十四块碑，在河里。&quot;</p>
+  <p>巩铁匠没有说话。萧铁衣低头，看着铁砧上那块木牌。牌面上刻着七个笔画。</p>
+  <p>一个&quot;扶&quot;字。</p>
+  <p>最后一笔没有刻完。他把刀重新拿起来。</p>
+  <p>&quot;你还要刻。&quot;</p>
+  <p>&quot;要刻。&quot;</p>
+  <p>&quot;刻完呢。&quot;</p>
+  <p>刀尖落在牌上。&quot;刻完了，我下河。&quot;</p>
+  <p>&quot;下河找那块碑。&quot;</p>
+  <p>&quot;找。&quot;</p>
+  <p>&quot;找到呢。&quot;</p>
+  <p>&quot;回青锋山。&quot;</p>
+  <p>&quot;为什么回去。&quot;</p>
+  <p>&quot;药库底下有个坑。&quot;萧铁衣说，&quot;三丈深。&quot;</p>
+  <p>天快亮的时候，门响了。小满带着丫丫回来了。丫丫的鞋上全是土，头发上沾着一根草。</p>
+  <p>她进门，先望铁砧。&quot;刻好了吗。&quot;</p>
+  <p>&quot;刻好了。&quot;</p>
+  <p>她走到铁砧前，踮起脚。牌上刻着一个字。扶。</p>
+  <p>字刻在&quot;氏&quot;的右边。</p>
+  <p>左边是柳，右边是扶。&quot;这个是扶。&quot;</p>
+  <p>&quot;是。&quot;</p>
+  <p>&quot;这个是娘的。&quot;</p>
+  <p>&quot;是。&quot;</p>
+  <p>丫丫伸出手，手指在字上摸。从撇摸到横，从横摸到捺。摸了两遍。</p>
+  <p>&quot;七笔。&quot;她说。</p>
+  <p>&quot;七笔。&quot;</p>
+  <p>&quot;一笔不缺。&quot;</p>
+  <p>&quot;一笔不缺。&quot;</p>
+  <p>&quot;爹。&quot;</p>
+  <p>&quot;嗯。&quot;</p>
+  <p>&quot;她的手，是不是也这样摸过我的头。&quot;</p>
+  <p>铺子里没有人说话。炉子里的火，只剩一层红。</p>
+  <p>&quot;是。&quot;萧铁衣说。</p>
+  <p>第七十章 完</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，轻点显示/隐藏 ===== */
+  var TOTAL=430;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null,dragging=false;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+
+  /* 翻页：只有「横向滑动」（>64px 且横向明显占优）才翻章；轻点只开关工具栏。
+     不再用「点侧边就翻页」，避免误点一下就莫名跳章。 */
+  var sx=0,sy=0,stk=false,moved=false;
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a"))return;
+    sx=e.clientX||0;sy=e.clientY||0;stk=true;moved=false;
+  },{passive:true});
+  document.body.addEventListener("pointermove",function(e){
+    if(!stk)return;
+    if(Math.abs((e.clientX||0)-sx)>10||Math.abs((e.clientY||0)-sy)>10)moved=true;
+  },{passive:true});
+  document.body.addEventListener("pointerup",function(e){
+    if(!stk)return;stk=false;
+    var dx=(e.clientX||0)-sx,dy=(e.clientY||0)-sy;
+    if(Math.abs(dx)>=64&&Math.abs(dx)>Math.abs(dy)*1.6){
+      if(dx<0&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+      if(dx>0&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    }
+    if(!moved){if(document.body.classList.contains("ui-show"))hide();else show();}
+  },{passive:true});
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  /* ===== 进度与书签：每本书只有两格 =====
+     ① auto   自动存档位：读到哪里自动记，无需操作
+     ② manual 手动书签位：点一下按钮钉住，全书共享这一个
+     进页面时绝不擅自跳转，只给提示；只有从「续读/书签」入口进来才定位。 */
+  var RKEY="hugo_reader_v1";
+  var mm=location.pathname.match(/gudo-(\d+)/);
+  var CH=(mm?parseInt(mm[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var TITLE=h1?h1.textContent.trim():("第"+CH+"章");
+
+  function migrate(d){
+    if(!d.auto&&!d.manual&&(d.bookmark||d.resume||d.chapters)){
+      var nd={};
+      if(d.resume&&d.resume.ch){nd.auto={ch:d.resume.ch,pct:d.resume.pct|0,t:d.resume.t||0};}
+      if(d.bookmark&&d.bookmark.ch){nd.manual={ch:d.bookmark.ch,pct:d.bookmark.pct|0,t:d.bookmark.t||0};}
+      return nd;
+    }
+    return d;
+  }
+  function loadR(){
+    var d={};
+    try{d=JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){d={}}
+    var o=migrate(d);
+    if(o!==d){try{localStorage.setItem(RKEY,JSON.stringify(o))}catch(e){}}
+    return o;
+  }
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function scrollToPct(p){var h=maxH();if(h>0)window.scrollTo(0,Math.round(h*p/100));}
+
+  var cur=loadR();
+  var A=cur.auto||null, B=cur.manual||null;
+  var hash=location.hash;
+
+  /* 只在带 #auto / #manual 进来时定位；多点几次，等版式稳定，避免“跳歪” */
+  var restoring=false;
+  function restore(p){
+    if(!(p>0))return;
+    restoring=true;
+    [0,90,220,420,700].forEach(function(dt){
+      setTimeout(function(){if(restoring)scrollToPct(p);},dt);
+    });
+    setTimeout(function(){restoring=false;},960);
+  }
+  addEventListener("wheel",function(){restoring=false;},{passive:true,once:true});
+  addEventListener("touchstart",function(){restoring=false;},{passive:true,once:true});
+
+  if(hash==="#manual"&&B&&B.ch===CH&&B.pct>0){restore(B.pct);}
+  else if(hash==="#auto"&&A&&A.ch===CH&&A.pct>0){restore(A.pct);}
+  else{
+    var wrap=document.querySelector(".wrap");
+    if(B&&B.ch&&B.ch!==CH){
+      var x=document.createElement("div");x.className="resume-tip";
+      x.innerHTML="🔖 书签在 <a href='gudo-"+B.ch+".html#manual'>第"+B.ch+"章</a>（钉在 "+B.pct+"%）";
+      wrap.prepend(x);
+    }
+    if(A&&A.ch===CH&&A.pct>=3&&A.pct<97){
+      var tip=document.createElement("div");tip.className="resume-tip";
+      tip.innerHTML="📌 上次读至 "+A.pct+"% · <a href='javascript:void(0)' id='resumeGo'>回到原位</a>";
+      wrap.prepend(tip);
+      document.getElementById("resumeGo").onclick=function(){tip.remove();scrollToPct(A.pct);};
+    }
+    if(B&&B.ch===CH&&B.pct>0){
+      var btip=document.createElement("div");btip.className="resume-tip";
+      btip.innerHTML="🔖 本章书签：钉在 "+B.pct+"% · <a href='javascript:void(0)' id='bmGo'>回到书签</a>";
+      wrap.prepend(btip);
+      document.getElementById("bmGo").onclick=function(){btip.remove();scrollToPct(B.pct);};
+    }
+  }
+
+  /* 自动存档：随滚动更新（节流 1.2s），离开页面再记一次 */
+  var timer=null;
+  function record(){
+    var mh=maxH();if(mh<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/mh*100));
+    var d=loadR();d.auto={ch:CH,pct:p,t:Date.now()};saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record();},1200)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(record,800);
+
+  /* 手动书签：一键钉住 / 再点清除（全书仅此一格） */
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  function paint(){
+    var b=(loadR().manual)||null;
+    if(b&&b.ch===CH&&b.pct>0)btn.textContent="🔖 书签 "+b.pct+"%";
+    else if(b&&b.ch)btn.textContent="🔖 书签·第"+b.ch+"章";
+    else btn.textContent="🔖 书签";
+  }
+  document.getElementById("__bmSlot").appendChild(btn);
+  paint();
+  btn.onclick=function(){
+    var mh=maxH();
+    var p=mh>0?Math.min(100,Math.round(document.documentElement.scrollTop/mh*100)):0;
+    var d=loadR();
+    if(d.manual&&d.manual.ch===CH&&Math.abs((d.manual.pct||0)-p)<=2){
+      delete d.manual;saveR(d);paint();
+      btn.textContent="已清除书签";setTimeout(paint,1400);
+    }else{
+      d.manual={ch:CH,pct:p,t:Date.now()};saveR(d);paint();
+      btn.textContent="✓ 已存书签 "+p+"%";setTimeout(paint,1600);
+    }
+  };
+})();
+
+</script>
+</body>
+</html>
