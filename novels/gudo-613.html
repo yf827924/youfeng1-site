@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第六百一十三章 · 手 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第六百一十三章 · 手</h1>
+  <p>十月二十四。晴。日头出来了，雪面上有一层亮，亮得晃眼。</p>
+  <p>卸枷 169 日。役 214 日。令悬 219 日。火入井第 109 日。</p>
+  <p>日头出来以后，碑面上的雪开始化。化得慢，先化顶，再化面，化下来的水顺着字口往下走，走到碑座就冻住，冻成一条一条细冰。冰是透明的，冰里头裹着石粉，太阳一照，一条一条亮。</p>
+  <p>第十七排往下，碑矮。碑一矮，影子就短；影子短了，一排一排看过去，像一排人蹲着。</p>
+  <p>他坐在第三十七块前头，右手搁在膝上，布缠着，布上落了一点雪。雪落在布上不化，布是干的。</p>
+  <p>赵守路来量碑座。他是一个人来的。从坡下上来，不走近道，走的是碑林东边那条车辙。车辙冻了，辙心比辙边低两寸，他走在辙心里，一脚一脚踩得很稳，踩到辙底才换脚。</p>
+  <p>四十八岁。瘦。颧骨高，脸上没有肉，皮贴在骨头上，贴出两个坑。左手少一根小指，缺的是最末一节，断口是旧的，圆了，圆得像磨过。他穿赵家的青布褂，褂子大了一号，袖子垂到手背上，垂下来盖住半个手背。</p>
+  <p>他在第十七排第三十七块前停住。先瞧碑，再瞧碑座。</p>
+  <p>“量座。”他说。</p>
+  <p>“尺呢。”</p>
+  <p>“不用尺。”</p>
+  <p>他蹲下去，右手一掌按在碑座上。</p>
+  <p>碑座埋在土里三尺，露在外头的只有半尺。座面上有青苔，苔是黑的，干了以后发白，白上落着雪。碑与座之间垫一块薄石，薄石三寸厚，四角各垫一片铁，铁片上的锈把缝填住了。</p>
+  <p>一掌。两掌。三掌。</p>
+  <p>一掌是虎口到指尖，五寸。第一掌从西角起，虎口贴住座的边，指尖压到座面中间；第二掌接上去，接得严，中间不留缝；第三掌只落下三指，无名指和小指悬在外头——座宽不到一尺五。</p>
+  <p>他把第三掌的落点记住，把手横过来，用虎口去卡。</p>
+  <p>卡住了。虎口到小指根，七寸；两卡一尺四，少两寸。他再挪半卡。</p>
+  <p>一尺二。</p>
+  <p>疤在他右手掌心。横的。两寸长。白。</p>
+  <p>他把手收回去。</p>
+  <p>“一尺二。”他说，“座宽一尺二，座厚一尺一。东角比西角低半分——埋的时候没垫平。”</p>
+  <p>“你量座做什么。”</p>
+  <p>“起碑要量。”赵守路说，“碑身一百四十斤，两个人抬得动；座在土里，谁也没抬过。抬不抬座，得先知道座多大。”</p>
+  <p>“抬不抬。”</p>
+  <p>“赵钧礼说不抬。”赵守路说，“座是座，碑是碑。令上写的是碑。”</p>
+  <p>他把右手抬起来，五指张开。指头很细，指节很大，五个指节像五颗石子。</p>
+  <p>“开阙五重，气走指。”他说，“五重的气走指，能捻起一根针，搬不动一块石。赵家让我来量，不让我来搬。”</p>
+  <p>一验。</p>
+  <p>验的是陈九的手。陈九的手他见过。十月十六那天，灯放在石板上，光照不到井壁下半截；陈九把手伸进光里，让他瞧。</p>
+  <p>右手。十指。十个指甲都磨没了，磨到甲床，甲床上结着一层薄壳，薄壳是白的。</p>
+  <p>掌心里有一个印。印是板印，方的，四边清楚，四个角上深一点。合久了，板认得手。</p>
+  <p>左手掌心有一道横疤。两寸。白。边齐。</p>
+  <p>他记了一笔：齐。疤齐，是刀快，一刀过，皮翻开，肉还没有缩，刀已经出去了。齐疤收得好，收成一条白线；毛疤收不好，收成两道，中间隔一线红。</p>
+  <p>二验。</p>
+  <p>验的是赵守路的手。右手。掌心。横疤两寸。白。边毛。</p>
+  <p>毛的那道是两道压在一道：第一道浅，第二道压上去，压偏了半分。偏的那半分上有结，结是硬的，用指甲刮，刮不动。</p>
+  <p>左手少一根小指。指甲是全的，剪得很短，剪口平。指甲缝里没有泥，只有一点黑，黑在指甲根，洗不掉的那种黑。</p>
+  <p>手背上有三处旧伤，都是细的，像被纸划的。做账的人翻纸，翻得快了，纸边划手，划出来的口子细，好了以后只剩一道白。</p>
+  <p>他记了一笔：毛。</p>
+  <p>三验。</p>
+  <p>验的是自己的手。</p>
+  <p>右手缠着布。布底下是那道红斑，红斑不是疤，是这一回新落下的。腕后四寸，拇指盖那么大，边齐。</p>
+  <p>真正的那道疤在左手掌心。</p>
+  <p>左手。掌心。横疤两寸。白。边齐。</p>
+  <p>疤是十六年前留的。那年他八岁。</p>
+  <p>三道口子，摆在太阳底下。</p>
+  <p>两道齐，一道毛。两道在掌心正中间，一道偏了半分。</p>
+  <p>他把三个位置在心里对了一遍：齐的、毛的、齐的。三道都是横的，都是从虎口那边起，往小指那边收。</p>
+  <p>“三道。”他说。</p>
+  <p>“三道。”赵守路说。</p>
+  <p>“两道齐，一道毛。”</p>
+  <p>“毛的是我的。”赵守路说，“刀钝。那年我十四，手抖，师傅按着我的手划，划到一半我抽了一下。”</p>
+  <p>“这道口子，是做账的人入行留的。”</p>
+  <p>赵守路抬起头。</p>
+  <p>“谁告诉你的。”</p>
+  <p>“井底下的人。”</p>
+  <p>“陈九。”赵守路说，“他还活着。”</p>
+  <p>“活着。”</p>
+  <p>“三十七年。”赵守路说，“他比我早七年。”</p>
+  <p>“早七年做什么。”</p>
+  <p>“早七年下去。”赵守路说，“也早七年开在掌心。”</p>
+  <p>“你怎么知道。”</p>
+  <p>“守楼册上记着。”赵守路说，“三十七年前，萧家送来一个人，开阙六重，气走掌心。册上写：入井，压板，替萧家守。”</p>
+  <p>“守什么。”</p>
+  <p>“守一个名字。”</p>
+  <p>赵守路把手收回去，插进袖子。</p>
+  <p>“左手给我瞧。”</p>
+  <p>“瞧什么。”</p>
+  <p>“瞧刀口。”</p>
+  <p>赵守路伸手来抓他的左手。</p>
+  <p>五重气走指。五指一扣，扣的是腕：拇指压腕骨，四指扣腕内，扣得很准，准得像量过。扣住的不是他右手疼的那一处，可他知道那个位置扣上是什么滋味。</p>
+  <p>他没有抽。抽不出来。腕被扣住，往外抽是跟他较劲；较劲就得分个高下，分高下就要用气。他的气在掌心里，掌心缠着布，出不去。</p>
+  <p>他把左手往里送。送半寸。扣着的手跟着紧半寸。</p>
+  <p>再送半寸。赵守路的拇指压到腕骨下头的窝里，压空了。腕子在他掌里转了半圈，掌心朝上。</p>
+  <p>“瞧。”</p>
+  <p>赵守路瞧了很久。疤在日头底下，白得发亮。两寸长，一道，边齐。</p>
+  <p>“你这道，比我早十六年。”</p>
+  <p>“十六年前我八岁。”</p>
+  <p>“八岁入行。”赵守路说，“入得早。”</p>
+  <p>“谁给我划的，我不记得了。”</p>
+  <p>“不记得是好事。”赵守路说，“记得的人，一辈子记得那只手。”</p>
+  <p>他把手松开。“你哪年出城。”他问。</p>
+  <p>“宣和八年三月。”赵守路说，“那年十八。”</p>
+  <p>“守楼人。”</p>
+  <p>“守楼册第三十九行。”赵守路说，“守期，至归。”</p>
+  <p>“守楼守什么。”</p>
+  <p>“守格子。”赵守路说，“楼里有三百六十格，一格一样东西。东西在，格子上挂一块木牌；东西不在，格子空着，牌也空着。守楼人一天点一遍，点完了在册上画一道。三十年前我点到第四十七格，那一格的牌是空的。”</p>
+  <p>“空了多久。”</p>
+  <p>“册上画了三十七年的空道。”赵守路说，“我爹画了十九年，我画了十一年。画到第十一年，我出城了。”</p>
+  <p>“出了城，谁画。”</p>
+  <p>“没人画。”赵守路说，“没人画的册，就不算册。”</p>
+  <p>“楼里少了什么。”</p>
+  <p>“一把刀。”</p>
+  <p>赵守路把袖子往上撸了一截。手腕上有一道勒痕，勒痕很旧，陷进肉里，像是常年绑着什么。</p>
+  <p>“楼里有一格是空的。”他说，“格板上刻着尺寸：刀长二尺三，宽三指，背厚一分半。格是空的，空了三十七年。”</p>
+  <p>“你找刀。”</p>
+  <p>“我找刀。”赵守路说，“三十年前出城，就是照着那个尺寸找的。”</p>
+  <p>“找着了。”</p>
+  <p>“找着了。”赵守路看着他的手。</p>
+  <p>“在哪。”</p>
+  <p>“在你身上。”赵守路说，“你昨天带去井口那把。”</p>
+  <p>“那把叫守拙。”</p>
+  <p>“守拙两个字是后刻的。”赵守路说，“刀根上原来没有字。原来刀尖后头半寸，有三个崩口，一个比一个大。”</p>
+  <p>他没有说话。守拙刀刀尖后头半寸，有三个崩口。第三个崩口最大，崩口边上有一道细裂。</p>
+  <p>“刀是萧家的。”他说。</p>
+  <p>“刀是从井里出来的。”赵守路说，“三十七年前进去，后来出来了。出来的时候没有字，字是后来刻的。”</p>
+  <p>“谁刻的。”</p>
+  <p>“刻字的人。”赵守路说，“守拙两个字，刻得很深。刻得深，是想让这两个字盖住下头的东西。”</p>
+  <p>“下头有什么。”</p>
+  <p>“我不知道。”赵守路说，“我只知道那一格是空的，尺寸是这个尺寸。我找了三十年，找到的是两个字。”</p>
+  <p>他把袖子放下来，盖住那道勒痕。</p>
+  <p>勒痕是绑绳留下的。守楼人上楼下楼，绳绑在腕上，绑三十年，勒痕就长进肉里。勒痕的深浅，和他右手腕后那道红斑差不多——一个是绳勒的，一个是气憋的。</p>
+  <p>“你要不要瞧刀根。”</p>
+  <p>“刀不在我这儿。”</p>
+  <p>“在哪。”</p>
+  <p>“石婆收着。”他说，“四十天。”</p>
+  <p>赵守路笑了一下。笑的时候脸上的皮绷紧了，两个坑浅了一点。</p>
+  <p>“四十天。”他说，“你合过手了。”</p>
+  <p>“合过。”</p>
+  <p>“几次。”</p>
+  <p>“五次。”</p>
+  <p>赵守路不笑了。“五次。”他说，“第五次裂到哪儿。”</p>
+  <p>“腕后四寸。”</p>
+  <p>“过腕了。”赵守路说，“过腕就是往臂上走。往臂上走，收不回来。”</p>
+  <p>“收得回来。”</p>
+  <p>“收得回来的人，我见过一个。”赵守路说，“三十七年前那个。他裂到腕后三寸，收了四十天，收回来了；收回来以后，手是凉的，一辈子凉。”</p>
+  <p>他把手插回袖子，转身要走。</p>
+  <p>“刀根你瞧不瞧。”</p>
+  <p>“瞧。”赵守路说，“等你手好了，我来瞧。”</p>
+  <p>“那时候你在哪。”</p>
+  <p>“不知道。”赵守路说，“赵家的活干完了，我就走。我来是找刀，不是来起碑。”</p>
+  <p>他往坡下走。走了三步，停住。</p>
+  <p>“那三个崩口。”他说，“第二个崩口崩掉的那块铁，是朝里的。刀崩口朝里，不是砍石头崩的，是撬东西撬的。”</p>
+  <p>“撬什么。”</p>
+  <p>“撬板。”赵守路说，“板压着火，火顶板，板翘起来，刀伸进去撬。撬一下，崩一个口。”</p>
+  <p>他往下走了。雪地上两行脚印，一深一浅。深的是右脚，浅的是左脚——左脚的印比右脚短半分。</p>
+  <p>他在第三十七块前头立了很久。</p>
+  <p>日头到了碑顶，冰开始化。化下来的水顺着碑面走，走到『九』字最后一笔，停住。那一笔是横折弯钩，钩朝上，水积在钩里，积成一小汪。汪里的水是清的，清得能照出天。</p>
+  <p>他把左手翻过来，掌心朝上，对着日头。</p>
+  <p>疤在日头底下是白的，白得发亮。亮的中间有一线粉，粉很淡，淡得几乎瞧不见。</p>
+  <p>十六年前，那只手按着他的手，刀从虎口那边过来。他不记得刀，记得手：手很干，指头很硬，划的时候不打颤。</p>
+  <p>那只手是萧家的。萧家的账房，萧家的刀，萧家的名字。</p>
+  <p>他把手掌合上。这一只没有布挡着。</p>
+  <p>“守拙。”他念。</p>
+  <p>刀不在。念出来，没有回音。</p>
+  <p>第六百一十三章 完</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，轻点显示/隐藏 ===== */
+  var TOTAL=680;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null,dragging=false;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+
+  /* 翻页：只有「横向滑动」（>64px 且横向明显占优）才翻章；轻点只开关工具栏。
+     不再用「点侧边就翻页」，避免误点一下就莫名跳章。 */
+  var sx=0,sy=0,stk=false,moved=false;
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a"))return;
+    sx=e.clientX||0;sy=e.clientY||0;stk=true;moved=false;
+  },{passive:true});
+  document.body.addEventListener("pointermove",function(e){
+    if(!stk)return;
+    if(Math.abs((e.clientX||0)-sx)>10||Math.abs((e.clientY||0)-sy)>10)moved=true;
+  },{passive:true});
+  document.body.addEventListener("pointerup",function(e){
+    if(!stk)return;stk=false;
+    var dx=(e.clientX||0)-sx,dy=(e.clientY||0)-sy;
+    if(Math.abs(dx)>=64&&Math.abs(dx)>Math.abs(dy)*1.6){
+      if(dx<0&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+      if(dx>0&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    }
+    if(!moved){if(document.body.classList.contains("ui-show"))hide();else show();}
+  },{passive:true});
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  /* ===== 进度与书签：每本书只有两格 =====
+     ① auto   自动存档位：读到哪里自动记，无需操作
+     ② manual 手动书签位：点一下按钮钉住，全书共享这一个
+     进页面时绝不擅自跳转，只给提示；只有从「续读/书签」入口进来才定位。 */
+  var RKEY="hugo_reader_v1";
+  var mm=location.pathname.match(/gudo-(\d+)/);
+  var CH=(mm?parseInt(mm[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var TITLE=h1?h1.textContent.trim():("第"+CH+"章");
+
+  function migrate(d){
+    if(!d.auto&&!d.manual&&(d.bookmark||d.resume||d.chapters)){
+      var nd={};
+      if(d.resume&&d.resume.ch){nd.auto={ch:d.resume.ch,pct:d.resume.pct|0,t:d.resume.t||0};}
+      if(d.bookmark&&d.bookmark.ch){nd.manual={ch:d.bookmark.ch,pct:d.bookmark.pct|0,t:d.bookmark.t||0};}
+      return nd;
+    }
+    return d;
+  }
+  function loadR(){
+    var d={};
+    try{d=JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){d={}}
+    var o=migrate(d);
+    if(o!==d){try{localStorage.setItem(RKEY,JSON.stringify(o))}catch(e){}}
+    return o;
+  }
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function scrollToPct(p){var h=maxH();if(h>0)window.scrollTo(0,Math.round(h*p/100));}
+
+  var cur=loadR();
+  var A=cur.auto||null, B=cur.manual||null;
+  var hash=location.hash;
+
+  /* 只在带 #auto / #manual 进来时定位；多点几次，等版式稳定，避免“跳歪” */
+  var restoring=false;
+  function restore(p){
+    if(!(p>0))return;
+    restoring=true;
+    [0,90,220,420,700].forEach(function(dt){
+      setTimeout(function(){if(restoring)scrollToPct(p);},dt);
+    });
+    setTimeout(function(){restoring=false;},960);
+  }
+  addEventListener("wheel",function(){restoring=false;},{passive:true,once:true});
+  addEventListener("touchstart",function(){restoring=false;},{passive:true,once:true});
+
+  if(hash==="#manual"&&B&&B.ch===CH&&B.pct>0){restore(B.pct);}
+  else if(hash==="#auto"&&A&&A.ch===CH&&A.pct>0){restore(A.pct);}
+  else{
+    var wrap=document.querySelector(".wrap");
+    if(B&&B.ch&&B.ch!==CH){
+      var x=document.createElement("div");x.className="resume-tip";
+      x.innerHTML="🔖 书签在 <a href='gudo-"+B.ch+".html#manual'>第"+B.ch+"章</a>（钉在 "+B.pct+"%）";
+      wrap.prepend(x);
+    }
+    if(A&&A.ch===CH&&A.pct>=3&&A.pct<97){
+      var tip=document.createElement("div");tip.className="resume-tip";
+      tip.innerHTML="📌 上次读至 "+A.pct+"% · <a href='javascript:void(0)' id='resumeGo'>回到原位</a>";
+      wrap.prepend(tip);
+      document.getElementById("resumeGo").onclick=function(){tip.remove();scrollToPct(A.pct);};
+    }
+    if(B&&B.ch===CH&&B.pct>0){
+      var btip=document.createElement("div");btip.className="resume-tip";
+      btip.innerHTML="🔖 本章书签：钉在 "+B.pct+"% · <a href='javascript:void(0)' id='bmGo'>回到书签</a>";
+      wrap.prepend(btip);
+      document.getElementById("bmGo").onclick=function(){btip.remove();scrollToPct(B.pct);};
+    }
+  }
+
+  /* 自动存档：随滚动更新（节流 1.2s），离开页面再记一次 */
+  var timer=null;
+  function record(){
+    var mh=maxH();if(mh<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/mh*100));
+    var d=loadR();d.auto={ch:CH,pct:p,t:Date.now()};saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record();},1200)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(record,800);
+
+  /* 手动书签：一键钉住 / 再点清除（全书仅此一格） */
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  function paint(){
+    var b=(loadR().manual)||null;
+    if(b&&b.ch===CH&&b.pct>0)btn.textContent="🔖 书签 "+b.pct+"%";
+    else if(b&&b.ch)btn.textContent="🔖 书签·第"+b.ch+"章";
+    else btn.textContent="🔖 书签";
+  }
+  document.getElementById("__bmSlot").appendChild(btn);
+  paint();
+  btn.onclick=function(){
+    var mh=maxH();
+    var p=mh>0?Math.min(100,Math.round(document.documentElement.scrollTop/mh*100)):0;
+    var d=loadR();
+    if(d.manual&&d.manual.ch===CH&&Math.abs((d.manual.pct||0)-p)<=2){
+      delete d.manual;saveR(d);paint();
+      btn.textContent="已清除书签";setTimeout(paint,1400);
+    }else{
+      d.manual={ch:CH,pct:p,t:Date.now()};saveR(d);paint();
+      btn.textContent="✓ 已存书签 "+p+"%";setTimeout(paint,1600);
+    }
+  };
+})();
+
+</script>
+</body>
+</html>
