@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第八百五十章 · 换我了 - 万古第一执刀人</title>
+<style>
+  :root{--bg:#FBF7F0;--card:#FFFDF8;--ink:#2B2620;--muted:#8A7F70;--accent:#A8503A;--gold:#C9A227;--line:#E7DDCF}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.9;font-size:17px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 56px}
+  h1{font-size:1.55em;font-weight:700;margin:8px 0 22px;letter-spacing:.5px}
+  p{margin:0 0 1.15em;text-align:justify}
+  .pager{display:flex;justify-content:space-between;gap:12px;margin-top:34px}
+  .pager a,.pager .pager-disabled{display:inline-block;padding:10px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--accent);font-size:.9em;background:var(--card)}
+  .pager .pager-disabled{color:var(--muted);opacity:.6;border-style:dashed}
+  .resume-tip{background:#FDF3E0;border:1px solid var(--gold);border-left:4px solid var(--gold);color:var(--muted);font-size:.85em;border-radius:10px;padding:10px 16px;margin-bottom:20px}
+  .resume-tip a{color:var(--accent);font-weight:700;text-decoration:none}
+  .bookmark-btn{position:fixed;right:16px;bottom:150px;z-index:60;border:none;cursor:pointer;background:var(--gold);color:#3A2E12;font-size:.82em;padding:9px 14px;border-radius:999px;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bookmark-btn:active{transform:scale(.96)}
+
+  @media(max-width:640px){
+    .wrap{padding-bottom:130px}
+    body{font-size:16px}
+  }
+
+  /* ===== 沉浸阅读：触屏呼出工具栏（参照手机阅读器交互） ===== */
+  #topBar{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:8px;
+    padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px;
+    background:linear-gradient(180deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 52%,rgba(251,247,240,.62) 80%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(-108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  #botBar{position:fixed;bottom:0;left:0;right:0;z-index:80;display:flex;flex-direction:column;gap:10px;
+    padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg,rgba(251,247,240,.98) 0%,rgba(251,247,240,.94) 54%,rgba(251,247,240,.6) 82%,rgba(251,247,240,0) 100%);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    font-family:inherit;transform:translateY(108%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+  body.ui-show #topBar,body.ui-show #botBar{transform:translateY(0)}
+  .rbtn{border:1px solid var(--line);background:#fff;color:var(--accent);font-family:inherit;
+    font-size:.88em;padding:10px 14px;border-radius:999px;text-decoration:none;white-space:nowrap;
+    text-align:center;display:inline-block;box-sizing:border-box}
+  .rbtn:active{transform:scale(.95)}
+  .rbtn.gold{background:linear-gradient(140deg,#E7C9A0 0%,#B5532E 66%,#8E4324 100%);
+    color:#FFF9F0;border-color:transparent;box-shadow:0 4px 14px rgba(181,83,46,.28);font-weight:700}
+  .rbtn.off{opacity:.5;pointer-events:none;border-style:dashed}
+  #topBar .tb-title{flex:1;text-align:center;font-family:"Noto Serif SC","Songti SC",serif;font-weight:700;
+    font-size:.95em;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #topBar .tb-spacer{flex:0 0 62px}
+  #botBar .row{display:flex;align-items:center;gap:8px}
+  #botBar .row .rbtn,#botBar .row .bookmark-btn{flex:1;min-width:0}
+  #progRow{display:flex;align-items:center;gap:10px}
+  #rProg{flex:1;min-width:0;height:16px;accent-color:var(--accent);margin:0;pointer-events:auto;cursor:pointer}
+  #rPct{font-size:.78em;color:var(--muted);min-width:34px;text-align:right}
+  #rCh{font-size:.78em;color:var(--muted);min-width:44px}
+  /* 书签按钮移进底栏，取消原来的悬浮定位 */
+  .bookmark-btn{position:static;border:1px solid var(--gold);background:var(--gold);color:#3A2E12;
+    font-size:.82em;padding:9px 10px;border-radius:999px;box-shadow:none;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>第八百五十章 · 换我了</h1>
+  <p>七月初六，亥时。库房的灯芯短了。管庄的拿剪子剪了一下，灯焰跳起来，跳得比刚才高了一寸。</p>
+  <p>“取牌。”他说。</p>
+  <p>“不取。”管庄的说。</p>
+  <p>“要取。”</p>
+  <p>“牌是役册上的东西。”管庄的说，“牌在匣里，号在位子上。牌离了匣，号就空。号一空，册上那一行就成了空行。”</p>
+  <p>“空行也是行。”</p>
+  <p>“空行不是行。”管庄的说，“册上的行，是给号留的。号在，行在。号空了，行就要划。划了的行，不算行。”</p>
+  <p>“牌取出去，还要放回来。”</p>
+  <p>“放回来，号就回来了？”</p>
+  <p>“回来。”</p>
+  <p>“回不来。”管庄的说，“牌离匣一夜，册上就要记一夜。记一夜，就要报。报了，府里问，为什么取。答一句，刻字。府里再问，刻什么字。答不上来，牌就押在府里，押到有人答上来。”</p>
+  <p>“那就答。”</p>
+  <p>“答什么。”</p>
+  <p>“刻一个‘待’字。”</p>
+  <p>管庄的手停在匣盖上，指头压着铜扣，压得很紧。</p>
+  <p>“待。”</p>
+  <p>“待。”他说，“牌正面是号。号是给官对的。牌背面是光的，光的地方刻一个字，刻‘待’。”</p>
+  <p>“待什么。”</p>
+  <p>“待人问。”</p>
+  <p>差役甲从门口走进来。他把差票摊在桌上，用指头压住。</p>
+  <p>“第一格，物。”他念，“碑一座。第二格，处，井台东。第三格，状，阴面有坑。第四格，押，差役一名，四邻一名。”</p>
+  <p>他抬起头，把差票往桌心推了推。</p>
+  <p>“差票上没有牌。”</p>
+  <p>“牌是役册上的。”管庄的说，“差票管不到役册。”</p>
+  <p>“管得到。”差役甲说，“役册是官的，牌是役册上的，牌就是官物。官物点收，差票管得到。”</p>
+  <p>“点收要有人报。”</p>
+  <p>“我报。”</p>
+  <p>“你是点的人。”</p>
+  <p>“我报，你点。”差役甲说，“你点，我押。两个人，够了。”</p>
+  <p>管庄的没有说话。他把钥匙从腰上解下来，插进锁里，转了半圈，又停住。</p>
+  <p>“取一块，押一块。”他说。</p>
+  <p>“怎么押。”</p>
+  <p>“取一块，写一行。”管庄的说，“写取的时辰，写取的人，写做什么用。写完了，押一个指印。一块一行，五十二块，五十二行。”</p>
+  <p>“五十二行，写到天亮。”</p>
+  <p>“写不到天亮，就别取。”</p>
+  <p>“写得到。”他说，“我写。”</p>
+  <p>“你写不了。”管庄的说，“你的手。”</p>
+  <p>他把左手举起来。手背上那层薄壳裂了三道，裂口里的肉是红的。</p>
+  <p>“我写不了。”他说，“我刻。”</p>
+  <p>“刻在哪儿。”</p>
+  <p>“刻在纸上。”他说，“纸上刻不出字。纸上只能画。画一道，就是一行。”</p>
+  <p>管庄的瞧了他一会儿，把锁转开，掀开匣盖。</p>
+  <p>“取。”</p>
+  <p>他伸手进匣。第一格，一。牌是铁的，两寸见方，一指厚。牌面朝上，牌面上刻着一。牌背面是光的。</p>
+  <p>“为什么是铁的。”他问。</p>
+  <p>“木头的会烂。”管庄的说，“三十七年，木头烂三回。烂一回换一回，换一回号就断一回。铁的不烂，只锈。锈了拿沙子磨，磨完了还是那块牌。”</p>
+  <p>“铁不烂，人烂。”</p>
+  <p>“人烂得快。”管庄的说。</p>
+  <p>他把牌翻过来，放在桌上，牌背朝上，光朝着灯。</p>
+  <p>“一。”管庄的念。</p>
+  <p>他拿起炭条，在纸上画一道。</p>
+  <p>“取牌一块，一，亥时，刻字用。”管庄的念，“押。”</p>
+  <p>他把左手拇指在印泥盒里蘸了一下，压在纸上。</p>
+  <p>第二格，二。第三格，三。</p>
+  <p>一块一块往下取。取到第十格，纸上的道子已经排成一列，长短不齐。</p>
+  <p>取到第四十六格，是四十六。第四十七格，空的。</p>
+  <p>管庄的手停在格边上，指头离那格空处半寸。</p>
+  <p>“这一格。”他说。</p>
+  <p>“知道。”</p>
+  <p>“空了三十七年。”</p>
+  <p>“知道。”</p>
+  <p>“三十七年里，这个号换过九个人。”管庄的说，“换一个，牌跟着一个人。最后那个人下土，牌跟着下土。牌一入土，号就空了。空了的号，不补。”</p>
+  <p>“为什么不补。”</p>
+  <p>“补不上。”管庄的说，“补号要有牌。牌在土里，取不出来。取不出来，号就空着。空着的号，一年一年往下空。”</p>
+  <p>他把手收回来，插进袖子里。</p>
+  <p>“四十八。”</p>
+  <p>“四十九。”</p>
+  <p>“五十。”</p>
+  <p>取到五十二，匣里剩一格。是四十七那一格。</p>
+  <p>五十二块牌摆在桌上，两寸见方，一块挨一块，摆成四行，一行十三块。</p>
+  <p>“刻什么。”管庄的问。</p>
+  <p>“一个‘待’字。”</p>
+  <p>“待什么。”</p>
+  <p>“待人问。”他说，“牌上只有号，没有名。号是位子，名是人。位子在，人不在。人不在，就得有人问。”</p>
+  <p>“问了怎么样。”</p>
+  <p>“问了，就有人应。”他说，“应了，名就回来了。”</p>
+  <p>子时，井台。灯挂在木架上。架子空了，横档上只剩绳头。灯是拿铁丝吊在横档上的，风一吹，灯晃。</p>
+  <p>他把刀放在井沿上。刀是一把刻刀，三寸长，刀尖三分宽。刀柄缠着布条，布条黑得发亮。</p>
+  <p>磨石是粗面的，青灰色。他把刀按在磨石上，推了十下，翻过来，又推了十下。</p>
+  <p>“粗面磨口，细面磨锋。”陈九在井口里说。</p>
+  <p>“没有细面。”</p>
+  <p>“没有细面，就多推十下。”</p>
+  <p>他推了二十下，把刀举到灯前。刀尖上有一线白，白得很细，细得像一根头发。</p>
+  <p>“试一试。”陈九说。</p>
+  <p>“试哪儿。”</p>
+  <p>“试木头。”</p>
+  <p>井台边有一块废木料，是起铁板的时候垫的。木头是榆木，纹拧，拧得像麻花。</p>
+  <p>他把刀尖搁在木头上，往下一压，往前一推。</p>
+  <p>刀走偏了。偏了半分，走到纹里去，卡住。</p>
+  <p>“木纹拧。”他说。</p>
+  <p>“铁上没有纹。”陈九说，“铁是平的。平的，刀就走得直。”</p>
+  <p>他把刀尖搁在第一块牌上。牌是铁的，背面光。刀尖落下去，铁上没有一点白，只有一道印。</p>
+  <p>要压。压下去，再推。</p>
+  <p>第一刀：起。刀尖压在牌边上，往下一按，按出一个点。</p>
+  <p>第二刀：走。刀尖从点里往外走，走了一分，走不动了。</p>
+  <p>第三刀：收。刀尖抬起来，抬得慢，抬快了要带出一道毛。</p>
+  <p>一个字，三刀。一个“待”字，十一笔。十一笔，三十三刀。</p>
+  <p>牌在桌上会滑。他垫了一块布，布是从袖子上撕下来的。布垫在牌底下，牌就不滑；布吸了血，黑得快。</p>
+  <p>刻完一笔，要拿布把刀尖上的铁屑擦掉。铁屑不掉，第二刀就带不动，一带就滑出线外。</p>
+  <p>他刻完第一笔，把手停下来，搁在膝盖上。</p>
+  <p>虎口的痂裂开了一条缝。血从缝里出来，不多，走到腕上就停了。</p>
+  <p>“血。”陈九说。</p>
+  <p>“知道。”</p>
+  <p>“血滴在牌上，牌就锈。”</p>
+  <p>“锈了也是字。”</p>
+  <p>他把手在裤腿上蹭了一下，把血蹭掉，接着刻。</p>
+  <p>左边一撇，短。第二撇，长。长撇底下是一竖。</p>
+  <p>右边一个土。土上头一横，中间一竖，底下一横。</p>
+  <p>土底下加一横。横底下是一个寸。寸的一竖带钩，钩往左。寸的一点，点在横上头。</p>
+  <p>“待。”</p>
+  <p>他把第一块牌举起来，举到眼睛那么高。</p>
+  <p>灯照在牌背面，字是凹的，凹里没有光，黑得像一道缝。</p>
+  <p>“成了。”他说。</p>
+  <p>第二块。第三块。</p>
+  <p>刻到第五块，刀尖崩了一个小口。崩口不大，一颗芝麻的三分之一。他拿磨石磨了三下，磨掉了，刀尖短了一点。</p>
+  <p>“短了。”陈九说。</p>
+  <p>“短了也够。”</p>
+  <p>“短了，字就小。”</p>
+  <p>“字小，能刻完。”</p>
+  <p>刻到第七块，他把七块牌排开，牌面朝上。号从一排到七。</p>
+  <p>“一，二，三，四，五，六，七。”他念。</p>
+  <p>“念号做什么。”陈九问。</p>
+  <p>“念一遍。”他说，“念过了，才知道少哪一个。”</p>
+  <p>“少四十七。”</p>
+  <p>“少四十七。”</p>
+  <p>他把牌翻回去，牌背朝上，一块一块对齐。</p>
+  <p>刻到第八块，灯焰歪了一下。</p>
+  <p>灯焰歪，是因为有风。可井台上没有风。草不动，绳头不动，灯焰自己歪了，往左倒，倒了半寸，又直起来。</p>
+  <p>他把刀放下，把左手翻过来，搁在膝上。</p>
+  <p>掌心正中有一个针眼大的洞，洞边的皮是硬的。</p>
+  <p>洞是早就有的。封口内侧，正中间，针眼大。火从洞里进出，气也从洞里漏。</p>
+  <p>此刻洞里有风。风不是外头的风，是里头的风。气从掌心往外走，走得急，走到洞口，成了一个小小的旋。</p>
+  <p>“漏了。”他说。</p>
+  <p>“什么漏了。”</p>
+  <p>“气。”</p>
+  <p>陈九在井口里抬起头，脖子上的筋绷起来。</p>
+  <p>“补。”</p>
+  <p>“补不上。”他说，“这个洞，补了三年。”</p>
+  <p>“补了三年，还漏。”</p>
+  <p>“漏。”他说，“漏得不快。一晚上漏一口。”</p>
+  <p>“一口。”</p>
+  <p>“一口。”</p>
+  <p>他把掌心按在牌上，按了一会儿。</p>
+  <p>牌背面留下一个圆印，当中一个点，点是湿的。</p>
+  <p>第八块。</p>
+  <p>第九块，他刻的不是“待”，是一个“九”。</p>
+  <p>九是号。九号里那个人，他一个名字也叫不出来。叫不出来，就先刻一个字。字刻上去，牌子就不空。</p>
+  <p>第十块。</p>
+  <p>第十一块刻到一半，他把刀停住。</p>
+  <p>账上添了一格，添的是第九块那一格。一格满了，就能还一次。还的是那个人的力气，力气使完了，就从他自己身上扣。</p>
+  <p>胸口空了一下。空得很快，像一个碗里的水被人倒掉了一半。他坐在井沿上，坐着，没有动。</p>
+  <p>“掉了。”陈九说。</p>
+  <p>“掉了。”</p>
+  <p>“几口了。”</p>
+  <p>他没有立刻答。他把手压在胸口，压了一会儿。</p>
+  <p>“五口。”他说，“今天是第五口。”</p>
+  <p>“还剩几口。”</p>
+  <p>“四口。”</p>
+  <p>“四口。”</p>
+  <p>“四口。”他说，“掉到零，人就散了。”</p>
+  <p>“散了是什么样。”</p>
+  <p>“不知道。”他说，“没有散过。”</p>
+  <p>陈九没有说话。井口里静了一会儿。</p>
+  <p>“你怕不怕。”他问。</p>
+  <p>“怕什么。”</p>
+  <p>“散了。”</p>
+  <p>陈九想了一会儿，绳子在他手里轻轻地响。</p>
+  <p>“散了，就没人知道了。”他说，“没有人知道九号里有过一个人。”</p>
+  <p>“有人知道。”</p>
+  <p>“谁。”</p>
+  <p>“我。”</p>
+  <p>“你刻这个字，刻一夜，掉一口。”陈九说，“值么。”</p>
+  <p>“值。”</p>
+  <p>“值在哪儿。”</p>
+  <p>“牌在匣里，是号。”他说，“牌上刻了字，就是人。人不用有名，先有个字。有个字，就有人知道这个号在等。”</p>
+  <p>“等什么。”</p>
+  <p>“等人来问。”</p>
+  <p>他把刀放下，歇了一会儿。</p>
+  <p>“你叫什么。”他问。</p>
+  <p>“陈九。”</p>
+  <p>“姓什么。”</p>
+  <p>陈九没有立刻答，把身子往井壁上靠了靠。</p>
+  <p>“没有姓。”他说。</p>
+  <p>“为什么没有姓。”</p>
+  <p>“役不入籍。”陈九说，“不入籍，就没有姓。姓是籍上的东西。籍上有姓，人才有姓；籍上没有，人就只有一个名。”</p>
+  <p>“陈九是名。”</p>
+  <p>“是名。”</p>
+  <p>“九是号。”</p>
+  <p>“九是号。”陈九说，“我叫陈九，是因为我在九号。九号换过人，换到我，我就叫陈九。换到别人，别人也叫陈九。”</p>
+  <p>“那你自己叫什么。”</p>
+  <p>“不知道。”陈九说，“我进井的时候十四。进井之前，我娘叫我阿九。进了井，井上的人叫我九。出了井，庄上的人叫我陈九。”</p>
+  <p>“阿九。”</p>
+  <p>“阿九。”陈九说，“这两个字，四十年没有人叫过。”</p>
+  <p>他把第九块牌翻过来。号是九。他刻的那个字，就在九的旁边。</p>
+  <p>刻错了。</p>
+  <p>他把刀拿起来，刀柄在掌心里转了一下。</p>
+  <p>“阿九。”他叫了一声。</p>
+  <p>井口里没有声音，绳子轻轻地晃。</p>
+  <p>“哎。”陈九说。</p>
+  <p>声音很低，低得像从井底传上来的。</p>
+  <p>丑时末，坡上有脚步声。来的是三个。高的那个走在最前头，手里提着铁钎。后头两个提着灯笼，灯笼是纸的，糊得厚，光透出来是黄的。</p>
+  <p>“牌。”高的那个说。</p>
+  <p>“什么牌。”</p>
+  <p>“匣里的牌。”高的那个说，“五十二块，今夜取出来的。取出来，就得还回去。”</p>
+  <p>“还没有刻完。”</p>
+  <p>“刻没刻完，是天亮的事。”高的那个说，“天亮之前，牌要进匣。牌不进匣，天亮就报。”</p>
+  <p>“报什么。”</p>
+  <p>“报‘牌失’。”高的那个说，“牌失，册上五十二行就要划。划了，这五十二个人就没有号了。”</p>
+  <p>他站起来。膝盖响了一声。他在井沿上坐了一夜，膝盖僵了，站起来的时候直不了。</p>
+  <p>“牌在桌上。”他说，“刻完了还。”</p>
+  <p>“现在就还。”</p>
+  <p>高的那个往前走，走到桌边，伸手去抱那一摞牌。</p>
+  <p>陈九在井口里动了一下。</p>
+  <p>他两只手抓住绳子，把身子往上提了半尺，伸出手。手够到井沿上砌好的砖，抽了一块。</p>
+  <p>第十一层，第二块。</p>
+  <p>砖抽出来，墩上缺了一个口。上头压着的三层砖往下一沉，沉了半寸，灰缝裂开，掉下一层白灰。</p>
+  <p>“井松了。”陈九说。</p>
+  <p>“你做什么。”</p>
+  <p>“井松了，就封不成。”陈九说，“封不成，明日就报填讫报不上去。”</p>
+  <p>高的那个回过头，铁钎往地上一戳。</p>
+  <p>“砌回去。”</p>
+  <p>“砌回去，我一天一块。”陈九说，“这块砖，我砌了半个时辰。抽出来，一息。砌回去，再半个时辰。”</p>
+  <p>高的那个把牌放下，走过来。</p>
+  <p>“你抽了几块。”</p>
+  <p>“一块。”</p>
+  <p>“再抽，我把你吊上来。”</p>
+  <p>“吊上来，井口就没人砌。”</p>
+  <p>高的那个伸出手，一把把陈九从吊板上拽起来。</p>
+  <p>他横过去挡，挡在陈九前头。</p>
+  <p>护院的膝盖顶在他膝弯上。</p>
+  <p>打实。五百二十九。</p>
+  <p>他往前跪下去，膝盖磕在井沿的石头上。开阙六重的气走到掌心就散，散得没有声。六重的身子跪得住，可他要起来，右臂撑在井沿上，撑了一下，手臂自己软了。</p>
+  <p>差役甲从坡下跑上来，把差票举过头顶。</p>
+  <p>“夺官物。”他喊，“我写。”</p>
+  <p>高的那个的手停在陈九的衣领上。</p>
+  <p>“写。”</p>
+  <p>“写‘丑时末，井台，三人夺牌，一人被拽’。”差役甲说，“写了，明日进城，递到户房。户房递到县里。县里问，谁夺的，为什么夺。”</p>
+  <p>“为井。”</p>
+  <p>“为井，井归官。”差役甲说，“井归官，井台上的东西也归官。牌在井台上，牌归官。夺牌，就是夺官。”</p>
+  <p>高的那个把手松开。</p>
+  <p>陈九落回吊板上，吊板晃了两下，绳子吱吱地响。</p>
+  <p>“天亮之前。”高的那个说，“牌要进匣。”</p>
+  <p>他走了。两个提灯笼的跟着他走，灯笼的光在坡上一晃一晃，晃到坡腰，拐进库房那一间。</p>
+  <p>井台上静下来，他把膝盖上的土拍掉。</p>
+  <p>“你的手。”陈九说。</p>
+  <p>他把左手举起来，举到灯底下。</p>
+  <p>手背上的薄壳全裂了。裂的地方不流血，只翻起一层白皮。</p>
+  <p>“还能刻。”他说。</p>
+  <p>寅时，碑前。天还没有亮。东边有一线灰，灰上头是青。</p>
+  <p>他站在碑前，把刀从怀里取出来。</p>
+  <p>碑阴朝井台，一尺二的缝。他侧着身子挤进去，把灯挂在碑的角上。</p>
+  <p>坑的上头，那一笔“守”还在。毛刺细，扎手。</p>
+  <p>他把刀尖搁在那一竖的下头。</p>
+  <p>一横。又一横。底下一个寸。</p>
+  <p>守字的底下是一个寸。寸的一点，点在横上头。</p>
+  <p>刻完了，他退出来，把灯举高。</p>
+  <p>“守”字刻得很浅。浅得只有指头摸得出来。</p>
+  <p>他往下一格，刀尖挪到下一个字的位置。</p>
+  <p>下一个字是“碑”。</p>
+  <p>“碑”字二十一笔。石头硬，一刀下去，只掉一点粉。</p>
+  <p>石头和铁不一样。铁软，刀压下去，铁让开；石头硬，刀压下去，石头顶着。</p>
+  <p>刻石头要用錾子。他没有錾子，只有一把刀。刀尖在石头上走，走一分，滑一分。滑了，就滑出划好的线。</p>
+  <p>滑出去一回，他就把刀收回来，重新起一刀。</p>
+  <p>刻到第三笔，刀尖崩了第二个口。这一回崩得大，崩掉半颗芝麻。他把刀在碑上磨了两下，磨不回来。</p>
+  <p>刻了半个时辰，刻到“卑”的最后一竖，天边白了。</p>
+  <p>他把刀收回来，刀尖上沾着一层石粉。</p>
+  <p>第三个字是“人”。两笔。一撇，一捺。</p>
+  <p>刻完，他把手放下来。石面上是三个字：守碑人。</p>
+  <p>三个字底下，空着一格。</p>
+  <p>那一格有一尺二宽，一尺长。尺寸正好是一个名字。</p>
+  <p>他把手放在那一格上。</p>
+  <p>石头是凉的，凉里没有毛刺。这一格没有人动过。</p>
+  <p>刻名，就可以刻自己的。刻了自己的，位子就有人坐，井就有人守。官上来问，答一句“守碑人在”。答了，就走不了。</p>
+  <p>刻职，位子上没有人。没有人，官就要问：守碑人是谁。问了，就得找。找了，就有人来。</p>
+  <p>他把手从那一格上拿开，手印留在石头上。</p>
+  <p>空了三十七年的位子，再空几日。</p>
+  <p>他把刀收起来，数了数桌上的牌。十一块。</p>
+  <p>“十一块。”他说。</p>
+  <p>“五十二块，刻了十一块。”陈九说。</p>
+  <p>“剩下的，下一回。”</p>
+  <p>“下一回是几日。”</p>
+  <p>“不知道。”他说，“三日到了。”</p>
+  <p>回到井台，天已经亮了半边。铁板还靠在西边。板面朝外，九个字。</p>
+  <p>他把铁板翻过来。板背朝上。</p>
+  <p>板背上有九个字，三行，一行三个。字口里积着灰，灰是白的。九个字底下，还压着三个字。</p>
+  <p>三个字浅，浅得只有指头摸得出来。笔画细，细得像刀尖划的。</p>
+  <p>他伸出手指头，在那三个字上抹了一下。</p>
+  <p>指腹上沾了一层粉，粉是白的。字口里没有灰。</p>
+  <p>灰要三十年才积得满。</p>
+  <p>他把指头举到眼前。白的，干的，新的。</p>
+  <p>有人来过。有人在他之前，把这把刀搁在这块板上，刻了三个字，刻完了，走了。</p>
+  <p>“换我了。”</p>
+  <p>他念了一遍，声音很低。</p>
+  <p>坡下起了火。火一点一点亮，从坡脚往坡腰上走。不是灯笼，是火把。</p>
+  <p>他数了数，十一个，一支不少。</p>
+  <p>十一个火把走得不快，走到坡腰，停了一下，又走。坡腰有一间库房，库房的门开着，里头黑。</p>
+  <p>火把连成一条线，往坡上来。</p>
+  <p>第七日，日头出来了。</p>
+  <p>第八百五十章 完</p>
+</div>
+<script>
+
+(function(){
+  /* ===== 沉浸阅读工具栏：触屏呼出，轻点显示/隐藏 ===== */
+  var TOTAL=890;
+  var m=location.pathname.match(/gudo-(\d+)/);
+  var n=(m?parseInt(m[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var title=h1?h1.textContent.trim():("第"+n+"章");
+
+  var top=document.createElement("div");top.id="topBar";
+  top.innerHTML='<a class="rbtn" href="catalog.html">← 目录</a>'+
+    '<span class="tb-title">'+title+'</span>'+
+    '<span class="tb-spacer"></span>';
+  document.body.appendChild(top);
+
+  var bot=document.createElement("div");bot.id="botBar";
+  bot.innerHTML='<div class="row" id="progRow">'+
+      '<span id="rCh">第'+n+'章</span>'+
+      '<input id="rProg" type="range" min="0" max="1000" value="0" step="1">'+
+      '<span id="rPct">0%</span></div>'+
+    '<div class="row">'+
+      (n>1?'<a class="rbtn" href="gudo-'+(n-1)+'.html">上一章</a>':'<span class="rbtn off">开篇</span>')+
+      '<span id="__bmSlot"></span>'+
+      (n<TOTAL?'<a class="rbtn" href="gudo-'+(n+1)+'.html">下一章</a>':'<span class="rbtn off">尾章</span>')+
+    '</div>';
+  document.body.appendChild(bot);
+
+  /* 阅读进度条：滚动同步，拖动跳转 */
+  var pr=document.getElementById("rProg"),pc=document.getElementById("rPct");
+  var pt=null,dragging=false;
+  function upd(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    var p=h>0?Math.round(document.documentElement.scrollTop/h*100):0;
+    if(!dragging)pr.value=p;
+    pc.textContent=p+"%";
+  }
+  pr.addEventListener("pointerdown",function(){dragging=true;clearTimeout(pt);});
+  pr.addEventListener("input",function(){
+    var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    if(h>0)window.scrollTo(0,h*this.value/100);
+    pc.textContent=this.value+"%";
+  });
+  pr.addEventListener("pointerup",function(){setTimeout(function(){dragging=false;},180);});
+  pr.addEventListener("pointercancel",function(){setTimeout(function(){dragging=false;},180);});
+  addEventListener("scroll",function(){
+    upd();
+    clearTimeout(pt);
+    pt=setTimeout(function(){if(!dragging)hide();},2600);
+  },{passive:true});
+
+  /* 触屏呼出 / 4 秒收回 */
+  var t=null;
+  function show(){
+    document.body.classList.add("ui-show");
+    clearTimeout(t);
+    t=setTimeout(hide,3800);
+  }
+  function hide(){
+    document.body.classList.remove("ui-show");
+    clearTimeout(t);
+  }
+
+  /* 翻页：只有「横向滑动」（>64px 且横向明显占优）才翻章；轻点只开关工具栏。
+     不再用「点侧边就翻页」，避免误点一下就莫名跳章。 */
+  var sx=0,sy=0,stk=false,moved=false;
+  document.body.addEventListener("pointerdown",function(e){
+    if(e.target.closest("#topBar,#botBar,input,button,a"))return;
+    sx=e.clientX||0;sy=e.clientY||0;stk=true;moved=false;
+  },{passive:true});
+  document.body.addEventListener("pointermove",function(e){
+    if(!stk)return;
+    if(Math.abs((e.clientX||0)-sx)>10||Math.abs((e.clientY||0)-sy)>10)moved=true;
+  },{passive:true});
+  document.body.addEventListener("pointerup",function(e){
+    if(!stk)return;stk=false;
+    var dx=(e.clientX||0)-sx,dy=(e.clientY||0)-sy;
+    if(Math.abs(dx)>=64&&Math.abs(dx)>Math.abs(dy)*1.6){
+      if(dx<0&&n<TOTAL){location.href="gudo-"+(n+1)+".html";return;}
+      if(dx>0&&n>1){location.href="gudo-"+(n-1)+".html";return;}
+    }
+    if(!moved){if(document.body.classList.contains("ui-show"))hide();else show();}
+  },{passive:true});
+  addEventListener("resize",upd);
+  addEventListener("orientationchange",function(){setTimeout(upd,300);});
+  upd();
+})();
+
+(function(){
+  /* ===== 进度与书签：每本书只有两格 =====
+     ① auto   自动存档位：读到哪里自动记，无需操作
+     ② manual 手动书签位：点一下按钮钉住，全书共享这一个
+     进页面时绝不擅自跳转，只给提示；只有从「续读/书签」入口进来才定位。 */
+  var RKEY="hugo_reader_v1";
+  var mm=location.pathname.match(/gudo-(\d+)/);
+  var CH=(mm?parseInt(mm[1],10):1)||1;
+  var h1=document.querySelector(".wrap h1");
+  var TITLE=h1?h1.textContent.trim():("第"+CH+"章");
+
+  function migrate(d){
+    if(!d.auto&&!d.manual&&(d.bookmark||d.resume||d.chapters)){
+      var nd={};
+      if(d.resume&&d.resume.ch){nd.auto={ch:d.resume.ch,pct:d.resume.pct|0,t:d.resume.t||0};}
+      if(d.bookmark&&d.bookmark.ch){nd.manual={ch:d.bookmark.ch,pct:d.bookmark.pct|0,t:d.bookmark.t||0};}
+      return nd;
+    }
+    return d;
+  }
+  function loadR(){
+    var d={};
+    try{d=JSON.parse(localStorage.getItem(RKEY))||{}}catch(e){d={}}
+    var o=migrate(d);
+    if(o!==d){try{localStorage.setItem(RKEY,JSON.stringify(o))}catch(e){}}
+    return o;
+  }
+  function saveR(d){try{localStorage.setItem(RKEY,JSON.stringify(d))}catch(e){}}
+  function maxH(){var h=document.documentElement;return h.scrollHeight-h.clientHeight;}
+  function scrollToPct(p){var h=maxH();if(h>0)window.scrollTo(0,Math.round(h*p/100));}
+
+  var cur=loadR();
+  var A=cur.auto||null, B=cur.manual||null;
+  var hash=location.hash;
+
+  /* 只在带 #auto / #manual 进来时定位；多点几次，等版式稳定，避免“跳歪” */
+  var restoring=false;
+  function restore(p){
+    if(!(p>0))return;
+    restoring=true;
+    [0,90,220,420,700].forEach(function(dt){
+      setTimeout(function(){if(restoring)scrollToPct(p);},dt);
+    });
+    setTimeout(function(){restoring=false;},960);
+  }
+  addEventListener("wheel",function(){restoring=false;},{passive:true,once:true});
+  addEventListener("touchstart",function(){restoring=false;},{passive:true,once:true});
+
+  if(hash==="#manual"&&B&&B.ch===CH&&B.pct>0){restore(B.pct);}
+  else if(hash==="#auto"&&A&&A.ch===CH&&A.pct>0){restore(A.pct);}
+  else{
+    var wrap=document.querySelector(".wrap");
+    if(B&&B.ch&&B.ch!==CH){
+      var x=document.createElement("div");x.className="resume-tip";
+      x.innerHTML="🔖 书签在 <a href='gudo-"+B.ch+".html#manual'>第"+B.ch+"章</a>（钉在 "+B.pct+"%）";
+      wrap.prepend(x);
+    }
+    if(A&&A.ch===CH&&A.pct>=3&&A.pct<97){
+      var tip=document.createElement("div");tip.className="resume-tip";
+      tip.innerHTML="📌 上次读至 "+A.pct+"% · <a href='javascript:void(0)' id='resumeGo'>回到原位</a>";
+      wrap.prepend(tip);
+      document.getElementById("resumeGo").onclick=function(){tip.remove();scrollToPct(A.pct);};
+    }
+    if(B&&B.ch===CH&&B.pct>0){
+      var btip=document.createElement("div");btip.className="resume-tip";
+      btip.innerHTML="🔖 本章书签：钉在 "+B.pct+"% · <a href='javascript:void(0)' id='bmGo'>回到书签</a>";
+      wrap.prepend(btip);
+      document.getElementById("bmGo").onclick=function(){btip.remove();scrollToPct(B.pct);};
+    }
+  }
+
+  /* 自动存档：随滚动更新（节流 1.2s），离开页面再记一次 */
+  var timer=null;
+  function record(){
+    var mh=maxH();if(mh<=0)return;
+    var p=Math.min(100,Math.round(document.documentElement.scrollTop/mh*100));
+    var d=loadR();d.auto={ch:CH,pct:p,t:Date.now()};saveR(d);
+  }
+  addEventListener("scroll",function(){if(timer)return;timer=setTimeout(function(){timer=null;record();},1200)},{passive:true});
+  addEventListener("beforeunload",record);
+  setTimeout(record,800);
+
+  /* 手动书签：一键钉住 / 再点清除（全书仅此一格） */
+  var btn=document.createElement("button");btn.className="bookmark-btn";
+  function paint(){
+    var b=(loadR().manual)||null;
+    if(b&&b.ch===CH&&b.pct>0)btn.textContent="🔖 书签 "+b.pct+"%";
+    else if(b&&b.ch)btn.textContent="🔖 书签·第"+b.ch+"章";
+    else btn.textContent="🔖 书签";
+  }
+  document.getElementById("__bmSlot").appendChild(btn);
+  paint();
+  btn.onclick=function(){
+    var mh=maxH();
+    var p=mh>0?Math.min(100,Math.round(document.documentElement.scrollTop/mh*100)):0;
+    var d=loadR();
+    if(d.manual&&d.manual.ch===CH&&Math.abs((d.manual.pct||0)-p)<=2){
+      delete d.manual;saveR(d);paint();
+      btn.textContent="已清除书签";setTimeout(paint,1400);
+    }else{
+      d.manual={ch:CH,pct:p,t:Date.now()};saveR(d);paint();
+      btn.textContent="✓ 已存书签 "+p+"%";setTimeout(paint,1600);
+    }
+  };
+})();
+
+</script>
+</body>
+</html>
